@@ -9,7 +9,10 @@ environment:
 # Add regular dependencies here.
 dependencies:
   args: ^2.4.2
+  mason_logger: ^0.2.16
+  meta: ^1.15.0
 
 dev_dependencies:
   lints: ^4.0.0
   test: ^1.24.0
+  very_good_analysis: ^6.0.0

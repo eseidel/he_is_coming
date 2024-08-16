@@ -1,6 +1,6 @@
 import 'package:args/args.dart';
-
-const String version = '0.0.1';
+import 'package:he_is_coming_sim/logger.dart';
+import 'package:he_is_coming_sim/simulate.dart';
 
 ArgParser buildParser() {
   return ArgParser()
@@ -15,11 +15,6 @@ ArgParser buildParser() {
       abbr: 'v',
       negatable: false,
       help: 'Show additional command output.',
-    )
-    ..addFlag(
-      'version',
-      negatable: false,
-      help: 'Print the tool version.',
     );
 }
 
@@ -29,33 +24,18 @@ void printUsage(ArgParser argParser) {
 }
 
 void main(List<String> arguments) {
-  final ArgParser argParser = buildParser();
-  try {
-    final ArgResults results = argParser.parse(arguments);
-    bool verbose = false;
+  final argParser = buildParser();
+  final results = argParser.parse(arguments);
+  final verbose = results.wasParsed('verbose');
 
-    // Process the parsed arguments.
-    if (results.wasParsed('help')) {
-      printUsage(argParser);
-      return;
-    }
-    if (results.wasParsed('version')) {
-      print('he_is_coming_sim version: $version');
-      return;
-    }
-    if (results.wasParsed('verbose')) {
-      verbose = true;
-    }
-
-    // Act on the arguments provided.
-    print('Positional arguments: ${results.rest}');
-    if (verbose) {
-      print('[VERBOSE] All arguments: ${results.arguments}');
-    }
-  } on FormatException catch (e) {
-    // Print usage information if an invalid argument was provided.
-    print(e.message);
-    print('');
+  if (results.wasParsed('help')) {
     printUsage(argParser);
+    return;
   }
+  if (verbose) {
+    logger.level = Level.debug;
+  }
+
+  // Roll a new start and simulate.
+  runSim();
 }
