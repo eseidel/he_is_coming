@@ -8,9 +8,6 @@ void runSim() {
 
   final player = createPlayer();
   final wolf = Enemies.wolfLevel1;
-  logger
-    ..info('Player: ${player.startingStats}')
-    ..info('Wolf: ${wolf.startingStats}');
 
   final battle = Battle();
   final result = battle.resolve(first: player, second: wolf);

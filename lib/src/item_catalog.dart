@@ -33,8 +33,8 @@ extension on YamlMap {
   }
 }
 
-// Function type for effect callbacks.
-typedef EffectFn = void Function(EffectContext ctx) Function();
+/// Function type for effect callbacks.
+typedef EffectFn = void Function(EffectContext ctx);
 
 /// Container for callbacks for items.
 class Effect {
@@ -70,14 +70,14 @@ class _ItemCatalogReader {
     'speed',
   ];
 
-  static void validateKeys(YamlMap yaml, Set<String> expectedkeys) {
+  static void validateKeys(YamlMap yaml, Set<String> expectedKeys) {
     final unexpected =
-        yaml.keys.cast<String>().toSet().difference(expectedkeys);
+        yaml.keys.cast<String>().toSet().difference(expectedKeys);
     if (unexpected.isEmpty) {
       return;
     }
     for (final key in unexpected) {
-      logger.err('Unexpected key: $key in $yaml allowed: $expectedkeys');
+      logger.err('Unexpected key: $key in $yaml allowed: $expectedKeys');
     }
     throw StateError('Unexpected keys in yaml');
   }

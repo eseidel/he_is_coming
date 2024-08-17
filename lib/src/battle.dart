@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:he_is_coming_sim/src/creatures.dart';
-import 'package:he_is_coming_sim/src/item.dart';
 import 'package:he_is_coming_sim/src/logger.dart';
 
 /// Passed to all Effect callbacks.
@@ -20,31 +19,83 @@ class EffectContext {
 
   /// Add or remove armor
   void adjustArmor(int armorDelta) {
-    _stats = _stats + Stats(armor: armorDelta);
+    _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
   }
 }
 
+/// Holds stats for a creature during battle.
 class CreatureStats {
+  /// Create a CreatureStats.
+  CreatureStats({
+    required this.maxHp,
+    required this.hp,
+    required this.armor,
+    required this.speed,
+    required this.attack,
+    required this.gold,
+  });
+
+  /// Create a CreatureStats from a Creature.
+  factory CreatureStats.fromCreature(Creature creature) {
+    final stats = creature.startingStats;
+    return CreatureStats(
+      maxHp: stats.health,
+      hp: creature.hp,
+      armor: stats.armor,
+      speed: stats.speed,
+      attack: stats.attack,
+      gold: creature.gold,
+    );
+  }
+
+  /// Max health.
   final int maxHp;
+
+  /// Current health.
   final int hp;
+
+  /// Current armor.
   final int armor;
+
+  /// Speed.
   final int speed;
+
+  /// Attack.
   final int attack;
+
+  /// Value if the creature is defeated.
   final int gold;
 
+  /// Returns true if health is currently full.
   bool get isHealthFull => hp == maxHp;
+
+  /// Create a copy of this with some fields updated.
+  CreatureStats copyWith({
+    int? hp,
+    int? armor,
+    int? maxHp,
+  }) {
+    return CreatureStats(
+      maxHp: maxHp ?? this.maxHp,
+      hp: hp ?? this.hp,
+      armor: armor ?? this.armor,
+      speed: speed,
+      attack: attack,
+      gold: gold,
+    );
+  }
 }
 
 /// Context for an in-progress battle.
 class BattleContext {
   /// Create a BattleContext.
   BattleContext(this.creatures)
-      : stats = creatures.map((c) => c.startingStats).toList(),
+      : stats = creatures.map(CreatureStats.fromCreature).toList(),
         _attackerIndex = 0 {
     _attackerIndex = _firstAttackerIndex(stats);
   }
 
-  static int _firstAttackerIndex(List<Stats> stats) =>
+  static int _firstAttackerIndex(List<CreatureStats> stats) =>
       stats[0].speed >= stats[1].speed ? 0 : 1;
 
   /// Advance to the next attacker.
@@ -79,7 +130,7 @@ class BattleContext {
   String get defenderName => creatures[defenderIndex].name;
 
   /// Set stats for the creature at `index`.
-  void setStats(int index, Stats newStats) {
+  void setStats(int index, CreatureStats newStats) {
     stats[index] = newStats;
   }
 
@@ -148,6 +199,10 @@ class Battle {
   /// Play out the battle and return the result.
   BattleResult resolve({required Creature first, required Creature second}) {
     final ctx = BattleContext([first, second]);
+
+    logger
+      ..info('${first.name}: ${ctx.stats[0]}')
+      ..info('${second.name}: ${ctx.stats[1]}');
     while (ctx.allAlive) {
       // onBattle
       // onTurn
@@ -158,14 +213,14 @@ class Battle {
       final armorReduction = min(ctx.defenderStats.armor, damage);
       final remainingDamage = damage - armorReduction;
       final newArmor = ctx.defenderStats.armor - armorReduction;
-      final newHp = ctx.defenderStats.health - remainingDamage;
+      final newHp = ctx.defenderStats.hp - remainingDamage;
       logger.info('${ctx.attackerName} attacks ($damage).');
       ctx
         ..setStats(
           ctx.defenderIndex,
           ctx.defenderStats.copyWith(
             armor: newArmor,
-            health: newHp,
+            hp: newHp,
           ),
         )
         // onHit
