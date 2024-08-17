@@ -73,13 +73,56 @@ class Creature {
   }
 }
 
-/// Class holding all predefined enemies.
+/// Class holding predefined over-world enemies.
 class Enemies {
-  /// Wolf Lvl 1
+  /// Wolf Level 1
   /// If player has 5 or less health, wolf gains 2 attack.
   static final wolfLevel1 = Creature('Wolf', attack: 1, health: 3);
 
-  /// Bear Lvl 1
+  /// Wolf Level 2
+  /// If player has 5 or less health, wolf gains 3 attack.
+  static final wolfLevel2 = Creature('Wolf', attack: 2, health: 6, speed: 1);
+
+  /// Wolf Level 3
+  /// If player has 5 or less health, wolf gains 4 attack.
+  static final wolfLevel3 = Creature('Wolf', attack: 2, health: 9, speed: 2);
+
+  /// Bear Level 1
   /// Bear deals 3 additional damage while you have armor.
   static final bearLevel1 = Creature('Bear', attack: 1, health: 3);
+
+  /// Bear Level 3
+  /// Bear deals 5 additional damage while you have armor.
+  static final bearLevel3 = Creature('Bear', attack: 2, health: 8, speed: 2);
+
+  /// Spider Level 1
+  /// Battle Start: If Spider has more speed than you, it deals 3 damage
+  static final spiderLevel1 =
+      Creature('Spider', attack: 1, health: 3, speed: 3);
+
+  /// Spider Level 2
+  /// Battle Start: If Spider has more speed than you, it deals 4 damage
+  static final spiderLevel2 =
+      Creature('Spider', attack: 1, health: 3, speed: 3);
+
+  /// Spider Level 3
+  /// Battle Start: If Spider has more speed than you, it deals 5 damage
+  static final spiderLevel3 =
+      Creature('Spider', attack: 1, health: 4, speed: 4);
+}
+
+/// Class holding predefined bosses.
+class Bosses {
+  /// Hothead, level 1
+  /// If Hothead has more speed than you, his first strike deals 10 additional
+  /// damage.
+  static final hothead = Creature('Hothead', attack: 4, health: 5, speed: 4);
+
+  /// Redwood Treant, level 2
+  /// Redwood Treant's attack is halved against armor
+  static final redwoodTreant =
+      Creature('Redwood Treant', attack: 6, health: 25, armor: 15);
+
+  /// Leshen, level 3
+  static final leshen = Creature('Leshen', attack: 7, health: 60, speed: 3);
 }

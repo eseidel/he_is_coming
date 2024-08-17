@@ -120,5 +120,8 @@ enum Material {
   stone,
 
   /// Sanguine
-  sanguine
+  sanguine,
+
+  /// Bomb
+  bomb,
 }

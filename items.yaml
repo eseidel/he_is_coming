@@ -55,7 +55,7 @@
   rarity: common
   health: 3
   speed: 1
-- name: 'Iron Greatsword'
+- name: 'Ironstone Greatsword'
   rarity: common
   kind: weapon
   material: stone
@@ -66,3 +66,207 @@
   material: wood
   armor: 1
   effect: "Exposed: Restore 3 health"
+- name: 'Mortal Edge'
+  rarity: rare
+  material: sanguine
+  attack: 2
+  effect: "Wounded: Gain 5 attack and take 2 damage"
+- name: 'Stoneslab Sword'
+  kind: weapon
+  rarity: heroic
+  attack: 2
+  material: stone
+  effect: "On Hit: Gain 2 armor"
+- name: 'Iron Rose'
+  rarity: rare
+  effect: "Whenever you restore health, gain 1 armor"
+- name: 'Stealbond Curse'
+  rarity: rare
+  kind: weapon
+  attack: 2
+  effect: 'Battle Start: Give 8 armor to the enemy'
+- name: 'Dueling Gauntlet'
+  rarity: rare
+  effect: 'Wounded: Do an additional strike on your next turn'
+- name: 'Marble Mirror'
+  rarity: rare
+  material: stone
+  effect: "Battle Start: Gain armor equal to the enemy's armor"
+- name: 'Blacksmith Bond'
+  rarity: rare
+  effect: "Exposed can trigger one additional time"
+- name: 'Bejeweled Blade'
+  rarity: rare
+  effect: 'Gain 2 attack for each equipped jewelry item'
+- name: 'Oak Heart'
+  rarity: rare
+  effect: 'Gain 2 health for each equipped wood item'
+  unique: true
+  material: wood
+- name: 'Melting Iceblade'
+  kind: weapon
+  rarity: heroic
+  attack: 7
+  effect: 'On hit: Lose 1 attack'
+- name: 'Explosive Surprise'
+  rarity: rare
+  effect: 'Exposed: Deal 5 damage'
+  material: bomb
+- name: 'Featherweight Coat'
+  rarity: rare
+  effect: 'Battle Start: Convert 1 armor to 3 speed'
+- name: 'Cracked Bouldershield'
+  rarity: common # Guess
+  effect: 'Exposed: Gain 5 armor'
+  material: stone
+- name: 'Brittlebark Club'
+  kind: weapon
+  rarity: heroic
+  attack: 6
+  effect: 'Exposed & Wounded: Lose 2 attack'
+- name: 'Hook Blade'
+  kind: weapon
+  rarity: rare
+  attack: 2
+  effect: "Whenever you deal damage to the enemy's armor, gain that much armor"
+- name: 'Double-edged Sword'
+  kind: weapon
+  rarity: rare
+  attack: 5
+  effect: "On Hit: Take 1 damage"
+- name: 'Granite Gauntlet'
+  rarity: common
+  effect: 'Battle start: Gain 5 armor'
+  health: -2
+  material: stone
+- name: 'Brittlebark Bow'
+  kind: weapon
+  rarity: common
+  attack: 4
+  material: wood
+  effect: 'After 3 strikes, lose 2 attack'
+- name: 'Citrine Ring'
+  kind: jewelry
+  rarity: common
+  effect: "Battle Start: Deal damage equal to your speed"
+  unique: true
+- name: 'Sapphire Ring'
+  kind: jewelry
+  rarity: common
+  effect: "Battle Start: Steal 2 armor from the enemy"
+- name: 'Citrine Crown'
+  kind: jewelry
+  unique: true
+  rarity: rare
+  effect: "Battle Start: If your speed is 6 or higher, your strikes deal double damage"
+- name: 'Gold Ring'
+  rarity: rare
+  unlock: 'Fight a boss early and win it'
+  kind: jewelry
+  effect: 'Battle Start: Gain 1 gold'
+- name: "Sticky Web"
+  rarity: rare
+  effect: "Battle Start: If you have less speed than the enemy, stun the enemy for 1 turn"
+  unlock: "Smoked: Win against Fen Fire for the first time"
+- name: "Sapphire Crown"
+  rarity: rare
+  kind: jewelry
+  effect: "Battle Start: If your armor is 15 or higher, gain 10 armor"
+- name: 'Shield of the Hero'
+  rarity: common
+  armor: 3
+- name: "Firecracker Belt"
+  rarity: common
+  material: bomb
+  effect: "Exposed: Deal 1 damage 3 times"
+- name: "Horned Helmet"
+  rarity: common
+  armor: 2
+  effect: "Battle Start: Gain 2 thorns"
+- name: "Ruby Earings"
+  rarity: common
+  kind: jewelry
+  effect: "Deal 1 damage every other turn"
+- name: "Ruby Crown"
+  rarity: rare
+  kind: jewelry
+  effect: "Battle Start: If your attack is 6 or higher, gain 2 attack"
+- name: "Chain Mail"
+  rarity: rare
+  effect: "Wounded: Gain armor equal to your base armor"
+- name: "Leather Boots"
+  rarity: rare
+  effect: "If you have more speed than the enemy, gain 2 attack"
+- name: "Granite Hammer"
+  rarity: rare
+  kind: weapon
+  material: stone
+  effect: "On Hit: Convert 1 armor to 2 attack"
+- name: "Ore Heart"
+  rarity: rare
+  material: stone
+  unique: true
+  effect: "Battle Start: Gain 2 armor for each equipped stone item"
+- name: "Bonespine Whip"
+  rarity: heroic
+  kind: weapon
+  attack: 2
+  effect: "Do two additional strikes that always deal 1 damage"
+- name: "Stormcoud Spear"
+  rarity: common
+  kind: weapon
+  attack: 2
+  effect: "Every 5 strikes: Stun the enemy for 2 turns"
+- name: "Redwood Roast"
+  rarity: common
+  kind: food
+  health: 5
+  material: wood
+- name: "Protecting Charm"
+  rarity: common
+  unique: true
+  effect: "The first time the enemy strikes, their damage is halved"
+- name: "Sword of the Hero"
+  rarity: common
+  kind: weapon
+  attack: 3
+- name: "Grindstone Club"
+  rarity: heroic
+  kind: weapon
+  material: stone
+  attack: 1
+  effect: "The next weapon you equip gains 2 attack"
+- name: "Impressive Physique"
+  rarity: rare
+  effect: "Exposed: Stun the enemy for 1 turn"
+- name: "Plated Helmet"
+  rarity: heroic
+  effect: "Turn Start: If you are below 50% health, gain 2 armor"
+- name: "Iron Transfusion"
+  rarity: heroic
+  effect: "Turn Start: Gain 2 armor and lose 1 health"
+- name: "Lifeblood Burst"
+  material: sanguine
+  rarity: heroic
+  effect: "Wounded: Deal damage equal to 50% of your max health"
+- name: "Ruby Ring"
+  kind: jewelry
+  rarity: rare
+  effect: "Battle Start: Gain 1 attack and take 2 damage"
+- name: "Woodcutter's Axe"
+  kind: weapon
+  rarity: common
+  attack: 2
+  material: wood
+  effect: "On Hit: Reduce the enemy's max health by 2"
+- name: "Cracked Whetstone"
+  rarity: common
+  material: stone
+  effect: "First Turn: Gain 2 attack"
+- name: "Elderwood Staff"
+  rarity: common
+  kind: weapon
+  material: wood
+  attack: 1
+  speed: 1
+  armor: 1

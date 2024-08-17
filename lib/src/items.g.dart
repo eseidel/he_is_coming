@@ -4,6 +4,110 @@ import 'package:he_is_coming_sim/src/item.dart';
 
 /// Class containing pre-defined `Item` instances.
 class Items {
+  /// Bejeweled Blade
+  static final bejeweledBlade = Item(
+    'Bejeweled Blade',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Blacksmith Bond
+  static final blacksmithBond = Item(
+    'Blacksmith Bond',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Bonespine Whip
+  static final bonespineWhip = Item(
+    'Bonespine Whip',
+    Kind.weapon,
+    Rarity.heroic,
+    Material.leather,
+  );
+
+  /// Brittlebark Bow
+  static final brittlebarkBow = Item(
+    'Brittlebark Bow',
+    Kind.weapon,
+    Rarity.common,
+    Material.wood,
+  );
+
+  /// Brittlebark Club
+  static final brittlebarkClub = Item(
+    'Brittlebark Club',
+    Kind.weapon,
+    Rarity.heroic,
+    Material.leather,
+  );
+
+  /// Chain Mail
+  static final chainMail = Item(
+    'Chain Mail',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Citrine Crown
+  static final citrineCrown = Item(
+    'Citrine Crown',
+    Kind.jewelry,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Citrine Ring
+  static final citrineRing = Item(
+    'Citrine Ring',
+    Kind.jewelry,
+    Rarity.common,
+    Material.leather,
+  );
+
+  /// Cracked Bouldershield
+  static final crackedBouldershield = Item(
+    'Cracked Bouldershield',
+    Kind.clothing,
+    Rarity.common,
+    Material.stone,
+  );
+
+  /// Cracked Whetstone
+  static final crackedWhetstone = Item(
+    'Cracked Whetstone',
+    Kind.clothing,
+    Rarity.common,
+    Material.stone,
+  );
+
+  /// Double-edged Sword
+  static final doubleedgedSword = Item(
+    'Double-edged Sword',
+    Kind.weapon,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Dueling Gauntlet
+  static final duelingGauntlet = Item(
+    'Dueling Gauntlet',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Elderwood Staff
+  static final elderwoodStaff = Item(
+    'Elderwood Staff',
+    Kind.weapon,
+    Rarity.common,
+    Material.wood,
+  );
+
   /// Emergency Shield
   static final emergencyShield = Item(
     'Emergency Shield',
@@ -12,12 +116,68 @@ class Items {
     Material.leather,
   );
 
+  /// Explosive Surprise
+  static final explosiveSurprise = Item(
+    'Explosive Surprise',
+    Kind.clothing,
+    Rarity.rare,
+    Material.bomb,
+  );
+
+  /// Featherweight Coat
+  static final featherweightCoat = Item(
+    'Featherweight Coat',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Firecracker Belt
+  static final firecrackerBelt = Item(
+    'Firecracker Belt',
+    Kind.clothing,
+    Rarity.common,
+    Material.bomb,
+  );
+
   /// Fortified Gauntlet
   static final fortifiedGauntlet = Item(
     'Fortified Gauntlet',
     Kind.clothing,
     Rarity.rare,
     Material.leather,
+  );
+
+  /// Gold Ring
+  static final goldRing = Item(
+    'Gold Ring',
+    Kind.jewelry,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Granite Gauntlet
+  static final graniteGauntlet = Item(
+    'Granite Gauntlet',
+    Kind.clothing,
+    Rarity.common,
+    Material.stone,
+  );
+
+  /// Granite Hammer
+  static final graniteHammer = Item(
+    'Granite Hammer',
+    Kind.weapon,
+    Rarity.rare,
+    Material.stone,
+  );
+
+  /// Grindstone Club
+  static final grindstoneClub = Item(
+    'Grindstone Club',
+    Kind.weapon,
+    Rarity.heroic,
+    Material.stone,
   );
 
   /// Haymaker
@@ -36,12 +196,60 @@ class Items {
     Material.sanguine,
   );
 
-  /// Iron Greatsword
-  static final ironGreatsword = Item(
-    'Iron Greatsword',
+  /// Hook Blade
+  static final hookBlade = Item(
+    'Hook Blade',
+    Kind.weapon,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Horned Helmet
+  static final hornedHelmet = Item(
+    'Horned Helmet',
+    Kind.clothing,
+    Rarity.common,
+    Material.leather,
+  );
+
+  /// Impressive Physique
+  static final impressivePhysique = Item(
+    'Impressive Physique',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Iron Rose
+  static final ironRose = Item(
+    'Iron Rose',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Iron Transfusion
+  static final ironTransfusion = Item(
+    'Iron Transfusion',
+    Kind.clothing,
+    Rarity.heroic,
+    Material.leather,
+  );
+
+  /// Ironstone Greatsword
+  static final ironstoneGreatsword = Item(
+    'Ironstone Greatsword',
     Kind.weapon,
     Rarity.common,
     Material.stone,
+  );
+
+  /// Leather Boots
+  static final leatherBoots = Item(
+    'Leather Boots',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
   );
 
   /// Leather Gloves
@@ -60,11 +268,75 @@ class Items {
     Material.leather,
   );
 
+  /// Lifeblood Burst
+  static final lifebloodBurst = Item(
+    'Lifeblood Burst',
+    Kind.clothing,
+    Rarity.heroic,
+    Material.sanguine,
+  );
+
+  /// Marble Mirror
+  static final marbleMirror = Item(
+    'Marble Mirror',
+    Kind.clothing,
+    Rarity.rare,
+    Material.stone,
+  );
+
+  /// Melting Iceblade
+  static final meltingIceblade = Item(
+    'Melting Iceblade',
+    Kind.weapon,
+    Rarity.heroic,
+    Material.leather,
+  );
+
+  /// Mortal Edge
+  static final mortalEdge = Item(
+    'Mortal Edge',
+    Kind.clothing,
+    Rarity.rare,
+    Material.sanguine,
+  );
+
+  /// Oak Heart
+  static final oakHeart = Item(
+    'Oak Heart',
+    Kind.clothing,
+    Rarity.rare,
+    Material.wood,
+  );
+
+  /// Ore Heart
+  static final oreHeart = Item(
+    'Ore Heart',
+    Kind.clothing,
+    Rarity.rare,
+    Material.stone,
+  );
+
   /// Phantom Armor
   static final phantomArmor = Item(
     'Phantom Armor',
     Kind.clothing,
     Rarity.rare,
+    Material.leather,
+  );
+
+  /// Plated Helmet
+  static final platedHelmet = Item(
+    'Plated Helmet',
+    Kind.clothing,
+    Rarity.heroic,
+    Material.leather,
+  );
+
+  /// Protecting Charm
+  static final protectingCharm = Item(
+    'Protecting Charm',
+    Kind.clothing,
+    Rarity.common,
     Material.leather,
   );
 
@@ -84,6 +356,14 @@ class Items {
     Material.wood,
   );
 
+  /// Redwood Roast
+  static final redwoodRoast = Item(
+    'Redwood Roast',
+    Kind.food,
+    Rarity.common,
+    Material.wood,
+  );
+
   /// Redwood Rod
   static final redwoodRod = Item(
     'Redwood Rod',
@@ -92,11 +372,75 @@ class Items {
     Material.wood,
   );
 
+  /// Ruby Crown
+  static final rubyCrown = Item(
+    'Ruby Crown',
+    Kind.jewelry,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Ruby Earings
+  static final rubyEarings = Item(
+    'Ruby Earings',
+    Kind.jewelry,
+    Rarity.common,
+    Material.leather,
+  );
+
+  /// Ruby Ring
+  static final rubyRing = Item(
+    'Ruby Ring',
+    Kind.jewelry,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Sapphire Crown
+  static final sapphireCrown = Item(
+    'Sapphire Crown',
+    Kind.jewelry,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Sapphire Ring
+  static final sapphireRing = Item(
+    'Sapphire Ring',
+    Kind.jewelry,
+    Rarity.common,
+    Material.leather,
+  );
+
+  /// Shield of the Hero
+  static final shieldoftheHero = Item(
+    'Shield of the Hero',
+    Kind.clothing,
+    Rarity.common,
+    Material.leather,
+  );
+
   /// Spearshield Lance
   static final spearshieldLance = Item(
     'Spearshield Lance',
     Kind.weapon,
     Rarity.common,
+    Material.leather,
+  );
+
+  /// Stealbond Curse
+  static final stealbondCurse = Item(
+    'Stealbond Curse',
+    Kind.weapon,
+    Rarity.rare,
+    Material.leather,
+  );
+
+  /// Sticky Web
+  static final stickyWeb = Item(
+    'Sticky Web',
+    Kind.clothing,
+    Rarity.rare,
     Material.leather,
   );
 
@@ -108,12 +452,44 @@ class Items {
     Material.stone,
   );
 
+  /// Stoneslab Sword
+  static final stoneslabSword = Item(
+    'Stoneslab Sword',
+    Kind.weapon,
+    Rarity.heroic,
+    Material.stone,
+  );
+
+  /// Stormcoud Spear
+  static final stormcoudSpear = Item(
+    'Stormcoud Spear',
+    Kind.weapon,
+    Rarity.common,
+    Material.leather,
+  );
+
+  /// Sword of the Hero
+  static final swordoftheHero = Item(
+    'Sword of the Hero',
+    Kind.weapon,
+    Rarity.common,
+    Material.leather,
+  );
+
   /// Weighted Bracelet
   static final weightedBracelet = Item(
     'Weighted Bracelet',
     Kind.clothing,
     Rarity.common,
     Material.leather,
+  );
+
+  /// Woodcutter&#x27;s Axe
+  static final woodcuttersAxe = Item(
+    'Woodcutter&#x27;s Axe',
+    Kind.weapon,
+    Rarity.common,
+    Material.wood,
   );
 
   /// Wooden Stick

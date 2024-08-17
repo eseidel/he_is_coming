@@ -6,24 +6,44 @@ import 'package:mustache_template/mustache.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+extension Lookup on YamlMap {
+  T lookupOr<T extends Enum>(String key, List<T> values, T defaultValue) {
+    final toFind = this[key] as String?;
+    if (toFind == null) {
+      return defaultValue;
+    }
+    final found = values.firstWhereOrNull((v) => v.name == toFind);
+    if (found == null) {
+      throw Exception('Unexpected $toFind in $this, expected in $values');
+    }
+    return found;
+  }
+
+  T lookup<T extends Enum>(String key, List<T> values) {
+    final toFind = this[key] as String?;
+    if (toFind == null) {
+      throw Exception('$key is missing from $this');
+    }
+    final found = values.firstWhereOrNull((v) => v.name == toFind);
+    if (found == null) {
+      throw Exception('Unexpected $toFind in $this, expected in $values');
+    }
+    return found;
+  }
+}
+
 Item itemFromYaml(YamlMap yaml) {
   final name = yaml['name'] as String;
-  final yamlKind = yaml['kind'];
-  final kind = yamlKind == null
-      ? Kind.clothing
-      : Kind.values.firstWhere((k) => k.name == yamlKind);
-  final rarity = Rarity.values.firstWhere((r) => r.name == yaml['rarity']);
-  final yamlMaterial = yaml['material'];
-  final material = yamlMaterial == null
-      ? Material.leather
-      : Material.values.firstWhere((m) => m.name == yamlMaterial);
+  final kind = yaml.lookupOr('kind', Kind.values, Kind.clothing);
+  final rarity = yaml.lookup('rarity', Rarity.values);
+  final material = yaml.lookupOr('material', Material.values, Material.leather);
   // final effect = yaml['effect'] as String?;
   return Item(name, kind, rarity, material);
 }
 
 String camelCase(String sentenceCase) {
   final parts = sentenceCase.split(' ');
-  final joined = parts.join();
+  final joined = parts.join().replaceAll('-', '').replaceAll("'", '');
   return joined[0].toLowerCase() + joined.substring(1);
 }
 
@@ -39,7 +59,7 @@ Map<String, dynamic> toTemplateMap(Item item) {
 }
 
 // Could turn this into a build_runner extension at some point.
-void main() {
+int main() {
   final itemsString = File('items.yaml').readAsStringSync();
   final itemsYaml = loadYaml(itemsString) as YamlList;
   final items = itemsYaml
@@ -54,5 +74,11 @@ void main() {
   final outPath = p.join('lib', 'src', 'items.g.dart');
   File(outPath).writeAsStringSync(output);
 
-  Process.runSync(Platform.executable, ['format', outPath]);
+  final result = Process.runSync(Platform.executable, ['format', outPath]);
+  if (result.exitCode != 0) {
+    stdout.write(result.stdout);
+    stderr.write(result.stderr);
+    return result.exitCode;
+  }
+  return 0;
 }
