@@ -1,4 +1,17 @@
+import 'package:he_is_coming_sim/src/battle.dart';
 import 'package:meta/meta.dart';
+
+/// Function type for effect callbacks.
+typedef EffectFn = void Function(EffectContext ctx);
+
+/// Container for callbacks for items.
+class Effect {
+  /// Create a new Effect
+  Effect({this.onBattle});
+
+  /// Called on battle start.
+  final EffectFn? onBattle;
+}
 
 /// Class representing stats for a Creature.
 @immutable
@@ -67,6 +80,7 @@ class Item {
     int armor = 0,
     int attack = 0,
     int speed = 0,
+    this.effect,
   }) : stats = Stats(
           health: health,
           armor: armor,
@@ -88,6 +102,9 @@ class Item {
 
   /// Material of the item.
   final Material material;
+
+  /// Effect of the item.
+  final Effect? effect;
 }
 
 /// Enum representing Item kind.

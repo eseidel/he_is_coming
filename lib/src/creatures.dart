@@ -5,13 +5,19 @@ import 'package:meta/meta.dart';
 const _kPlayerName = 'Player';
 
 /// Create a player.
-Creature createPlayer() {
+Creature createPlayer({List<Item> withItems = const <Item>[]}) {
+  // Player must always have a weapon.
+  final items = [...withItems];
+  if (items.every((item) => item.kind != Kind.weapon)) {
+    items.add(itemCatalog['Wooden Stick']);
+  }
+
   return Creature(
     _kPlayerName,
     health: 10,
     attack: 0,
     gold: 0,
-    items: [itemCatalog['Wooden Stick']],
+    items: items,
   );
 }
 

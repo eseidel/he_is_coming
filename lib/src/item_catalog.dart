@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:he_is_coming_sim/src/battle.dart';
 import 'package:he_is_coming_sim/src/item.dart';
 import 'package:he_is_coming_sim/src/logger.dart';
 import 'package:path/path.dart' as p;
@@ -31,18 +30,6 @@ extension on YamlMap {
     }
     return found;
   }
-}
-
-/// Function type for effect callbacks.
-typedef EffectFn = void Function(EffectContext ctx);
-
-/// Container for callbacks for items.
-class Effect {
-  /// Create a new Effect
-  Effect({this.onBattle});
-
-  /// Called on battle start.
-  final EffectFn? onBattle;
 }
 
 final _effectByItemName = <String, Effect>{
@@ -93,8 +80,9 @@ class _ItemCatalogReader {
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
     final effectText = yaml['effect'] as String?;
+    Effect? effect;
     if (effectText != null) {
-      final effect = _effectByItemName[name];
+      effect = _effectByItemName[name];
       // TODO(eseidel): Currently only warning about commons.
       if (effect == null && rarity == Rarity.common) {
         logger.warn('$name missing: $effectText');
@@ -110,6 +98,7 @@ class _ItemCatalogReader {
       health: health,
       armor: armor,
       speed: speed,
+      effect: effect,
     );
   }
 

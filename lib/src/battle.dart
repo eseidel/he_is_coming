@@ -201,9 +201,25 @@ class Battle {
     }
   }
 
+  void _onBattle(BattleContext battleCtx) {
+    // send on battle to all items on both creatures
+    for (final creature in battleCtx.creatures) {
+      final effectCxt =
+          EffectContext(battleCtx, battleCtx.creatures.indexOf(creature));
+      for (final item in creature.items) {
+        item.effect?.onBattle?.call(effectCxt);
+      }
+    }
+  }
+
   /// Play out the battle and return the result.
   BattleResult resolve({required Creature first, required Creature second}) {
+    logger
+      ..info('${first.name}: ${first.baseStats}')
+      ..info('${second.name}: ${first.baseStats}');
+
     final ctx = BattleContext([first, second]);
+    _onBattle(ctx);
 
     logger
       ..info('${first.name}: ${ctx.stats[0]}')
