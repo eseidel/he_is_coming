@@ -6,7 +6,7 @@ import 'package:he_is_coming_sim/src/logger.dart';
 void runSim() {
   // This is mostly a placeholder for now.
 
-  final player = Creature.player();
+  final player = createPlayer();
   final wolf = Enemies.wolfLevel1;
   logger
     ..info('Player: ${player.startingStats}')

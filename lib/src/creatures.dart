@@ -1,6 +1,18 @@
 import 'package:he_is_coming_sim/src/item.dart';
-import 'package:he_is_coming_sim/src/items.g.dart';
+import 'package:he_is_coming_sim/src/item_catalog.dart';
 import 'package:meta/meta.dart';
+
+const _kPlayerName = 'Player';
+
+/// Create a player.
+Creature createPlayer() {
+  return Creature(
+    _kPlayerName,
+    health: 10,
+    attack: 0,
+    items: [itemCatalog['Wooden Stick']],
+  );
+}
 
 /// Class representing a player or an enemy.
 @immutable
@@ -21,15 +33,6 @@ class Creature {
           speed: speed,
         ),
         hp = hp ?? health;
-
-  /// Create a player.
-  Creature.player({int health = 10})
-      : name = _kPlayerName,
-        baseStats = Stats(health: health),
-        items = <Item>[Items.woodenStick],
-        hp = health;
-
-  static const _kPlayerName = 'Player';
 
   /// Returns true if this Creature is the player.
   bool get isPlayer => name == _kPlayerName;

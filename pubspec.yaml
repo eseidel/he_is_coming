@@ -12,11 +12,10 @@ dependencies:
   collection: ^1.19.0
   mason_logger: ^0.2.16
   meta: ^1.15.0
+  path: ^1.9.0
+  yaml: ^3.1.2
 
 dev_dependencies:
   lints: ^4.0.0
-  mustache_template: ^2.0.0
-  path: ^1.9.0
   test: ^1.24.0
   very_good_analysis: ^6.0.0
-  yaml: ^3.1.2
