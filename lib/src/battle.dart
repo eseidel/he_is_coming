@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:he_is_coming_sim/creatures.dart';
-import 'package:he_is_coming_sim/item.dart';
-import 'package:he_is_coming_sim/logger.dart';
+import 'package:he_is_coming_sim/src/creatures.dart';
+import 'package:he_is_coming_sim/src/item.dart';
+import 'package:he_is_coming_sim/src/logger.dart';
 
 /// Context for an in-progress battle.
 class BattleContext {

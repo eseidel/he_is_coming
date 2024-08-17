@@ -1,5 +1,5 @@
-import 'package:he_is_coming_sim/item.dart';
-import 'package:he_is_coming_sim/items.g.dart';
+import 'package:he_is_coming_sim/src/item.dart';
+import 'package:he_is_coming_sim/src/items.g.dart';
 import 'package:meta/meta.dart';
 
 /// Class representing a player or an enemy.

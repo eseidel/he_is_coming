@@ -1,6 +1,6 @@
 import 'package:args/args.dart';
-import 'package:he_is_coming_sim/logger.dart';
-import 'package:he_is_coming_sim/simulate.dart';
+import 'package:he_is_coming_sim/he_is_coming_sim.dart';
+import 'package:he_is_coming_sim/src/logger.dart';
 
 ArgParser buildParser() {
   return ArgParser()

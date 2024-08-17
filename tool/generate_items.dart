@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:he_is_coming_sim/item.dart';
+import 'package:he_is_coming_sim/src/item.dart';
 import 'package:mustache_template/mustache.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
@@ -51,7 +51,7 @@ void main() {
 
   final output =
       template.renderString({'items': items.map(toTemplateMap).toList()});
-  final outPath = p.join('lib', 'items.g.dart');
+  final outPath = p.join('lib', 'src', 'items.g.dart');
   File(outPath).writeAsStringSync(output);
 
   Process.runSync(Platform.executable, ['format', outPath]);

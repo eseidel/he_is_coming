@@ -1,4 +1,4 @@
-import 'package:he_is_coming_sim/creatures.dart';
+import 'package:he_is_coming_sim/src/creatures.dart';
 import 'package:meta/meta.dart';
 
 /// Represents a single level or floor during a run.
