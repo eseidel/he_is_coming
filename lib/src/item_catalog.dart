@@ -32,6 +32,10 @@ extension on YamlMap {
   }
 }
 
+class Effect {}
+
+final _effectByItemName = <String, Effect>{};
+
 class _ItemCatalogReader {
   static const List<String> _itemKeys = <String>[
     'name',
@@ -69,7 +73,14 @@ class _ItemCatalogReader {
     final health = yaml['health'] as int? ?? 0;
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
-    // final effect = yaml['effect'] as String?;
+    final effectText = yaml['effect'] as String?;
+    if (effectText != null) {
+      final effect = _effectByItemName[name];
+      // TODO(eseidel): Currently only warning about commons.
+      if (effect == null && rarity == Rarity.common) {
+        logger.warn('$name missing: $effectText');
+      }
+    }
     validateKeys(yaml, _itemKeys.toSet());
     return Item(
       name,
@@ -100,6 +111,7 @@ class ItemCatalog {
   /// Create an ItemCatalog from a yaml file.
   factory ItemCatalog.fromFile(String path) {
     final items = _ItemCatalogReader.read(path);
+    logger.info('Loaded ${items.length} from $path');
     return ItemCatalog(items);
   }
 
