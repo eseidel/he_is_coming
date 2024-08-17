@@ -10,7 +10,30 @@ Creature createPlayer() {
     _kPlayerName,
     health: 10,
     attack: 0,
+    gold: 0,
     items: [itemCatalog['Wooden Stick']],
+  );
+}
+
+/// Create an enemy
+Creature makeEnemy(
+  String name, {
+  required int attack,
+  required int health,
+  int gold = 1,
+  int armor = 0,
+  int speed = 0,
+  List<Item> items = const <Item>[],
+  int? hp,
+}) {
+  return Creature(
+    name,
+    attack: attack,
+    health: health,
+    speed: speed,
+    gold: gold,
+    items: items,
+    hp: hp,
   );
 }
 
@@ -22,6 +45,7 @@ class Creature {
     this.name, {
     required int attack,
     required int health,
+    required this.gold,
     int armor = 0,
     int speed = 0,
     this.items = const <Item>[],
@@ -49,6 +73,12 @@ class Creature {
   /// The current hp of the enemy or player.
   final int hp;
 
+  /// How much gold is on this creature or player.
+  final int gold;
+
+  /// Returns true if the creature is still alive.
+  bool get isAlive => hp > 0;
+
   /// Stats as they would be in the over-world or at fight start.
   Stats get startingStats {
     return items.fold(
@@ -63,7 +93,7 @@ class Creature {
   }
 
   /// Make a copy with a changed hp.
-  Creature copyWith({int? hp}) {
+  Creature copyWith({int? hp, int? gold}) {
     return Creature(
       name,
       attack: baseStats.attack,
@@ -72,46 +102,42 @@ class Creature {
       speed: baseStats.speed,
       items: items,
       hp: hp ?? this.hp,
+      gold: gold ?? this.gold,
     );
   }
 }
 
 /// Class holding predefined over-world enemies.
 class Enemies {
-  /// Wolf Level 1
   /// If player has 5 or less health, wolf gains 2 attack.
-  static final wolfLevel1 = Creature('Wolf', attack: 1, health: 3);
+  static final wolfLevel1 = makeEnemy('Wolf Level 1', attack: 1, health: 3);
 
-  /// Wolf Level 2
   /// If player has 5 or less health, wolf gains 3 attack.
-  static final wolfLevel2 = Creature('Wolf', attack: 2, health: 6, speed: 1);
+  static final wolfLevel2 =
+      makeEnemy('Wolf Level 2', attack: 2, health: 6, speed: 1);
 
-  /// Wolf Level 3
   /// If player has 5 or less health, wolf gains 4 attack.
-  static final wolfLevel3 = Creature('Wolf', attack: 2, health: 9, speed: 2);
+  static final wolfLevel3 =
+      makeEnemy('Wolf Level 3', attack: 2, health: 9, speed: 2);
 
-  /// Bear Level 1
   /// Bear deals 3 additional damage while you have armor.
-  static final bearLevel1 = Creature('Bear', attack: 1, health: 3);
+  static final bearLevel1 = makeEnemy('Bear Level 1', attack: 1, health: 3);
 
-  /// Bear Level 3
   /// Bear deals 5 additional damage while you have armor.
-  static final bearLevel3 = Creature('Bear', attack: 2, health: 8, speed: 2);
+  static final bearLevel3 =
+      makeEnemy('Bear Level 3', attack: 2, health: 8, speed: 2);
 
-  /// Spider Level 1
   /// Battle Start: If Spider has more speed than you, it deals 3 damage
   static final spiderLevel1 =
-      Creature('Spider', attack: 1, health: 3, speed: 3);
+      makeEnemy('Spider Level 1', attack: 1, health: 3, speed: 3);
 
-  /// Spider Level 2
   /// Battle Start: If Spider has more speed than you, it deals 4 damage
   static final spiderLevel2 =
-      Creature('Spider', attack: 1, health: 3, speed: 3);
+      makeEnemy('Spider Level 2', attack: 1, health: 3, speed: 3);
 
-  /// Spider Level 3
   /// Battle Start: If Spider has more speed than you, it deals 5 damage
   static final spiderLevel3 =
-      Creature('Spider', attack: 1, health: 4, speed: 4);
+      makeEnemy('Spider Level 3', attack: 1, health: 4, speed: 4);
 }
 
 /// Class holding predefined bosses.
@@ -119,13 +145,13 @@ class Bosses {
   /// Hothead, level 1
   /// If Hothead has more speed than you, his first strike deals 10 additional
   /// damage.
-  static final hothead = Creature('Hothead', attack: 4, health: 5, speed: 4);
+  static final hothead = makeEnemy('Hothead', attack: 4, health: 5, speed: 4);
 
   /// Redwood Treant, level 2
   /// Redwood Treant's attack is halved against armor
   static final redwoodTreant =
-      Creature('Redwood Treant', attack: 6, health: 25, armor: 15);
+      makeEnemy('Redwood Treant', attack: 6, health: 25, armor: 15);
 
   /// Leshen, level 3
-  static final leshen = Creature('Leshen', attack: 7, health: 60, speed: 3);
+  static final leshen = makeEnemy('Leshen', attack: 7, health: 60, speed: 3);
 }

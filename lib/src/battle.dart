@@ -56,10 +56,16 @@ class BattleContext {
   Creature get _second => creatures[1];
 
   /// The first creature in this battle with current stats.
-  Creature get firstResolved => _first.copyWith(hp: stats[0].health);
+  Creature get firstResolved {
+    final goldDiff = _first.isAlive ? _second.gold : 0;
+    return _first.copyWith(hp: stats[0].health, gold: _first.gold + goldDiff);
+  }
 
   /// The second creature in this battle with current stats.
-  Creature get secondResolved => _second.copyWith(hp: stats[1].health);
+  Creature get secondResolved {
+    final goldDiff = _second.isAlive ? _first.gold : 0;
+    return _second.copyWith(hp: stats[1].health, gold: _second.gold + goldDiff);
+  }
 
   /// Returns true if all participants are still alive.
   bool get allAlive => stats[0].health > 0 && stats[1].health > 0;
@@ -88,6 +94,26 @@ class BattleResult {
 /// Class to represent a battle between two creatures.
 /// The player should be the first creature.
 class Battle {
+  void _logSpoils({required Creature before, required Creature after}) {
+    if (!after.isAlive) {
+      return;
+    }
+    final diffStrings = <String>[];
+    final hpDiff = after.hp - before.hp;
+    if (hpDiff > 0) {
+      diffStrings.add('hp +$hpDiff');
+    } else if (hpDiff < 0) {
+      diffStrings.add('hp $hpDiff');
+    }
+    final goldDiff = after.gold - before.gold;
+    if (goldDiff > 0) {
+      diffStrings.add('gold +$goldDiff');
+    }
+    if (diffStrings.isNotEmpty) {
+      logger.info('${after.name} result: ${diffStrings.join(' ')}');
+    }
+  }
+
   /// Play out the battle and return the result.
   BattleResult resolve({required Creature first, required Creature second}) {
     final ctx = BattleContext([first, second]);
@@ -120,8 +146,9 @@ class Battle {
         ..nextAttacker();
     }
 
-    // While neither of them is dead.
-    // Resolve a turn
-    return BattleResult(ctx.firstResolved, ctx.secondResolved);
+    // Print spoils for the player if they won.
+    final firstResolved = ctx.firstResolved;
+    _logSpoils(before: first, after: firstResolved);
+    return BattleResult(firstResolved, ctx.secondResolved);
   }
 }
