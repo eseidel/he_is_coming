@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:he_is_coming_sim/logger.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -13,6 +16,25 @@ class Stats {
   final int armor;
   final int attack;
   final int speed;
+
+  Stats copyWith({
+    int? health,
+    int? armor,
+    int? attack,
+    int? speed,
+  }) {
+    return Stats(
+      health: health ?? this.health,
+      armor: armor ?? this.armor,
+      attack: attack ?? this.attack,
+      speed: speed ?? this.speed,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Health: $health, Armor: $armor, Attack: $attack, Speed: $speed';
+  }
 }
 
 @immutable
@@ -51,7 +73,7 @@ class Item {
 }
 
 class Items {
-  final woodenStick = Item.weapon('Wooden Stick', attack: 1);
+  static final woodenStick = Item.weapon('Wooden Stick', attack: 1);
 }
 
 @immutable
@@ -63,18 +85,19 @@ class Creature {
     int armor = 0,
     int speed = 0,
     this.items = const <Item>[],
+    int? hp,
   })  : baseStats = Stats(
           health: health,
           armor: armor,
           attack: attack,
           speed: speed,
         ),
-        hp = health;
+        hp = hp ?? health;
 
   Creature.player({int health = 10})
       : name = kPlayerName,
         baseStats = Stats(health: health),
-        items = const <Item>[],
+        items = <Item>[Items.woodenStick],
         hp = health;
 
   static const kPlayerName = 'Player';
@@ -86,13 +109,33 @@ class Creature {
   final List<Item> items;
   final int hp;
 
-  Stats get stats => baseStats;
+  Stats get startingStats {
+    return items.fold(
+      baseStats,
+      (stats, item) => stats.copyWith(
+        health: stats.health + item.stats.health,
+        armor: stats.armor + item.stats.armor,
+        attack: stats.attack + item.stats.attack,
+        speed: stats.speed + item.stats.speed,
+      ),
+    );
+  }
 
-  bool get isAlive => hp > 0;
+  Creature copyWith({int? hp}) {
+    return Creature(
+      name,
+      attack: baseStats.attack,
+      health: baseStats.health,
+      armor: baseStats.armor,
+      speed: baseStats.speed,
+      items: items,
+      hp: hp ?? this.hp,
+    );
+  }
 }
 
 class Creatures {
-  final wolf = Creature('Wolf', attack: 1, health: 5);
+  static final wolf = Creature('Wolf', attack: 1, health: 5);
 }
 
 // Named Floor to not conflict with "Level" from mason_logger.
@@ -122,50 +165,106 @@ class Combatants {
   // the tie for who goes first in equal speed, etc.
   Combatants(this.creatures);
   final List<Creature> creatures;
+}
+
+class BattleContext {
+  BattleContext(this.creatures)
+      : stats = creatures.map((c) => c.startingStats).toList(),
+        _attackerIndex = 0 {
+    _attackerIndex = firstAttackerIndex(stats);
+  }
+
+  static int firstAttackerIndex(List<Stats> stats) =>
+      stats[0].speed >= stats[1].speed ? 0 : 1;
+
+  void nextAttacker() {
+    _attackerIndex = attackerIndex.isEven ? 1 : 0;
+  }
+
+  void onBattle() {
+    // This is a placeholder for now.
+  }
+
+  final List<Creature> creatures;
+  final List<Stats> stats;
+  int _attackerIndex;
+
+  int get attackerIndex => _attackerIndex;
+  int get defenderIndex => _attackerIndex.isEven ? 1 : 0;
+
+  Stats get attackerStats => stats[attackerIndex];
+  String get attackerName => creatures[attackerIndex].name;
+  Stats get defenderStats => stats[defenderIndex];
+  String get defenderName => creatures[defenderIndex].name;
+
+  void setStats(int index, Stats newStats) {
+    stats[index] = newStats;
+  }
 
   Creature get _first => creatures[0];
   Creature get _second => creatures[1];
 
-  int get startIndex => _first.stats.speed >= _second.stats.speed ? 0 : 1;
+  Creature get firstResolved => _first.copyWith(hp: stats[0].health);
+  Creature get secondResolved => _second.copyWith(hp: stats[1].health);
 
-  Creature get player => _first.isPlayer ? _first : _second;
-  Creature get mob => _first.isPlayer ? _second : _first;
-
-  bool get allAlive => _first.isAlive && _second.isAlive;
+  bool get allAlive => stats[0].health > 0 && stats[1].health > 0;
 
   Creature operator [](int index) => index.isEven ? _first : _second;
 }
 
 class Battle {
-  Combatants hit({required Creature attacker, required Creature defender}) {
-    return Combatants([attacker, defender]);
-  }
-
   Combatants resolve({required Creature first, required Creature second}) {
-    var combatants = Combatants([first, second]);
-    var attackerIndex = combatants.startIndex;
-    while (combatants.allAlive) {
-      final attacker = combatants[attackerIndex];
-      final defender = combatants[attackerIndex];
+    final ctx = BattleContext([first, second])..onBattle();
+    while (ctx.allAlive) {
       // onBattle
       // onTurn
       // apply the damage
-      combatants = hit(attacker: attacker, defender: defender);
-      // onHit
-      // onExposed
-      // onWounded
-      // This doesn't handle "stunned" yet.
-      attackerIndex++;
+      // figure out how much damage to apply
+      // apply it to armor, then apply it to hp
+      final damage = ctx.attackerStats.attack;
+      final armorReduction = min(ctx.defenderStats.armor, damage);
+      final remainingDamage = damage - armorReduction;
+      final newArmor = ctx.defenderStats.armor - armorReduction;
+      final newHp = ctx.defenderStats.health - remainingDamage;
+      logger.info(
+          '${ctx.attackerName} attacks ${ctx.defenderName} for $damage damage. '
+          'Armor absorbs $armorReduction damage. '
+          '${ctx.defenderName} has $newArmor armor and $newHp health remaining.');
+      ctx
+        ..setStats(
+          ctx.defenderIndex,
+          ctx.defenderStats.copyWith(
+            armor: newArmor,
+            health: newHp,
+          ),
+        )
+        // onHit
+        // onExposed
+        // onWounded
+        // This doesn't handle "stunned" yet.
+        ..nextAttacker();
     }
 
     // While neither of them is dead.
     // Resolve a turn
-    return combatants;
+    return Combatants([ctx.firstResolved, ctx.secondResolved]);
   }
 }
 
 void runSim() {
   // This is mostly a placeholder for now.
+
+  final player = Creature.player();
+  final wolf = Creatures.wolf;
+  logger
+    ..info('Player: ${player.startingStats}')
+    ..info('Wolf: ${wolf.startingStats}');
+
+  final battle = Battle();
+  final combatants = battle.resolve(first: player, second: wolf);
+  final winner =
+      combatants.creatures.firstWhere((c) => c.startingStats.health > 0);
+  logger.info('${winner.name} wins!');
 
   // Create a new Game
   // Simulate it until the player dies?
