@@ -1,0 +1,68 @@
+- name: Wooden Stick
+  rarity: common
+  kind: weapon
+  attack: 1
+- name: "Leather Vest"
+  rarity: common
+  armor: 2
+  speed: 1
+- name: "Redwood Rod"
+  rarity: common
+  material: wood
+  kind: weapon
+  attack: 2
+  health: 4
+- name: "Stone Steak"
+  rarity: common
+  kind: food
+  material: stone
+  effect: "Battle Start: If your health is full, gain 4 armor"
+- name: 'Redwood Cloak'
+  rarity: common
+  health: 2
+  effect: "Battle Start: If your health is not full, restore 1 health"
+- name: Heart Drinker
+  rarity: common
+  kind: weapon
+  material: sanguine
+  attack: 2
+  effect: "On Hit: Restore 1 health"
+- name: Spearshield Lance
+  rarity: common
+  kind: weapon
+  attack: 1
+  armor: 4
+- name: Emergency Shield
+  rarity: common
+  effect: "Battle Start: If you have less speed than the enemy, gain 4 armor"
+- name: Phantom Armor
+  effect: Enemies first strike ignores armor.
+  rarity: rare
+  armor: 4
+- name: 'Fortified Gauntlet'
+  rarity: rare
+  effect: 'Turn Start: If you have armor, gain 1 additional armor'
+- name: 'Weighted Bracelet'
+  rarity: common
+  attack: 1
+  speed: -1
+- name: 'Haymaker'
+  rarity: common
+  kind: weapon
+  attack: 1
+  effect: 'Every 3 strikes, deal triple damage'
+- name: 'Leather Gloves'
+  rarity: common
+  health: 3
+  speed: 1
+- name: 'Iron Greatsword'
+  rarity: common
+  kind: weapon
+  material: stone
+  attack: 4
+  speed: -2
+- name: 'Redwood Helmet'
+  rarity: common
+  material: wood
+  armor: 1
+  effect: "Exposed: Restore 3 health"
