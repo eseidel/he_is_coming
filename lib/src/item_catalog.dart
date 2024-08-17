@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
+import 'package:he_is_coming_sim/src/battle.dart';
 import 'package:he_is_coming_sim/src/item.dart';
 import 'package:he_is_coming_sim/src/logger.dart';
 import 'package:path/path.dart' as p;
@@ -32,9 +33,27 @@ extension on YamlMap {
   }
 }
 
-class Effect {}
+// Function type for effect callbacks.
+typedef EffectFn = void Function(EffectContext ctx) Function();
 
-final _effectByItemName = <String, Effect>{};
+/// Container for callbacks for items.
+class Effect {
+  /// Create a new Effect
+  Effect({this.onBattle});
+
+  /// Called on battle start.
+  final EffectFn? onBattle;
+}
+
+final _effectByItemName = <String, Effect>{
+  'Stone Steak': Effect(
+    onBattle: (ctx) {
+      if (ctx.isHealthFull) {
+        ctx.adjustArmor(4);
+      }
+    },
+  ),
+};
 
 class _ItemCatalogReader {
   static const List<String> _itemKeys = <String>[

@@ -4,6 +4,37 @@ import 'package:he_is_coming_sim/src/creatures.dart';
 import 'package:he_is_coming_sim/src/item.dart';
 import 'package:he_is_coming_sim/src/logger.dart';
 
+/// Passed to all Effect callbacks.
+class EffectContext {
+  /// Create an EffectContext
+  EffectContext(this._battle, this._index);
+
+  final BattleContext _battle;
+  final int _index;
+
+  CreatureStats get _stats => _battle.stats[_index];
+  set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
+
+  /// Returns true if health is currently full.
+  bool get isHealthFull => _stats.isHealthFull;
+
+  /// Add or remove armor
+  void adjustArmor(int armorDelta) {
+    _stats = _stats + Stats(armor: armorDelta);
+  }
+}
+
+class CreatureStats {
+  final int maxHp;
+  final int hp;
+  final int armor;
+  final int speed;
+  final int attack;
+  final int gold;
+
+  bool get isHealthFull => hp == maxHp;
+}
+
 /// Context for an in-progress battle.
 class BattleContext {
   /// Create a BattleContext.
@@ -25,7 +56,7 @@ class BattleContext {
   final List<Creature> creatures;
 
   /// Current stats for the battling creatures.
-  final List<Stats> stats;
+  final List<CreatureStats> stats;
 
   int _attackerIndex;
 
@@ -36,13 +67,13 @@ class BattleContext {
   int get defenderIndex => _attackerIndex.isEven ? 1 : 0;
 
   /// Stats for the current attacker.
-  Stats get attackerStats => stats[attackerIndex];
+  CreatureStats get attackerStats => stats[attackerIndex];
 
   /// Name of the current attacker.
   String get attackerName => creatures[attackerIndex].name;
 
   /// Stats for the current defender.
-  Stats get defenderStats => stats[defenderIndex];
+  CreatureStats get defenderStats => stats[defenderIndex];
 
   /// Name of the current defender.
   String get defenderName => creatures[defenderIndex].name;
@@ -58,17 +89,17 @@ class BattleContext {
   /// The first creature in this battle with current stats.
   Creature get firstResolved {
     final goldDiff = _first.isAlive ? _second.gold : 0;
-    return _first.copyWith(hp: stats[0].health, gold: _first.gold + goldDiff);
+    return _first.copyWith(hp: stats[0].hp, gold: _first.gold + goldDiff);
   }
 
   /// The second creature in this battle with current stats.
   Creature get secondResolved {
     final goldDiff = _second.isAlive ? _first.gold : 0;
-    return _second.copyWith(hp: stats[1].health, gold: _second.gold + goldDiff);
+    return _second.copyWith(hp: stats[1].hp, gold: _second.gold + goldDiff);
   }
 
   /// Returns true if all participants are still alive.
-  bool get allAlive => stats[0].health > 0 && stats[1].health > 0;
+  bool get allAlive => stats[0].hp > 0 && stats[1].hp > 0;
 
   /// Returns the Creature at `index` mod 2.
   Creature operator [](int index) => index.isEven ? _first : _second;
@@ -128,9 +159,7 @@ class Battle {
       final remainingDamage = damage - armorReduction;
       final newArmor = ctx.defenderStats.armor - armorReduction;
       final newHp = ctx.defenderStats.health - remainingDamage;
-      logger.info(
-        '${ctx.attackerName} attacks ($damage).',
-      );
+      logger.info('${ctx.attackerName} attacks ($damage).');
       ctx
         ..setStats(
           ctx.defenderIndex,

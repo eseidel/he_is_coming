@@ -23,6 +23,16 @@ class Stats {
   /// Current speed.
   final int speed;
 
+  /// Add two Stats together.
+  Stats operator +(Stats other) {
+    return copyWith(
+      health: health + other.health,
+      armor: armor + other.armor,
+      attack: attack + other.attack,
+      speed: speed + other.speed,
+    );
+  }
+
   /// Create a copy of Stats with updated values.
   Stats copyWith({
     int? health,
