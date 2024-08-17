@@ -3,91 +3,91 @@
 import 'package:he_is_coming_sim/item.dart';
 
 class Items {
-  static final EmergencyShield = Item(
+  static final emergencyShield = Item(
     'Emergency Shield',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
-  static final FortifiedGauntlet = Item(
+  static final fortifiedGauntlet = Item(
     'Fortified Gauntlet',
     Kind.clothing,
     Rarity.rare,
     Material.leather,
   );
-  static final Haymaker = Item(
+  static final haymaker = Item(
     'Haymaker',
     Kind.weapon,
     Rarity.common,
     Material.leather,
   );
-  static final HeartDrinker = Item(
+  static final heartDrinker = Item(
     'Heart Drinker',
     Kind.weapon,
     Rarity.common,
     Material.sanguine,
   );
-  static final IronGreatsword = Item(
+  static final ironGreatsword = Item(
     'Iron Greatsword',
     Kind.weapon,
     Rarity.common,
     Material.stone,
   );
-  static final LeatherGloves = Item(
+  static final leatherGloves = Item(
     'Leather Gloves',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
-  static final LeatherVest = Item(
+  static final leatherVest = Item(
     'Leather Vest',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
-  static final PhantomArmor = Item(
+  static final phantomArmor = Item(
     'Phantom Armor',
     Kind.clothing,
     Rarity.rare,
     Material.leather,
   );
-  static final RedwoodCloak = Item(
+  static final redwoodCloak = Item(
     'Redwood Cloak',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
-  static final RedwoodHelmet = Item(
+  static final redwoodHelmet = Item(
     'Redwood Helmet',
     Kind.clothing,
     Rarity.common,
     Material.wood,
   );
-  static final RedwoodRod = Item(
+  static final redwoodRod = Item(
     'Redwood Rod',
     Kind.weapon,
     Rarity.common,
     Material.wood,
   );
-  static final SpearshieldLance = Item(
+  static final spearshieldLance = Item(
     'Spearshield Lance',
     Kind.weapon,
     Rarity.common,
     Material.leather,
   );
-  static final StoneSteak = Item(
+  static final stoneSteak = Item(
     'Stone Steak',
     Kind.food,
     Rarity.common,
     Material.stone,
   );
-  static final WeightedBracelet = Item(
+  static final weightedBracelet = Item(
     'Weighted Bracelet',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
-  static final WoodenStick = Item(
+  static final woodenStick = Item(
     'Wooden Stick',
     Kind.weapon,
     Rarity.common,

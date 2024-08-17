@@ -2,8 +2,12 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:he_is_coming_sim/item.dart';
+// We have these all under dev_dependencies, not sure why it complains.
+// ignore: depend_on_referenced_packages
 import 'package:mustache_template/mustache.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart' as p;
+// ignore: depend_on_referenced_packages
 import 'package:yaml/yaml.dart';
 
 Item itemFromYaml(YamlMap yaml) {
@@ -24,7 +28,7 @@ Item itemFromYaml(YamlMap yaml) {
 String camelCase(String sentenceCase) {
   final parts = sentenceCase.split(' ');
   final joined = parts.join();
-  return joined[0] + joined.substring(1);
+  return joined[0].toLowerCase() + joined.substring(1);
 }
 
 Map<String, dynamic> toTemplateMap(Item item) {
