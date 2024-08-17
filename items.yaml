@@ -270,3 +270,18 @@
   attack: 1
   speed: 1
   armor: 1
+- name: "Crimson Cloak"
+  rarity: rare
+  effect: "Whenever you take damage, restore 1 health"
+- name: "Lifethread Pendant"
+  rarity: rare
+  effect: "Resilience: 50% chance to survive with 1 health"
+- name: "Bearpelt Plate"
+  rarity: common
+  effect: "Take 3 additional damage from the enemies first strike"
+  armor: 5
+- name: "Vampiric Wine"
+  rarity: common
+  material: sanguine
+  kind: food
+  effect: "Wounded: Restore 4 health"

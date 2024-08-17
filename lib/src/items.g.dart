@@ -4,6 +4,14 @@ import 'package:he_is_coming_sim/src/item.dart';
 
 /// Class containing pre-defined `Item` instances.
 class Items {
+  /// Bearpelt Plate
+  static final bearpeltPlate = Item(
+    'Bearpelt Plate',
+    Kind.clothing,
+    Rarity.common,
+    Material.leather,
+  );
+
   /// Bejeweled Blade
   static final bejeweledBlade = Item(
     'Bejeweled Blade',
@@ -82,6 +90,14 @@ class Items {
     Kind.clothing,
     Rarity.common,
     Material.stone,
+  );
+
+  /// Crimson Cloak
+  static final crimsonCloak = Item(
+    'Crimson Cloak',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
   );
 
   /// Double-edged Sword
@@ -274,6 +290,14 @@ class Items {
     Kind.clothing,
     Rarity.heroic,
     Material.sanguine,
+  );
+
+  /// Lifethread Pendant
+  static final lifethreadPendant = Item(
+    'Lifethread Pendant',
+    Kind.clothing,
+    Rarity.rare,
+    Material.leather,
   );
 
   /// Marble Mirror
@@ -474,6 +498,14 @@ class Items {
     Kind.weapon,
     Rarity.common,
     Material.leather,
+  );
+
+  /// Vampiric Wine
+  static final vampiricWine = Item(
+    'Vampiric Wine',
+    Kind.food,
+    Rarity.common,
+    Material.sanguine,
   );
 
   /// Weighted Bracelet

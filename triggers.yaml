@@ -1,0 +1,10 @@
+- name: "First Turn"
+  detail: "Gain a temporary effect at the start of your first turn"
+- name: "Exposed"
+  detail: "Triggers when you lose all your armor for the first time"
+- name: "Resilience"
+  detail: "Triggers when you take lethal damage for the first time."
+- name: "Wounded"
+  detail: "Triggers when you go below 50% health for the first time."
+- name: Thorns
+  detail: "Deals damage equal to your thorns when struck, then remove all thorns."

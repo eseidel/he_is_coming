@@ -1,0 +1,4 @@
+- name: Titan's Edge
+  effect: Only strike every other turn, but deal double damage
+- name: Thieving Edge
+  effect: "On Hit: If you have less than 10 gold, gain 1 gold."
