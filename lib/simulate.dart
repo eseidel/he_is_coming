@@ -160,13 +160,6 @@ class Game {
   int currentTime;
 }
 
-class Combatants {
-  // By convention the player should be passed first, as the first will win
-  // the tie for who goes first in equal speed, etc.
-  Combatants(this.creatures);
-  final List<Creature> creatures;
-}
-
 class BattleContext {
   BattleContext(this.creatures)
       : stats = creatures.map((c) => c.startingStats).toList(),
@@ -212,8 +205,18 @@ class BattleContext {
   Creature operator [](int index) => index.isEven ? _first : _second;
 }
 
+class BattleResult {
+  BattleResult(this.first, this.second);
+  final Creature first;
+  final Creature second;
+
+  // By convention, the second creature wins if the first one is dead.
+  // The player is always the first creature and thus loses if they die.
+  Creature get winner => first.hp > 0 ? first : second;
+}
+
 class Battle {
-  Combatants resolve({required Creature first, required Creature second}) {
+  BattleResult resolve({required Creature first, required Creature second}) {
     final ctx = BattleContext([first, second])..onBattle();
     while (ctx.allAlive) {
       // onBattle
@@ -227,9 +230,8 @@ class Battle {
       final newArmor = ctx.defenderStats.armor - armorReduction;
       final newHp = ctx.defenderStats.health - remainingDamage;
       logger.info(
-          '${ctx.attackerName} attacks ${ctx.defenderName} for $damage damage. '
-          'Armor absorbs $armorReduction damage. '
-          '${ctx.defenderName} has $newArmor armor and $newHp health remaining.');
+        '${ctx.attackerName} attacks ($damage).',
+      );
       ctx
         ..setStats(
           ctx.defenderIndex,
@@ -247,7 +249,7 @@ class Battle {
 
     // While neither of them is dead.
     // Resolve a turn
-    return Combatants([ctx.firstResolved, ctx.secondResolved]);
+    return BattleResult(ctx.firstResolved, ctx.secondResolved);
   }
 }
 
@@ -261,10 +263,8 @@ void runSim() {
     ..info('Wolf: ${wolf.startingStats}');
 
   final battle = Battle();
-  final combatants = battle.resolve(first: player, second: wolf);
-  final winner =
-      combatants.creatures.firstWhere((c) => c.startingStats.health > 0);
-  logger.info('${winner.name} wins!');
+  final result = battle.resolve(first: player, second: wolf);
+  logger.info('${result.winner.name} wins!');
 
   // Create a new Game
   // Simulate it until the player dies?
