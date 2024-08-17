@@ -1,5 +1,5 @@
 import 'package:he_is_coming_sim/item.dart';
-import 'package:he_is_coming_sim/items.dart';
+import 'package:he_is_coming_sim/items.g.dart';
 import 'package:meta/meta.dart';
 
 @immutable
