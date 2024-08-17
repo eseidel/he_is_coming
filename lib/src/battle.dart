@@ -2,17 +2,22 @@ import 'dart:math';
 
 import 'package:he_is_coming_sim/src/creatures.dart';
 import 'package:he_is_coming_sim/src/logger.dart';
+import 'package:meta/meta.dart';
+
+String _signed(int value) => value >= 0 ? '+$value' : '$value';
 
 /// Passed to all Effect callbacks.
 class EffectContext {
   /// Create an EffectContext
-  EffectContext(this._battle, this._index);
+  EffectContext(this._battle, this._index, this._sourceName);
 
   final BattleContext _battle;
   final int _index;
+  final String _sourceName;
 
   CreatureStats get _stats => _battle.stats[_index];
   set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
+  String get _playerName => _battle.creatures[_index].name;
 
   /// Returns true if health is currently full.
   bool get isHealthFull => _stats.isHealthFull;
@@ -20,13 +25,20 @@ class EffectContext {
   /// Add or remove armor
   void adjustArmor(int armorDelta) {
     _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
+    logger.info('$_playerName armor ${_signed(armorDelta)} from $_sourceName');
   }
 }
 
+String? _diffString(String name, int before, int after) {
+  final diff = after - before;
+  return diff != 0 ? '$name: ${_signed(diff)}' : null;
+}
+
 /// Holds stats for a creature during battle.
+@immutable
 class CreatureStats {
   /// Create a CreatureStats.
-  CreatureStats({
+  const CreatureStats({
     required this.maxHp,
     required this.hp,
     required this.armor,
@@ -83,6 +95,23 @@ class CreatureStats {
       attack: attack,
       gold: gold,
     );
+  }
+
+  /// Returns a string describing the difference between this and `other`
+  /// or null if there is no difference.
+  String? diffString(CreatureStats other) {
+    final diffStrings = <String?>[
+      _diffString('hp', hp, other.hp),
+      _diffString('maxHp', maxHp, other.maxHp),
+      _diffString('armor', armor, other.armor),
+      _diffString('speed', speed, other.speed),
+      _diffString('attack', attack, other.attack),
+      _diffString('gold', gold, other.gold),
+    ].nonNulls;
+    if (diffStrings.isNotEmpty) {
+      return diffStrings.join(' ');
+    }
+    return null;
   }
 
   @override
@@ -185,17 +214,10 @@ class Battle {
     if (!after.isAlive) {
       return;
     }
-    final diffStrings = <String>[];
-    final hpDiff = after.hp - before.hp;
-    if (hpDiff > 0) {
-      diffStrings.add('hp +$hpDiff');
-    } else if (hpDiff < 0) {
-      diffStrings.add('hp $hpDiff');
-    }
-    final goldDiff = after.gold - before.gold;
-    if (goldDiff > 0) {
-      diffStrings.add('gold +$goldDiff');
-    }
+    final diffStrings = <String?>[
+      _diffString('hp', before.hp, after.hp),
+      _diffString('gold', before.gold, after.gold),
+    ].nonNulls;
     if (diffStrings.isNotEmpty) {
       logger.info('${after.name} result: ${diffStrings.join(' ')}');
     }
@@ -203,11 +225,17 @@ class Battle {
 
   void _onBattle(BattleContext battleCtx) {
     // send on battle to all items on both creatures
-    for (final creature in battleCtx.creatures) {
-      final effectCxt =
-          EffectContext(battleCtx, battleCtx.creatures.indexOf(creature));
+    for (var index = 0; index < battleCtx.creatures.length; index++) {
+      final creature = battleCtx.creatures[index];
+      final beforeStats = battleCtx.stats[index];
       for (final item in creature.items) {
+        final effectCxt = EffectContext(battleCtx, index, item.name);
         item.effect?.onBattle?.call(effectCxt);
+      }
+      final afterStats = battleCtx.stats[index];
+      final diffString = beforeStats.diffString(afterStats);
+      if (diffString != null) {
+        logger.info('${creature.name} onBattle: $diffString');
       }
     }
   }
