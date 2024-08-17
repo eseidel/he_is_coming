@@ -40,6 +40,25 @@ final _effectByItemName = <String, Effect>{
       }
     },
   ),
+  'Redwood Cloak': Effect(
+    onBattle: (ctx) {
+      if (!ctx.isHealthFull) {
+        ctx.restoreHealth(1);
+      }
+    },
+  ),
+  'Emergency Shield': Effect(
+    onBattle: (ctx) {
+      if (ctx.my.speed < ctx.enemy.speed) {
+        ctx.adjustArmor(4);
+      }
+    },
+  ),
+  'Granite Gauntlet': Effect(
+    onBattle: (ctx) {
+      ctx.adjustArmor(5);
+    },
+  ),
 };
 
 class _ItemCatalogReader {
@@ -104,6 +123,7 @@ class _ItemCatalogReader {
 
   static List<Item> read(String path) {
     final itemsYaml = loadYaml(File(path).readAsStringSync()) as YamlList;
+    // TODO(eseidel): Validate no extra item effects?
     return itemsYaml
         .cast<YamlMap>()
         .map<Item>(itemFromYaml)

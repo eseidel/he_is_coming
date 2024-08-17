@@ -15,6 +15,12 @@ class EffectContext {
   final int _index;
   final String _sourceName;
 
+  /// Stats for the creature with this effect.
+  CreatureStats get my => _battle.stats[_index];
+
+  /// Stats for the enemy creature.
+  CreatureStats get enemy => _battle.stats[_index.isEven ? 1 : 0];
+
   CreatureStats get _stats => _battle.stats[_index];
   set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
   String get _playerName => _battle.creatures[_index].name;
@@ -26,6 +32,12 @@ class EffectContext {
   void adjustArmor(int armorDelta) {
     _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
     logger.info('$_playerName armor ${_signed(armorDelta)} from $_sourceName');
+  }
+
+  /// Restore health.
+  void restoreHealth(int hp) {
+    _stats = _stats.copyWith(hp: hp);
+    logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
   }
 }
 
@@ -152,13 +164,13 @@ class BattleContext {
   int get defenderIndex => _attackerIndex.isEven ? 1 : 0;
 
   /// Stats for the current attacker.
-  CreatureStats get attackerStats => stats[attackerIndex];
+  CreatureStats get attacker => stats[attackerIndex];
 
   /// Name of the current attacker.
   String get attackerName => creatures[attackerIndex].name;
 
   /// Stats for the current defender.
-  CreatureStats get defenderStats => stats[defenderIndex];
+  CreatureStats get defender => stats[defenderIndex];
 
   /// Name of the current defender.
   String get defenderName => creatures[defenderIndex].name;
@@ -210,7 +222,7 @@ class BattleResult {
 /// Class to represent a battle between two creatures.
 /// The player should be the first creature.
 class Battle {
-  void _logSpoils({required Creature before, required Creature after}) {
+  static void _logSpoils({required Creature before, required Creature after}) {
     if (!after.isAlive) {
       return;
     }
@@ -223,7 +235,7 @@ class Battle {
     }
   }
 
-  void _onBattle(BattleContext battleCtx) {
+  static void _onBattle(BattleContext battleCtx) {
     // send on battle to all items on both creatures
     for (var index = 0; index < battleCtx.creatures.length; index++) {
       final creature = battleCtx.creatures[index];
@@ -241,7 +253,10 @@ class Battle {
   }
 
   /// Play out the battle and return the result.
-  BattleResult resolve({required Creature first, required Creature second}) {
+  static BattleResult resolve({
+    required Creature first,
+    required Creature second,
+  }) {
     logger
       ..info('${first.name}: ${first.baseStats}')
       ..info('${second.name}: ${first.baseStats}');
@@ -258,25 +273,28 @@ class Battle {
       // apply the damage
       // figure out how much damage to apply
       // apply it to armor, then apply it to hp
-      final damage = ctx.attackerStats.attack;
-      final armorReduction = min(ctx.defenderStats.armor, damage);
+      final damage = ctx.attacker.attack;
+      final armorReduction = min(ctx.defender.armor, damage);
       final remainingDamage = damage - armorReduction;
-      final newArmor = ctx.defenderStats.armor - armorReduction;
-      final newHp = ctx.defenderStats.hp - remainingDamage;
+      final newArmor = ctx.defender.armor - armorReduction;
+      final newHp = ctx.defender.hp - remainingDamage;
       logger.info('${ctx.attackerName} attacks ($damage).');
-      ctx
-        ..setStats(
-          ctx.defenderIndex,
-          ctx.defenderStats.copyWith(
-            armor: newArmor,
-            hp: newHp,
-          ),
-        )
-        // onHit
-        // onExposed
-        // onWounded
-        // This doesn't handle "stunned" yet.
-        ..nextAttacker();
+      ctx.setStats(
+        ctx.defenderIndex,
+        ctx.defender.copyWith(
+          armor: newArmor,
+          hp: newHp,
+        ),
+      );
+      logger.info(
+        '${ctx.defenderName} ${ctx.defender.hp} / ${ctx.defender.maxHp} hp '
+        '${ctx.defender.armor} armor',
+      );
+      // onHit
+      // onExposed
+      // onWounded
+      // This doesn't handle "stunned" yet.
+      ctx.nextAttacker();
     }
 
     // Print spoils for the player if they won.
