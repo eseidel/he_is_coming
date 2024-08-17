@@ -19,8 +19,9 @@ ArgParser buildParser() {
 }
 
 void printUsage(ArgParser argParser) {
-  print('Usage: dart he_is_coming_sim.dart <flags> [arguments]');
-  print(argParser.usage);
+  logger
+    ..info('Usage: dart he_is_coming_sim.dart <flags> [arguments]')
+    ..info(argParser.usage);
 }
 
 void main(List<String> arguments) {

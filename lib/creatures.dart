@@ -2,8 +2,10 @@ import 'package:he_is_coming_sim/item.dart';
 import 'package:he_is_coming_sim/items.g.dart';
 import 'package:meta/meta.dart';
 
+/// Class representing a player or an enemy.
 @immutable
 class Creature {
+  /// Create an enemy.
   Creature(
     this.name, {
     required int attack,
@@ -20,21 +22,31 @@ class Creature {
         ),
         hp = hp ?? health;
 
+  /// Create a player.
   Creature.player({int health = 10})
-      : name = kPlayerName,
+      : name = _kPlayerName,
         baseStats = Stats(health: health),
         items = <Item>[Items.woodenStick],
         hp = health;
 
-  static const kPlayerName = 'Player';
+  static const _kPlayerName = 'Player';
 
-  bool get isPlayer => name == kPlayerName;
+  /// Returns true if this Creature is the player.
+  bool get isPlayer => name == _kPlayerName;
 
+  /// Name of the creature or 'Player' if the player.
   final String name;
+
+  /// The intrinsic stats of this Creature without any items.
   final Stats baseStats;
+
+  /// Items the creature or player is using.
   final List<Item> items;
+
+  /// The current hp of the enemy or player.
   final int hp;
 
+  /// Stats as they would be in the over-world or at fight start.
   Stats get startingStats {
     return items.fold(
       baseStats,
@@ -47,6 +59,7 @@ class Creature {
     );
   }
 
+  /// Make a copy with a changed hp.
   Creature copyWith({int? hp}) {
     return Creature(
       name,
@@ -60,11 +73,13 @@ class Creature {
   }
 }
 
-class Creatures {
-  // Wolf Lvl 1
-  // If player has 5 or less health, wolf gains 2 attack.
+/// Class holding all predefined enemies.
+class Enemies {
+  /// Wolf Lvl 1
+  /// If player has 5 or less health, wolf gains 2 attack.
   static final wolfLevel1 = Creature('Wolf', attack: 1, health: 3);
-  // Bear Lvl 1
-  // Bear deals 3 additional damage while you have armor.
+
+  /// Bear Lvl 1
+  /// Bear deals 3 additional damage while you have armor.
   static final bearLevel1 = Creature('Bear', attack: 1, health: 3);
 }

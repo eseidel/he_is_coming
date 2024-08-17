@@ -2,91 +2,121 @@
 
 import 'package:he_is_coming_sim/item.dart';
 
+/// Class containing pre-defined `Item` instances.
 class Items {
+  /// Emergency Shield
   static final emergencyShield = Item(
     'Emergency Shield',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
+
+  /// Fortified Gauntlet
   static final fortifiedGauntlet = Item(
     'Fortified Gauntlet',
     Kind.clothing,
     Rarity.rare,
     Material.leather,
   );
+
+  /// Haymaker
   static final haymaker = Item(
     'Haymaker',
     Kind.weapon,
     Rarity.common,
     Material.leather,
   );
+
+  /// Heart Drinker
   static final heartDrinker = Item(
     'Heart Drinker',
     Kind.weapon,
     Rarity.common,
     Material.sanguine,
   );
+
+  /// Iron Greatsword
   static final ironGreatsword = Item(
     'Iron Greatsword',
     Kind.weapon,
     Rarity.common,
     Material.stone,
   );
+
+  /// Leather Gloves
   static final leatherGloves = Item(
     'Leather Gloves',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
+
+  /// Leather Vest
   static final leatherVest = Item(
     'Leather Vest',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
+
+  /// Phantom Armor
   static final phantomArmor = Item(
     'Phantom Armor',
     Kind.clothing,
     Rarity.rare,
     Material.leather,
   );
+
+  /// Redwood Cloak
   static final redwoodCloak = Item(
     'Redwood Cloak',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
+
+  /// Redwood Helmet
   static final redwoodHelmet = Item(
     'Redwood Helmet',
     Kind.clothing,
     Rarity.common,
     Material.wood,
   );
+
+  /// Redwood Rod
   static final redwoodRod = Item(
     'Redwood Rod',
     Kind.weapon,
     Rarity.common,
     Material.wood,
   );
+
+  /// Spearshield Lance
   static final spearshieldLance = Item(
     'Spearshield Lance',
     Kind.weapon,
     Rarity.common,
     Material.leather,
   );
+
+  /// Stone Steak
   static final stoneSteak = Item(
     'Stone Steak',
     Kind.food,
     Rarity.common,
     Material.stone,
   );
+
+  /// Weighted Bracelet
   static final weightedBracelet = Item(
     'Weighted Bracelet',
     Kind.clothing,
     Rarity.common,
     Material.leather,
   );
+
+  /// Wooden Stick
   static final woodenStick = Item(
     'Wooden Stick',
     Kind.weapon,
