@@ -58,27 +58,35 @@ Map<String, dynamic> toTemplateMap(Item item) {
   };
 }
 
-// Could turn this into a build_runner extension at some point.
-int main() {
-  final itemsString = File('items.yaml').readAsStringSync();
-  final itemsYaml = loadYaml(itemsString) as YamlList;
-  final items = itemsYaml
-      .cast<YamlMap>()
-      .map<Item>(itemFromYaml)
-      .sortedBy<String>((i) => i.name);
-  final templateString = File('templates/items.mustache').readAsStringSync();
-  final template = Template(templateString, name: 'items.g.dart');
-
-  final output =
-      template.renderString({'items': items.map(toTemplateMap).toList()});
-  final outPath = p.join('lib', 'src', 'items.g.dart');
-  File(outPath).writeAsStringSync(output);
-
-  final result = Process.runSync(Platform.executable, ['format', outPath]);
+int runDartFormat(String path) {
+  final result = Process.runSync(Platform.executable, ['format', path]);
   if (result.exitCode != 0) {
     stdout.write(result.stdout);
     stderr.write(result.stderr);
     return result.exitCode;
   }
   return 0;
+}
+
+// Could turn this into a build_runner extension at some point.
+int main() {
+  final itemsPath = p.join('data', 'items.yaml');
+  final templatePath = p.join('templates', 'items.mustache');
+  final outputPath = p.join('lib', 'src', 'items.g.dart');
+
+  final itemsYaml = loadYaml(File(itemsPath).readAsStringSync()) as YamlList;
+  final items = itemsYaml
+      .cast<YamlMap>()
+      .map<Item>(itemFromYaml)
+      .sortedBy<String>((i) => i.name)
+      .map(toTemplateMap)
+      .toList();
+
+  final templateString = File(templatePath).readAsStringSync();
+  final template = Template(templateString, name: p.basename(outputPath));
+
+  final output = template.renderString({'items': items});
+  File(outputPath).writeAsStringSync(output);
+
+  return runDartFormat(outputPath);
 }
