@@ -84,6 +84,11 @@ class CreatureStats {
       gold: gold,
     );
   }
+
+  @override
+  String toString() {
+    return 'hp: $hp/$maxHp, armor: $armor, speed: $speed, attack: $attack, gold: $gold';
+  }
 }
 
 /// Context for an in-progress battle.
