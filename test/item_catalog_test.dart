@@ -430,4 +430,30 @@ void main() {
     expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 0);
   });
+
+  test('Leather Boots', () {
+    final item = itemCatalog['Leather Boots'];
+    final player =
+        createPlayer(withItems: [item], intrinsic: const Stats(speed: 2));
+    expect(player.hp, 10);
+    expect(player.baseStats.speed, 2);
+    expect(player.baseStats.attack, 1);
+
+    // Leather Boots gives 2 attack if we have more speed than the enemy.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 1);
+    final result = Battle.resolve(first: player, second: enemy);
+    // With leather boots we get +2 attack so we kill the wolf in 2 hits.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.attack, 1);
+
+    final player2 =
+        createPlayer(withItems: [item], intrinsic: const Stats(speed: 1));
+    expect(player2.hp, 10);
+    expect(player2.baseStats.speed, 1);
+    expect(player2.baseStats.attack, 1);
+
+    // With the same speed, we don't get the attack bonus.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    expect(result2.first.hp, 5);
+  });
 }

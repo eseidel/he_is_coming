@@ -43,6 +43,12 @@ class EffectContext {
     }
   }
 
+  void _expectNegative(int value) {
+    if (value >= 0) {
+      throw ArgumentError('value must be negative');
+    }
+  }
+
   /// Add gold.
   void gainGold(int gold) {
     _expectPositive(gold);
@@ -57,8 +63,19 @@ class EffectContext {
     logger.info('$_playerName armor ${_signed(armor)} from $_sourceName');
   }
 
-  /// Add or remove attack
-  void adjustAttack(int attackDelta) {
+  /// Add attack.
+  void gainAttack(int attack) {
+    _expectPositive(attack);
+    _adjustAttack(attack);
+  }
+
+  /// Adjust by a negative attack.
+  void loseAttack(int attack) {
+    _expectNegative(attack);
+    _adjustAttack(attack);
+  }
+
+  void _adjustAttack(int attackDelta) {
     // Unclear if attack is clamped at 1 or 0.
     _stats = _stats.copyWith(attack: max(_stats.attack + attackDelta, 0));
     logger
