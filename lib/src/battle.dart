@@ -252,12 +252,16 @@ class BattleContext {
     }
   }
 
-  /// Strike the defender.
-  void strike() => dealDamage(
-        damage: attacker.attack,
-        targetIndex: defenderIndex,
-        source: '$attackerName strike',
-      );
+  /// Strike the defender, defaults to the attacker's attack value.
+  void strike([int? damage]) {
+    dealDamage(
+      damage: damage ?? attacker.attack,
+      targetIndex: defenderIndex,
+      source: '$attackerName strike',
+    );
+    // OnHit only triggers on strikes.
+    _trigger(attackerIndex, Effect.onHit);
+  }
 
   void _trigger(int index, Effect effect) {
     final creature = creatures[index];

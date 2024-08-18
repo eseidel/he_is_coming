@@ -12,6 +12,11 @@ enum Effect {
   /// Called at the start of each turn.
   onTurn,
 
+  /// Called whenever the creature attacks.
+  /// This does not include damage dealt by non-attack actions.
+  /// Essentially, this "onStrike" or "onAttack".
+  onHit,
+
   /// Called when armor is broken for the first time this battle.
   onExposed,
 
@@ -26,6 +31,7 @@ class Effects {
   const Effects({
     this.onBattle,
     this.onTurn,
+    this.onHit,
     this.onExposed,
     this.onWounded,
   });
@@ -35,6 +41,7 @@ class Effects {
     return switch (effect) {
       Effect.onBattle => onBattle,
       Effect.onTurn => onTurn,
+      Effect.onHit => onHit,
       Effect.onExposed => onExposed,
       Effect.onWounded => onWounded,
     };
@@ -45,6 +52,10 @@ class Effects {
 
   /// Called at the start of each turn.
   final EffectFn? onTurn;
+
+  /// Called whenever the creature attacks.
+  /// This does not include damage dealt by non-attack actions.
+  final EffectFn? onHit;
 
   /// Called when armor is broken for the first time this battle.
   final EffectFn? onExposed;

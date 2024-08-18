@@ -226,4 +226,19 @@ void main() {
     expect(result.first.hp, 4);
     expect(result.first.baseStats.armor, 3);
   });
+
+  test('Stoneslab Sword', () {
+    final item = itemCatalog['Stoneslab Sword'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 2);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // We attack first, and then the sword triggers, giving 2 armor, so we
+    // never take damage.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 10);
+    expect(result.first.baseStats.armor, 0);
+  });
 }

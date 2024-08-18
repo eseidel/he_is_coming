@@ -37,8 +37,8 @@ final _effectsByItemName = <String, Effects>{
       ..takeDamage(2),
   ),
   'Lifeblood Burst': Effects(onWounded: (c) => c.dealDamage(c.my.maxHp ~/ 2)),
-  // TODO(eseidel): "Chain Mail" is a typo in game, should be "Chainmail".
   'Chain Mail': Effects(onWounded: (c) => c.adjustArmor(3)),
+  'Stoneslab Sword': Effects(onHit: (c) => c.adjustArmor(2)),
 };
 
 extension on YamlMap {
