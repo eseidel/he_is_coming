@@ -8,6 +8,7 @@ const _kPlayerName = 'Player';
 Creature createPlayer({
   Stats baseStats = const Stats(),
   List<Item> withItems = const <Item>[],
+  int? hp,
 }) {
   // Player must always have a weapon.
   final items = [...withItems];
@@ -19,6 +20,7 @@ Creature createPlayer({
     name: _kPlayerName,
     baseStats: baseStats.copyWith(maxHp: 10),
     gold: 0,
+    hp: hp,
     items: items,
   );
 }

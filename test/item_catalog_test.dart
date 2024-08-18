@@ -91,6 +91,7 @@ void main() {
     final player =
         createPlayer(baseStats: const Stats(armor: 1), withItems: [item]);
     expect(player.hp, 10);
+    expect(player.startingStats.armor, 1);
 
     // Normally we would kill the wolf in 6 turns (take 5 dmg), but the armor
     // reduces one damage, and then the firecracker belt triggers after the
@@ -98,5 +99,59 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 9);
+  });
+
+  test('Redwood Helmet effect', () {
+    // Gives 1 armor.
+    final item = itemCatalog['Redwood Helmet'];
+    final player = createPlayer(withItems: [item], hp: 5);
+    expect(player.hp, 5);
+    expect(player.startingStats.armor, 1);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // We would kill the wolf in 6 turns (take 4 dmg, 1 absorbed by armor), but
+    // the helmet triggers after the armor is broken, healing 3 hp.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 4);
+
+    final player2 = createPlayer(withItems: [item]);
+    expect(player2.hp, 10);
+    expect(player2.startingStats.armor, 1);
+
+    // But if we fight with full health, the helmet triggers at exposed
+    // and does nothing because we're already at full health.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    expect(result2.first.hp, 6);
+  });
+
+  test('Explosive Surprise effect', () {
+    final item = itemCatalog['Explosive Surprise'];
+    final player =
+        createPlayer(baseStats: const Stats(armor: 1), withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.startingStats.armor, 1);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // We would kill the wolf in 6 turns (take 5 dmg), but the explosive
+    // surprise triggers at exposed, dealing 5 dmg to the wolf, killing it
+    // in 2 turns.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 10);
+  });
+
+  test('Cracked Bouldershield', () {
+    final item = itemCatalog['Cracked Bouldershield'];
+    final player =
+        createPlayer(baseStats: const Stats(armor: 1), withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.startingStats.armor, 1);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // We would kill the wolf in 6 turns (take 5 dmg), but the bouldershield
+    // triggers at exposed, giving 5 armor, so we take no damage.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 10);
+    // We still have our base armor, but any armor during battle is gone.
+    expect(player.startingStats.armor, 1);
   });
 }

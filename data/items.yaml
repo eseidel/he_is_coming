@@ -107,7 +107,7 @@
   kind: weapon
   rarity: heroic
   attack: 7
-  effect: 'On hit: Lose 1 attack'
+  effect: 'On Hit: Lose 1 attack'
 - name: 'Explosive Surprise'
   rarity: rare
   effect: 'Exposed: Deal 5 damage'

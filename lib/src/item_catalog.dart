@@ -6,6 +6,32 @@ import 'package:he_is_coming_sim/src/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+// Dart doesn't have if-expressions, so made a helper function.
+void _if(bool condition, void Function() fn) {
+  if (condition) {
+    fn();
+  }
+}
+
+final _effectsByItemName = <String, Effects>{
+  'Stone Steak': Effects(
+    onBattle: (c) => _if(c.isHealthFull, () => c.adjustArmor(4)),
+  ),
+  'Redwood Cloak': Effects(onBattle: (c) => c.restoreHealth(1)),
+  'Emergency Shield': Effects(
+    onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.adjustArmor(4)),
+  ),
+  'Granite Gauntlet': Effects(onBattle: (c) => c.adjustArmor(5)),
+  'Ruby Earings': Effects(
+    onTurn: (c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1)),
+  ),
+  'Firecracker Belt':
+      Effects(onExposed: (c) => [1, 1, 1].forEach(c.dealDamage)),
+  'Redwood Helmet': Effects(onExposed: (c) => c.restoreHealth(3)),
+  'Explosive Surprise': Effects(onExposed: (c) => c.dealDamage(5)),
+  'Cracked Bouldershield': Effects(onExposed: (c) => c.adjustArmor(5)),
+};
+
 extension on YamlMap {
   T lookupOr<T extends Enum>(String key, List<T> values, T defaultValue) {
     final toFind = this[key] as String?;
@@ -31,29 +57,6 @@ extension on YamlMap {
     return found;
   }
 }
-
-// Dart doesn't have if-expressions, so made a helper function.
-void _if(bool condition, void Function() fn) {
-  if (condition) {
-    fn();
-  }
-}
-
-final _effectsByItemName = <String, Effects>{
-  'Stone Steak': Effects(
-    onBattle: (c) => _if(c.isHealthFull, () => c.adjustArmor(4)),
-  ),
-  'Redwood Cloak': Effects(onBattle: (c) => c.restoreHealth(1)),
-  'Emergency Shield': Effects(
-    onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.adjustArmor(4)),
-  ),
-  'Granite Gauntlet': Effects(onBattle: (c) => c.adjustArmor(5)),
-  'Ruby Earings': Effects(
-    onTurn: (c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1)),
-  ),
-  'Firecracker Belt':
-      Effects(onExposed: (c) => [1, 1, 1].forEach(c.dealDamage)),
-};
 
 class _ItemCatalogReader {
   static const List<String> _itemKeys = <String>[
@@ -96,9 +99,8 @@ class _ItemCatalogReader {
     Effects? effects;
     if (effectText != null) {
       effects = _effectsByItemName[name];
-      // TODO(eseidel): Currently only warning about commons.
-      if (effects == null && rarity == Rarity.common) {
-        logger.warn('$name missing: $effectText');
+      if (effects == null) {
+        logger.warn('missing: $effectText');
       }
     }
     validateKeys(yaml, _itemKeys.toSet());
