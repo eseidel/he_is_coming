@@ -80,7 +80,7 @@
 - name: 'Iron Rose'
   rarity: rare
   effect: "Whenever you restore health, gain 1 armor"
-- name: 'Stealbond Curse'
+- name: 'Steelbond Curse'
   rarity: rare
   kind: weapon
   attack: 2
@@ -212,7 +212,7 @@
   kind: weapon
   attack: 2
   effect: "Do two additional strikes that always deal 1 damage"
-- name: "Stormcoud Spear"
+- name: "Stormcloud Spear"
   rarity: common
   kind: weapon
   attack: 2

@@ -56,7 +56,7 @@ Oil (weapon oil)
 Merchant (items for sale)
 Lookout Tower (reveal map, ignored)
 Crystal Ball (reveal event, ignored)
-Golumn (weapon combiner)
+Golem (weapon combiner)
 Cauldron (food combiner)
 
 ## Achievements
