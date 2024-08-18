@@ -504,4 +504,37 @@ void main() {
     // We get 4 armor from the Ore Heart, so we take 1 dmg from the wolf.
     expect(result2.first.hp, 9);
   });
+
+  test('Granite Hammer', () {
+    final item = itemCatalog['Granite Hammer'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 2);
+    expect(player.baseStats.armor, 0);
+
+    // Granite Hammer gives 2 attack and 1 armor on hit if we have armor.
+    // If we don't have armor it does nothing.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 10);
+    final result = Battle.resolve(first: player, second: enemy);
+    // Takes 5 hits to kill the wolf, so we take 4 dmg.
+    expect(result.first.hp, 6);
+    expect(result.first.baseStats.attack, 2);
+    expect(result.first.baseStats.armor, 0);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(armor: 1),
+      withItems: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.attack, 2);
+    expect(player2.baseStats.armor, 1);
+
+    // Granite Hammer gives 2 attack and 1 armor on hit if we have armor.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // We deal 2 dmg on the first hit and lose 1 armor and gain 2 attack.
+    // Then we deal 4 dmg on the second and 3rd hit, killing the wolf.
+    expect(result2.first.hp, 8);
+    expect(result2.first.baseStats.attack, 2);
+    expect(result2.first.baseStats.armor, 1);
+  });
 }

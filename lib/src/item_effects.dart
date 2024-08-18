@@ -64,6 +64,14 @@ final effectsByItemName = <String, Effects>{
   'Ore Heart': Effects(
     onBattle: (c) => c.gainArmor(c.itemCount(Material.stone) * 2),
   ),
+  'Granite Hammer': Effects(
+    onHit: (c) => _if(
+      c.my.armor > 0,
+      () => c
+        ..loseArmor(-1)
+        ..gainAttack(2),
+    ),
+  ),
 };
 
 /// Look up the effects for an item by name.

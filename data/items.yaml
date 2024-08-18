@@ -200,6 +200,7 @@
   effect: "If you have more speed than the enemy, gain 2 attack"
 - name: "Granite Hammer"
   rarity: rare
+  attack: 2 # Confirm this
   kind: weapon
   material: stone
   effect: "On Hit: Convert 1 armor to 2 attack"

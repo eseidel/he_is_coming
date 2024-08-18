@@ -56,11 +56,22 @@ class EffectContext {
     logger.info('$_playerName gold ${_signed(gold)} from $_sourceName');
   }
 
+  /// Add or remove armor.
+  void _adjustArmor(int armor) {
+    _stats = _stats.copyWith(armor: _stats.armor + armor);
+    logger.info('$_playerName armor ${_signed(armor)} from $_sourceName');
+  }
+
   /// Add armor.
   void gainArmor(int armor) {
     _expectPositive(armor);
-    _stats = _stats.copyWith(armor: _stats.armor + armor);
-    logger.info('$_playerName armor ${_signed(armor)} from $_sourceName');
+    _adjustArmor(armor);
+  }
+
+  /// Remove armor.
+  void loseArmor(int armor) {
+    _expectNegative(armor);
+    _adjustArmor(armor);
   }
 
   /// Add attack.
