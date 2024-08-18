@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:he_is_coming_sim/src/creatures.dart';
+import 'package:he_is_coming_sim/src/item.dart';
 import 'package:he_is_coming_sim/src/logger.dart';
 import 'package:meta/meta.dart';
 
@@ -213,38 +214,27 @@ class BattleContext {
   /// Strike the defender.
   void strike() => dealDamage(attacker.attack, source: '$attackerName strike');
 
-  void _triggerOnBattle() {
-    // send on battle to all items on both creatures
-    for (var index = 0; index < creatures.length; index++) {
-      final creature = creatures[index];
-      final beforeStats = stats[index];
-      for (final item in creature.items) {
-        final effectCxt = EffectContext(this, index, item.name);
-        item.effects?.onBattle?.call(effectCxt);
-      }
-      final afterStats = stats[index];
-      final diffString = beforeStats.diffString(afterStats);
-      if (diffString != null) {
-        logger.info('${creature.name} onBattle: $diffString');
-      }
-    }
-  }
-
-  void _triggerOnTurn() {
-    // Send "onTurn" to all items on the current attacker.
-    final index = attackerIndex;
+  void _trigger(int index, Effect effect) {
     final creature = creatures[index];
     final beforeStats = stats[index];
     for (final item in creature.items) {
       final effectCxt = EffectContext(this, index, item.name);
-      item.effects?.onTurn?.call(effectCxt);
+      item.effects?[effect]?.call(effectCxt);
     }
     final afterStats = stats[index];
     final diffString = beforeStats.diffString(afterStats);
     if (diffString != null) {
-      logger.info('${creature.name} onTurn: $diffString');
+      logger.info('${creature.name} ${effect.name}: $diffString');
     }
   }
+
+  void _triggerOnBattle() {
+    for (var index = 0; index < creatures.length; index++) {
+      _trigger(index, Effect.onBattle);
+    }
+  }
+
+  void _triggerOnTurn() => _trigger(attackerIndex, Effect.onTurn);
 
   /// List of creatures in this battle.
   final List<Creature> creatures;

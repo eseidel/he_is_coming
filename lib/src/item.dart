@@ -4,6 +4,21 @@ import 'package:meta/meta.dart';
 /// Function type for effect callbacks.
 typedef EffectFn = void Function(EffectContext ctx);
 
+/// Enum representing the different effects that can be triggered.
+enum Effect {
+  /// Called on battle start.
+  onBattle,
+
+  /// Called at the start of each turn.
+  onTurn,
+
+  /// Called when armor is broken for the first time this battle.
+  onExposed,
+
+  /// Called when hp is below 50% for the first time this battle.
+  onWounded,
+}
+
 /// Container for callbacks for items.
 @immutable
 class Effects {
@@ -14,6 +29,16 @@ class Effects {
     this.onExposed,
     this.onWounded,
   });
+
+  /// Get the effect callback for a given effect.
+  EffectFn? operator [](Effect effect) {
+    return switch (effect) {
+      Effect.onBattle => onBattle,
+      Effect.onTurn => onTurn,
+      Effect.onExposed => onExposed,
+      Effect.onWounded => onWounded,
+    };
+  }
 
   /// Called on battle start.
   final EffectFn? onBattle;
