@@ -37,6 +37,12 @@ class EffectContext {
   /// Returns true if this is "every other turn" for this creature.
   bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
 
+  /// Add or remove gold
+  void adjustGold(int goldDelta) {
+    _stats = _stats.copyWith(gold: _stats.gold + goldDelta);
+    logger.info('$_playerName gold ${_signed(goldDelta)} from $_sourceName');
+  }
+
   /// Add or remove armor
   void adjustArmor(int armorDelta) {
     _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
@@ -145,6 +151,7 @@ class CreatureStats {
     int? hp,
     int? armor,
     int? attack,
+    int? gold,
     bool? hasBeenExposed,
     bool? hasBeenWounded,
   }) {
@@ -161,7 +168,7 @@ class CreatureStats {
       speed: speed,
       // Attack needs to be clamped to 1?
       attack: attack ?? this.attack,
-      gold: gold,
+      gold: gold ?? this.gold,
       hasBeenExposed: hasBeenExposed ?? this.hasBeenExposed,
       hasBeenWounded: hasBeenWounded ?? this.hasBeenWounded,
     );
@@ -277,7 +284,7 @@ class BattleContext {
     }
   }
 
-  void _triggerOnBattle() {
+  void _triggerOnBattleStart() {
     for (var index = 0; index < creatures.length; index++) {
       _trigger(index, Effect.onBattle);
     }
@@ -326,24 +333,39 @@ class BattleContext {
   Creature get _first => creatures[0];
   Creature get _second => creatures[1];
 
-  /// The first creature in this battle with current stats.
-  Creature get firstResolved {
-    final goldDiff = _first.isAlive ? _second.gold : 0;
-    logger.info('firstResolved HP: ${stats[0].hp}');
-    return _first.copyWith(hp: stats[0].hp, gold: _first.gold + goldDiff);
-  }
-
-  /// The second creature in this battle with current stats.
-  Creature get secondResolved {
-    final goldDiff = _second.isAlive ? _first.gold : 0;
-    return _second.copyWith(hp: stats[1].hp, gold: _second.gold + goldDiff);
-  }
-
   /// Returns true if all participants are still alive.
   bool get allAlive => stats[0].hp > 0 && stats[1].hp > 0;
 
   /// Returns the Creature at `index` mod 2.
   Creature operator [](int index) => index.isEven ? _first : _second;
+
+  void _logSpoils({required Creature before, required Creature after}) {
+    if (!after.isAlive) {
+      return;
+    }
+    final diffStrings = <String?>[
+      _diffString('hp', before.hp, after.hp),
+      _diffString('gold', before.gold, after.gold),
+    ].nonNulls;
+    if (diffStrings.isNotEmpty) {
+      logger.info('${after.name} result: ${diffStrings.join(' ')}');
+    }
+  }
+
+  /// Resolve the battle and return the spoils.
+  BattleResult resolveWithSpoils() {
+    // Settle up the spoils.
+    final firstWon = stats[0].hp > 0;
+    final combinedGold = stats[0].gold + stats[1].gold;
+    final firstGold = firstWon ? combinedGold : 0;
+    final secondGold = firstWon ? 0 : combinedGold;
+    final first = _first.copyWith(hp: stats[0].hp, gold: firstGold);
+    final second = _second.copyWith(hp: stats[1].hp, gold: secondGold);
+
+    // Print spoils for the player if they won.
+    _logSpoils(before: creatures[0], after: first);
+    return BattleResult(first, second);
+  }
 }
 
 /// Represents the results of a battle.
@@ -366,19 +388,6 @@ class BattleResult {
 /// Class to represent a battle between two creatures.
 /// The player should be the first creature.
 class Battle {
-  static void _logSpoils({required Creature before, required Creature after}) {
-    if (!after.isAlive) {
-      return;
-    }
-    final diffStrings = <String?>[
-      _diffString('hp', before.hp, after.hp),
-      _diffString('gold', before.gold, after.gold),
-    ].nonNulls;
-    if (diffStrings.isNotEmpty) {
-      logger.info('${after.name} result: ${diffStrings.join(' ')}');
-    }
-  }
-
   /// Play out the battle and return the result.
   static BattleResult resolve({
     required Creature first,
@@ -388,7 +397,7 @@ class Battle {
       ..info('${first.name}: ${first.baseStats}')
       ..info('${second.name}: ${first.baseStats}');
 
-    final ctx = BattleContext([first, second]).._triggerOnBattle();
+    final ctx = BattleContext([first, second]).._triggerOnBattleStart();
 
     logger
       ..info('${first.name}: ${ctx.stats[0]}')
@@ -402,9 +411,6 @@ class Battle {
         ..nextAttacker();
     }
 
-    // Print spoils for the player if they won.
-    final firstResolved = ctx.firstResolved;
-    _logSpoils(before: first, after: firstResolved);
-    return BattleResult(firstResolved, ctx.secondResolved);
+    return ctx.resolveWithSpoils();
   }
 }

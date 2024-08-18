@@ -253,4 +253,30 @@ void main() {
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 8);
   });
+
+  test('Enemies give gold', () {
+    final player = createPlayer();
+    expect(player.hp, 10);
+    expect(player.gold, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    expect(enemy.gold, 1);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 5);
+    // Gain one gold at battle end.
+    expect(result.first.gold, 1);
+  });
+
+  test('Gold Ring', () {
+    final item = itemCatalog['Gold Ring'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.gold, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 5);
+    // Gain one gold at battle start and one gold at battle end.
+    expect(result.first.gold, 2);
+  });
 }

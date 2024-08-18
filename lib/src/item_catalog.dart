@@ -40,6 +40,7 @@ final _effectsByItemName = <String, Effects>{
   'Chain Mail': Effects(onWounded: (c) => c.adjustArmor(3)),
   'Stoneslab Sword': Effects(onHit: (c) => c.adjustArmor(2)),
   'Heart Drinker': Effects(onHit: (c) => c.restoreHealth(1)),
+  'Gold Ring': Effects(onBattle: (c) => c.adjustGold(1)),
 };
 
 extension on YamlMap {
