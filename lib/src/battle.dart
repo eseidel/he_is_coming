@@ -50,11 +50,9 @@ class EffectContext {
   }
 
   /// Add or remove attack
-  void adjustAttack(int attackDelta, {bool ifTrue = true}) {
-    if (!ifTrue) {
-      return;
-    }
-    _stats = _stats.copyWith(attack: _stats.attack + attackDelta);
+  void adjustAttack(int attackDelta) {
+    // Unclear if attack is clamped at 1 or 0.
+    _stats = _stats.copyWith(attack: max(_stats.attack + attackDelta, 0));
     logger
         .info('$_playerName attack ${_signed(attackDelta)} from $_sourceName');
   }

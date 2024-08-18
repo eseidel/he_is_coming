@@ -318,4 +318,37 @@ void main() {
     // Wolf dies in 2 hits (8 each) so we lose 1 hp.
     expect(result2.first.hp, 9);
   });
+
+  test('Melting Iceblade', () {
+    final item = itemCatalog['Melting Iceblade'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 7);
+
+    // Melting Iceblade reduces attack by 1 on Hit, so first hit is 7
+    // then 6, 5, 4, 3, 2, 1, 0.
+    // 15 will take 3 hits, so we should take 2 dmg.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 15);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 8);
+    // Attack recovers after battle I think?
+    expect(result.first.baseStats.attack, 7);
+  });
+
+  test('Melting Iceblade attack clamping', () {
+    final item = itemCatalog['Melting Iceblade'];
+    final player =
+        createPlayer(intrinsic: const Stats(maxHp: 100), withItems: [item]);
+    expect(player.hp, 100);
+    expect(player.baseStats.attack, 7);
+
+    // Melting Iceblade reduces attack by 1 on Hit, so first hit is 7
+    // then 6, 5, 4, 3, 2, 1, 0.
+    // Melting Iceblade can only do 28 dmg when clamped to 0, so we will lose
+    // to a 29 health enemy.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 29);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 0);
+    expect(result.first.baseStats.attack, 7);
+  });
 }

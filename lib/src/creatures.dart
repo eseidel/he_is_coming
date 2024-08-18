@@ -18,7 +18,9 @@ Creature createPlayer({
 
   return Creature(
     name: _kPlayerName,
-    intrinsic: intrinsic.copyWith(maxHp: 10),
+    // If maxHp wasn't set, default to 10.
+    intrinsic:
+        (intrinsic.maxHp == 0) ? intrinsic.copyWith(maxHp: 10) : intrinsic,
     gold: 0,
     hp: hp,
     items: items,

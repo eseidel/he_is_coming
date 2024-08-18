@@ -49,6 +49,7 @@ final _effectsByItemName = <String, Effects>{
   'Ruby Crown': Effects(
     onBattle: (c) => _if(c.my.attack >= 6, () => c.adjustAttack(2)),
   ),
+  'Melting Iceblade': Effects(onHit: (c) => c.adjustAttack(-1)),
 };
 
 extension on YamlMap {
