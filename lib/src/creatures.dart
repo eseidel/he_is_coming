@@ -5,7 +5,10 @@ import 'package:meta/meta.dart';
 const _kPlayerName = 'Player';
 
 /// Create a player.
-Creature createPlayer({List<Item> withItems = const <Item>[]}) {
+Creature createPlayer({
+  Stats baseStats = const Stats(),
+  List<Item> withItems = const <Item>[],
+}) {
   // Player must always have a weapon.
   final items = [...withItems];
   if (items.every((item) => item.kind != Kind.weapon)) {
@@ -14,7 +17,7 @@ Creature createPlayer({List<Item> withItems = const <Item>[]}) {
 
   return Creature(
     name: _kPlayerName,
-    baseStats: const Stats(maxHp: 10),
+    baseStats: baseStats.copyWith(maxHp: 10),
     gold: 0,
     items: items,
   );
