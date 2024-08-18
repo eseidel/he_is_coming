@@ -41,6 +41,11 @@ final _effectsByItemName = <String, Effects>{
   'Stoneslab Sword': Effects(onHit: (c) => c.adjustArmor(2)),
   'Heart Drinker': Effects(onHit: (c) => c.restoreHealth(1)),
   'Gold Ring': Effects(onBattle: (c) => c.adjustGold(1)),
+  'Ruby Ring': Effects(
+    onBattle: (c) => c
+      ..adjustAttack(1)
+      ..takeDamage(2),
+  ),
 };
 
 extension on YamlMap {

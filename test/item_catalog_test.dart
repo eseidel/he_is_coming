@@ -279,4 +279,17 @@ void main() {
     // Gain one gold at battle start and one gold at battle end.
     expect(result.first.gold, 2);
   });
+
+  test('Ruby Ring', () {
+    final item = itemCatalog['Ruby Ring'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 1);
+
+    // Ruby Ring gives 1 attack and takes 2 damage at the start of battle.
+    // Which means we only take 2 dmg from wolf, but 2 from ring.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 6);
+  });
 }
