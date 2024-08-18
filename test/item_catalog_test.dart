@@ -241,4 +241,16 @@ void main() {
     expect(result.first.hp, 10);
     expect(result.first.baseStats.armor, 0);
   });
+
+  test('Heart Drinker', () {
+    final item = itemCatalog['Heart Drinker'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy('Wolf', attack: 2, health: 6);
+    // We attack first, and then the sword triggers, healing 1 hp, so we only
+    // lose 2 hp since wolf hits us twice and we gain 3 from attacking.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 8);
+  });
 }

@@ -39,6 +39,7 @@ final _effectsByItemName = <String, Effects>{
   'Lifeblood Burst': Effects(onWounded: (c) => c.dealDamage(c.my.maxHp ~/ 2)),
   'Chain Mail': Effects(onWounded: (c) => c.adjustArmor(3)),
   'Stoneslab Sword': Effects(onHit: (c) => c.adjustArmor(2)),
+  'Heart Drinker': Effects(onHit: (c) => c.restoreHealth(1)),
 };
 
 extension on YamlMap {
