@@ -5,12 +5,27 @@ import 'package:meta/meta.dart';
 typedef EffectFn = void Function(EffectContext ctx);
 
 /// Container for callbacks for items.
+@immutable
 class Effect {
   /// Create a new Effect
-  Effect({this.onBattle});
+  const Effect({
+    this.onBattle,
+    this.onTurn,
+    this.onExposed,
+    this.onWounded,
+  });
 
   /// Called on battle start.
   final EffectFn? onBattle;
+
+  /// Called at the start of each turn.
+  final EffectFn? onTurn;
+
+  /// Called when armor is broken for the first time this battle.
+  final EffectFn? onExposed;
+
+  /// Called when hp is below 50% for the first time this battle.
+  final EffectFn? onWounded;
 }
 
 /// Class representing stats for a Creature.

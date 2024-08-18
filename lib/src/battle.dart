@@ -18,8 +18,10 @@ class EffectContext {
   /// Stats for the creature with this effect.
   CreatureStats get my => _battle.stats[_index];
 
+  int get _enemyIndex => _index.isEven ? 1 : 0;
+
   /// Stats for the enemy creature.
-  CreatureStats get enemy => _battle.stats[_index.isEven ? 1 : 0];
+  CreatureStats get enemy => _battle.stats[_enemyIndex];
 
   CreatureStats get _stats => _battle.stats[_index];
   set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
@@ -28,13 +30,26 @@ class EffectContext {
   /// Returns true if health is currently full.
   bool get isHealthFull => _stats.isHealthFull;
 
+  /// Returns true if this this creatures's first turn of the battle.
+  bool get isFirstTurn => _battle.turnNumber == 1;
+
+  /// Returns true if this is "every other turn" for this creature.
+  bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
+
   /// Add or remove armor
-  void adjustArmor(int armorDelta, {bool ifTrue = true}) {
+  void adjustArmor(int armorDelta) {
+    _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
+    logger.info('$_playerName armor ${_signed(armorDelta)} from $_sourceName');
+  }
+
+  /// Add or remove attack
+  void adjustAttack(int attackDelta, {bool ifTrue = true}) {
     if (!ifTrue) {
       return;
     }
-    _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
-    logger.info('$_playerName armor ${_signed(armorDelta)} from $_sourceName');
+    _stats = _stats.copyWith(attack: _stats.attack + attackDelta);
+    logger
+        .info('$_playerName attack ${_signed(attackDelta)} from $_sourceName');
   }
 
   /// Restore health.
@@ -45,6 +60,10 @@ class EffectContext {
     _stats = _stats.copyWith(hp: _stats.hp + hp);
     logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
   }
+
+  /// Deal damage to the enemy.
+  /// This is not for normal attacks "strikes" but for special effects.
+  void dealDamage(int hp) => _battle.dealDamage(hp, source: _sourceName);
 }
 
 String? _diffString(String name, int before, int after) {
@@ -64,6 +83,7 @@ class CreatureStats {
     required this.speed,
     required this.attack,
     required this.gold,
+    this.hasBeenExposed = false,
   });
 
   /// Create a CreatureStats from a Creature.
@@ -97,6 +117,9 @@ class CreatureStats {
   /// Value if the creature is defeated.
   final int gold;
 
+  /// Returns true if the creature has already sent onExposed.
+  final bool hasBeenExposed;
+
   /// Returns true if health is currently full.
   bool get isHealthFull => hp == maxHp;
 
@@ -105,6 +128,8 @@ class CreatureStats {
     int? hp,
     int? armor,
     int? maxHp,
+    int? attack,
+    bool? hasBeenExposed,
   }) {
     final newMaxHp = maxHp ?? this.maxHp;
     final newHp = hp ?? this.hp;
@@ -116,8 +141,10 @@ class CreatureStats {
       hp: newHp,
       armor: armor ?? this.armor,
       speed: speed,
-      attack: attack,
+      // Attack needs to be clamped to 1?
+      attack: attack ?? this.attack,
       gold: gold,
+      hasBeenExposed: hasBeenExposed ?? this.hasBeenExposed,
     );
   }
 
@@ -159,6 +186,64 @@ class BattleContext {
   /// Advance to the next attacker.
   void nextAttacker() {
     _attackerIndex = attackerIndex.isEven ? 1 : 0;
+    _turnsTaken++;
+  }
+
+  /// Deal damage to the defender.
+  void dealDamage(int damage, {required String source}) {
+    final armorReduction = min(defender.armor, damage);
+    final remainingDamage = damage - armorReduction;
+    final newArmor = defender.armor - armorReduction;
+    final newHp = defender.hp - remainingDamage;
+    setStats(
+      defenderIndex,
+      defender.copyWith(
+        armor: newArmor,
+        hp: newHp,
+      ),
+    );
+    logger.info(
+      '$source dealt $damage damage to $defenderName '
+      '${defender.hp} / ${defender.maxHp} hp '
+      '${defender.armor} armor',
+    );
+    // Send onExposed and onWounded if needed.
+  }
+
+  /// Strike the defender.
+  void strike() => dealDamage(attacker.attack, source: '$attackerName strike');
+
+  void _triggerOnBattle() {
+    // send on battle to all items on both creatures
+    for (var index = 0; index < creatures.length; index++) {
+      final creature = creatures[index];
+      final beforeStats = stats[index];
+      for (final item in creature.items) {
+        final effectCxt = EffectContext(this, index, item.name);
+        item.effect?.onBattle?.call(effectCxt);
+      }
+      final afterStats = stats[index];
+      final diffString = beforeStats.diffString(afterStats);
+      if (diffString != null) {
+        logger.info('${creature.name} onBattle: $diffString');
+      }
+    }
+  }
+
+  void _triggerOnTurn() {
+    // Send "onTurn" to all items on the current attacker.
+    final index = attackerIndex;
+    final creature = creatures[index];
+    final beforeStats = stats[index];
+    for (final item in creature.items) {
+      final effectCxt = EffectContext(this, index, item.name);
+      item.effect?.onTurn?.call(effectCxt);
+    }
+    final afterStats = stats[index];
+    final diffString = beforeStats.diffString(afterStats);
+    if (diffString != null) {
+      logger.info('${creature.name} onTurn: $diffString');
+    }
   }
 
   /// List of creatures in this battle.
@@ -168,6 +253,13 @@ class BattleContext {
   final List<CreatureStats> stats;
 
   int _attackerIndex;
+
+  // Counts all the turns taken by any player.
+  int _turnsTaken = 0;
+
+  /// Turn Number is 1-indexed, saying what number turn you're on.
+  /// Lets effects that apply on the first turn, check turnNumber == 1.
+  int get turnNumber => (_turnsTaken ~/ 2) + 1;
 
   /// Index of the current attacker.
   int get attackerIndex => _attackerIndex;
@@ -248,23 +340,6 @@ class Battle {
     }
   }
 
-  static void _onBattle(BattleContext battleCtx) {
-    // send on battle to all items on both creatures
-    for (var index = 0; index < battleCtx.creatures.length; index++) {
-      final creature = battleCtx.creatures[index];
-      final beforeStats = battleCtx.stats[index];
-      for (final item in creature.items) {
-        final effectCxt = EffectContext(battleCtx, index, item.name);
-        item.effect?.onBattle?.call(effectCxt);
-      }
-      final afterStats = battleCtx.stats[index];
-      final diffString = beforeStats.diffString(afterStats);
-      if (diffString != null) {
-        logger.info('${creature.name} onBattle: $diffString');
-      }
-    }
-  }
-
   /// Play out the battle and return the result.
   static BattleResult resolve({
     required Creature first,
@@ -274,40 +349,20 @@ class Battle {
       ..info('${first.name}: ${first.startingStats}')
       ..info('${second.name}: ${first.startingStats}');
 
-    final ctx = BattleContext([first, second]);
-    _onBattle(ctx);
+    final ctx = BattleContext([first, second]).._triggerOnBattle();
 
     logger
       ..info('${first.name}: ${ctx.stats[0]}')
       ..info('${second.name}: ${ctx.stats[1]}');
     while (ctx.allAlive) {
-      // onBattle
       // onTurn
-      // apply the damage
-      // figure out how much damage to apply
-      // apply it to armor, then apply it to hp
-      final damage = ctx.attacker.attack;
-      final armorReduction = min(ctx.defender.armor, damage);
-      final remainingDamage = damage - armorReduction;
-      final newArmor = ctx.defender.armor - armorReduction;
-      final newHp = ctx.defender.hp - remainingDamage;
-      logger.info('${ctx.attackerName} attacks ($damage).');
-      ctx.setStats(
-        ctx.defenderIndex,
-        ctx.defender.copyWith(
-          armor: newArmor,
-          hp: newHp,
-        ),
-      );
-      logger.info(
-        '${ctx.defenderName} ${ctx.defender.hp} / ${ctx.defender.maxHp} hp '
-        '${ctx.defender.armor} armor',
-      );
-      // onHit
-      // onExposed
-      // onWounded
-      // This doesn't handle "stunned" yet.
-      ctx.nextAttacker();
+      ctx
+        .._triggerOnTurn()
+        ..strike()
+        // onHit
+        // onExposed
+        // onWounded
+        ..nextAttacker();
     }
 
     // Print spoils for the player if they won.

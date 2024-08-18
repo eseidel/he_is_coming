@@ -32,16 +32,26 @@ extension on YamlMap {
   }
 }
 
+// Dart doesn't have if-expressions, so made a helper function.
+void _if(bool condition, void Function() fn) {
+  if (condition) {
+    fn();
+  }
+}
+
 final _effectByItemName = <String, Effect>{
   'Stone Steak': Effect(
-    onBattle: (ctx) => ctx.adjustArmor(4, ifTrue: ctx.isHealthFull),
+    onBattle: (ctx) => _if(ctx.isHealthFull, () => ctx.adjustArmor(4)),
   ),
   'Redwood Cloak': Effect(onBattle: (ctx) => ctx.restoreHealth(1)),
   'Emergency Shield': Effect(
     onBattle: (ctx) =>
-        ctx.adjustArmor(4, ifTrue: ctx.my.speed < ctx.enemy.speed),
+        _if(ctx.my.speed < ctx.enemy.speed, () => ctx.adjustArmor(4)),
   ),
   'Granite Gauntlet': Effect(onBattle: (ctx) => ctx.adjustArmor(5)),
+  'Ruby Earings': Effect(
+    onTurn: (ctx) => _if(ctx.isEveryOtherTurn, () => ctx.dealDamage(1)),
+  ),
 };
 
 class _ItemCatalogReader {

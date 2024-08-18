@@ -72,4 +72,17 @@ void main() {
     expect(result2.first.hp, 5);
     expect(result2.first.startingStats.armor, 0);
   });
+
+  test('Ruby Earnings effect', () {
+    final item = itemCatalog['Ruby Earings'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // Normally kill it in 6 turns (take 5 dmg), but the ruby earnings trigger
+    // every other turn (including the first) for 1 dmg, meaning we
+    // kill it in 4 turns (take 3 dmg).
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 7);
+  });
 }
