@@ -13,9 +13,8 @@ Creature createPlayer({List<Item> withItems = const <Item>[]}) {
   }
 
   return Creature(
-    _kPlayerName,
-    health: 10,
-    attack: 0,
+    name: _kPlayerName,
+    baseStats: const Stats(maxHp: 10),
     gold: 0,
     items: items,
   );
@@ -33,10 +32,13 @@ Creature makeEnemy(
   int? hp,
 }) {
   return Creature(
-    name,
-    attack: attack,
-    health: health,
-    speed: speed,
+    name: name,
+    baseStats: Stats(
+      maxHp: health,
+      armor: armor,
+      attack: attack,
+      speed: speed,
+    ),
     gold: gold,
     items: items,
     hp: hp,
@@ -47,22 +49,19 @@ Creature makeEnemy(
 @immutable
 class Creature {
   /// Create an enemy.
-  Creature(
-    this.name, {
-    required int attack,
-    required int health,
+  Creature({
+    required this.name,
+    required Stats baseStats,
     required this.gold,
-    int armor = 0,
-    int speed = 0,
     this.items = const <Item>[],
     int? hp,
-  })  : baseStats = Stats(
-          health: health,
-          armor: armor,
-          attack: attack,
-          speed: speed,
-        ),
-        hp = hp ?? health;
+  })  : _baseStats = baseStats,
+        _lostHp = _computeLostHp(baseStats, items, hp);
+
+  static int _computeLostHp(Stats baseStats, List<Item> items, int? hp) {
+    final maxHp = _statsWithItems(baseStats, items).maxHp;
+    return maxHp - (hp ?? maxHp);
+  }
 
   /// Returns true if this Creature is the player.
   bool get isPlayer => name == _kPlayerName;
@@ -71,26 +70,28 @@ class Creature {
   final String name;
 
   /// The intrinsic stats of this Creature without any items.
-  final Stats baseStats;
+  final Stats _baseStats;
 
   /// Items the creature or player is using.
   final List<Item> items;
 
-  /// The current hp of the enemy or player.
-  final int hp;
+  /// How much hp has been lost.
+  final int _lostHp;
 
   /// How much gold is on this creature or player.
   final int gold;
 
+  /// Current health of the creature.
+  int get hp => startingStats.maxHp - _lostHp;
+
   /// Returns true if the creature is still alive.
   bool get isAlive => hp > 0;
 
-  /// Stats as they would be in the over-world or at fight start.
-  Stats get startingStats {
+  static Stats _statsWithItems(Stats stats, List<Item> items) {
     return items.fold(
-      baseStats,
+      stats,
       (stats, item) => stats.copyWith(
-        health: stats.health + item.stats.health,
+        maxHp: stats.maxHp + item.stats.maxHp,
         armor: stats.armor + item.stats.armor,
         attack: stats.attack + item.stats.attack,
         speed: stats.speed + item.stats.speed,
@@ -98,14 +99,14 @@ class Creature {
     );
   }
 
+  /// Stats as they would be in the over-world or at fight start.
+  Stats get startingStats => _statsWithItems(_baseStats, items);
+
   /// Make a copy with a changed hp.
   Creature copyWith({int? hp, int? gold}) {
     return Creature(
-      name,
-      attack: baseStats.attack,
-      health: baseStats.health,
-      armor: baseStats.armor,
-      speed: baseStats.speed,
+      name: name,
+      baseStats: _baseStats,
       items: items,
       hp: hp ?? this.hp,
       gold: gold ?? this.gold,

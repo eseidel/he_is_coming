@@ -18,14 +18,14 @@ class Effect {
 class Stats {
   /// Create a new Stats.
   const Stats({
-    this.health = 0,
+    this.maxHp = 0,
     this.armor = 0,
     this.attack = 0,
     this.speed = 0,
   });
 
   /// Max health of the creature.
-  final int health;
+  final int maxHp;
 
   /// Current armor of the creature.
   final int armor;
@@ -39,7 +39,7 @@ class Stats {
   /// Add two Stats together.
   Stats operator +(Stats other) {
     return copyWith(
-      health: health + other.health,
+      maxHp: maxHp + other.maxHp,
       armor: armor + other.armor,
       attack: attack + other.attack,
       speed: speed + other.speed,
@@ -48,13 +48,13 @@ class Stats {
 
   /// Create a copy of Stats with updated values.
   Stats copyWith({
-    int? health,
+    int? maxHp,
     int? armor,
     int? attack,
     int? speed,
   }) {
     return Stats(
-      health: health ?? this.health,
+      maxHp: maxHp ?? this.maxHp,
       armor: armor ?? this.armor,
       attack: attack ?? this.attack,
       speed: speed ?? this.speed,
@@ -63,7 +63,7 @@ class Stats {
 
   @override
   String toString() {
-    return 'Health: $health, Armor: $armor, Attack: $attack, Speed: $speed';
+    return 'MaxHP: $maxHp, Armor: $armor, Attack: $attack, Speed: $speed';
   }
 }
 
@@ -82,7 +82,7 @@ class Item {
     int speed = 0,
     this.effect,
   }) : stats = Stats(
-          health: health,
+          maxHp: health,
           armor: armor,
           attack: attack,
           speed: speed,

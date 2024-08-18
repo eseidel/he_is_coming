@@ -36,13 +36,14 @@ class EffectContext {
 
   /// Restore health.
   void restoreHealth(int hp) {
-    _stats = _stats.copyWith(hp: hp);
+    _stats = _stats.copyWith(hp: _stats.hp + hp);
     logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
   }
 }
 
 String? _diffString(String name, int before, int after) {
   final diff = after - before;
+  // logger.info('$name: $before -> $after ($diff)');
   return diff != 0 ? '$name: ${_signed(diff)}' : null;
 }
 
@@ -63,7 +64,7 @@ class CreatureStats {
   factory CreatureStats.fromCreature(Creature creature) {
     final stats = creature.startingStats;
     return CreatureStats(
-      maxHp: stats.health,
+      maxHp: stats.maxHp,
       hp: creature.hp,
       armor: stats.armor,
       speed: stats.speed,
@@ -99,9 +100,14 @@ class CreatureStats {
     int? armor,
     int? maxHp,
   }) {
+    final newMaxHp = maxHp ?? this.maxHp;
+    final newHp = hp ?? this.hp;
+    if (newHp > newMaxHp) {
+      throw ArgumentError('hp cannot be greater than maxHp');
+    }
     return CreatureStats(
-      maxHp: maxHp ?? this.maxHp,
-      hp: hp ?? this.hp,
+      maxHp: newMaxHp,
+      hp: newHp,
       armor: armor ?? this.armor,
       speed: speed,
       attack: attack,
@@ -186,6 +192,7 @@ class BattleContext {
   /// The first creature in this battle with current stats.
   Creature get firstResolved {
     final goldDiff = _first.isAlive ? _second.gold : 0;
+    logger.info('firstResolved HP: ${stats[0].hp}');
     return _first.copyWith(hp: stats[0].hp, gold: _first.gold + goldDiff);
   }
 
@@ -258,8 +265,8 @@ class Battle {
     required Creature second,
   }) {
     logger
-      ..info('${first.name}: ${first.baseStats}')
-      ..info('${second.name}: ${first.baseStats}');
+      ..info('${first.name}: ${first.startingStats}')
+      ..info('${second.name}: ${first.startingStats}');
 
     final ctx = BattleContext([first, second]);
     _onBattle(ctx);
