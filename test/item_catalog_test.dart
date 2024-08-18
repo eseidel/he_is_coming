@@ -413,4 +413,21 @@ void main() {
     // Wolf goes first so we take 6 hits rather than 5.
     expect(result2.first.hp, 4);
   });
+
+  test('Marble Mirror', () {
+    final item = itemCatalog['Marble Mirror'];
+    final player =
+        createPlayer(withItems: [item], intrinsic: const Stats(attack: 1));
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 2);
+    expect(player.baseStats.armor, 0);
+
+    // Marble Mirror gives armor equal to the enemy's armor at the start.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6, armor: 3);
+    final result = Battle.resolve(first: player, second: enemy);
+    // We have 2 attack, wolf has 9 hp + armor, so we need 5 hits.
+    // Wolf attacks 4 times, so we take 4 dmg, but mirror gives 3 armor.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.armor, 0);
+  });
 }

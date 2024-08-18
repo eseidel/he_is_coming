@@ -15,13 +15,13 @@ void _if(bool condition, void Function() fn) {
 
 final _effectsByItemName = <String, Effects>{
   'Stone Steak': Effects(
-    onBattle: (c) => _if(c.isHealthFull, () => c.adjustArmor(4)),
+    onBattle: (c) => _if(c.isHealthFull, () => c.gainArmor(4)),
   ),
   'Redwood Cloak': Effects(onBattle: (c) => c.restoreHealth(1)),
   'Emergency Shield': Effects(
-    onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.adjustArmor(4)),
+    onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4)),
   ),
-  'Granite Gauntlet': Effects(onBattle: (c) => c.adjustArmor(5)),
+  'Granite Gauntlet': Effects(onBattle: (c) => c.gainArmor(5)),
   'Ruby Earings': Effects(
     onTurn: (c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1)),
   ),
@@ -29,7 +29,7 @@ final _effectsByItemName = <String, Effects>{
       Effects(onExposed: (c) => [1, 1, 1].forEach(c.dealDamage)),
   'Redwood Helmet': Effects(onExposed: (c) => c.restoreHealth(3)),
   'Explosive Surprise': Effects(onExposed: (c) => c.dealDamage(5)),
-  'Cracked Bouldershield': Effects(onExposed: (c) => c.adjustArmor(5)),
+  'Cracked Bouldershield': Effects(onExposed: (c) => c.gainArmor(5)),
   'Vampiric Wine': Effects(onWounded: (c) => c.restoreHealth(4)),
   'Mortal Edge': Effects(
     onWounded: (c) => c
@@ -37,10 +37,10 @@ final _effectsByItemName = <String, Effects>{
       ..takeDamage(2),
   ),
   'Lifeblood Burst': Effects(onWounded: (c) => c.dealDamage(c.my.maxHp ~/ 2)),
-  'Chain Mail': Effects(onWounded: (c) => c.adjustArmor(3)),
-  'Stoneslab Sword': Effects(onHit: (c) => c.adjustArmor(2)),
+  'Chain Mail': Effects(onWounded: (c) => c.gainArmor(3)),
+  'Stoneslab Sword': Effects(onHit: (c) => c.gainArmor(2)),
   'Heart Drinker': Effects(onHit: (c) => c.restoreHealth(1)),
-  'Gold Ring': Effects(onBattle: (c) => c.adjustGold(1)),
+  'Gold Ring': Effects(onBattle: (c) => c.gainGold(1)),
   'Ruby Ring': Effects(
     onBattle: (c) => c
       ..adjustAttack(1)
@@ -52,11 +52,12 @@ final _effectsByItemName = <String, Effects>{
   'Melting Iceblade': Effects(onHit: (c) => c.adjustAttack(-1)),
   'Double-edged Sword': Effects(onHit: (c) => c.takeDamage(1)),
   'Sapphire Crown': Effects(
-    onBattle: (c) => _if(c.my.armor >= 15, () => c.adjustArmor(10)),
+    onBattle: (c) => _if(c.my.armor >= 15, () => c.gainArmor(10)),
   ),
   'Citrine Ring': Effects(
     onBattle: (c) => _if(c.my.speed > 0, () => c.dealDamage(c.my.speed)),
   ),
+  'Marble Mirror': Effects(onBattle: (c) => c.gainArmor(c.enemy.armor)),
 };
 
 extension on YamlMap {

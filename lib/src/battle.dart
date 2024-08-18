@@ -37,16 +37,24 @@ class EffectContext {
   /// Returns true if this is "every other turn" for this creature.
   bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
 
-  /// Add or remove gold
-  void adjustGold(int goldDelta) {
-    _stats = _stats.copyWith(gold: _stats.gold + goldDelta);
-    logger.info('$_playerName gold ${_signed(goldDelta)} from $_sourceName');
+  void _expectPositive(int value) {
+    if (value <= 0) {
+      throw ArgumentError('value must be positive');
+    }
   }
 
-  /// Add or remove armor
-  void adjustArmor(int armorDelta) {
-    _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
-    logger.info('$_playerName armor ${_signed(armorDelta)} from $_sourceName');
+  /// Add gold.
+  void gainGold(int gold) {
+    _expectPositive(gold);
+    _stats = _stats.copyWith(gold: _stats.gold + gold);
+    logger.info('$_playerName gold ${_signed(gold)} from $_sourceName');
+  }
+
+  /// Add armor.
+  void gainArmor(int armor) {
+    _expectPositive(armor);
+    _stats = _stats.copyWith(armor: _stats.armor + armor);
+    logger.info('$_playerName armor ${_signed(armor)} from $_sourceName');
   }
 
   /// Add or remove attack
