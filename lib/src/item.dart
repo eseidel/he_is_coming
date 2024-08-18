@@ -6,9 +6,9 @@ typedef EffectFn = void Function(EffectContext ctx);
 
 /// Container for callbacks for items.
 @immutable
-class Effect {
+class Effects {
   /// Create a new Effect
-  const Effect({
+  const Effects({
     this.onBattle,
     this.onTurn,
     this.onExposed,
@@ -95,7 +95,7 @@ class Item {
     int armor = 0,
     int attack = 0,
     int speed = 0,
-    this.effect,
+    this.effects,
   }) : stats = Stats(
           maxHp: health,
           armor: armor,
@@ -119,7 +119,7 @@ class Item {
   final Material material;
 
   /// Effect of the item.
-  final Effect? effect;
+  final Effects? effects;
 }
 
 /// Enum representing Item kind.

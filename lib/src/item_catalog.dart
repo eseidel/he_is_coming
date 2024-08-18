@@ -39,18 +39,20 @@ void _if(bool condition, void Function() fn) {
   }
 }
 
-final _effectByItemName = <String, Effect>{
-  'Stone Steak': Effect(
+final _effectsByItemName = <String, Effects>{
+  'Stone Steak': Effects(
     onBattle: (c) => _if(c.isHealthFull, () => c.adjustArmor(4)),
   ),
-  'Redwood Cloak': Effect(onBattle: (c) => c.restoreHealth(1)),
-  'Emergency Shield': Effect(
+  'Redwood Cloak': Effects(onBattle: (c) => c.restoreHealth(1)),
+  'Emergency Shield': Effects(
     onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.adjustArmor(4)),
   ),
-  'Granite Gauntlet': Effect(onBattle: (c) => c.adjustArmor(5)),
-  'Ruby Earings': Effect(
+  'Granite Gauntlet': Effects(onBattle: (c) => c.adjustArmor(5)),
+  'Ruby Earings': Effects(
     onTurn: (c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1)),
   ),
+  'Firecracker Belt':
+      Effects(onExposed: (c) => [1, 1, 1].forEach(c.dealDamage)),
 };
 
 class _ItemCatalogReader {
@@ -91,11 +93,11 @@ class _ItemCatalogReader {
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
     final effectText = yaml['effect'] as String?;
-    Effect? effect;
+    Effects? effects;
     if (effectText != null) {
-      effect = _effectByItemName[name];
+      effects = _effectsByItemName[name];
       // TODO(eseidel): Currently only warning about commons.
-      if (effect == null && rarity == Rarity.common) {
+      if (effects == null && rarity == Rarity.common) {
         logger.warn('$name missing: $effectText');
       }
     }
@@ -109,7 +111,7 @@ class _ItemCatalogReader {
       health: health,
       armor: armor,
       speed: speed,
-      effect: effect,
+      effects: effects,
     );
   }
 

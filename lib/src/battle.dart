@@ -220,7 +220,7 @@ class BattleContext {
       final beforeStats = stats[index];
       for (final item in creature.items) {
         final effectCxt = EffectContext(this, index, item.name);
-        item.effect?.onBattle?.call(effectCxt);
+        item.effects?.onBattle?.call(effectCxt);
       }
       final afterStats = stats[index];
       final diffString = beforeStats.diffString(afterStats);
@@ -237,7 +237,7 @@ class BattleContext {
     final beforeStats = stats[index];
     for (final item in creature.items) {
       final effectCxt = EffectContext(this, index, item.name);
-      item.effect?.onTurn?.call(effectCxt);
+      item.effects?.onTurn?.call(effectCxt);
     }
     final afterStats = stats[index];
     final diffString = beforeStats.diffString(afterStats);
