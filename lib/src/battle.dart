@@ -64,7 +64,11 @@ class EffectContext {
 
   /// Deal damage to the enemy.
   /// This is not for normal attacks "strikes" but for special effects.
-  void dealDamage(int hp) => _battle.dealDamage(hp, source: _sourceName);
+  void dealDamage(int damage) => _battle.dealDamage(
+        damage: damage,
+        targetIndex: _enemyIndex,
+        source: _sourceName,
+      );
 }
 
 String? _diffString(String name, int before, int after) {
@@ -85,6 +89,7 @@ class CreatureStats {
     required this.attack,
     required this.gold,
     this.hasBeenExposed = false,
+    this.hasBeenWounded = false,
   });
 
   /// Create a CreatureStats from a Creature.
@@ -118,8 +123,11 @@ class CreatureStats {
   /// Value if the creature is defeated.
   final int gold;
 
-  /// Returns true if the creature has already sent onExposed.
+  /// true if the creature has already sent onExposed this battle.
   final bool hasBeenExposed;
+
+  /// true if the creature has already sent onWounded this battle.
+  final bool hasBeenWounded;
 
   /// Returns true if health is currently full.
   bool get isHealthFull => hp == maxHp;
@@ -131,6 +139,7 @@ class CreatureStats {
     int? maxHp,
     int? attack,
     bool? hasBeenExposed,
+    bool? hasBeenWounded,
   }) {
     final newMaxHp = maxHp ?? this.maxHp;
     final newHp = hp ?? this.hp;
@@ -146,6 +155,7 @@ class CreatureStats {
       attack: attack ?? this.attack,
       gold: gold,
       hasBeenExposed: hasBeenExposed ?? this.hasBeenExposed,
+      hasBeenWounded: hasBeenWounded ?? this.hasBeenWounded,
     );
   }
 
@@ -191,28 +201,41 @@ class BattleContext {
   }
 
   /// Deal damage to the defender.
-  void dealDamage(int damage, {required String source}) {
-    final armorReduction = min(defender.armor, damage);
+  void dealDamage({
+    required int damage,
+    required int targetIndex,
+    required String source,
+  }) {
+    final target = stats[targetIndex];
+    final targetName = creatures[targetIndex].name;
+    final armorReduction = min(target.armor, damage);
     final remainingDamage = damage - armorReduction;
-    final newArmor = defender.armor - armorReduction;
-    final newHp = defender.hp - remainingDamage;
-    setStats(
-      defenderIndex,
-      defender.copyWith(
-        armor: newArmor,
-        hp: newHp,
-      ),
-    );
+    final newArmor = target.armor - armorReduction;
+    final newHp = target.hp - remainingDamage;
+    final armorBefore = target.armor;
+    final newStats = target.copyWith(armor: newArmor, hp: newHp);
+    setStats(targetIndex, newStats);
     logger.info(
-      '$source dealt $damage damage to $defenderName '
-      '${defender.hp} / ${defender.maxHp} hp '
-      '${defender.armor} armor',
+      '$source dealt $damage damage to $targetName '
+      '${newStats.hp} / ${newStats.maxHp} hp '
+      '${newStats.armor} armor',
     );
-    // Send onExposed and onWounded if needed.
+
+    // If previously target had armor but now it doesn't
+    final armorWasBroken = armorBefore > 0 && newArmor == 0;
+    if (armorWasBroken && !newStats.hasBeenExposed) {
+      // Set "exposed" flag first to avoid infinite loops.
+      setStats(targetIndex, newStats.copyWith(hasBeenExposed: true));
+      _trigger(targetIndex, Effect.onExposed);
+    }
   }
 
   /// Strike the defender.
-  void strike() => dealDamage(attacker.attack, source: '$attackerName strike');
+  void strike() => dealDamage(
+        damage: attacker.attack,
+        targetIndex: defenderIndex,
+        source: '$attackerName strike',
+      );
 
   void _trigger(int index, Effect effect) {
     final creature = creatures[index];
@@ -350,8 +373,6 @@ class Battle {
         .._triggerOnTurn()
         ..strike()
         // onHit
-        // onExposed
-        // onWounded
         ..nextAttacker();
     }
 

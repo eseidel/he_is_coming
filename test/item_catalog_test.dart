@@ -85,4 +85,18 @@ void main() {
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 7);
   });
+
+  test('Firecracker Belt effect', () {
+    final item = itemCatalog['Firecracker Belt'];
+    final player =
+        createPlayer(baseStats: const Stats(armor: 1), withItems: [item]);
+    expect(player.hp, 10);
+
+    // Normally we would kill the wolf in 6 turns (take 5 dmg), but the armor
+    // reduces one damage, and then the firecracker belt triggers after the
+    // armor is broken, dealing 3 dmg to the wolf, killing it in 3 turns.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 9);
+  });
 }
