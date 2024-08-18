@@ -480,4 +480,28 @@ void main() {
     expect(result2.first.hp, 5);
     expect(result2.first.baseStats.armor, 0);
   });
+
+  test('Ore Heart', () {
+    final item = itemCatalog['Ore Heart'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    // Ore Heart gives 2 armor for each stone item we have.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    // We get 2 armor from the Ore Heart, so we take 3 dmg from the wolf.
+    expect(result.first.hp, 7);
+    expect(result.first.baseStats.armor, 0);
+
+    final other = Item('other', Kind.clothing, Rarity.common, Material.stone);
+    final player2 = createPlayer(withItems: [item, other]);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 0);
+
+    // Ore Heart gives 2 armor for each stone item we have.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // We get 4 armor from the Ore Heart, so we take 1 dmg from the wolf.
+    expect(result2.first.hp, 9);
+  });
 }

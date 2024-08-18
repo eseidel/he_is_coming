@@ -61,6 +61,9 @@ final effectsByItemName = <String, Effects>{
   'Plated Helmet': Effects(
     onTurn: (c) => _if(c.my.belowHalfHp, () => c.gainArmor(2)),
   ),
+  'Ore Heart': Effects(
+    onBattle: (c) => c.gainArmor(c.itemCount(Material.stone) * 2),
+  ),
 };
 
 /// Look up the effects for an item by name.

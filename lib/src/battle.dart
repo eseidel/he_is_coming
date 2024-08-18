@@ -105,6 +105,13 @@ class EffectContext {
         targetIndex: _index,
         source: _sourceName,
       );
+
+  /// Returns the number of items of a given material.
+  int itemCount(Material material) {
+    return _battle.creatures[_index].items
+        .where((item) => item.material == material)
+        .length;
+  }
 }
 
 String? _diffString(String name, int before, int after) {
