@@ -6,7 +6,7 @@ const _kPlayerName = 'Player';
 
 /// Create a player.
 Creature createPlayer({
-  Stats baseStats = const Stats(),
+  Stats intrinsic = const Stats(),
   List<Item> withItems = const <Item>[],
   int? hp,
 }) {
@@ -18,7 +18,7 @@ Creature createPlayer({
 
   return Creature(
     name: _kPlayerName,
-    baseStats: baseStats.copyWith(maxHp: 10),
+    intrinsic: intrinsic.copyWith(maxHp: 10),
     gold: 0,
     hp: hp,
     items: items,
@@ -38,7 +38,7 @@ Creature makeEnemy(
 }) {
   return Creature(
     name: name,
-    baseStats: Stats(
+    intrinsic: Stats(
       maxHp: health,
       armor: armor,
       attack: attack,
@@ -56,15 +56,15 @@ class Creature {
   /// Create an enemy.
   Creature({
     required this.name,
-    required Stats baseStats,
+    required Stats intrinsic,
     required this.gold,
     this.items = const <Item>[],
     int? hp,
-  })  : _baseStats = baseStats,
-        _lostHp = _computeLostHp(baseStats, items, hp);
+  })  : _intrinsic = intrinsic,
+        _lostHp = _computeLostHp(intrinsic, items, hp);
 
-  static int _computeLostHp(Stats baseStats, List<Item> items, int? hp) {
-    final maxHp = _statsWithItems(baseStats, items).maxHp;
+  static int _computeLostHp(Stats intrinsic, List<Item> items, int? hp) {
+    final maxHp = _statsWithItems(intrinsic, items).maxHp;
     return maxHp - (hp ?? maxHp);
   }
 
@@ -75,7 +75,7 @@ class Creature {
   final String name;
 
   /// The intrinsic stats of this Creature without any items.
-  final Stats _baseStats;
+  final Stats _intrinsic;
 
   /// Items the creature or player is using.
   final List<Item> items;
@@ -105,13 +105,13 @@ class Creature {
   }
 
   /// Stats as they would be in the over-world or at fight start.
-  Stats get startingStats => _statsWithItems(_baseStats, items);
+  Stats get startingStats => _statsWithItems(_intrinsic, items);
 
   /// Make a copy with a changed hp.
   Creature copyWith({int? hp, int? gold}) {
     return Creature(
       name: name,
-      baseStats: _baseStats,
+      intrinsic: _intrinsic,
       items: items,
       hp: hp ?? this.hp,
       gold: gold ?? this.gold,

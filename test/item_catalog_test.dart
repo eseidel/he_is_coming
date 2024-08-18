@@ -61,7 +61,7 @@ void main() {
     expect(result.first.startingStats.armor, 0);
 
     final player2 =
-        createPlayer(baseStats: const Stats(speed: 2), withItems: [item]);
+        createPlayer(intrinsic: const Stats(speed: 2), withItems: [item]);
     expect(player2.hp, 10);
     expect(player2.startingStats.speed, 2);
     expect(player2.startingStats.armor, 0);
@@ -89,7 +89,7 @@ void main() {
   test('Firecracker Belt effect', () {
     final item = itemCatalog['Firecracker Belt'];
     final player =
-        createPlayer(baseStats: const Stats(armor: 1), withItems: [item]);
+        createPlayer(intrinsic: const Stats(armor: 1), withItems: [item]);
     expect(player.hp, 10);
     expect(player.startingStats.armor, 1);
 
@@ -127,7 +127,7 @@ void main() {
   test('Explosive Surprise effect', () {
     final item = itemCatalog['Explosive Surprise'];
     final player =
-        createPlayer(baseStats: const Stats(armor: 1), withItems: [item]);
+        createPlayer(intrinsic: const Stats(armor: 1), withItems: [item]);
     expect(player.hp, 10);
     expect(player.startingStats.armor, 1);
 
@@ -142,7 +142,7 @@ void main() {
   test('Cracked Bouldershield', () {
     final item = itemCatalog['Cracked Bouldershield'];
     final player =
-        createPlayer(baseStats: const Stats(armor: 1), withItems: [item]);
+        createPlayer(intrinsic: const Stats(armor: 1), withItems: [item]);
     expect(player.hp, 10);
     expect(player.startingStats.armor, 1);
 
