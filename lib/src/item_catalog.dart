@@ -50,6 +50,7 @@ final _effectsByItemName = <String, Effects>{
     onBattle: (c) => _if(c.my.attack >= 6, () => c.adjustAttack(2)),
   ),
   'Melting Iceblade': Effects(onHit: (c) => c.adjustAttack(-1)),
+  'Double-edged Sword': Effects(onHit: (c) => c.takeDamage(1)),
 };
 
 extension on YamlMap {

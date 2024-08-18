@@ -351,4 +351,17 @@ void main() {
     expect(result.first.hp, 0);
     expect(result.first.baseStats.attack, 7);
   });
+
+  test('Double-edged Sword', () {
+    final item = itemCatalog['Double-edged Sword'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 5);
+
+    // Double-edged Sword deals 1 damage on hit, so we should take 3 dmg.
+    // One from wolf and two from sword.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 7);
+  });
 }
