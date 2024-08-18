@@ -36,7 +36,7 @@
   rarity: common
   effect: "Battle Start: If you have less speed than the enemy, gain 4 armor"
 - name: Phantom Armor
-  effect: Enemies first strike ignores armor.
+  effect: Enemies first strike ignores armor
   rarity: rare
   armor: 4
 - name: 'Fortified Gauntlet'
