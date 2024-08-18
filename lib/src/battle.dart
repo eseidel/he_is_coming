@@ -169,6 +169,9 @@ class CreatureStats {
   /// Returns true if health is currently full.
   bool get isHealthFull => hp == maxHp;
 
+  /// Returns true if health is below half.
+  bool get belowHalfHp => hp < maxHp / 2;
+
   /// Create a copy of this with some fields updated.
   CreatureStats copyWith({
     int? hp,
@@ -274,11 +277,8 @@ class BattleContext {
     // Wounded occurs when you cross the 50% hp threshold.
     // https://discord.com/channels/1041414829606449283/1209488302269534209/1274771566231552151
     // Currently enforcing *below* 50% hp, not *at* 50% hp.
-    final fiftyPercentHp = target.maxHp / 2;
-    final wasAboveFiftyPercent = target.hp >= fiftyPercentHp;
-    final nowBelowFiftyPercent = newHp < fiftyPercentHp;
-    if (wasAboveFiftyPercent &&
-        nowBelowFiftyPercent &&
+    if (!target.belowHalfHp &&
+        newStats.belowHalfHp &&
         !newStats.hasBeenWounded) {
       // Set "wounded" flag first to avoid infinite loops.
       setStats(targetIndex, newStats.copyWith(hasBeenWounded: true));

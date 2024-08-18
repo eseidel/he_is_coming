@@ -456,4 +456,28 @@ void main() {
     final result2 = Battle.resolve(first: player2, second: enemy);
     expect(result2.first.hp, 5);
   });
+
+  test('Plated Helmet', () {
+    final item = itemCatalog['Plated Helmet'];
+    final player = createPlayer(withItems: [item], hp: 5);
+    expect(player.hp, 5);
+    expect(player.baseStats.armor, 0);
+
+    // Plated Helmet gives 2 armor if we're below 50% health.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    // We take 1 dmg from the wolf the first hit, and then no more after that
+    // due to the 2 armor we get each turn from the helmet.
+    expect(result.first.hp, 4);
+    expect(result.first.baseStats.armor, 0);
+
+    final player2 = createPlayer(withItems: [item]);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 0);
+
+    // If we're not below 50% health, the helmet does nothing.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    expect(result2.first.hp, 5);
+    expect(result2.first.baseStats.armor, 0);
+  });
 }

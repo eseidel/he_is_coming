@@ -58,8 +58,13 @@ final _effectsByItemName = <String, Effects>{
     onBattle: (c) => _if(c.my.speed > 0, () => c.dealDamage(c.my.speed)),
   ),
   'Marble Mirror': Effects(onBattle: (c) => c.gainArmor(c.enemy.armor)),
+  // This might be wrong, since this probably should be onTurn?
+  // "If you have more speed than the enemy, gain 2 attack"
   'Leather Boots': Effects(
     onBattle: (c) => _if(c.my.speed > c.enemy.speed, () => c.gainAttack(2)),
+  ),
+  'Plated Helmet': Effects(
+    onTurn: (c) => _if(c.my.belowHalfHp, () => c.gainArmor(2)),
   ),
 };
 
