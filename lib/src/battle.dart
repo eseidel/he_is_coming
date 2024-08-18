@@ -228,6 +228,17 @@ class BattleContext {
       setStats(targetIndex, newStats.copyWith(hasBeenExposed: true));
       _trigger(targetIndex, Effect.onExposed);
     }
+
+    // Wounded occurs if you lose hp and are now below 50% hp.
+    final didLoseHp = remainingDamage > 0;
+    // Currently enforcing *below* 50% hp, not *at* 50% hp.
+    final fiftyPercentHp = target.maxHp / 2;
+    final nowBelowFiftyPercent = newHp < fiftyPercentHp;
+    if (didLoseHp && nowBelowFiftyPercent && !newStats.hasBeenWounded) {
+      // Set "wounded" flag first to avoid infinite loops.
+      setStats(targetIndex, newStats.copyWith(hasBeenWounded: true));
+      _trigger(targetIndex, Effect.onWounded);
+    }
   }
 
   /// Strike the defender.

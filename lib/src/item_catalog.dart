@@ -30,6 +30,7 @@ final _effectsByItemName = <String, Effects>{
   'Redwood Helmet': Effects(onExposed: (c) => c.restoreHealth(3)),
   'Explosive Surprise': Effects(onExposed: (c) => c.dealDamage(5)),
   'Cracked Bouldershield': Effects(onExposed: (c) => c.adjustArmor(5)),
+  'Vampiric Wine': Effects(onWounded: (c) => c.restoreHealth(4)),
 };
 
 extension on YamlMap {

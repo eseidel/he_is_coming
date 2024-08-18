@@ -154,4 +154,16 @@ void main() {
     // We still have our base armor, but any armor during battle is gone.
     expect(player.startingStats.armor, 1);
   });
+
+  test('Vampiric Wine effect', () {
+    final item = itemCatalog['Vampiric Wine'];
+    final player = createPlayer(withItems: [item], hp: 9);
+    expect(player.hp, 9);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // Normally take 5 dmg but the wine triggers
+    // when we're below 50% health, healing 4 hp.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 8);
+  });
 }
