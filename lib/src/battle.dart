@@ -226,7 +226,7 @@ class BattleContext {
     final newArmor = target.armor - armorReduction;
     final newHp = target.hp - remainingDamage;
     final armorBefore = target.armor;
-    final newStats = target.copyWith(armor: newArmor, hp: newHp);
+    final newStats = target.copyWith(armor: newArmor, hp: max(newHp, 0));
     setStats(targetIndex, newStats);
     logger.info(
       '$source dealt $damage damage to $targetName '

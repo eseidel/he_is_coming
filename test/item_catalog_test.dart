@@ -364,4 +364,32 @@ void main() {
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 7);
   });
+
+  test('Sapphire Crown', () {
+    final item = itemCatalog['Sapphire Crown'];
+    final player =
+        createPlayer(intrinsic: const Stats(armor: 15), withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 15);
+
+    // Sapphire Crown gives 10 armor if we have 15 or more armor.
+    final enemy = makeEnemy('Wolf', attack: 5, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    // We take 5 hits from wolf, which is 25 dmg, but we have 25 armor.
+    expect(result.first.hp, 10);
+    expect(result.first.baseStats.armor, 15);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(armor: 14),
+      withItems: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 14);
+
+    // Sapphire Crown gives 10 armor if we have 15 or more armor.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // We take 5 hits from wolf, which is 25 dmg, but we have 14 armor.
+    expect(result2.first.hp, 0);
+    expect(result2.first.baseStats.armor, 14);
+  });
 }

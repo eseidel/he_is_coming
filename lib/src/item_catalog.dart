@@ -51,6 +51,9 @@ final _effectsByItemName = <String, Effects>{
   ),
   'Melting Iceblade': Effects(onHit: (c) => c.adjustAttack(-1)),
   'Double-edged Sword': Effects(onHit: (c) => c.takeDamage(1)),
+  'Sapphire Crown': Effects(
+    onBattle: (c) => _if(c.my.armor >= 15, () => c.adjustArmor(10)),
+  ),
 };
 
 extension on YamlMap {
