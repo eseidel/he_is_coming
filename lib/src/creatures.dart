@@ -87,7 +87,8 @@ class Creature {
   final int gold;
 
   /// Current health of the creature.
-  int get hp => startingStats.maxHp - _lostHp;
+  /// Combat can't change maxHp, so we can compute it from baseStats.
+  int get hp => baseStats.maxHp - _lostHp;
 
   /// Returns true if the creature is still alive.
   bool get isAlive => hp > 0;
@@ -105,7 +106,7 @@ class Creature {
   }
 
   /// Stats as they would be in the over-world or at fight start.
-  Stats get startingStats => _statsWithItems(_intrinsic, items);
+  Stats get baseStats => _statsWithItems(_intrinsic, items);
 
   /// Make a copy with a changed hp.
   Creature copyWith({int? hp, int? gold}) {

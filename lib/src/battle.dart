@@ -85,6 +85,7 @@ String? _diffString(String name, int before, int after) {
 }
 
 /// Holds stats for a creature during battle.
+// This is probably really "CreatureBattleState" or something.
 @immutable
 class CreatureStats {
   /// Create a CreatureStats.
@@ -101,7 +102,7 @@ class CreatureStats {
 
   /// Create a CreatureStats from a Creature.
   factory CreatureStats.fromCreature(Creature creature) {
-    final stats = creature.startingStats;
+    final stats = creature.baseStats;
     return CreatureStats(
       maxHp: stats.maxHp,
       hp: creature.hp,
@@ -112,7 +113,7 @@ class CreatureStats {
     );
   }
 
-  /// Max health.
+  /// Max health.  Does not change during battle.
   final int maxHp;
 
   /// Current health.
@@ -143,18 +144,18 @@ class CreatureStats {
   CreatureStats copyWith({
     int? hp,
     int? armor,
-    int? maxHp,
     int? attack,
     bool? hasBeenExposed,
     bool? hasBeenWounded,
   }) {
-    final newMaxHp = maxHp ?? this.maxHp;
+    // It's not possible to change maxHp during battle.
+    // If it was, we'd need to be careful with Creature.hp.
     final newHp = hp ?? this.hp;
-    if (newHp > newMaxHp) {
+    if (newHp > maxHp) {
       throw ArgumentError('hp cannot be greater than maxHp');
     }
     return CreatureStats(
-      maxHp: newMaxHp,
+      maxHp: maxHp,
       hp: newHp,
       armor: armor ?? this.armor,
       speed: speed,
@@ -380,8 +381,8 @@ class Battle {
     required Creature second,
   }) {
     logger
-      ..info('${first.name}: ${first.startingStats}')
-      ..info('${second.name}: ${first.startingStats}');
+      ..info('${first.name}: ${first.baseStats}')
+      ..info('${second.name}: ${first.baseStats}');
 
     final ctx = BattleContext([first, second]).._triggerOnBattle();
 

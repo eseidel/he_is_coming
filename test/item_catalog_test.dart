@@ -15,19 +15,19 @@ void main() {
     final player = createPlayer(withItems: [item]);
     // Redwood Roast gives 5 maxHp, so the player should have 15 maxHp.
     expect(player.hp, 15);
-    expect(player.startingStats.maxHp, 15);
+    expect(player.baseStats.maxHp, 15);
   });
 
   test('Stone Steak effect', () {
     final item = itemCatalog['Stone Steak'];
     final player = createPlayer(withItems: [item]);
     expect(player.hp, 10);
-    expect(player.startingStats.armor, 0);
+    expect(player.baseStats.armor, 0);
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     final result = Battle.resolve(first: player, second: enemy);
     // Stone Steak gives 4 armor, so the player should win with 9 health.
     expect(result.first.hp, 9);
-    expect(result.first.startingStats.armor, 0);
+    expect(result.first.baseStats.armor, 0);
     expect(result.winner, result.first);
   });
 
@@ -51,26 +51,26 @@ void main() {
     final item = itemCatalog['Emergency Shield'];
     final player = createPlayer(withItems: [item]);
     expect(player.hp, 10);
-    expect(player.startingStats.speed, 0);
-    expect(player.startingStats.armor, 0);
+    expect(player.baseStats.speed, 0);
+    expect(player.baseStats.armor, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 2);
     final result = Battle.resolve(first: player, second: enemy);
     // Wolf is faster, so does 6 dmg to us, but we get 4 armor from the shield.
     expect(result.first.hp, 8);
-    expect(result.first.startingStats.armor, 0);
+    expect(result.first.baseStats.armor, 0);
 
     final player2 =
         createPlayer(intrinsic: const Stats(speed: 2), withItems: [item]);
     expect(player2.hp, 10);
-    expect(player2.startingStats.speed, 2);
-    expect(player2.startingStats.armor, 0);
+    expect(player2.baseStats.speed, 2);
+    expect(player2.baseStats.armor, 0);
 
     final result2 = Battle.resolve(first: player2, second: enemy);
     // Wolf is same speed, so only does 5 dmg to us.
     // Emergency Shield won't give armor, since player has >= enemy speed.
     expect(result2.first.hp, 5);
-    expect(result2.first.startingStats.armor, 0);
+    expect(result2.first.baseStats.armor, 0);
   });
 
   test('Ruby Earnings effect', () {
@@ -91,7 +91,7 @@ void main() {
     final player =
         createPlayer(intrinsic: const Stats(armor: 1), withItems: [item]);
     expect(player.hp, 10);
-    expect(player.startingStats.armor, 1);
+    expect(player.baseStats.armor, 1);
 
     // Normally we would kill the wolf in 6 turns (take 5 dmg), but the armor
     // reduces one damage, and then the firecracker belt triggers after the
@@ -106,7 +106,7 @@ void main() {
     final item = itemCatalog['Redwood Helmet'];
     final player = createPlayer(withItems: [item], hp: 5);
     expect(player.hp, 5);
-    expect(player.startingStats.armor, 1);
+    expect(player.baseStats.armor, 1);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // We would kill the wolf in 6 turns (take 4 dmg, 1 absorbed by armor), but
@@ -116,7 +116,7 @@ void main() {
 
     final player2 = createPlayer(withItems: [item]);
     expect(player2.hp, 10);
-    expect(player2.startingStats.armor, 1);
+    expect(player2.baseStats.armor, 1);
 
     // But if we fight with full health, the helmet triggers at exposed
     // and does nothing because we're already at full health.
@@ -129,7 +129,7 @@ void main() {
     final player =
         createPlayer(intrinsic: const Stats(armor: 1), withItems: [item]);
     expect(player.hp, 10);
-    expect(player.startingStats.armor, 1);
+    expect(player.baseStats.armor, 1);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // We would kill the wolf in 6 turns (take 5 dmg), but the explosive
@@ -144,7 +144,7 @@ void main() {
     final player =
         createPlayer(intrinsic: const Stats(armor: 1), withItems: [item]);
     expect(player.hp, 10);
-    expect(player.startingStats.armor, 1);
+    expect(player.baseStats.armor, 1);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // We would kill the wolf in 6 turns (take 5 dmg), but the bouldershield
@@ -152,7 +152,7 @@ void main() {
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 10);
     // We still have our base armor, but any armor during battle is gone.
-    expect(player.startingStats.armor, 1);
+    expect(player.baseStats.armor, 1);
   });
 
   test('Vampiric Wine effect', () {
@@ -186,14 +186,14 @@ void main() {
     final item = itemCatalog['Mortal Edge'];
     final player = createPlayer(withItems: [item], hp: 5);
     expect(player.hp, 5);
-    expect(player.startingStats.attack, 2);
+    expect(player.baseStats.attack, 2);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // Normally take 5 dmg but the mortal edge triggers
     // when we're below 50% health, increasing attack by 5 and taking 2 dmg.
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 2);
-    expect(result.first.startingStats.attack, 2);
+    expect(result.first.baseStats.attack, 2);
   });
 
   test('Lifeblood Burst effect', () {
