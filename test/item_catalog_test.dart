@@ -292,4 +292,30 @@ void main() {
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 6);
   });
+
+  test('Ruby Crown', () {
+    final item = itemCatalog['Ruby Crown'];
+    final player =
+        createPlayer(intrinsic: const Stats(attack: 1), withItems: [item]);
+    expect(player.hp, 10);
+    // We have 1 attack from intrinsic and 1 from "Wooden Stick".
+    expect(player.baseStats.attack, 2);
+
+    // Ruby Crown gives 2 attack if we have 6 or more attack.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 14);
+    final result = Battle.resolve(first: player, second: enemy);
+    // Wolf dies in 7 attacks, so we lose 6 hp.
+    expect(result.first.hp, 4);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(attack: 5),
+      withItems: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.attack, 6);
+    // Ruby Crown gives 2 attack if we have 6 or more attack.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // Wolf dies in 2 hits (8 each) so we lose 1 hp.
+    expect(result2.first.hp, 9);
+  });
 }
