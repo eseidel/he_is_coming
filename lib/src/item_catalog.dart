@@ -34,31 +34,14 @@ extension on YamlMap {
 
 final _effectByItemName = <String, Effect>{
   'Stone Steak': Effect(
-    onBattle: (ctx) {
-      if (ctx.isHealthFull) {
-        ctx.adjustArmor(4);
-      }
-    },
+    onBattle: (ctx) => ctx.adjustArmor(4, ifTrue: ctx.isHealthFull),
   ),
-  'Redwood Cloak': Effect(
-    onBattle: (ctx) {
-      if (!ctx.isHealthFull) {
-        ctx.restoreHealth(1);
-      }
-    },
-  ),
+  'Redwood Cloak': Effect(onBattle: (ctx) => ctx.restoreHealth(1)),
   'Emergency Shield': Effect(
-    onBattle: (ctx) {
-      if (ctx.my.speed < ctx.enemy.speed) {
-        ctx.adjustArmor(4);
-      }
-    },
+    onBattle: (ctx) =>
+        ctx.adjustArmor(4, ifTrue: ctx.my.speed < ctx.enemy.speed),
   ),
-  'Granite Gauntlet': Effect(
-    onBattle: (ctx) {
-      ctx.adjustArmor(5);
-    },
-  ),
+  'Granite Gauntlet': Effect(onBattle: (ctx) => ctx.adjustArmor(5)),
 };
 
 class _ItemCatalogReader {

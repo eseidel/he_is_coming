@@ -29,13 +29,19 @@ class EffectContext {
   bool get isHealthFull => _stats.isHealthFull;
 
   /// Add or remove armor
-  void adjustArmor(int armorDelta) {
+  void adjustArmor(int armorDelta, {bool ifTrue = true}) {
+    if (!ifTrue) {
+      return;
+    }
     _stats = _stats.copyWith(armor: _stats.armor + armorDelta);
     logger.info('$_playerName armor ${_signed(armorDelta)} from $_sourceName');
   }
 
   /// Restore health.
   void restoreHealth(int hp) {
+    if (_stats.hp == _stats.maxHp) {
+      return;
+    }
     _stats = _stats.copyWith(hp: _stats.hp + hp);
     logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
   }
