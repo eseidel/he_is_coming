@@ -195,4 +195,17 @@ void main() {
     expect(result.first.hp, 2);
     expect(result.first.startingStats.attack, 2);
   });
+
+  test('Lifeblood Burst effect', () {
+    final item = itemCatalog['Lifeblood Burst'];
+    final player = createPlayer(withItems: [item], hp: 5);
+    expect(player.hp, 5);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // Normally take 5 dmg but the lifeblood burst triggers
+    // onWounded, dealing 5 dmg to the enemy.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 4);
+    expect(result.second.hp, 0);
+  });
 }

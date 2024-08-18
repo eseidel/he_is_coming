@@ -36,6 +36,7 @@ final _effectsByItemName = <String, Effects>{
       ..adjustAttack(5)
       ..takeDamage(2),
   ),
+  'Lifeblood Burst': Effects(onWounded: (c) => c.dealDamage(c.my.maxHp ~/ 2)),
 };
 
 extension on YamlMap {
