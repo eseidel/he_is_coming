@@ -41,16 +41,15 @@ void _if(bool condition, void Function() fn) {
 
 final _effectByItemName = <String, Effect>{
   'Stone Steak': Effect(
-    onBattle: (ctx) => _if(ctx.isHealthFull, () => ctx.adjustArmor(4)),
+    onBattle: (c) => _if(c.isHealthFull, () => c.adjustArmor(4)),
   ),
-  'Redwood Cloak': Effect(onBattle: (ctx) => ctx.restoreHealth(1)),
+  'Redwood Cloak': Effect(onBattle: (c) => c.restoreHealth(1)),
   'Emergency Shield': Effect(
-    onBattle: (ctx) =>
-        _if(ctx.my.speed < ctx.enemy.speed, () => ctx.adjustArmor(4)),
+    onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.adjustArmor(4)),
   ),
-  'Granite Gauntlet': Effect(onBattle: (ctx) => ctx.adjustArmor(5)),
+  'Granite Gauntlet': Effect(onBattle: (c) => c.adjustArmor(5)),
   'Ruby Earings': Effect(
-    onTurn: (ctx) => _if(ctx.isEveryOtherTurn, () => ctx.dealDamage(1)),
+    onTurn: (c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1)),
   ),
 };
 
