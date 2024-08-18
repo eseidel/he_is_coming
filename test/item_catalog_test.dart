@@ -167,6 +167,21 @@ void main() {
     expect(result.first.hp, 8);
   });
 
+  test('Wounded when already below 50%', () {
+    final item = itemCatalog['Vampiric Wine'];
+    final player = createPlayer(withItems: [item], hp: 4);
+    expect(player.hp, 4);
+
+    // Wounded does not trigger when we're already below 50% health.
+    // You have to be at-or-above 50% when taking damage for it to trigger.
+    // https://discord.com/channels/1041414829606449283/1209488302269534209/1274771566231552151
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // Normally take 5 dmg but the wine triggers
+    // when we're below 50% health, healing 4 hp.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 0);
+  });
+
   test('Mortal Edge effect', () {
     final item = itemCatalog['Mortal Edge'];
     final player = createPlayer(withItems: [item], hp: 5);

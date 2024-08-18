@@ -236,12 +236,15 @@ class BattleContext {
       _trigger(targetIndex, Effect.onExposed);
     }
 
-    // Wounded occurs if you lose hp and are now below 50% hp.
-    final didLoseHp = remainingDamage > 0;
+    // Wounded occurs when you cross the 50% hp threshold.
+    // https://discord.com/channels/1041414829606449283/1209488302269534209/1274771566231552151
     // Currently enforcing *below* 50% hp, not *at* 50% hp.
     final fiftyPercentHp = target.maxHp / 2;
+    final wasAboveFiftyPercent = target.hp >= fiftyPercentHp;
     final nowBelowFiftyPercent = newHp < fiftyPercentHp;
-    if (didLoseHp && nowBelowFiftyPercent && !newStats.hasBeenWounded) {
+    if (wasAboveFiftyPercent &&
+        nowBelowFiftyPercent &&
+        !newStats.hasBeenWounded) {
       // Set "wounded" flag first to avoid infinite loops.
       setStats(targetIndex, newStats.copyWith(hasBeenWounded: true));
       _trigger(targetIndex, Effect.onWounded);
