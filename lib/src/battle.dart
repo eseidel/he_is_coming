@@ -69,6 +69,13 @@ class EffectContext {
         targetIndex: _enemyIndex,
         source: _sourceName,
       );
+
+  /// Take damage (from an item).
+  void takeDamage(int damage) => _battle.dealDamage(
+        damage: damage,
+        targetIndex: _index,
+        source: _sourceName,
+      );
 }
 
 String? _diffString(String name, int before, int after) {

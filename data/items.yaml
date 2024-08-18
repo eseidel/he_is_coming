@@ -67,6 +67,7 @@
   armor: 1
   effect: "Exposed: Restore 3 health"
 - name: 'Mortal Edge'
+  kind: weapon
   rarity: rare
   material: sanguine
   attack: 2

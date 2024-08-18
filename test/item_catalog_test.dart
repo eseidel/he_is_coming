@@ -166,4 +166,18 @@ void main() {
     final result = Battle.resolve(first: player, second: enemy);
     expect(result.first.hp, 8);
   });
+
+  test('Mortal Edge effect', () {
+    final item = itemCatalog['Mortal Edge'];
+    final player = createPlayer(withItems: [item], hp: 5);
+    expect(player.hp, 5);
+    expect(player.startingStats.attack, 2);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // Normally take 5 dmg but the mortal edge triggers
+    // when we're below 50% health, increasing attack by 5 and taking 2 dmg.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 2);
+    expect(result.first.startingStats.attack, 2);
+  });
 }
