@@ -208,4 +208,22 @@ void main() {
     expect(result.first.hp, 4);
     expect(result.second.hp, 0);
   });
+
+  test('Chain Mail', () {
+    final item = itemCatalog['Chain Mail'];
+    final player = createPlayer(
+      intrinsic: const Stats(armor: 3),
+      withItems: [item],
+      hp: 5,
+    );
+    expect(player.hp, 5);
+    expect(player.baseStats.armor, 3);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    // Normally take 5 dmg but the first 3 are absorbed by the armor
+    // and then the chain mail triggers, giving 3 armor again, so take 1 dmg.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 4);
+    expect(result.first.baseStats.armor, 3);
+  });
 }
