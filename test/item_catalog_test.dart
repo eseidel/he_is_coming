@@ -392,4 +392,25 @@ void main() {
     expect(result2.first.hp, 0);
     expect(result2.first.baseStats.armor, 14);
   });
+
+  test('Citrine Ring', () {
+    final item = itemCatalog['Citrine Ring'];
+    final player =
+        createPlayer(withItems: [item], intrinsic: const Stats(speed: 2));
+    expect(player.baseStats.speed, 2);
+
+    // Citrine Ring deals damage equal to our speed at the start of battle.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 7);
+
+    final player2 =
+        createPlayer(withItems: [item], intrinsic: const Stats(speed: -2));
+    expect(player2.baseStats.speed, -2);
+
+    // Speed can be negative, but won't deal negative damage.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // Wolf goes first so we take 6 hits rather than 5.
+    expect(result2.first.hp, 4);
+  });
 }

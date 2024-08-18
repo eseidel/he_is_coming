@@ -219,6 +219,10 @@ class BattleContext {
     required int targetIndex,
     required String source,
   }) {
+    if (damage < 0) {
+      throw ArgumentError('damage must be positive');
+    }
+
     final target = stats[targetIndex];
     final targetName = creatures[targetIndex].name;
     final armorReduction = min(target.armor, damage);
@@ -259,6 +263,9 @@ class BattleContext {
 
   /// Strike the defender, defaults to the attacker's attack value.
   void strike([int? damage]) {
+    if (damage != null && damage <= 0) {
+      throw ArgumentError('explicit strike damage should be positive');
+    }
     dealDamage(
       damage: damage ?? attacker.attack,
       targetIndex: defenderIndex,

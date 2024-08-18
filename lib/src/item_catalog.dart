@@ -54,6 +54,9 @@ final _effectsByItemName = <String, Effects>{
   'Sapphire Crown': Effects(
     onBattle: (c) => _if(c.my.armor >= 15, () => c.adjustArmor(10)),
   ),
+  'Citrine Ring': Effects(
+    onBattle: (c) => _if(c.my.speed > 0, () => c.dealDamage(c.my.speed)),
+  ),
 };
 
 extension on YamlMap {
