@@ -532,4 +532,19 @@ void main() {
     expect(result2.first.baseStats.attack, 2);
     expect(result2.first.baseStats.armor, 1);
   });
+
+  test('Iron Transfusion', () {
+    final item = itemCatalog['Iron Transfusion'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    // Iron Transfusion gives 2 armor and loses 1 hp every turn.
+    // We take 6 turns to kill the wolf, so we lose 6 hp.
+    // The wolf never gets through our armor.
+    expect(result.first.hp, 4);
+    expect(result.first.baseStats.armor, 0);
+  });
 }

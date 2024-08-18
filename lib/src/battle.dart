@@ -93,13 +93,23 @@ class EffectContext {
         .info('$_playerName attack ${_signed(attackDelta)} from $_sourceName');
   }
 
+  void _adjustHp(int hp) {
+    // clamp hp to [0, maxHp]
+    _stats = _stats.copyWith(hp: min(max(_stats.hp + hp, 0), _stats.maxHp));
+    logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
+  }
+
   /// Restore health.
   void restoreHealth(int hp) {
-    if (_stats.hp == _stats.maxHp) {
-      return;
-    }
-    _stats = _stats.copyWith(hp: _stats.hp + hp);
-    logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
+    _expectPositive(hp);
+    _adjustHp(hp);
+  }
+
+  /// Lose health.  Careful this is not the same as taking damage!
+  /// This bypasses armor and is for special effects.
+  void loseHealth(int hp) {
+    _expectNegative(hp);
+    _adjustHp(hp);
   }
 
   /// Deal damage to the enemy.

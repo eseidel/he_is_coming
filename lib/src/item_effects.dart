@@ -72,6 +72,11 @@ final effectsByItemName = <String, Effects>{
         ..gainAttack(2),
     ),
   ),
+  'Iron Transfusion': Effects(
+    onTurn: (c) => c
+      ..gainArmor(2)
+      ..loseHealth(-1),
+  ),
 };
 
 /// Look up the effects for an item by name.
