@@ -1,5 +1,5 @@
 import 'package:args/args.dart';
-import 'package:he_is_coming/he_is_coming_sim.dart';
+import 'package:he_is_coming/he_is_coming.dart';
 import 'package:he_is_coming/src/logger.dart';
 
 ArgParser buildParser() {
