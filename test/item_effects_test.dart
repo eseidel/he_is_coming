@@ -703,4 +703,28 @@ void main() {
     expect(result2.first.hp, 5);
     expect(result2.first.baseStats.speed, 2);
   });
+
+  test('Impressive Physique effect', () {
+    final item = itemCatalog['Impressive Physique'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    // With no armor, nothing happens.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 5);
+    expect(result.first.baseStats.armor, 0);
+
+    final player2 =
+        createPlayer(withItems: [item], intrinsic: const Stats(armor: 1));
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 1);
+
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // When our armor breaks, the wolf is stunned for 1 turn.
+    // So we only take 4 dmg from the wolf - 1 from the armor.
+    expect(result2.first.hp, 7);
+    expect(result2.first.baseStats.armor, 1);
+  });
 }
