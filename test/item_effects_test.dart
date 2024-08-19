@@ -605,4 +605,36 @@ void main() {
     expect(result2.first.hp, 5);
     expect(result2.first.baseStats.armor, 0);
   });
+
+  test('Iron Rose', () {
+    final healOnHit = Item(
+      'healOnHit',
+      Kind.clothing,
+      Rarity.common,
+      Material.leather,
+      effects: Effects(onHit: (c) => c.restoreHealth(1)),
+    );
+    final item = itemCatalog['Iron Rose'];
+    // Order of the items should not matter in this case.
+    final player = createPlayer(withItems: [item, healOnHit]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 3, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    // Iron Rose gives 1 armor on (successful) heal, but the first hit we're
+    // not damaged, so it does nothing.  Our remaining 5 hits heal 1 each time.
+    // Wolf hits us 5 times, the first time for 3 dmg, then 1 for each.
+    expect(result.first.hp, 4);
+    expect(result.first.baseStats.armor, 0);
+
+    // This time w/o the healOnHit item, the iron rose won't trigger.
+    final player2 = createPlayer(withItems: [item], hp: 5);
+    expect(player2.hp, 5);
+    expect(player2.baseStats.armor, 0);
+
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    expect(result2.first.hp, 0);
+    expect(result2.first.baseStats.armor, 0);
+  });
 }

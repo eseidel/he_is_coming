@@ -22,6 +22,9 @@ enum Effect {
 
   /// Called when hp is below 50% for the first time this battle.
   onWounded,
+
+  /// Called when any hp is restored.
+  onHeal,
 }
 
 /// Container for callbacks for items.
@@ -34,6 +37,7 @@ class Effects {
     this.onHit,
     this.onExposed,
     this.onWounded,
+    this.onHeal,
   });
 
   /// Get the effect callback for a given effect.
@@ -44,6 +48,7 @@ class Effects {
       Effect.onHit => onHit,
       Effect.onExposed => onExposed,
       Effect.onWounded => onWounded,
+      Effect.onHeal => onHeal,
     };
   }
 
@@ -62,6 +67,9 @@ class Effects {
 
   /// Called when hp is below 50% for the first time this battle.
   final EffectFn? onWounded;
+
+  /// Called when any hp is restored.
+  final EffectFn? onHeal;
 }
 
 /// Class representing stats for a Creature.

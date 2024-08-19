@@ -93,23 +93,19 @@ class EffectContext {
         .info('$_playerName attack ${_signed(attackDelta)} from $_sourceName');
   }
 
-  void _adjustHp(int hp) {
-    // clamp hp to [0, maxHp]
-    _stats = _stats.copyWith(hp: min(max(_stats.hp + hp, 0), _stats.maxHp));
-    logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
-  }
-
   /// Restore health.
-  void restoreHealth(int hp) {
-    _expectPositive(hp);
-    _adjustHp(hp);
-  }
+  void restoreHealth(int hp) => _battle.restoreHealth(
+        hp: hp,
+        targetIndex: _index,
+        source: _sourceName,
+      );
 
   /// Lose health.  Careful this is not the same as taking damage!
   /// This bypasses armor and is for special effects.
   void loseHealth(int hp) {
     _expectNegative(hp);
-    _adjustHp(hp);
+    _stats = _stats.copyWith(hp: min(max(_stats.hp + hp, 0), _stats.maxHp));
+    logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
   }
 
   /// Deal damage to the enemy.
@@ -269,6 +265,30 @@ class BattleContext {
     _turnsTaken++;
   }
 
+  /// Restore health to a creature.
+  void restoreHealth({
+    required int hp,
+    required int targetIndex,
+    required String source,
+  }) {
+    if (hp < 0) {
+      throw ArgumentError('hp must be positive');
+    }
+    final target = stats[targetIndex];
+    final newHp = min(target.hp + hp, target.maxHp);
+    final newStats = target.copyWith(hp: newHp);
+    setStats(targetIndex, newStats);
+    final restored = newHp - target.hp;
+    logger.info(
+      '$source restored $restored hp to ${creatures[targetIndex].name}',
+    );
+
+    // If we successfully restored health, trigger onHeal.
+    if (restored > 0) {
+      _trigger(targetIndex, Effect.onHeal);
+    }
+  }
+
   /// Deal damage to the defender.
   void dealDamage({
     required int damage,
@@ -337,6 +357,9 @@ class BattleContext {
     }
     final afterStats = stats[index];
     final diffString = beforeStats.diffString(afterStats);
+    // TODO(eseidel):  This can show diffs twice for nested effects.
+    // e.g. if onHit triggers a heal and then onHeal does +1 armor, we'll
+    // show +1 armor from the onHeal in both the onHit and onHeal logs.
     if (diffString != null) {
       logger.info('${creature.name} ${effect.name}: $diffString');
     }
