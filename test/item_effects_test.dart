@@ -547,4 +547,62 @@ void main() {
     expect(result.first.hp, 4);
     expect(result.first.baseStats.armor, 0);
   });
+
+  test('Fortified Gauntlet', () {
+    final item = itemCatalog['Fortified Gauntlet'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    // We never gain any armor from the gauntlet.
+    expect(result.first.hp, 5);
+    expect(result.first.baseStats.armor, 0);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(armor: 1),
+      withItems: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 1);
+
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // Fortified Gauntlet gives 1 armor if we have armor.
+    // So we never take any damage from the wolf.
+    expect(result2.first.hp, 10);
+    expect(result2.first.baseStats.armor, 1);
+  });
+
+  test('Item order matters', () {
+    final armor = Item(
+      'armor',
+      Kind.clothing,
+      Rarity.common,
+      Material.leather,
+      effects: Effects(onTurn: (c) => c.gainArmor(1)),
+    );
+    final gauntlet = itemCatalog['Fortified Gauntlet'];
+    final player = createPlayer(withItems: [armor, gauntlet]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 2, health: 6);
+    // The armor item gives 1 armor before the gauntlet, so the Gauntlet
+    // triggers and gives 1 armor, so we take no damage from the wolf.
+    final result = Battle.resolve(first: player, second: enemy);
+    expect(result.first.hp, 10);
+    expect(result.first.baseStats.armor, 0);
+
+    final player2 = createPlayer(withItems: [gauntlet, armor]);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 0);
+
+    // The gauntlet triggers first, but we have no armor to gain 1 armor from
+    // so the wolf hits us 5 times for 2 dmg each, one of which is absorbed
+    // by the armor item, so we take 5 dmg.
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    expect(result2.first.hp, 5);
+    expect(result2.first.baseStats.armor, 0);
+  });
 }
