@@ -182,6 +182,7 @@ enum Kind {
   clothing,
 
   /// Jewelry
+  // Is Jewelry just a material?
   jewelry,
 }
 
@@ -199,6 +200,7 @@ enum Rarity {
 }
 
 /// Represents the material of the item.
+// These maybe should just be "tags".
 enum Material {
   /// Leather is essentially "none" and is the default material.
   leather,

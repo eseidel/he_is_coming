@@ -152,9 +152,16 @@ class EffectContext {
       );
 
   /// Returns the number of items of a given material.
-  int itemCount(Material material) {
+  int materialCount(Material material) {
     return _battle.creatures[_index].items
         .where((item) => item.material == material)
+        .length;
+  }
+
+  /// Returns the number of items of a given kind.
+  int kindCount(Kind kind) {
+    return _battle.creatures[_index].items
+        .where((item) => item.kind == kind)
         .length;
   }
 }

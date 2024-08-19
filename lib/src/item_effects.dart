@@ -62,7 +62,7 @@ final effectsByItemName = <String, Effects>{
     onTurn: (c) => _if(c.my.belowHalfHp, () => c.gainArmor(2)),
   ),
   'Ore Heart': Effects(
-    onBattle: (c) => c.gainArmor(c.itemCount(Material.stone) * 2),
+    onBattle: (c) => c.gainArmor(c.materialCount(Material.stone) * 2),
   ),
   'Granite Hammer': Effects(
     onHit: (c) => _if(
@@ -94,6 +94,13 @@ final effectsByItemName = <String, Effects>{
   ),
   'Impressive Physique': Effects(onExposed: (c) => c.stunEnemy(1)),
   'Steelbond Curse': Effects(onBattle: (c) => c.giveArmorToEnemy(8)),
+  // Bejeweled Blade doesn't say "On Battle Start". This might be subtly wrong?
+  'Bejeweled Blade': Effects(
+    onBattle: (c) => _if(
+      c.kindCount(Kind.jewelry) > 0,
+      () => c.gainAttack(c.kindCount(Kind.jewelry) * 2),
+    ),
+  ),
 };
 
 /// Look up the effects for an item by name.
