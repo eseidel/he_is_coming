@@ -147,6 +147,10 @@ class Item {
           speed: speed,
         ) {
     if (kind == Kind.weapon && attack == 0) {
+      if (name == 'Bejeweled Blade') {
+        // Bejeweled Blade is a special case, it is intentionally 0.
+        return;
+      }
       throw ArgumentError('Weapon $name must have attack');
     }
   }

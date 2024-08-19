@@ -748,12 +748,14 @@ void main() {
     final item = itemCatalog['Bejeweled Blade'];
     final player = createPlayer(withItems: [item]);
     expect(player.hp, 10);
-    expect(player.baseStats.attack, 1);
+    expect(player.baseStats.attack, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     final result = Battle.resolve(first: player, second: enemy);
-    expect(result.first.hp, 5);
-    expect(player.baseStats.attack, 1);
+    // Bejeweled Blade gives 2 attack for each jewelry item we have
+    // if we don't have any jewelry we have 0 attack!
+    expect(result.first.hp, 0);
+    expect(player.baseStats.attack, 0);
 
     final jewelry = Item(
       'jewelry',
@@ -763,13 +765,13 @@ void main() {
     );
     final player2 = createPlayer(withItems: [item, jewelry]);
     expect(player2.hp, 10);
-    // We've implemented Bejeweled Blade onBattle so this is still 1.
-    expect(player2.baseStats.attack, 1);
+    // We've implemented Bejeweled Blade onBattle so this is still 0.
+    expect(player2.baseStats.attack, 0);
 
     final result2 = Battle.resolve(first: player2, second: enemy);
     // Bejeweled Blade gives 2 attack for each jewelry item we have.
-    // So we kill the wolf in 2 attacks, so we take 1 dmg.
-    expect(result2.first.hp, 9);
-    expect(player2.baseStats.attack, 1);
+    // So we kill the wolf in 3 attacks, so we take 2 dmg.
+    expect(result2.first.hp, 8);
+    expect(player2.baseStats.attack, 0);
   });
 }
