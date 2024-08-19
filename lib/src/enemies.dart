@@ -14,7 +14,12 @@ class Enemies {
       makeEnemy('Wolf Level 3', attack: 2, health: 9, speed: 2);
 
   /// Bear deals 3 additional damage while you have armor.
-  static final bearLevel1 = makeEnemy('Bear Level 1', attack: 1, health: 3);
+  static final bearLevel1 =
+      makeEnemy('Bear Level 1', attack: 1, health: 3, armor: 2);
+
+  /// Bear deals 4 additional damage while you have armor.
+  static final bearLevel2 =
+      makeEnemy('Bear Level 2', attack: 2, health: 5, speed: 1);
 
   /// Bear deals 5 additional damage while you have armor.
   static final bearLevel3 =
@@ -39,6 +44,11 @@ class Bosses {
   /// If Hothead has more speed than you, his first strike deals 10 additional
   /// damage.
   static final hothead = makeEnemy('Hothead', attack: 4, health: 5, speed: 4);
+
+  /// Brittlebark Beast, level 1
+  /// Whenever Brittlebark beast takes damage, he takes 2 additional damage.
+  static final brittlebarkBeast =
+      makeEnemy('Brittlebark Beast', health: 40, attack: 3, speed: 2);
 
   /// Redwood Treant, level 2
   /// Redwood Treant's attack is halved against armor

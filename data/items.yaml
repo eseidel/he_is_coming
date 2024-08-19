@@ -97,7 +97,9 @@
   rarity: rare
   effect: "Exposed can trigger one additional time"
 - name: 'Bejeweled Blade'
+  kind: weapon
   rarity: rare
+  attack: 0
   effect: 'Gain 2 attack for each equipped jewelry item'
 - name: 'Oak Heart'
   rarity: rare
@@ -287,3 +289,23 @@
   material: sanguine
   kind: food
   effect: "Wounded: Restore 4 health"
+- name: "Double-plated Armor"
+  rarity: common
+  armor: 2
+  speed: -2
+  effect: "Exposed: Gain 3 armor"
+- name: "Boots of the hero"
+  rarity: common
+  speed: 2
+- name: "Hidden Dagger"
+  rarity: common
+  kind: weapon
+  attack: 2
+  effect: "Gets stronger for every new hidden dagger you find"
+  unlock: "Less is More: Defeat the first boss with only common items in your inventory."
+- name: "Assault Greaves"
+  rarity: heroic
+  effect: "Whenever you take damage, deal 1 damage"
+- name: "Razor Scales"
+  rarity: heroic
+  effect: "Exposed: Armor now deals damage when removed"
