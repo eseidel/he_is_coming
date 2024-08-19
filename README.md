@@ -3,4 +3,9 @@ https://store.steampowered.com/app/2824490/He_is_coming/
 
 "He is Coming" is a NES-styled 2d RPG auto-battler with rogue-lite elements.
 
-This is a simulator to explore the space of possible builds.
+Go buy it! https://store.steampowered.com/app/2824490/He_is_coming/
+
+This repo is just a simulator to explore the space of possible builds.
+
+No promises that any of the data here reflects the current game.
+At time of writing Demo Patch 3 (August 11, 2024) is the latest.
