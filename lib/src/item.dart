@@ -137,7 +137,11 @@ class Item {
           armor: armor,
           attack: attack,
           speed: speed,
-        );
+        ) {
+    if (kind == Kind.weapon && attack == 0) {
+      throw ArgumentError('Weapon $name must have attack');
+    }
+  }
 
   /// Name of the item.
   final String name;
