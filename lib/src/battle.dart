@@ -74,6 +74,13 @@ class EffectContext {
     _adjustArmor(armor);
   }
 
+  /// Add speed.
+  void gainSpeed(int speed) {
+    _expectPositive(speed);
+    _stats = _stats.copyWith(speed: _stats.speed + speed);
+    logger.info('$_playerName speed ${_signed(speed)} from $_sourceName');
+  }
+
   /// Add attack.
   void gainAttack(int attack) {
     _expectPositive(attack);
@@ -201,6 +208,7 @@ class CreatureStats {
     int? hp,
     int? armor,
     int? attack,
+    int? speed,
     int? gold,
     bool? hasBeenExposed,
     bool? hasBeenWounded,
@@ -215,7 +223,7 @@ class CreatureStats {
       maxHp: maxHp,
       hp: newHp,
       armor: armor ?? this.armor,
-      speed: speed,
+      speed: speed ?? this.speed,
       // Attack needs to be clamped to 1?
       attack: attack ?? this.attack,
       gold: gold ?? this.gold,
@@ -251,10 +259,7 @@ class CreatureStats {
 class BattleContext {
   /// Create a BattleContext.
   BattleContext(this.creatures)
-      : stats = creatures.map(CreatureStats.fromCreature).toList(),
-        _attackerIndex = 0 {
-    _attackerIndex = _firstAttackerIndex(stats);
-  }
+      : stats = creatures.map(CreatureStats.fromCreature).toList();
 
   static int _firstAttackerIndex(List<CreatureStats> stats) =>
       stats[0].speed >= stats[1].speed ? 0 : 1;
@@ -263,6 +268,11 @@ class BattleContext {
   void nextAttacker() {
     _attackerIndex = attackerIndex.isEven ? 1 : 0;
     _turnsTaken++;
+  }
+
+  /// Decide who goes first.
+  void _decideFirstAttacker() {
+    _attackerIndex = _firstAttackerIndex(stats);
   }
 
   /// Restore health to a creature.
@@ -379,7 +389,7 @@ class BattleContext {
   /// Current stats for the battling creatures.
   final List<CreatureStats> stats;
 
-  int _attackerIndex;
+  late int _attackerIndex;
 
   // Counts all the turns taken by any player.
   int _turnsTaken = 0;
@@ -478,7 +488,9 @@ class Battle {
       ..info('${first.name}: ${first.baseStats}')
       ..info('${second.name}: ${first.baseStats}');
 
-    final ctx = BattleContext([first, second]).._triggerOnBattleStart();
+    final ctx = BattleContext([first, second])
+      .._triggerOnBattleStart()
+      .._decideFirstAttacker();
 
     logger
       ..info('${first.name}: ${ctx.stats[0]}')

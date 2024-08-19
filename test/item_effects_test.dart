@@ -637,4 +637,34 @@ void main() {
     expect(result2.first.hp, 0);
     expect(result2.first.baseStats.armor, 0);
   });
+
+  test('Featherweight Coat', () {
+    final item = itemCatalog['Featherweight Coat'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+    expect(player.baseStats.speed, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 2);
+    final result = Battle.resolve(first: player, second: enemy);
+    // Featherweight Coat gives 3 speed if we have armor, but we don't.
+    // Wolf goes first so we take 6 dmg.
+    expect(result.first.hp, 4);
+    expect(result.first.baseStats.armor, 0);
+    expect(result.first.baseStats.speed, 0);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(armor: 1),
+      withItems: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 1);
+    expect(player2.baseStats.speed, 0);
+
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // Featherweight Coat gives 3 speed if we have armor, so we go first.
+    expect(result2.first.hp, 5);
+    expect(result2.first.baseStats.armor, 1);
+    expect(result2.first.baseStats.speed, 0);
+  });
 }

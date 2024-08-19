@@ -81,6 +81,14 @@ final effectsByItemName = <String, Effects>{
     onTurn: (c) => _if(c.my.armor > 0, () => c.gainArmor(1)),
   ),
   'Iron Rose': Effects(onHeal: (c) => c.gainArmor(1)),
+  'Featherweight Coat': Effects(
+    onBattle: (c) => _if(
+      c.my.armor > 0,
+      () => c
+        ..loseArmor(-1)
+        ..gainSpeed(3),
+    ),
+  ),
 };
 
 /// Look up the effects for an item by name.
