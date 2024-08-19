@@ -727,4 +727,20 @@ void main() {
     expect(result2.first.hp, 7);
     expect(result2.first.baseStats.armor, 1);
   });
+
+  test('Steelbond Curse effect', () {
+    final item = itemCatalog['Steelbond Curse'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+    expect(player.baseStats.attack, 2);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = Battle.resolve(first: player, second: enemy);
+    // Steelbond Curse gives 8 armor to the enemy, so it takes 14 dmg to kill
+    // and it hits for 2, so that's 7 hits, so we take 6 dmg.
+    expect(result.first.hp, 4);
+    expect(player.baseStats.armor, 0);
+    expect(player.baseStats.attack, 2);
+  });
 }

@@ -111,6 +111,16 @@ class EffectContext {
     logger.info('$_playerName stunned $_enemyName for $turns turns');
   }
 
+  /// Give armor to the enemy.
+  void giveArmorToEnemy(int armor) {
+    _expectPositive(armor);
+    _battle.setStats(
+      _enemyIndex,
+      enemy.copyWith(armor: enemy.armor + armor),
+    );
+    logger.info('$_playerName gave $_enemyName $armor armor');
+  }
+
   /// Restore health.
   void restoreHealth(int hp) => _battle.restoreHealth(
         hp: hp,

@@ -93,6 +93,7 @@ final effectsByItemName = <String, Effects>{
     onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.stunEnemy(1)),
   ),
   'Impressive Physique': Effects(onExposed: (c) => c.stunEnemy(1)),
+  'Steelbond Curse': Effects(onBattle: (c) => c.giveArmorToEnemy(8)),
 };
 
 /// Look up the effects for an item by name.
