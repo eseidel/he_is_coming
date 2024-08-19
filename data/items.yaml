@@ -347,3 +347,12 @@
   kind: weapon
   attack: 2
   effect: "Deal double damage to armor"
+- name: "Sapphire Earing"
+  rarity: common
+  effect: "Gain 1 armor every other turn"
+- name: Brittlebark Armor
+  health: 10
+  rarity: heroic
+  unlock: "Barking up the wrong tree: Win against the Brittlebark Beast for the first time"
+  effect: Whenever you take damage, take 1 additional damage
+  material: wood
