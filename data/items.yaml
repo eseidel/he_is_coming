@@ -186,7 +186,7 @@
   rarity: common
   armor: 2
   effect: "Battle Start: Gain 2 thorns"
-- name: "Ruby Earings"
+- name: "Ruby Earing"
   rarity: common
   kind: jewelry
   effect: "Deal 1 damage every other turn"
@@ -309,3 +309,41 @@
 - name: "Razor Scales"
   rarity: heroic
   effect: "Exposed: Armor now deals damage when removed"
+- name: "Emerald Ring"
+  rarity: common
+  kind: jewelry
+  effect: "Battle Start: Restore 2 health"
+- name: "Ironskin Potion"
+  rarity: heroic
+  unique: true
+  effect: "Battle Start: Gain armor equal to lost health"
+- name: "Emerald Earing"
+  rarity: common
+  effect: "Restore 1 health every other turn"
+- name: "Featherweight Blade"
+  kind: weapon
+  rarity: common
+  speed: 2
+  attack: 2
+- name: "Elderwood Necklace"
+  rarity: heroic
+  material: wood
+  attack: 1
+  armor: 1
+  speed: 1
+- name: "Swiftstrike Rapier"
+  kind: weapon
+  rarity: rare
+  unlock: "Hunting Season: Win against Razortusk Hog for the first time"
+  attack: 2
+  effect: "First Turn: If you have more speed than the enemy, do 2 additional strikes"
+- name: "Sapphire Gemstone"
+  rarity: heroic
+  kind: jewelry
+  unique: true
+  effect: "Whenever you lose armor, restore that much health"
+- name: "Battle Axe"
+  rarity: common
+  kind: weapon
+  attack: 2
+  effect: "Deal double damage to armor"

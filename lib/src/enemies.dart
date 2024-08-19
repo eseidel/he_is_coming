@@ -19,11 +19,11 @@ class Enemies {
 
   /// Bear deals 4 additional damage while you have armor.
   static final bearLevel2 =
-      makeEnemy('Bear Level 2', attack: 2, health: 5, speed: 1);
+      makeEnemy('Bear Level 2', attack: 2, health: 5, speed: 1, armor: 3);
 
   /// Bear deals 5 additional damage while you have armor.
   static final bearLevel3 =
-      makeEnemy('Bear Level 3', attack: 2, health: 8, speed: 2);
+      makeEnemy('Bear Level 3', attack: 3, health: 7, speed: 2, armor: 4);
 
   /// Battle Start: If Spider has more speed than you, it deals 3 damage
   static final spiderLevel1 =
@@ -54,6 +54,12 @@ class Bosses {
   /// Redwood Treant's attack is halved against armor
   static final redwoodTreant =
       makeEnemy('Redwood Treant', attack: 6, health: 25, armor: 15);
+
+  /// Razortusk Hog, level 2
+  /// Battle Start: If Razortusk Hog has more speed than you, he strikes twice
+  /// for the rest of the battle.
+  static final razortuskHog =
+      makeEnemy('Razortusk Hog', attack: 4, health: 20, speed: 4);
 
   /// Leshen, level 3
   static final leshen = makeEnemy('Leshen', attack: 7, health: 60, speed: 3);

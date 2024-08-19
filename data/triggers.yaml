@@ -8,3 +8,5 @@
   detail: "Triggers when you go below 50% health for the first time."
 - name: Thorns
   detail: "Deals damage equal to your thorns when struck, then remove all thorns."
+- name: Stun
+  detail: "When stunned you skip your strike than remove one stun."

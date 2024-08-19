@@ -17,7 +17,7 @@ final effectsByItemName = <String, Effects>{
     onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4)),
   ),
   'Granite Gauntlet': Effects(onBattle: (c) => c.gainArmor(5)),
-  'Ruby Earings': Effects(
+  'Ruby Earing': Effects(
     onTurn: (c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1)),
   ),
   'Firecracker Belt':

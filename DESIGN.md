@@ -50,6 +50,7 @@ Final
 Campfire (+10 hp, skip to morning)
 House (full hp, skip to morning)
 Chest (common items)
+Jewelry Box (Jewelry Items)
 Grave (epic items)
 Anvil (weapon edge)
 Oil (weapon oil)

@@ -68,8 +68,8 @@ void main() {
     expect(result2.first.baseStats.armor, 0);
   });
 
-  test('Ruby Earnings effect', () {
-    final item = itemCatalog['Ruby Earings'];
+  test('Ruby Earning effect', () {
+    final item = itemCatalog['Ruby Earing'];
     final player = createPlayer(withItems: [item]);
     expect(player.hp, 10);
 
