@@ -667,4 +667,40 @@ void main() {
     expect(result2.first.baseStats.armor, 1);
     expect(result2.first.baseStats.speed, 0);
   });
+
+  test('Item effects are cumulative', () {
+    final item = itemCatalog['Redwood Roast'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 15);
+    expect(player.baseStats.maxHp, 15);
+
+    final player2 = createPlayer(withItems: [item, item]);
+    expect(player2.hp, 20);
+    expect(player2.baseStats.maxHp, 20);
+  });
+
+  test('Sticky Web effect', () {
+    final item = itemCatalog['Sticky Web'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.speed, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 2);
+    final result = Battle.resolve(first: player, second: enemy);
+    // Wolf is faster, but the web triggers and so we go first.
+    expect(result.first.hp, 5);
+    expect(result.first.baseStats.speed, 0);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(speed: 2),
+      withItems: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.speed, 2);
+
+    final result2 = Battle.resolve(first: player2, second: enemy);
+    // We're the same speed, so the web does nothing.
+    expect(result2.first.hp, 5);
+    expect(result2.first.baseStats.speed, 2);
+  });
 }

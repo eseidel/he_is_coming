@@ -27,6 +27,7 @@ class EffectContext {
   CreatureStats get _stats => _battle.stats[_index];
   set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
   String get _playerName => _battle.creatures[_index].name;
+  String get _enemyName => _battle.creatures[_enemyIndex].name;
 
   /// Returns true if health is currently full.
   bool get isHealthFull => _stats.isHealthFull;
@@ -100,6 +101,16 @@ class EffectContext {
         .info('$_playerName attack ${_signed(attackDelta)} from $_sourceName');
   }
 
+  /// Stun the enemy for a number of turns.
+  void stunEnemy(int turns) {
+    _expectPositive(turns);
+    _battle.setStats(
+      _enemyIndex,
+      enemy.copyWith(stunCount: enemy.stunCount + turns),
+    );
+    logger.info('$_playerName stunned $_enemyName for $turns turns');
+  }
+
   /// Restore health.
   void restoreHealth(int hp) => _battle.restoreHealth(
         hp: hp,
@@ -158,6 +169,7 @@ class CreatureStats {
     required this.gold,
     this.hasBeenExposed = false,
     this.hasBeenWounded = false,
+    this.stunCount = 0,
   });
 
   /// Create a CreatureStats from a Creature.
@@ -197,6 +209,9 @@ class CreatureStats {
   /// true if the creature has already sent onWounded this battle.
   final bool hasBeenWounded;
 
+  /// Number of turns remaining the creature is stunned.
+  final int stunCount;
+
   /// Returns true if health is currently full.
   bool get isHealthFull => hp == maxHp;
 
@@ -212,6 +227,7 @@ class CreatureStats {
     int? gold,
     bool? hasBeenExposed,
     bool? hasBeenWounded,
+    int? stunCount,
   }) {
     // It's not possible to change maxHp during battle.
     // If it was, we'd need to be careful with Creature.hp.
@@ -229,6 +245,7 @@ class CreatureStats {
       gold: gold ?? this.gold,
       hasBeenExposed: hasBeenExposed ?? this.hasBeenExposed,
       hasBeenWounded: hasBeenWounded ?? this.hasBeenWounded,
+      stunCount: stunCount ?? this.stunCount,
     );
   }
 
@@ -496,12 +513,18 @@ class Battle {
       ..info('${first.name}: ${ctx.stats[0]}')
       ..info('${second.name}: ${ctx.stats[1]}');
     while (ctx.allAlive) {
-      // onTurn
-      ctx
-        .._triggerOnTurn()
-        ..strike()
-        // onHit
-        ..nextAttacker();
+      if (ctx.attacker.stunCount > 0) {
+        ctx.setStats(
+          ctx.attackerIndex,
+          ctx.attacker.copyWith(stunCount: ctx.attacker.stunCount - 1),
+        );
+        logger.info('${ctx.attackerName} is stunned, skipping turn');
+      } else {
+        ctx
+          .._triggerOnTurn()
+          ..strike();
+      }
+      ctx.nextAttacker();
     }
 
     return ctx.resolveWithSpoils();

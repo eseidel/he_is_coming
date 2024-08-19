@@ -89,6 +89,9 @@ final effectsByItemName = <String, Effects>{
         ..gainSpeed(3),
     ),
   ),
+  'Sticky Web': Effects(
+    onBattle: (c) => _if(c.my.speed < c.enemy.speed, () => c.stunEnemy(1)),
+  ),
 };
 
 /// Look up the effects for an item by name.
