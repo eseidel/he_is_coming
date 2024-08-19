@@ -1,12 +1,11 @@
-name: he_is_coming_sim
-description: A sample command-line application with basic argument parsing.
+name: he_is_coming
+description: Simulator for the game "He is Coming"
 version: 0.0.1
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/eseidel/he_is_coming_sim
 
 environment:
   sdk: ^3.5.0
 
-# Add regular dependencies here.
 dependencies:
   args: ^2.4.2
   collection: ^1.19.0

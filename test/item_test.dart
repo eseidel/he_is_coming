@@ -1,4 +1,4 @@
-import 'package:he_is_coming_sim/src/item.dart';
+import 'package:he_is_coming/src/item.dart';
 import 'package:test/test.dart';
 
 void main() {

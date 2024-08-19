@@ -1,8 +1,8 @@
-import 'package:he_is_coming_sim/src/battle.dart';
-import 'package:he_is_coming_sim/src/creature.dart';
-import 'package:he_is_coming_sim/src/enemies.dart';
-import 'package:he_is_coming_sim/src/item_catalog.dart';
-import 'package:he_is_coming_sim/src/logger.dart';
+import 'package:he_is_coming/src/battle.dart';
+import 'package:he_is_coming/src/creature.dart';
+import 'package:he_is_coming/src/enemies.dart';
+import 'package:he_is_coming/src/item_catalog.dart';
+import 'package:he_is_coming/src/logger.dart';
 
 /// Simulate one game with a player.
 void runSim() {

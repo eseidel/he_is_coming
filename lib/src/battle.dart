@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:he_is_coming_sim/src/creature.dart';
-import 'package:he_is_coming_sim/src/item.dart';
-import 'package:he_is_coming_sim/src/logger.dart';
+import 'package:he_is_coming/src/creature.dart';
+import 'package:he_is_coming/src/item.dart';
+import 'package:he_is_coming/src/logger.dart';
 import 'package:meta/meta.dart';
 
 String _signed(int value) => value >= 0 ? '+$value' : '$value';

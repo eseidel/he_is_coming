@@ -1,4 +1,4 @@
-import 'package:he_is_coming_sim/src/battle.dart';
+import 'package:he_is_coming/src/battle.dart';
 import 'package:meta/meta.dart';
 
 /// Function type for effect callbacks.

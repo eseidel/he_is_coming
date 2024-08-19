@@ -1,5 +1,5 @@
-import 'package:he_is_coming_sim/src/item.dart';
-import 'package:he_is_coming_sim/src/item_catalog.dart';
+import 'package:he_is_coming/src/item.dart';
+import 'package:he_is_coming/src/item_catalog.dart';
 import 'package:meta/meta.dart';
 
 const _kPlayerName = 'Player';

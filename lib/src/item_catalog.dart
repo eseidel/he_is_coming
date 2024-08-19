@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:collection/collection.dart';
-import 'package:he_is_coming_sim/src/item.dart';
-import 'package:he_is_coming_sim/src/item_effects.dart';
-import 'package:he_is_coming_sim/src/logger.dart';
+import 'package:he_is_coming/src/item.dart';
+import 'package:he_is_coming/src/item_effects.dart';
+import 'package:he_is_coming/src/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 

@@ -1,4 +1,4 @@
-import 'package:he_is_coming_sim/src/item.dart';
+import 'package:he_is_coming/src/item.dart';
 
 // Dart doesn't have if-expressions, so made a helper function.
 void _if(bool condition, void Function() fn) {

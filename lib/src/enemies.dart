@@ -1,4 +1,4 @@
-import 'package:he_is_coming_sim/src/creature.dart';
+import 'package:he_is_coming/src/creature.dart';
 
 /// Class holding predefined over-world enemies.
 class Enemies {
