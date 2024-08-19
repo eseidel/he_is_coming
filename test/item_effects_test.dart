@@ -1,5 +1,5 @@
 import 'package:he_is_coming_sim/src/battle.dart';
-import 'package:he_is_coming_sim/src/creatures.dart';
+import 'package:he_is_coming_sim/src/creature.dart';
 import 'package:he_is_coming_sim/src/item.dart';
 import 'package:he_is_coming_sim/src/item_catalog.dart';
 import 'package:test/test.dart';

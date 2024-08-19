@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:he_is_coming_sim/src/creatures.dart';
+import 'package:he_is_coming_sim/src/creature.dart';
 import 'package:he_is_coming_sim/src/item.dart';
 import 'package:he_is_coming_sim/src/logger.dart';
 import 'package:meta/meta.dart';
