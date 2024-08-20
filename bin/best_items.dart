@@ -81,6 +81,34 @@ class BattleStats {
       itemValues.putIfAbsent(item.name, () => []).add(value);
     }
   }
+
+  void logAverages() {
+    // Figure out the items which survived the longest on average.
+    final itemAverages = averages.entries.toList()..sortBy<num>((e) => e.value);
+
+    for (final entry in itemAverages) {
+      logger.info('${entry.key}: ${entry.value.toStringAsFixed(1)}');
+    }
+  }
+
+  void logBest() {
+    logger
+      ..info('---')
+      ..info(
+        'Best survivor (${bestTurns.turns} turns,'
+        ' ${bestTurns.dmg} damage):',
+      );
+    for (final item in bestTurns.items) {
+      logger.info(item.name);
+    }
+    logger
+      ..info('---')
+      ..info('Best damage (${bestDmg.turns} turns,'
+          ' ${bestDmg.dmg} damage):');
+    for (final item in bestDmg.items) {
+      logger.info(item.name);
+    }
+  }
 }
 
 void doMain(List<String> arguments) {
@@ -93,31 +121,8 @@ void doMain(List<String> arguments) {
   for (var i = 0; i < 10000; i++) {
     _runBattle(random, stats);
   }
-
-  // Figure out the items which survived the longest on average.
-  final itemAverages = stats.averages.entries.toList()
-    ..sortBy<num>((e) => e.value);
-
-  for (final entry in itemAverages) {
-    logger.info('${entry.key}: ${entry.value.toStringAsFixed(1)}');
-  }
-
-  logger
-    ..info('---')
-    ..info(
-      'Best survivor (${stats.bestTurns.turns} turns,'
-      ' ${stats.bestTurns.dmg} damage):',
-    );
-  for (final item in stats.bestTurns.items) {
-    logger.info(item.name);
-  }
-  logger
-    ..info('---')
-    ..info('Best damage (${stats.bestDmg.turns} turns,'
-        ' ${stats.bestDmg.dmg} damage):');
-  for (final item in stats.bestDmg.items) {
-    logger.info(item.name);
-  }
+  // stats.logAverages();
+  stats.logBest();
 }
 
 void main(List<String> args) {
