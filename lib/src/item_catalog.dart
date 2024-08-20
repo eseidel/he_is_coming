@@ -34,20 +34,6 @@ extension on YamlMap {
 }
 
 class _ItemCatalogReader {
-  static const List<String> _itemKeys = <String>[
-    'name',
-    'kind',
-    'rarity',
-    'material',
-    'effect',
-    'unlock', // ignored for now
-    'unique',
-    'attack',
-    'health',
-    'armor',
-    'speed',
-  ];
-
   static void validateKeys(YamlMap yaml, Set<String> expectedKeys) {
     final unexpected =
         yaml.keys.cast<String>().toSet().difference(expectedKeys);
@@ -72,7 +58,7 @@ class _ItemCatalogReader {
     final speed = yaml['speed'] as int? ?? 0;
     final effectText = yaml['effect'] as String?;
     final effects = effectsForItemNamed(name, effectText);
-    validateKeys(yaml, _itemKeys.toSet());
+    validateKeys(yaml, ItemCatalog.orderedItemKeys.toSet());
     return Item(
       name,
       kind,
@@ -133,6 +119,21 @@ class ItemCatalog {
     logger.info('Loaded ${items.length} from $path');
     return ItemCatalog(items);
   }
+
+  /// All the known keys in the item yaml, in sorted order.
+  static const List<String> orderedItemKeys = <String>[
+    'name',
+    'unique',
+    'kind',
+    'rarity',
+    'material',
+    'unlock', // ignored for now
+    'attack',
+    'health',
+    'armor',
+    'speed',
+    'effect',
+  ];
 
   /// The items in this catalog.
   final List<Item> items;
