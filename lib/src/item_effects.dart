@@ -53,7 +53,9 @@ final itemEffects = <String, Effects>{
   'Citrine Ring': Effects(
     onBattle: (c) => _if(c.my.speed > 0, () => c.dealDamage(c.my.speed)),
   ),
-  'Marble Mirror': Effects(onBattle: (c) => c.gainArmor(c.enemy.armor)),
+  'Marble Mirror': Effects(
+    onBattle: (c) => _if(c.enemy.armor > 0, () => c.gainArmor(c.enemy.armor)),
+  ),
   // This might be wrong, since this probably should be onTurn?
   // "If you have more speed than the enemy, gain 2 attack"
   'Leather Boots': Effects(

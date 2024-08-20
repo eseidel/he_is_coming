@@ -43,6 +43,7 @@ class CreatureCatalog {
   static const List<String> orderedKeys = <String>[
     'name',
     'unlock', // ignored for now
+    'level', // ignored for now
     'attack',
     'health',
     'armor',
@@ -61,7 +62,7 @@ class CreatureCatalog {
 /// Our global creature catalog instance.
 late final CreatureCatalog creatureCatalog;
 
-final _defaultPath = p.join('data', 'enemies.yaml');
+final _defaultPath = p.join('data', 'creatures.yaml');
 
 /// Initialize the global item catalog.
 void initCreatureCatalog([String? path]) {

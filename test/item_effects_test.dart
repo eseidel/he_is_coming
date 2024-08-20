@@ -439,6 +439,18 @@ void main() {
     // Wolf attacks 4 times, so we take 4 dmg, but mirror gives 3 armor.
     expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 0);
+
+    final player2 = createPlayer(withItems: [item]);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.attack, 1);
+    expect(player2.baseStats.armor, 0);
+
+    final enemy2 = makeEnemy('Wolf', attack: 1, health: 6);
+    final result2 = doBattle(first: player2, second: enemy2);
+    // We have 1 attack, wolf has 6 hp, so we need 6 hits.
+    // Wolf attacks 5 times, so we take 5 dmg, but mirror gives 0 armor.
+    expect(result2.first.hp, 5);
+    expect(player2.baseStats.armor, 0);
   });
 
   test('Leather Boots', () {

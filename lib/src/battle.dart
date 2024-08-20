@@ -495,20 +495,27 @@ class BattleContext {
 
     // Print spoils for the player if they won.
     _logSpoils(before: creatures[0], after: first);
-    return BattleResult(first, second);
+    return BattleResult(first: first, second: second, turns: _turnsTaken ~/ 2);
   }
 }
 
 /// Represents the results of a battle.
 class BattleResult {
   /// Create a BattleResult
-  BattleResult(this.first, this.second);
+  BattleResult({
+    required this.first,
+    required this.second,
+    required this.turns,
+  });
 
   /// First creature in this battle.
   final Creature first;
 
   /// Second creature in this battle.
   final Creature second;
+
+  /// Number of turns taken in this battle.
+  int turns;
 
   /// Winner of the battle.
   /// By convention, the second creature wins if the first one is dead.

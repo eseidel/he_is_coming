@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_catalog.dart';
@@ -16,6 +17,14 @@ Creature createPlayer({
   if (items.every((item) => item.kind != Kind.weapon)) {
     items.add(itemCatalog['Wooden Stick']);
   }
+
+  final weaponCount = items.where((item) => item.kind == Kind.weapon).length;
+  if (weaponCount > 1) {
+    throw ArgumentError('Player can only have one weapon.');
+  }
+
+  // Weapon is always first.
+  items.sortBy<num>((item) => item.kind == Kind.weapon ? 0 : 1);
 
   return Creature(
     name: _kPlayerName,
