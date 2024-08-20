@@ -1,6 +1,7 @@
 import 'package:args/args.dart';
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:he_is_coming/src/logger.dart';
+import 'package:scoped_deps/scoped_deps.dart';
 
 ArgParser buildParser() {
   return ArgParser()
@@ -24,7 +25,7 @@ void printUsage(ArgParser argParser) {
     ..info(argParser.usage);
 }
 
-void main(List<String> arguments) {
+void doMain(List<String> arguments) {
   final argParser = buildParser();
   final results = argParser.parse(arguments);
   final verbose = results.wasParsed('verbose');
@@ -39,4 +40,8 @@ void main(List<String> arguments) {
 
   // Roll a new start and simulate.
   runSim();
+}
+
+void main(List<String> args) {
+  return runScoped(() => doMain(args), values: {loggerRef});
 }
