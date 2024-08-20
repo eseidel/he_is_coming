@@ -850,4 +850,18 @@ void main() {
     expect(result.first.hp, 5);
     expect(result.first.baseStats.armor, 0);
   });
+
+  test('Double-plated Armor', () {
+    final item = itemCatalog['Double-plated Armor'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 2);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Double-plated armor makes us slower, so wolf hits us 6 times.
+    // It absorbs the first 2 hits with armor and then adds 3 armor on exposed.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.armor, 2);
+  });
 }
