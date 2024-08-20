@@ -45,7 +45,7 @@ final itemEffects = <String, Effects>{
   'Ruby Crown': Effects(
     onBattle: (c) => _if(c.my.attack >= 6, () => c.gainAttack(2)),
   ),
-  'Melting Iceblade': Effects(onHit: (c) => c.loseAttack(-1)),
+  'Melting Iceblade': Effects(onHit: (c) => c.loseAttack(1)),
   'Double-edged Sword': Effects(onHit: (c) => c.takeDamage(1)),
   'Sapphire Crown': Effects(
     onBattle: (c) => _if(c.my.armor >= 15, () => c.gainArmor(10)),

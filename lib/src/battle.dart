@@ -90,8 +90,8 @@ class EffectContext {
 
   /// Adjust by a negative attack.
   void loseAttack(int attack) {
-    _expectNegative(attack, 'attack');
-    _battle._adjustAttack(attack: attack, index: _index, source: _sourceName);
+    _expectPositive(attack, 'attack');
+    _battle._adjustAttack(attack: -attack, index: _index, source: _sourceName);
   }
 
   /// Stun the enemy for a number of turns.

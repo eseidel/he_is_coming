@@ -29,4 +29,5 @@ final creatureEffects = <String, Effects>{
   'Bat Level 2': _batEffect(hp: 2),
   'Woodland Abomination': Effects(onTurn: (c) => c.gainAttack(1)),
   'Black Knight': Effects(onBattle: (c) => c.gainAttack(c.enemy.attack)),
+  'Ironstone Golem': Effects(onExposed: (c) => c.loseAttack(3)),
 };

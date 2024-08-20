@@ -85,4 +85,15 @@ void main() {
     expect(result2.first.hp, 0);
     expect(result2.second.hp, 1);
   });
+
+  test('Ironstone Golem', () {
+    final player = createPlayer(intrinsic: const Stats(attack: 2, maxHp: 20));
+    final enemy = creatureCatalog['Ironstone Golem'];
+    final result = doBattle(first: player, second: enemy);
+    // Ironstone hits for 4, killing us in 5 hits (at 20hp)
+    // We hit for 3, killing it in 7 hits, but removing its armor in 5 hits when
+    // it has only done 4 hits against us (16 hp), its last hits only do 1 dmg.
+    expect(result.first.hp, 2);
+    expect(result.winner, result.first);
+  });
 }
