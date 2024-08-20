@@ -108,4 +108,6 @@ final itemEffects = <String, Effects>{
   'Emerald Ring': Effects(onBattle: (c) => c.restoreHealth(2)),
   'Ironskin Potion': Effects(onBattle: (c) => c.gainArmor(c.my.lostHp)),
   'Double-plated Armor': Effects(onExposed: (c) => c.gainArmor(3)),
+  'Sapphire Earing':
+      Effects(onTurn: (c) => _if(c.isEveryOtherTurn, () => c.gainArmor(1))),
 };

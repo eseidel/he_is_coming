@@ -54,6 +54,7 @@ class EffectContext {
   bool get isFirstTurn => _battle.turnNumber == 1;
 
   /// Returns true if this is "every other turn" for this creature.
+  // I tested with Emerald Earning and it was first turn, then every other turn.
   bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
 
   /// Add gold.

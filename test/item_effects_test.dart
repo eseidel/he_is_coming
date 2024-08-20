@@ -864,4 +864,18 @@ void main() {
     expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 2);
   });
+
+  test('Sapphire Earing', () {
+    final item = itemCatalog['Sapphire Earing'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Sapphire Earing gains 1 armor every other turn starting the first.
+    // We would take 5 dmg from the wolf, but the earning negates 3 of that.
+    expect(result.first.hp, 8);
+    expect(result.first.baseStats.armor, 0);
+  });
 }
