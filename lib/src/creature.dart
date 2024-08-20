@@ -30,11 +30,11 @@ Creature createPlayer({
 /// Create an enemy
 Creature makeEnemy(
   String name, {
-  required int attack,
   required int health,
-  int gold = 1,
+  required int attack,
   int armor = 0,
   int speed = 0,
+  int gold = 1,
   List<Item> items = const <Item>[],
   int? hp,
 }) {

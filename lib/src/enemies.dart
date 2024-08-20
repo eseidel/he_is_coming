@@ -13,6 +13,10 @@ class Enemies {
   static final wolfLevel3 =
       makeEnemy('Wolf Level 3', attack: 2, health: 9, speed: 2);
 
+  /// Every other strike: Gain 1 health on hit
+  static final batLevel1 =
+      makeEnemy('Bat Level 1', attack: 1, health: 4, speed: 2);
+
   /// Bear deals 3 additional damage while you have armor.
   static final bearLevel1 =
       makeEnemy('Bear Level 1', attack: 1, health: 3, armor: 2);
