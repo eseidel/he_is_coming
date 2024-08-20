@@ -1,3 +1,4 @@
+import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_catalog.dart';
 import 'package:meta/meta.dart';
@@ -37,6 +38,7 @@ Creature makeEnemy(
   int gold = 1,
   List<Item> items = const <Item>[],
   int? hp,
+  Effects? effects,
 }) {
   return Creature(
     name: name,

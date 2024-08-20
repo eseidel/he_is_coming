@@ -6,7 +6,7 @@ import 'package:yaml/yaml.dart';
 import 'package:yaml_edit/yaml_edit.dart';
 
 int compareItemKeys(String a, String b) {
-  const order = ItemCatalog.orderedItemKeys;
+  const order = ItemCatalog.orderedKeys;
   final aIndex = order.indexOf(a);
   final bIndex = order.indexOf(b);
   if (aIndex == -1) {

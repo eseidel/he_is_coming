@@ -1,111 +1,35 @@
-import 'dart:io';
-
-import 'package:collection/collection.dart';
+import 'package:he_is_coming/src/catalog.dart';
+import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_effects.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-extension on YamlMap {
-  T lookupOr<T extends Enum>(String key, List<T> values, T defaultValue) {
-    final toFind = this[key] as String?;
-    if (toFind == null) {
-      return defaultValue;
-    }
-    final found = values.firstWhereOrNull((v) => v.name == toFind);
-    if (found == null) {
-      throw Exception('Unexpected $toFind in $this, expected in $values');
-    }
-    return found;
-  }
-
-  T lookup<T extends Enum>(String key, List<T> values) {
-    final toFind = this[key] as String?;
-    if (toFind == null) {
-      throw Exception('$key is missing from $this');
-    }
-    final found = values.firstWhereOrNull((v) => v.name == toFind);
-    if (found == null) {
-      throw Exception('Unexpected $toFind in $this, expected in $values');
-    }
-    return found;
-  }
-}
-
-class _ItemCatalogReader {
-  static void validateKeys(YamlMap yaml, Set<String> expectedKeys) {
-    final unexpected =
-        yaml.keys.cast<String>().toSet().difference(expectedKeys);
-    if (unexpected.isEmpty) {
-      return;
-    }
-    for (final key in unexpected) {
-      logger.err('Unexpected key: $key in $yaml allowed: $expectedKeys');
-    }
-    throw StateError('Unexpected keys in yaml');
-  }
-
-  static Item itemFromYaml(YamlMap yaml) {
-    final name = yaml['name'] as String;
-    final kind = yaml.lookupOr('kind', Kind.values, Kind.notSpecified);
-    final rarity = yaml.lookup('rarity', Rarity.values);
-    final material =
-        yaml.lookupOr('material', Material.values, Material.notSpecified);
-    final attack = yaml['attack'] as int? ?? 0;
-    final health = yaml['health'] as int? ?? 0;
-    final armor = yaml['armor'] as int? ?? 0;
-    final speed = yaml['speed'] as int? ?? 0;
-    final effectText = yaml['effect'] as String?;
-    final effects = effectsForItemNamed(name, effectText);
-    validateKeys(yaml, ItemCatalog.orderedItemKeys.toSet());
-    return Item(
-      name,
-      kind: kind,
-      rarity,
-      material: material,
-      attack: attack,
-      health: health,
-      armor: armor,
-      speed: speed,
-      effects: effects,
-    );
-  }
-
-  static void _warnAboutMissingEffects(YamlList itemsYaml) {
-    final itemYamlWithEffectText = itemsYaml
-        .cast<YamlMap>()
-        .where((yaml) => yaml['effect'] != null)
-        .toSet();
-    final itemsWithEffectText =
-        itemYamlWithEffectText.map((yaml) => yaml['name'] as String).toSet();
-    final itemsWithEffects = effectsByItemName.keys.toSet();
-    final missingEffects = itemsWithEffectText.difference(itemsWithEffects);
-    if (missingEffects.isNotEmpty) {
-      logger.warn(
-        '${missingEffects.length} items have effect text but no code:',
-      );
-      for (final item in missingEffects) {
-        final yaml =
-            itemYamlWithEffectText.firstWhere((yaml) => yaml['name'] == item);
-        logger.info('${yaml['effect']}, for $item');
-      }
-      logger.info(''); // Add a newline.
-    }
-    final unusedEffects = itemsWithEffects.difference(itemsWithEffectText);
-    if (unusedEffects.isNotEmpty) {
-      logger.warn('Unused effects for: $unusedEffects');
-    }
-  }
-
-  static List<Item> read(String path) {
-    final itemsYaml = loadYaml(File(path).readAsStringSync()) as YamlList;
-    _warnAboutMissingEffects(itemsYaml);
-    return itemsYaml
-        .cast<YamlMap>()
-        .map<Item>(itemFromYaml)
-        .sortedBy<String>((i) => i.name);
-  }
+Item _itemFromYaml(YamlMap yaml, EffectCatalog effectsByName) {
+  final name = yaml['name'] as String;
+  final kind = yaml.lookupOr('kind', Kind.values, Kind.notSpecified);
+  final rarity = yaml.lookup('rarity', Rarity.values);
+  final material =
+      yaml.lookupOr('material', Material.values, Material.notSpecified);
+  final attack = yaml['attack'] as int? ?? 0;
+  final health = yaml['health'] as int? ?? 0;
+  final armor = yaml['armor'] as int? ?? 0;
+  final speed = yaml['speed'] as int? ?? 0;
+  // final effectText = yaml['effect'] as String?;
+  final effects = effectsByName[name];
+  CatalogReader.validateKeys(yaml, ItemCatalog.orderedKeys.toSet());
+  return Item(
+    name,
+    kind: kind,
+    rarity,
+    material: material,
+    attack: attack,
+    health: health,
+    armor: armor,
+    speed: speed,
+    effects: effects,
+  );
 }
 
 /// Class to hold all known items.
@@ -115,13 +39,13 @@ class ItemCatalog {
 
   /// Create an ItemCatalog from a yaml file.
   factory ItemCatalog.fromFile(String path) {
-    final items = _ItemCatalogReader.read(path);
+    final items = CatalogReader.read(path, _itemFromYaml, itemEffects);
     logger.info('Loaded ${items.length} from $path');
     return ItemCatalog(items);
   }
 
   /// All the known keys in the item yaml, in sorted order.
-  static const List<String> orderedItemKeys = <String>[
+  static const List<String> orderedKeys = <String>[
     'name',
     'unique',
     'kind',

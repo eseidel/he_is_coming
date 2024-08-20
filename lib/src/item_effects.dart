@@ -1,3 +1,4 @@
+import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 
 // Dart doesn't have if-expressions, so made a helper function.
@@ -8,7 +9,7 @@ void _if(bool condition, void Function() fn) {
 }
 
 /// Effects that can be triggered by items.
-final effectsByItemName = <String, Effects>{
+final itemEffects = <String, Effects>{
   'Stone Steak': Effects(
     onBattle: (c) => _if(c.isHealthFull, () => c.gainArmor(4)),
   ),
@@ -102,9 +103,3 @@ final effectsByItemName = <String, Effects>{
     ),
   ),
 };
-
-/// Look up the effects for an item by name.
-Effects? effectsForItemNamed(String name, String? effectText) {
-  //  Validate that onTurn effectText starts with "On Turn Start" and so on?
-  return effectsByItemName[name];
-}

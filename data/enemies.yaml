@@ -1,0 +1,46 @@
+- name: Bear Level 1
+  health: 3
+  attack: 1
+  armor: 2
+  effect: 'Bear deals 3 additional damage while you have armor'
+- name: Bear Level 2
+  health: 5
+  attack: 2
+  armor: 3
+  speed: 1
+  effect: 'Bear deals 5 additional damage while you have armor'
+- name: Bear Level 3
+  health: 7
+  attack: 3
+  armor: 4
+  speed: 2
+  effect: 'Bear deals 7 additional damage while you have armor'
+- name: Wolf Level 1
+  health: 3
+  attack: 1
+  effect: 'If player has 5 or less health, wolf gains 2 attack'
+- name: Wolf Level 2
+  health: 6
+  attack: 2
+  speed: 1
+  effect: 'If player has 5 or less health, wolf gains 3 attack'
+- name: Wolf Level 3
+  health: 9
+  attack: 3
+  speed: 2
+  effect: 'If player has 5 or less health, wolf gains 4 attack'
+- name: Spider Level 1
+  health: 3
+  attack: 1
+  speed: 3
+  effect: 'Battle Start: If Spider has more speed than you, it deals 3 damage'
+- name: Spider Level 2
+  health: 3
+  attack: 1
+  speed: 3
+  effect: 'Battle Start: If Spider has more speed than you, it deals 4 damage'
+- name: Spider Level 3
+  health: 4
+  attack: 1
+  speed: 4
+  effect: 'Battle Start: If Spider has more speed than you, it deals 5 damage'
