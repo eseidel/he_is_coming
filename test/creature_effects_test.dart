@@ -45,6 +45,16 @@ void main() {
     expect(result2.first.hp, 9);
   });
 
+  test('Bat Level 1', () {
+    final player = createPlayer();
+    final enemy = creatureCatalog['Bat Level 1'];
+    final result = doBattle(first: player, second: enemy);
+    // Bat is faster than us so should heal 1 on every other turn.
+    // We hit first and take 6 hits to kill it.
+    expect(result.first.hp, 4);
+    expect(result.winner, result.first);
+  });
+
   test('Black Knight', () {
     final player = createPlayer();
     final enemy = creatureCatalog['Black Knight'];
