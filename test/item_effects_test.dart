@@ -826,4 +826,15 @@ void main() {
     final result2 = doBattle(first: player2, second: selfHealing);
     expect(result2.first.hp, 6);
   });
+
+  test('Emerald Ring', () {
+    final item = itemCatalog['Emerald Ring'];
+    final player = createPlayer(withItems: [item], hp: 7);
+    expect(player.hp, 7);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Emerald ring restores 2 hp on battle start, then wolf does 5 dmg.
+    expect(result.first.hp, 4);
+  });
 }
