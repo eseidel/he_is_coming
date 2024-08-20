@@ -8,6 +8,18 @@ import 'package:meta/meta.dart';
 
 String _signed(int value) => value >= 0 ? '+$value' : '$value';
 
+void _expectPositive(int value) {
+  if (value <= 0) {
+    throw ArgumentError('value must be positive');
+  }
+}
+
+void _expectNegative(int value) {
+  if (value >= 0) {
+    throw ArgumentError('value must be negative');
+  }
+}
+
 /// Passed to all Effect callbacks.
 class EffectContext {
   /// Create an EffectContext
@@ -28,7 +40,6 @@ class EffectContext {
   CreatureStats get _stats => _battle.stats[_index];
   set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
   String get _playerName => _battle.creatures[_index].name;
-  String get _enemyName => _battle.creatures[_enemyIndex].name;
 
   /// Returns true if health is currently full.
   bool get isHealthFull => _stats.isHealthFull;
@@ -39,91 +50,58 @@ class EffectContext {
   /// Returns true if this is "every other turn" for this creature.
   bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
 
-  void _expectPositive(int value) {
-    if (value <= 0) {
-      throw ArgumentError('value must be positive');
-    }
-  }
-
-  void _expectNegative(int value) {
-    if (value >= 0) {
-      throw ArgumentError('value must be negative');
-    }
-  }
-
   /// Add gold.
   void gainGold(int gold) {
     _expectPositive(gold);
     _stats = _stats.copyWith(gold: _stats.gold + gold);
-    logger.info('$_playerName gold ${_signed(gold)} from $_sourceName');
-  }
-
-  /// Add or remove armor.
-  void _adjustArmor(int armor) {
-    _stats = _stats.copyWith(armor: _stats.armor + armor);
-    logger.info('$_playerName armor ${_signed(armor)} from $_sourceName');
+    _battle.log('$_playerName gold ${_signed(gold)} from $_sourceName');
   }
 
   /// Add armor.
   void gainArmor(int armor) {
     _expectPositive(armor);
-    _adjustArmor(armor);
+    _battle._adjustArmor(index: _index, armor: armor, source: _sourceName);
   }
 
   /// Remove armor.
   void loseArmor(int armor) {
     _expectNegative(armor);
-    _adjustArmor(armor);
+    _battle._adjustArmor(index: _index, armor: armor, source: _sourceName);
   }
 
   /// Add speed.
   void gainSpeed(int speed) {
     _expectPositive(speed);
     _stats = _stats.copyWith(speed: _stats.speed + speed);
-    logger.info('$_playerName speed ${_signed(speed)} from $_sourceName');
+    _battle.log('$_playerName speed ${_signed(speed)} from $_sourceName');
   }
 
   /// Add attack.
   void gainAttack(int attack) {
     _expectPositive(attack);
-    _adjustAttack(attack);
+    _battle._adjustAttack(attack: attack, index: _index, source: _sourceName);
   }
 
   /// Adjust by a negative attack.
   void loseAttack(int attack) {
     _expectNegative(attack);
-    _adjustAttack(attack);
-  }
-
-  void _adjustAttack(int attackDelta) {
-    // Unclear if attack is clamped at 1 or 0.
-    _stats = _stats.copyWith(attack: max(_stats.attack + attackDelta, 0));
-    logger
-        .info('$_playerName attack ${_signed(attackDelta)} from $_sourceName');
+    _battle._adjustAttack(attack: attack, index: _index, source: _sourceName);
   }
 
   /// Stun the enemy for a number of turns.
   void stunEnemy(int turns) {
     _expectPositive(turns);
-    _battle.setStats(
-      _enemyIndex,
-      enemy.copyWith(stunCount: enemy.stunCount + turns),
-    );
-    logger.info('$_playerName stunned $_enemyName for $turns turns');
+    _battle._adjustStun(turns: turns, index: _enemyIndex, source: _sourceName);
   }
 
   /// Give armor to the enemy.
   void giveArmorToEnemy(int armor) {
     _expectPositive(armor);
-    _battle.setStats(
-      _enemyIndex,
-      enemy.copyWith(armor: enemy.armor + armor),
-    );
-    logger.info('$_playerName gave $_enemyName $armor armor');
+    _battle._adjustArmor(index: _enemyIndex, armor: armor, source: _sourceName);
   }
 
   /// Restore health.
-  void restoreHealth(int hp) => _battle.restoreHealth(
+  void restoreHealth(int hp) => _battle._restoreHealth(
         hp: hp,
         targetIndex: _index,
         source: _sourceName,
@@ -134,7 +112,7 @@ class EffectContext {
   void loseHealth(int hp) {
     _expectNegative(hp);
     _stats = _stats.copyWith(hp: min(max(_stats.hp + hp, 0), _stats.maxHp));
-    logger.info('$_playerName hp ${_signed(hp)} from $_sourceName');
+    _battle.log('$_playerName hp ${_signed(hp)} from $_sourceName');
   }
 
   /// Deal damage to the enemy.
@@ -169,7 +147,6 @@ class EffectContext {
 
 String? _diffString(String name, int before, int after) {
   final diff = after - before;
-  // logger.info('$name: $before -> $after ($diff)');
   return diff != 0 ? '$name: ${_signed(diff)}' : null;
 }
 
@@ -294,15 +271,32 @@ class CreatureStats {
 class BattleContext {
   /// Create a BattleContext.
   BattleContext(this.creatures)
-      : stats = creatures.map(CreatureStats.fromCreature).toList();
+      : stats = creatures.map(CreatureStats.fromCreature).toList() {
+    log('${_first.name}: ${_first.baseStats}');
+    log('${_second.name}: ${_second.baseStats}');
+  }
+
+  /// Coordinated logging for the battle.
+  void log(String message) => logger.detail(message);
 
   static int _firstAttackerIndex(List<CreatureStats> stats) =>
       stats[0].speed >= stats[1].speed ? 0 : 1;
 
-  /// Advance to the next attacker.
+  /// Advance to the next non-stunned creature.
   void nextAttacker() {
-    _attackerIndex = attackerIndex.isEven ? 1 : 0;
-    _turnsTaken++;
+    while (allAlive) {
+      _attackerIndex = attackerIndex.isEven ? 1 : 0;
+      _turnsTaken++;
+
+      if (attacker.stunCount < 1) {
+        break;
+      }
+      setStats(
+        attackerIndex,
+        attacker.copyWith(stunCount: attacker.stunCount - 1),
+      );
+      log('$attackerName is stunned, skipping turn');
+    }
   }
 
   /// Decide who goes first.
@@ -310,23 +304,51 @@ class BattleContext {
     _attackerIndex = _firstAttackerIndex(stats);
   }
 
+  void _adjustAttack({
+    required int attack,
+    required int index,
+    required String source,
+  }) {
+    final target = stats[index];
+    // Unclear if attack is clamped?  Probably strike values are just clamped?
+    setStats(index, target.copyWith(attack: max(target.attack + attack, 0)));
+    log('${creatures[index].name} attack ${_signed(attack)} from $source');
+  }
+
+  void _adjustStun({
+    required int turns,
+    required int index,
+    required String source,
+  }) {
+    final target = stats[index];
+    setStats(index, target.copyWith(stunCount: target.stunCount + turns));
+    log('${creatures[index].name} stun ${_signed(turns)} turns by $source');
+  }
+
+  /// Add or remove armor.
+  void _adjustArmor({
+    required int armor,
+    required int index,
+    required String source,
+  }) {
+    final target = stats[index];
+    setStats(index, target.copyWith(armor: target.armor + armor));
+    log('${creatures[index].name} armor ${_signed(armor)} from $source');
+  }
+
   /// Restore health to a creature.
-  void restoreHealth({
+  void _restoreHealth({
     required int hp,
     required int targetIndex,
     required String source,
   }) {
-    if (hp < 0) {
-      throw ArgumentError('hp must be positive');
-    }
+    _expectPositive(hp);
     final target = stats[targetIndex];
     final newHp = min(target.hp + hp, target.maxHp);
     final newStats = target.copyWith(hp: newHp);
     setStats(targetIndex, newStats);
     final restored = newHp - target.hp;
-    logger.info(
-      '$source restored $restored hp to ${creatures[targetIndex].name}',
-    );
+    log('$source restored $restored hp to ${creatures[targetIndex].name}');
 
     // If we successfully restored health, trigger onHeal.
     if (restored > 0) {
@@ -353,7 +375,7 @@ class BattleContext {
     final armorBefore = target.armor;
     final newStats = target.copyWith(armor: newArmor, hp: max(newHp, 0));
     setStats(targetIndex, newStats);
-    logger.info(
+    log(
       '$source dealt $damage damage to $targetName '
       '${newStats.hp} / ${newStats.maxHp} hp '
       '${newStats.armor} armor',
@@ -411,7 +433,7 @@ class BattleContext {
     // e.g. if onHit triggers a heal and then onHeal does +1 armor, we'll
     // show +1 armor from the onHeal in both the onHit and onHeal logs.
     if (diffString != null) {
-      logger.info('${creature.name} ${effect.name}: $diffString');
+      log('${creature.name} ${effect.name}: $diffString');
     }
   }
 
@@ -479,7 +501,7 @@ class BattleContext {
       _diffString('gold', before.gold, after.gold),
     ].nonNulls;
     if (diffStrings.isNotEmpty) {
-      logger.info('${after.name} result: ${diffStrings.join(' ')}');
+      log('${after.name} result: ${diffStrings.join(' ')}');
     }
   }
 
@@ -531,30 +553,19 @@ class Battle {
     required Creature first,
     required Creature second,
   }) {
-    logger
-      ..info('${first.name}: ${first.baseStats}')
-      ..info('${second.name}: ${first.baseStats}');
-
     final ctx = BattleContext([first, second])
       .._triggerOnBattleStart()
       .._decideFirstAttacker();
 
     logger
-      ..info('${first.name}: ${ctx.stats[0]}')
-      ..info('${second.name}: ${ctx.stats[1]}');
+      ..detail('${first.name}: ${ctx.stats[0]}')
+      ..detail('${second.name}: ${ctx.stats[1]}');
     while (ctx.allAlive) {
-      if (ctx.attacker.stunCount > 0) {
-        ctx.setStats(
-          ctx.attackerIndex,
-          ctx.attacker.copyWith(stunCount: ctx.attacker.stunCount - 1),
-        );
-        logger.info('${ctx.attackerName} is stunned, skipping turn');
-      } else {
-        ctx
-          .._triggerOnTurn()
-          ..strike();
-      }
-      ctx.nextAttacker();
+      ctx
+        .._triggerOnTurn()
+        ..strike()
+        // Might advance multiple turns if both creatures are stunned.
+        ..nextAttacker();
     }
 
     return ctx.resolveWithSpoils();
