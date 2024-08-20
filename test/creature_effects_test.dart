@@ -66,8 +66,8 @@ void main() {
     expect(result.second.hp, 10);
 
     // I need to confirm this in-game, but...
-    // Player onBattle happens before enemy onBattle, so black knight should
-    // get our increased attack.
+    // Player onBattle happens before enemy onBattle (regardless of speed?)
+    // so black knight should get our increased attack from onBattle effects.
     final player2 = createPlayer(
       intrinsic: const Stats(maxHp: 20),
       withItems: [
