@@ -198,6 +198,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  mocktail:
+    dependency: "direct main"
+    description:
+      name: mocktail
+      sha256: "890df3f9688106f25755f26b1c60589a92b3ab91a22b8b224947ad041bf172d8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.4"
   node_preamble:
     dependency: transitive
     description:
@@ -238,6 +246,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  scoped_deps:
+    dependency: "direct main"
+    description:
+      path: "packages/scoped_deps"
+      ref: HEAD
+      resolved-ref: "2041dfaaa34d8f69b3a2215d5011ec336ba29f5a"
+      url: "https://github.com/shorebirdtech/shorebird.git"
+    source: git
+    version: "0.1.0+2"
   shelf:
     dependency: transitive
     description:

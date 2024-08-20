@@ -141,7 +141,12 @@ class ItemCatalog {
   Item operator [](String name) => items.firstWhere((i) => i.name == name);
 }
 
+/// Our global item catalog instance.
+late final ItemCatalog itemCatalog;
+
 final _defaultItemsPath = p.join('data', 'items.yaml');
 
-/// Our global item catalog instance.
-final itemCatalog = ItemCatalog.fromFile(_defaultItemsPath);
+/// Initialize the global item catalog.
+void initItemCatalog([String? path]) {
+  itemCatalog = ItemCatalog.fromFile(path ?? _defaultItemsPath);
+}

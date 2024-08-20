@@ -6,6 +6,8 @@ import 'package:he_is_coming/src/logger.dart';
 
 /// Simulate one game with a player.
 void runSim() {
+  initItemCatalog();
+
   final player = createPlayer(withItems: [itemCatalog['Stone Steak']]);
   final wolf = Enemies.wolfLevel1;
 

@@ -2,9 +2,23 @@ import 'package:he_is_coming/src/battle.dart';
 import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_catalog.dart';
+import 'package:he_is_coming/src/logger.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
+class _MockLogger extends Mock implements Logger {}
+
+BattleResult doBattle({required Creature first, required Creature second}) {
+  final logger = _MockLogger();
+  return runWithLogger(
+    logger,
+    () => Battle.resolve(first: first, second: second),
+  );
+}
+
 void main() {
+  runWithLogger(_MockLogger(), initItemCatalog);
+
   test('maxHp from items', () {
     final item = itemCatalog['Redwood Roast'];
     final player = createPlayer(withItems: [item]);
@@ -19,7 +33,7 @@ void main() {
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Stone Steak gives 4 armor, so the player should win with 9 health.
     expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 0);
@@ -32,12 +46,12 @@ void main() {
     expect(player.hp, 12);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Lose 5 hp from the wolf, since cloak doesn't trigger.
     expect(result.first.hp, 7);
 
     // Fight the same battle again, should heal on start this time.
-    final result2 = Battle.resolve(first: result.first, second: enemy);
+    final result2 = doBattle(first: result.first, second: enemy);
     // Lose only 4 hp from the wolf, since cloak triggers.
     expect(result2.first.hp, 3);
   });
@@ -50,7 +64,7 @@ void main() {
     expect(player.baseStats.armor, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 2);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Wolf is faster, so does 6 dmg to us, but we get 4 armor from the shield.
     expect(result.first.hp, 8);
     expect(result.first.baseStats.armor, 0);
@@ -61,7 +75,7 @@ void main() {
     expect(player2.baseStats.speed, 2);
     expect(player2.baseStats.armor, 0);
 
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // Wolf is same speed, so only does 5 dmg to us.
     // Emergency Shield won't give armor, since player has >= enemy speed.
     expect(result2.first.hp, 5);
@@ -77,7 +91,7 @@ void main() {
     // Normally kill it in 6 turns (take 5 dmg), but the ruby earnings trigger
     // every other turn (including the first) for 1 dmg, meaning we
     // kill it in 4 turns (take 3 dmg).
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 7);
   });
 
@@ -92,7 +106,7 @@ void main() {
     // reduces one damage, and then the firecracker belt triggers after the
     // armor is broken, dealing 3 dmg to the wolf, killing it in 3 turns.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 9);
   });
 
@@ -106,7 +120,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // We would kill the wolf in 6 turns (take 4 dmg, 1 absorbed by armor), but
     // the helmet triggers after the armor is broken, healing 3 hp.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 4);
 
     final player2 = createPlayer(withItems: [item]);
@@ -115,7 +129,7 @@ void main() {
 
     // But if we fight with full health, the helmet triggers at exposed
     // and does nothing because we're already at full health.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     expect(result2.first.hp, 6);
   });
 
@@ -130,7 +144,7 @@ void main() {
     // We would kill the wolf in 6 turns (take 5 dmg), but the explosive
     // surprise triggers at exposed, dealing 5 dmg to the wolf, killing it
     // in 2 turns.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 10);
   });
 
@@ -144,7 +158,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // We would kill the wolf in 6 turns (take 5 dmg), but the bouldershield
     // triggers at exposed, giving 5 armor, so we take no damage.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 10);
     // We still have our base armor, but any armor during battle is gone.
     expect(player.baseStats.armor, 1);
@@ -158,7 +172,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // Normally take 5 dmg but the wine triggers
     // when we're below 50% health, healing 4 hp.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 8);
   });
 
@@ -173,7 +187,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // Normally take 5 dmg but the wine triggers
     // when we're below 50% health, healing 4 hp.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 0);
   });
 
@@ -186,7 +200,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // Normally take 5 dmg but the mortal edge triggers
     // when we're below 50% health, increasing attack by 5 and taking 2 dmg.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 2);
     expect(result.first.baseStats.attack, 2);
   });
@@ -199,7 +213,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // Normally take 5 dmg but the lifeblood burst triggers
     // onWounded, dealing 5 dmg to the enemy.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 4);
     expect(result.second.hp, 0);
   });
@@ -217,7 +231,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // Normally take 5 dmg but the first 3 are absorbed by the armor
     // and then the chain mail triggers, giving 3 armor again, so take 1 dmg.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 4);
     expect(result.first.baseStats.armor, 3);
   });
@@ -232,7 +246,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     // We attack first, and then the sword triggers, giving 2 armor, so we
     // never take damage.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 10);
     expect(result.first.baseStats.armor, 0);
   });
@@ -245,7 +259,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 2, health: 6);
     // We attack first, and then the sword triggers, healing 1 hp, so we only
     // lose 2 hp since wolf hits us twice and we gain 3 from attacking.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 8);
   });
 
@@ -256,7 +270,7 @@ void main() {
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
     expect(enemy.gold, 1);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 5);
     // Gain one gold at battle end.
     expect(result.first.gold, 1);
@@ -269,7 +283,7 @@ void main() {
     expect(player.gold, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 5);
     // Gain one gold at battle start and one gold at battle end.
     expect(result.first.gold, 2);
@@ -284,7 +298,7 @@ void main() {
     // Ruby Ring gives 1 attack and takes 2 damage at the start of battle.
     // Which means we only take 2 dmg from wolf, but 2 from ring.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 6);
   });
 
@@ -298,7 +312,7 @@ void main() {
 
     // Ruby Crown gives 2 attack if we have 6 or more attack.
     final enemy = makeEnemy('Wolf', attack: 1, health: 14);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Wolf dies in 7 attacks, so we lose 6 hp.
     expect(result.first.hp, 4);
 
@@ -309,7 +323,7 @@ void main() {
     expect(player2.hp, 10);
     expect(player2.baseStats.attack, 6);
     // Ruby Crown gives 2 attack if we have 6 or more attack.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // Wolf dies in 2 hits (8 each) so we lose 1 hp.
     expect(result2.first.hp, 9);
   });
@@ -324,7 +338,7 @@ void main() {
     // then 6, 5, 4, 3, 2, 1, 0.
     // 15 will take 3 hits, so we should take 2 dmg.
     final enemy = makeEnemy('Wolf', attack: 1, health: 15);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 8);
     // Attack recovers after battle I think?
     expect(result.first.baseStats.attack, 7);
@@ -342,7 +356,7 @@ void main() {
     // Melting Iceblade can only do 28 dmg when clamped to 0, so we will lose
     // to a 29 health enemy.
     final enemy = makeEnemy('Wolf', attack: 1, health: 29);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 0);
     expect(result.first.baseStats.attack, 7);
   });
@@ -356,7 +370,7 @@ void main() {
     // Double-edged Sword deals 1 damage on hit, so we should take 3 dmg.
     // One from wolf and two from sword.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 7);
   });
 
@@ -369,7 +383,7 @@ void main() {
 
     // Sapphire Crown gives 10 armor if we have 15 or more armor.
     final enemy = makeEnemy('Wolf', attack: 5, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // We take 5 hits from wolf, which is 25 dmg, but we have 25 armor.
     expect(result.first.hp, 10);
     expect(result.first.baseStats.armor, 15);
@@ -382,7 +396,7 @@ void main() {
     expect(player2.baseStats.armor, 14);
 
     // Sapphire Crown gives 10 armor if we have 15 or more armor.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // We take 5 hits from wolf, which is 25 dmg, but we have 14 armor.
     expect(result2.first.hp, 0);
     expect(result2.first.baseStats.armor, 14);
@@ -396,7 +410,7 @@ void main() {
 
     // Citrine Ring deals damage equal to our speed at the start of battle.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 7);
 
     final player2 =
@@ -404,7 +418,7 @@ void main() {
     expect(player2.baseStats.speed, -2);
 
     // Speed can be negative, but won't deal negative damage.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // Wolf goes first so we take 6 hits rather than 5.
     expect(result2.first.hp, 4);
   });
@@ -419,7 +433,7 @@ void main() {
 
     // Marble Mirror gives armor equal to the enemy's armor at the start.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6, armor: 3);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // We have 2 attack, wolf has 9 hp + armor, so we need 5 hits.
     // Wolf attacks 4 times, so we take 4 dmg, but mirror gives 3 armor.
     expect(result.first.hp, 9);
@@ -436,7 +450,7 @@ void main() {
 
     // Leather Boots gives 2 attack if we have more speed than the enemy.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 1);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // With leather boots we get +2 attack so we kill the wolf in 2 hits.
     expect(result.first.hp, 9);
     expect(result.first.baseStats.attack, 1);
@@ -448,7 +462,7 @@ void main() {
     expect(player2.baseStats.attack, 1);
 
     // With the same speed, we don't get the attack bonus.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     expect(result2.first.hp, 5);
   });
 
@@ -460,7 +474,7 @@ void main() {
 
     // Plated Helmet gives 2 armor if we're below 50% health.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // We take 1 dmg from the wolf the first hit, and then no more after that
     // due to the 2 armor we get each turn from the helmet.
     expect(result.first.hp, 4);
@@ -471,7 +485,7 @@ void main() {
     expect(player2.baseStats.armor, 0);
 
     // If we're not below 50% health, the helmet does nothing.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     expect(result2.first.hp, 5);
     expect(result2.first.baseStats.armor, 0);
   });
@@ -484,7 +498,7 @@ void main() {
 
     // Ore Heart gives 2 armor for each stone item we have.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // We get 2 armor from the Ore Heart, so we take 3 dmg from the wolf.
     expect(result.first.hp, 7);
     expect(result.first.baseStats.armor, 0);
@@ -495,7 +509,7 @@ void main() {
     expect(player2.baseStats.armor, 0);
 
     // Ore Heart gives 2 armor for each stone item we have.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // We get 4 armor from the Ore Heart, so we take 1 dmg from the wolf.
     expect(result2.first.hp, 9);
   });
@@ -510,7 +524,7 @@ void main() {
     // Granite Hammer gives 2 attack and 1 armor on hit if we have armor.
     // If we don't have armor it does nothing.
     final enemy = makeEnemy('Wolf', attack: 1, health: 10);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Takes 5 hits to kill the wolf, so we take 4 dmg.
     expect(result.first.hp, 6);
     expect(result.first.baseStats.attack, 2);
@@ -525,7 +539,7 @@ void main() {
     expect(player2.baseStats.armor, 1);
 
     // Granite Hammer gives 2 attack and 1 armor on hit if we have armor.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // We deal 2 dmg on the first hit and lose 1 armor and gain 2 attack.
     // Then we deal 4 dmg on the second and 3rd hit, killing the wolf.
     expect(result2.first.hp, 8);
@@ -540,7 +554,7 @@ void main() {
     expect(player.baseStats.armor, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Iron Transfusion gives 2 armor and loses 1 hp every turn.
     // We take 6 turns to kill the wolf, so we lose 6 hp.
     // The wolf never gets through our armor.
@@ -555,7 +569,7 @@ void main() {
     expect(player.baseStats.armor, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // We never gain any armor from the gauntlet.
     expect(result.first.hp, 5);
     expect(result.first.baseStats.armor, 0);
@@ -567,7 +581,7 @@ void main() {
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 1);
 
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // Fortified Gauntlet gives 1 armor if we have armor.
     // So we never take any damage from the wolf.
     expect(result2.first.hp, 10);
@@ -590,7 +604,7 @@ void main() {
     final enemy = makeEnemy('Wolf', attack: 2, health: 6);
     // The armor item gives 1 armor before the gauntlet, so the Gauntlet
     // triggers and gives 1 armor, so we take no damage from the wolf.
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 10);
     expect(result.first.baseStats.armor, 0);
 
@@ -601,7 +615,7 @@ void main() {
     // The gauntlet triggers first, but we have no armor to gain 1 armor from
     // so the wolf hits us 5 times for 2 dmg each, one of which is absorbed
     // by the armor item, so we take 5 dmg.
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     expect(result2.first.hp, 5);
     expect(result2.first.baseStats.armor, 0);
   });
@@ -621,7 +635,7 @@ void main() {
     expect(player.baseStats.armor, 0);
 
     final enemy = makeEnemy('Wolf', attack: 3, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Iron Rose gives 1 armor on (successful) heal, but the first hit we're
     // not damaged, so it does nothing.  Our remaining 5 hits heal 1 each time.
     // Wolf hits us 5 times, the first time for 3 dmg, then 1 for each.
@@ -633,7 +647,7 @@ void main() {
     expect(player2.hp, 5);
     expect(player2.baseStats.armor, 0);
 
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     expect(result2.first.hp, 0);
     expect(result2.first.baseStats.armor, 0);
   });
@@ -646,7 +660,7 @@ void main() {
     expect(player.baseStats.speed, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 2);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Featherweight Coat gives 3 speed if we have armor, but we don't.
     // Wolf goes first so we take 6 dmg.
     expect(result.first.hp, 4);
@@ -661,7 +675,7 @@ void main() {
     expect(player2.baseStats.armor, 1);
     expect(player2.baseStats.speed, 0);
 
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // Featherweight Coat gives 3 speed if we have armor, so we go first.
     expect(result2.first.hp, 5);
     expect(result2.first.baseStats.armor, 1);
@@ -686,7 +700,7 @@ void main() {
     expect(player.baseStats.speed, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 2);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Wolf is faster, but the web triggers and so we go first.
     expect(result.first.hp, 5);
     expect(result.first.baseStats.speed, 0);
@@ -698,7 +712,7 @@ void main() {
     expect(player2.hp, 10);
     expect(player2.baseStats.speed, 2);
 
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // We're the same speed, so the web does nothing.
     expect(result2.first.hp, 5);
     expect(result2.first.baseStats.speed, 2);
@@ -712,7 +726,7 @@ void main() {
 
     // With no armor, nothing happens.
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 5);
     expect(result.first.baseStats.armor, 0);
 
@@ -721,7 +735,7 @@ void main() {
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 1);
 
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // When our armor breaks, the wolf is stunned for 1 turn.
     // So we only take 4 dmg from the wolf - 1 from the armor.
     expect(result2.first.hp, 7);
@@ -736,7 +750,7 @@ void main() {
     expect(player.baseStats.attack, 2);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Steelbond Curse gives 8 armor to the enemy, so it takes 14 dmg to kill
     // and it hits for 2, so that's 7 hits, so we take 6 dmg.
     expect(result.first.hp, 4);
@@ -751,7 +765,7 @@ void main() {
     expect(player.baseStats.attack, 0);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = Battle.resolve(first: player, second: enemy);
+    final result = doBattle(first: player, second: enemy);
     // Bejeweled Blade gives 2 attack for each jewelry item we have
     // if we don't have any jewelry we have 0 attack!
     expect(result.first.hp, 0);
@@ -768,7 +782,7 @@ void main() {
     // We've implemented Bejeweled Blade onBattle so this is still 0.
     expect(player2.baseStats.attack, 0);
 
-    final result2 = Battle.resolve(first: player2, second: enemy);
+    final result2 = doBattle(first: player2, second: enemy);
     // Bejeweled Blade gives 2 attack for each jewelry item we have.
     // So we kill the wolf in 3 attacks, so we take 2 dmg.
     expect(result2.first.hp, 8);
