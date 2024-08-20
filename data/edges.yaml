@@ -4,3 +4,7 @@
   effect: "On Hit: If you have less than 10 gold, gain 1 gold."
 - name: "Blunt Edge"
   effect: "On Hit: Gain 1 armor"
+- name: "Lightning Edge"
+  effect: "Battle Start: Stun the enemy for 1 turn"
+- name: "Bleeding Edge"
+  effect: "On Hit: Restore 1 health"

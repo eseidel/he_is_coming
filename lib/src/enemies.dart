@@ -50,6 +50,11 @@ class Bosses {
   static final brittlebarkBeast =
       makeEnemy('Brittlebark Beast', health: 40, attack: 3, speed: 2);
 
+  /// Ironstone, Level 1
+  /// Exposed: Ironstone loses 3 attack
+  static final ironstoneGolem =
+      makeEnemy('Ironstone Golem', attack: 4, health: 5, armor: 15);
+
   /// Redwood Treant, level 2
   /// Redwood Treant's attack is halved against armor
   static final redwoodTreant =
@@ -63,4 +68,13 @@ class Bosses {
 
   /// Leshen, level 3
   static final leshen = makeEnemy('Leshen', attack: 7, health: 60, speed: 3);
+
+  /// Woodland Abomination, End
+  /// Turn Start: Woodland Abomination gains 1 attack
+  static final woodlandAbomination = makeEnemy(
+    'Woodland Abomination',
+    attack: 0,
+    health: 1000,
+    speed: 2,
+  );
 }
