@@ -891,4 +891,25 @@ void main() {
     // since the first heal happens while we're at full hp.
     expect(result.first.hp, 7);
   });
+
+  test('Emerald Crown', () {
+    final item = itemCatalog['Emerald Crown'];
+    final player = createPlayer(withItems: [item], hp: 7);
+    expect(player.hp, 7);
+
+    // Emerald Crown does nothing if we don't have 20 or more max hp.
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 2);
+
+    final player2 = createPlayer(
+      withItems: [item],
+      intrinsic: const Stats(maxHp: 20),
+      hp: 7,
+    );
+    expect(player2.hp, 7);
+    final result2 = doBattle(first: player2, second: enemy);
+    // Emerald Crown heals to full on battle start if we have 20 or more max hp.
+    expect(result2.first.hp, 15);
+  });
 }

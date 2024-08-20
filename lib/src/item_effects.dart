@@ -113,4 +113,7 @@ final itemEffects = <String, Effects>{
   'Emerald Earing': Effects(
     onTurn: (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(1)),
   ),
+  'Emerald Crown': Effects(
+    onBattle: (c) => _if(c.my.maxHp >= 20, () => c.restoreHealth(c.my.lostHp)),
+  ),
 };
