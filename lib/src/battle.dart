@@ -225,6 +225,9 @@ class CreatureStats {
   /// Returns true if health is below half.
   bool get belowHalfHp => hp < maxHp / 2;
 
+  /// Returns the amount of health lost.
+  int get lostHp => maxHp - hp;
+
   /// Create a copy of this with some fields updated.
   CreatureStats copyWith({
     int? maxHp,

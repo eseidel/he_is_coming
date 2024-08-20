@@ -106,4 +106,5 @@ final itemEffects = <String, Effects>{
   ),
   "Woodcutter's Axe": Effects(onHit: (c) => c.reduceEnemyMaxHp(2)),
   'Emerald Ring': Effects(onBattle: (c) => c.restoreHealth(2)),
+  'Ironskin Potion': Effects(onBattle: (c) => c.gainArmor(c.my.lostHp)),
 };

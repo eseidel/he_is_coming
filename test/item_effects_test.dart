@@ -837,4 +837,17 @@ void main() {
     // Emerald ring restores 2 hp on battle start, then wolf does 5 dmg.
     expect(result.first.hp, 4);
   });
+
+  test('Ironskin Potion', () {
+    final item = itemCatalog['Ironskin Potion'];
+    final player = createPlayer(withItems: [item], hp: 6);
+    expect(player.hp, 6);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Ironskin potion gives armor = lost hp (4) so we only take 1 dmg.
+    expect(result.first.hp, 5);
+    expect(result.first.baseStats.armor, 0);
+  });
 }
