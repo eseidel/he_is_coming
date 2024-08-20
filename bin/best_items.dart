@@ -37,10 +37,23 @@ void _runBattle(Random random, BattleStats stats) {
   stats.recordItems(player.items, result, abomination);
 }
 
+class RunResult {
+  RunResult({required this.turns, required this.dmg, required this.items});
+
+  RunResult.empty()
+      : turns = 0,
+        dmg = 0,
+        items = [];
+
+  final int turns;
+  final int dmg;
+  List<Item> items;
+}
+
 class BattleStats {
   final itemValues = <String, List<int>>{};
-  int bestValue = 0;
-  List<Item> bestItems = [];
+  RunResult bestTurns = RunResult.empty();
+  RunResult bestDmg = RunResult.empty();
 
   Map<String, double> get averages {
     final averages = <String, double>{};
@@ -52,15 +65,18 @@ class BattleStats {
   }
 
   void recordItems(List<Item> items, BattleResult result, Creature enemy) {
-    // Record the number of turns those items survived for.
-    // Can either look at # of turns survived or total damage dealt.
-    // final value = result.turns;
-    final value = enemy.baseStats.maxHp - result.second.hp;
-    if (value > bestValue) {
-      bestValue = value;
-      bestItems = items;
+    // Record the best items we've seen for turns and damage.
+    final turns = result.turns;
+    final dmg = enemy.baseStats.maxHp - result.second.hp;
+    if (result.turns > bestTurns.turns) {
+      bestTurns = RunResult(turns: turns, dmg: dmg, items: items);
+    }
+    if (dmg > bestDmg.dmg) {
+      bestDmg = RunResult(turns: turns, dmg: dmg, items: items);
     }
 
+    // Can either look at # of turns survived or total damage dealt.
+    final value = dmg;
     for (final item in items) {
       itemValues.putIfAbsent(item.name, () => []).add(value);
     }
@@ -88,8 +104,18 @@ void doMain(List<String> arguments) {
 
   logger
     ..info('---')
-    ..info('Best item set:');
-  for (final item in stats.bestItems) {
+    ..info(
+      'Best survivor (${stats.bestTurns.turns} turns,'
+      ' ${stats.bestTurns.dmg} damage):',
+    );
+  for (final item in stats.bestTurns.items) {
+    logger.info(item.name);
+  }
+  logger
+    ..info('---')
+    ..info('Best damage (${stats.bestDmg.turns} turns,'
+        ' ${stats.bestDmg.dmg} damage):');
+  for (final item in stats.bestDmg.items) {
     logger.info(item.name);
   }
 }
