@@ -878,4 +878,17 @@ void main() {
     expect(result.first.hp, 8);
     expect(result.first.baseStats.armor, 0);
   });
+
+  test('Emerald Earing', () {
+    final item = itemCatalog['Emerald Earing'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Emerald Earing gains 1 hp every other turn starting the first.
+    // We would take 5 dmg from the wolf, but the earning negates 2 of that
+    // since the first heal happens while we're at full hp.
+    expect(result.first.hp, 7);
+  });
 }

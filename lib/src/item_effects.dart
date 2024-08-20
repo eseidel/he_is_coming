@@ -110,4 +110,7 @@ final itemEffects = <String, Effects>{
   'Double-plated Armor': Effects(onExposed: (c) => c.gainArmor(3)),
   'Sapphire Earing':
       Effects(onTurn: (c) => _if(c.isEveryOtherTurn, () => c.gainArmor(1))),
+  'Emerald Earing': Effects(
+    onTurn: (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(1)),
+  ),
 };
