@@ -1,5 +1,6 @@
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/creature.dart';
+import 'package:he_is_coming/src/creature_effects.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:path/path.dart' as p;
@@ -32,7 +33,8 @@ class CreatureCatalog {
   /// Create an CreatureCatalog from a yaml file.
   factory CreatureCatalog.fromFile(String path) {
     // Effects not implemented for creatures yet.
-    final creatures = CatalogReader.read(path, _creatureFromYaml, {});
+    final creatures =
+        CatalogReader.read(path, _creatureFromYaml, creatureEffects);
     logger.info('Loaded ${creatures.length} from $path');
     return CreatureCatalog(creatures);
   }

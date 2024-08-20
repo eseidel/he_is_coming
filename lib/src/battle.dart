@@ -396,6 +396,11 @@ class BattleContext {
   void _trigger(int index, Effect effect) {
     final creature = creatures[index];
     final beforeStats = stats[index];
+    if (creature.effects != null) {
+      final effectCxt = EffectContext(this, index, creature.name);
+      creature.effects?[effect]?.call(effectCxt);
+    }
+
     for (final item in creature.items) {
       final effectCxt = EffectContext(this, index, item.name);
       item.effects?[effect]?.call(effectCxt);

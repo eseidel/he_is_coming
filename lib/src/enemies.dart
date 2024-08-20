@@ -1,8 +1,5 @@
 import 'package:he_is_coming/src/creature.dart';
 
-/// Class holding predefined over-world enemies.
-class Enemies {}
-
 /// Class holding predefined bosses.
 class Bosses {
   /// Hothead, level 1

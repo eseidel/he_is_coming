@@ -51,6 +51,7 @@ Creature makeEnemy(
     gold: gold,
     items: items,
     hp: hp,
+    effects: effects,
   );
 }
 
@@ -64,6 +65,7 @@ class Creature {
     required this.gold,
     this.items = const <Item>[],
     int? hp,
+    this.effects,
   })  : _intrinsic = intrinsic,
         _lostHp = _computeLostHp(intrinsic, items, hp);
 
@@ -80,6 +82,9 @@ class Creature {
 
   /// The intrinsic stats of this Creature without any items.
   final Stats _intrinsic;
+
+  /// Intrinsic effects of this creature.
+  final Effects? effects;
 
   /// Items the creature or player is using.
   final List<Item> items;
