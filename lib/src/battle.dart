@@ -8,15 +8,21 @@ import 'package:meta/meta.dart';
 
 String _signed(int value) => value >= 0 ? '+$value' : '$value';
 
-void _expectPositive(int value) {
+void _expectPositive(int value, String valueName) {
   if (value <= 0) {
-    throw ArgumentError('value must be positive');
+    throw ArgumentError('$valueName ($value) must be positive');
   }
 }
 
-void _expectNegative(int value) {
+void _expectNonNegative(int value, String valueName) {
+  if (value < 0) {
+    throw ArgumentError('$valueName ($value) must be non-negative');
+  }
+}
+
+void _expectNegative(int value, String valueName) {
   if (value >= 0) {
-    throw ArgumentError('value must be negative');
+    throw ArgumentError('$valueName ($value) must be negative');
   }
 }
 
@@ -52,51 +58,51 @@ class EffectContext {
 
   /// Add gold.
   void gainGold(int gold) {
-    _expectPositive(gold);
+    _expectPositive(gold, 'gold');
     _stats = _stats.copyWith(gold: _stats.gold + gold);
     _battle.log('$_playerName gold ${_signed(gold)} from $_sourceName');
   }
 
   /// Add armor.
   void gainArmor(int armor) {
-    _expectPositive(armor);
+    _expectPositive(armor, 'armor');
     _battle._adjustArmor(index: _index, armor: armor, source: _sourceName);
   }
 
   /// Remove armor.
   void loseArmor(int armor) {
-    _expectNegative(armor);
+    _expectNegative(armor, 'armor');
     _battle._adjustArmor(index: _index, armor: armor, source: _sourceName);
   }
 
   /// Add speed.
   void gainSpeed(int speed) {
-    _expectPositive(speed);
+    _expectPositive(speed, 'speed');
     _stats = _stats.copyWith(speed: _stats.speed + speed);
     _battle.log('$_playerName speed ${_signed(speed)} from $_sourceName');
   }
 
   /// Add attack.
   void gainAttack(int attack) {
-    _expectPositive(attack);
+    _expectPositive(attack, 'speed');
     _battle._adjustAttack(attack: attack, index: _index, source: _sourceName);
   }
 
   /// Adjust by a negative attack.
   void loseAttack(int attack) {
-    _expectNegative(attack);
+    _expectNegative(attack, 'attack');
     _battle._adjustAttack(attack: attack, index: _index, source: _sourceName);
   }
 
   /// Stun the enemy for a number of turns.
   void stunEnemy(int turns) {
-    _expectPositive(turns);
+    _expectPositive(turns, 'turns');
     _battle._adjustStun(turns: turns, index: _enemyIndex, source: _sourceName);
   }
 
   /// Give armor to the enemy.
   void giveArmorToEnemy(int armor) {
-    _expectPositive(armor);
+    _expectPositive(armor, 'armor');
     _battle._adjustArmor(index: _enemyIndex, armor: armor, source: _sourceName);
   }
 
@@ -110,9 +116,15 @@ class EffectContext {
   /// Lose health.  Careful this is not the same as taking damage!
   /// This bypasses armor and is for special effects.
   void loseHealth(int hp) {
-    _expectNegative(hp);
+    _expectNegative(hp, 'hp');
     _stats = _stats.copyWith(hp: min(max(_stats.hp + hp, 0), _stats.maxHp));
     _battle.log('$_playerName hp ${_signed(hp)} from $_sourceName');
+  }
+
+  /// Reduce the enemy's max hp by a given amount.
+  void reduceEnemyMaxHp(int hp) {
+    _expectPositive(hp, 'hp');
+    _battle._adjustMaxHp(delta: -hp, index: _enemyIndex, source: _sourceName);
   }
 
   /// Deal damage to the enemy.
@@ -215,6 +227,7 @@ class CreatureStats {
 
   /// Create a copy of this with some fields updated.
   CreatureStats copyWith({
+    int? maxHp,
     int? hp,
     int? armor,
     int? attack,
@@ -224,14 +237,13 @@ class CreatureStats {
     bool? hasBeenWounded,
     int? stunCount,
   }) {
-    // It's not possible to change maxHp during battle.
-    // If it was, we'd need to be careful with Creature.hp.
+    final newMaxHp = maxHp ?? this.maxHp;
     final newHp = hp ?? this.hp;
-    if (newHp > maxHp) {
+    if (newHp > newMaxHp) {
       throw ArgumentError('hp cannot be greater than maxHp');
     }
     return CreatureStats(
-      maxHp: maxHp,
+      maxHp: newMaxHp,
       hp: newHp,
       armor: armor ?? this.armor,
       speed: speed ?? this.speed,
@@ -270,14 +282,20 @@ class CreatureStats {
 /// Context for an in-progress battle.
 class BattleContext {
   /// Create a BattleContext.
-  BattleContext(this.creatures)
+  BattleContext(this.creatures, {this.verbose = false})
       : stats = creatures.map(CreatureStats.fromCreature).toList() {
     log('${_first.name}: ${_first.baseStats}');
     log('${_second.name}: ${_second.baseStats}');
   }
 
   /// Coordinated logging for the battle.
-  void log(String message) => logger.detail(message);
+  void log(String message) {
+    if (verbose) {
+      logger.info(message);
+    } else {
+      logger.detail(message);
+    }
+  }
 
   static int _firstAttackerIndex(List<CreatureStats> stats) =>
       stats[0].speed >= stats[1].speed ? 0 : 1;
@@ -315,6 +333,23 @@ class BattleContext {
     log('${creatures[index].name} attack ${_signed(attack)} from $source');
   }
 
+  void _adjustMaxHp({
+    required int delta,
+    required int index,
+    required String source,
+  }) {
+    final target = stats[index];
+    final newMaxHp = target.maxHp + delta;
+    if (delta < 0 && target.hp > newMaxHp) {
+      // If we're reducing maxHp, we need to reduce hp as well.
+      setStats(index, target.copyWith(maxHp: newMaxHp, hp: newMaxHp));
+    } else {
+      // Increasing maxHp doesn't change current hp.
+      setStats(index, target.copyWith(maxHp: newMaxHp));
+    }
+    log('${creatures[index].name} maxHp ${_signed(delta)} from $source');
+  }
+
   void _adjustStun({
     required int turns,
     required int index,
@@ -342,7 +377,7 @@ class BattleContext {
     required int targetIndex,
     required String source,
   }) {
-    _expectPositive(hp);
+    _expectPositive(hp, 'hp');
     final target = stats[targetIndex];
     final newHp = min(target.hp + hp, target.maxHp);
     final newStats = target.copyWith(hp: newHp);
@@ -362,10 +397,7 @@ class BattleContext {
     required int targetIndex,
     required String source,
   }) {
-    if (damage < 0) {
-      throw ArgumentError('damage must be positive');
-    }
-
+    _expectNonNegative(damage, 'damage');
     final target = stats[targetIndex];
     final targetName = creatures[targetIndex].name;
     final armorReduction = min(target.armor, damage);
@@ -452,6 +484,9 @@ class BattleContext {
   final List<CreatureStats> stats;
 
   late int _attackerIndex;
+
+  /// If true, log more detailed information.
+  final bool verbose;
 
   // Counts all the turns taken by any player.
   int _turnsTaken = 0;
@@ -552,8 +587,9 @@ class Battle {
   static BattleResult resolve({
     required Creature first,
     required Creature second,
+    bool verbose = false,
   }) {
-    final ctx = BattleContext([first, second])
+    final ctx = BattleContext([first, second], verbose: verbose)
       .._triggerOnBattleStart()
       .._decideFirstAttacker();
 

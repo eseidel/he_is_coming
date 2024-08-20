@@ -104,4 +104,5 @@ final itemEffects = <String, Effects>{
       () => c.gainAttack(c.kindCount(Kind.jewelry) * 2),
     ),
   ),
+  "Woodcutter's Axe": Effects(onHit: (c) => c.reduceEnemyMaxHp(2)),
 };

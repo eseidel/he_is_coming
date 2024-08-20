@@ -9,11 +9,15 @@ import 'package:test/test.dart';
 
 class _MockLogger extends Mock implements Logger {}
 
-BattleResult doBattle({required Creature first, required Creature second}) {
-  final logger = _MockLogger();
+BattleResult doBattle({
+  required Creature first,
+  required Creature second,
+  bool verbose = false,
+}) {
+  final logger = verbose ? Logger() : _MockLogger();
   return runWithLogger(
     logger,
-    () => Battle.resolve(first: first, second: second),
+    () => Battle.resolve(first: first, second: second, verbose: verbose),
   );
 }
 
@@ -795,5 +799,31 @@ void main() {
     // So we kill the wolf in 3 attacks, so we take 2 dmg.
     expect(result2.first.hp, 8);
     expect(player2.baseStats.attack, 0);
+  });
+
+  test("Woodcutter's Axe effect", () {
+    final selfHealing = makeEnemy(
+      'Wolf',
+      attack: 1,
+      health: 6,
+      effects: Effects(onTurn: (c) => c.restoreHealth(1)),
+    );
+
+    final item = itemCatalog["Woodcutter's Axe"];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 2);
+
+    final result = doBattle(first: player, second: selfHealing);
+    // Woodcutter's Axe reduces maxHp on hit, negating any healing abilities.
+    expect(result.first.hp, 8);
+
+    // If we fight w/o the axe, the wolf heals 1 hp every turn, taking
+    // 5 turns to kill so we take 4 dmg.
+    final player2 = createPlayer(intrinsic: const Stats(attack: 1));
+    expect(player2.hp, 10);
+    expect(player2.baseStats.attack, 2);
+    final result2 = doBattle(first: player2, second: selfHealing);
+    expect(result2.first.hp, 6);
   });
 }
