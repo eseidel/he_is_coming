@@ -132,9 +132,9 @@ class Item {
   /// Create a new Item
   Item(
     this.name,
-    this.kind,
-    this.rarity,
-    this.material, {
+    this.rarity, {
+    this.kind = Kind.notSpecified,
+    this.material = Material.notSpecified,
     int health = 0,
     int armor = 0,
     int attack = 0,
@@ -179,14 +179,17 @@ enum Kind {
   /// Weapon, can only equip one of these.
   weapon,
 
+  /// Not displayed in the UI.
+  notSpecified,
+
+  // Are food and jewelry just "tags"?  The only reason why Food is separate
+  // is that there are food + stone items.
+  // I'm not aware of jewelry + material items.
+
   /// Food, can be combined in the cauldron.
   food,
 
-  /// Clothing, nothing special this is the default.
-  clothing,
-
-  /// Jewelry
-  // Is Jewelry just a material?
+  /// Jewelry, interacts with items sensitive to jewelry.
   jewelry,
 }
 
@@ -206,8 +209,8 @@ enum Rarity {
 /// Represents the material of the item.
 // These maybe should just be "tags".
 enum Material {
-  /// Leather is essentially "none" and is the default material.
-  leather,
+  /// Not displayed in the UI.
+  notSpecified,
 
   /// Wood, interacts with items sensitive to wood.
   wood,

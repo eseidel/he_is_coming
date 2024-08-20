@@ -48,10 +48,10 @@ class _ItemCatalogReader {
 
   static Item itemFromYaml(YamlMap yaml) {
     final name = yaml['name'] as String;
-    final kind = yaml.lookupOr('kind', Kind.values, Kind.clothing);
+    final kind = yaml.lookupOr('kind', Kind.values, Kind.notSpecified);
     final rarity = yaml.lookup('rarity', Rarity.values);
     final material =
-        yaml.lookupOr('material', Material.values, Material.leather);
+        yaml.lookupOr('material', Material.values, Material.notSpecified);
     final attack = yaml['attack'] as int? ?? 0;
     final health = yaml['health'] as int? ?? 0;
     final armor = yaml['armor'] as int? ?? 0;
@@ -61,9 +61,9 @@ class _ItemCatalogReader {
     validateKeys(yaml, ItemCatalog.orderedItemKeys.toSet());
     return Item(
       name,
-      kind,
+      kind: kind,
       rarity,
-      material,
+      material: material,
       attack: attack,
       health: health,
       armor: armor,

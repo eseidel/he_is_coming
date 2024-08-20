@@ -503,7 +503,7 @@ void main() {
     expect(result.first.hp, 7);
     expect(result.first.baseStats.armor, 0);
 
-    final other = Item('other', Kind.clothing, Rarity.common, Material.stone);
+    final other = Item('other', Rarity.common, material: Material.stone);
     final player2 = createPlayer(withItems: [item, other]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
@@ -591,9 +591,7 @@ void main() {
   test('Item order matters', () {
     final armor = Item(
       'armor',
-      Kind.clothing,
       Rarity.common,
-      Material.leather,
       effects: Effects(onTurn: (c) => c.gainArmor(1)),
     );
     final gauntlet = itemCatalog['Fortified Gauntlet'];
@@ -623,9 +621,7 @@ void main() {
   test('Iron Rose', () {
     final healOnHit = Item(
       'healOnHit',
-      Kind.clothing,
       Rarity.common,
-      Material.leather,
       effects: Effects(onHit: (c) => c.restoreHealth(1)),
     );
     final item = itemCatalog['Iron Rose'];
@@ -773,9 +769,8 @@ void main() {
 
     final jewelry = Item(
       'jewelry',
-      Kind.jewelry,
+      kind: Kind.jewelry,
       Rarity.common,
-      Material.leather,
     );
     final player2 = createPlayer(withItems: [item, jewelry]);
     expect(player2.hp, 10);

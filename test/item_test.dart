@@ -6,9 +6,8 @@ void main() {
     expect(
       () => Item(
         'Test',
-        Kind.weapon,
+        kind: Kind.weapon,
         Rarity.common,
-        Material.wood,
       ),
       throwsA(isA<ArgumentError>()),
     );
