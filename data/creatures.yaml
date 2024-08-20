@@ -1,3 +1,18 @@
+- name: Bat Level 1
+  health: 4
+  attack: 1
+  speed: 2
+  effect: 'Every other strike: Gain 1 health on hit'
+- name: Bat Level 2
+  health: 6
+  attack: 2
+  speed: 3
+  effect: 'Every other strike: Gain 2 health on hit'
+- name: Bat Level 2
+  health: 8
+  attack: 3
+  speed: 4
+  effect: 'Every other strike: Gain 3 health on hit'
 - name: Bear Level 1
   health: 3
   attack: 1
@@ -30,9 +45,9 @@
   speed: 2
   effect: 'If player has 5 or less health, wolf gains 4 attack'
 - name: Spider Level 1
-  health: 3
+  health: 2
   attack: 1
-  speed: 3
+  speed: 2
   effect: 'Battle Start: If Spider has more speed than you, it deals 3 damage'
 - name: Spider Level 2
   health: 3
@@ -62,6 +77,12 @@
   health: 5
   armor: 15
   effect: 'Exposed: Ironstone loses 3 attack'
+- name: "Black Knight"
+  level: 1
+  health: 10
+  attack: 1
+  armor: 5
+  effect: "Battle Start: Black Knight gains attack equal to the players attack"
 - name: Redwood Treant
   level: 2
   attack: 6

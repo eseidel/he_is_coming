@@ -93,6 +93,10 @@
   attack: 1
   armor: 1
   speed: 1
+- name: Emerald Crown
+  rarity: rare
+  kind: jewelry
+  effect: "Battle Start: If your max health is 20 or higher restore health to full"
 - name: Emerald Earing
   rarity: common
   effect: Restore 1 health every other turn
