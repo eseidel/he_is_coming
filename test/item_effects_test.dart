@@ -919,6 +919,16 @@ void main() {
     final result2 = doBattle(first: player2, second: enemy);
     // Emerald Crown heals to full on battle start if we have 20 or more max hp.
     expect(result2.first.hp, 15);
+
+    final player3 = createPlayer(
+      withItems: [item],
+      intrinsic: const Stats(maxHp: 20),
+      hp: 20,
+    );
+    expect(player3.hp, 20);
+    final result3 = doBattle(first: player3, second: enemy);
+    // Emerald Crown does nothing if we're already at full hp.
+    expect(result3.first.hp, 15);
   });
 
   test('Sapphire Ring', () {
