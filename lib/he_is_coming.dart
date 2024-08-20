@@ -10,7 +10,7 @@ void runSim() {
   initCreatureCatalog();
 
   final player = createPlayer(withItems: [itemCatalog['Stone Steak']]);
-  final wolf = creatureCatalog['Wolf Level 1'];
+  final wolf = creatureCatalog['Spider Level 1'];
 
   final result = Battle.resolve(first: player, second: wolf);
   logger.info('${result.winner.name} wins!');

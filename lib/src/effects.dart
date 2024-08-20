@@ -74,3 +74,6 @@ class Effects {
 
 /// Type for looking up effects by name.
 typedef EffectCatalog = Map<String, Effects>;
+
+/// Type for looking up effects by name.
+typedef LookupEffect = Effects? Function(String name);

@@ -85,9 +85,10 @@ class CatalogReader {
   }
 
   /// Read a yaml file and return a list of items.
-  static List<T> read<T>(
+  static List<T> read<T extends Object>(
     String path,
-    T Function(YamlMap, EffectCatalog) fromYaml,
+    T? Function(YamlMap, LookupEffect) fromYaml,
+    Set<String> validKeys,
     EffectCatalog effectsCatalog, {
     bool warnAboutMissingEffects = true,
   }) {
@@ -95,9 +96,15 @@ class CatalogReader {
     if (warnAboutMissingEffects) {
       _warnAboutMissingEffects(yamlList, effectsCatalog, T.toString());
     }
+    Effects? lookupEffect(String name) => effectsCatalog[name];
+
     return yamlList
         .cast<YamlMap>()
-        .map<T>((yaml) => fromYaml(yaml, effectsCatalog))
+        .map<T?>((yaml) {
+          validateKeys(yaml, validKeys);
+          return fromYaml(yaml, lookupEffect);
+        })
+        .nonNulls
         .toList();
   }
 }

@@ -6,7 +6,7 @@ import 'package:he_is_coming/src/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-Item _itemFromYaml(YamlMap yaml, EffectCatalog effectsByName) {
+Item? _itemFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final name = yaml['name'] as String;
   final kind = yaml.lookupOr('kind', Kind.values, Kind.notSpecified);
   final rarity = yaml.lookup('rarity', Rarity.values);
@@ -16,9 +16,11 @@ Item _itemFromYaml(YamlMap yaml, EffectCatalog effectsByName) {
   final health = yaml['health'] as int? ?? 0;
   final armor = yaml['armor'] as int? ?? 0;
   final speed = yaml['speed'] as int? ?? 0;
-  // final effectText = yaml['effect'] as String?;
-  final effects = effectsByName[name];
-  CatalogReader.validateKeys(yaml, ItemCatalog.orderedKeys.toSet());
+  final effectText = yaml['effect'] as String?;
+  final effects = lookupEffect(name);
+  if (effectText != null && effects == null) {
+    return null;
+  }
   return Item(
     name,
     kind: kind,
@@ -39,7 +41,12 @@ class ItemCatalog {
 
   /// Create an ItemCatalog from a yaml file.
   factory ItemCatalog.fromFile(String path) {
-    final items = CatalogReader.read(path, _itemFromYaml, itemEffects);
+    final items = CatalogReader.read(
+      path,
+      _itemFromYaml,
+      orderedKeys.toSet(),
+      itemEffects,
+    );
     logger.info('Loaded ${items.length} from $path');
     return ItemCatalog(items);
   }

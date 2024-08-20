@@ -6,15 +6,18 @@ import 'package:he_is_coming/src/logger.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
-Creature _creatureFromYaml(YamlMap yaml, EffectCatalog effectsByName) {
+Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final name = yaml['name'] as String;
   final attack = yaml['attack'] as int? ?? 0;
   final health = yaml['health'] as int? ?? 0;
   final armor = yaml['armor'] as int? ?? 0;
   final speed = yaml['speed'] as int? ?? 0;
-  // final effectText = yaml['effect'] as String?;
-  final effects = effectsByName[name];
-  CatalogReader.validateKeys(yaml, CreatureCatalog.orderedKeys.toSet());
+  final effectText = yaml['effect'] as String?;
+  final effects = lookupEffect(name);
+  if (effectText != null && effects == null) {
+    return null;
+  }
+
   return makeEnemy(
     name,
     health: health,
@@ -33,8 +36,12 @@ class CreatureCatalog {
   /// Create an CreatureCatalog from a yaml file.
   factory CreatureCatalog.fromFile(String path) {
     // Effects not implemented for creatures yet.
-    final creatures =
-        CatalogReader.read(path, _creatureFromYaml, creatureEffects);
+    final creatures = CatalogReader.read(
+      path,
+      _creatureFromYaml,
+      orderedKeys.toSet(),
+      creatureEffects,
+    );
     logger.info('Loaded ${creatures.length} from $path');
     return CreatureCatalog(creatures);
   }
