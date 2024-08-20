@@ -849,6 +849,14 @@ void main() {
     // Ironskin potion gives armor = lost hp (4) so we only take 1 dmg.
     expect(result.first.hp, 5);
     expect(result.first.baseStats.armor, 0);
+
+    final player2 = createPlayer(withItems: [item], hp: 10);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 0);
+    final result2 = doBattle(first: player2, second: enemy);
+    // Ironskin potion gives armor = lost hp (0) so we take 5 dmg.
+    expect(result2.first.hp, 5);
+    expect(result2.first.baseStats.armor, 0);
   });
 
   test('Double-plated Armor', () {
