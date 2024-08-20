@@ -116,4 +116,5 @@ final itemEffects = <String, Effects>{
   'Emerald Crown': Effects(
     onBattle: (c) => _if(c.my.maxHp >= 20, () => c.restoreHealth(c.my.lostHp)),
   ),
+  'Sapphire Ring': Effects(onBattle: (c) => c.stealArmor(2)),
 };

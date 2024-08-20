@@ -107,6 +107,27 @@ class EffectContext {
     _battle._adjustArmor(index: _enemyIndex, armor: armor, source: _sourceName);
   }
 
+  /// Steal armor from the enemy.
+  void stealArmor(int armor) {
+    _expectPositive(armor, 'armor');
+    final target = _battle.stats[_enemyIndex];
+    final stolen = min(target.armor, armor);
+    if (stolen == 0) {
+      return;
+    }
+    _battle
+      .._adjustArmor(
+        index: _enemyIndex,
+        armor: -stolen,
+        source: _sourceName,
+      )
+      .._adjustArmor(
+        index: _index,
+        armor: stolen,
+        source: _sourceName,
+      );
+  }
+
   /// Restore health.
   void restoreHealth(int hp) => _battle._restoreHealth(
         hp: hp,

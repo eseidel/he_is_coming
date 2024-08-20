@@ -912,4 +912,38 @@ void main() {
     // Emerald Crown heals to full on battle start if we have 20 or more max hp.
     expect(result2.first.hp, 15);
   });
+
+  test('Sapphire Ring', () {
+    final item = itemCatalog['Sapphire Ring'];
+    final player = createPlayer(withItems: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Sapphire Ring does nothing if enemy has no armor.
+    expect(result.first.hp, 5);
+    expect(result.first.baseStats.armor, 0);
+
+    final enemy2 = makeEnemy('Wolf', attack: 1, health: 6, armor: 1);
+    final result2 = doBattle(first: player, second: enemy2);
+    // Sapphire Ring steals up to 2 armor from the enemy.
+    expect(result2.first.hp, 6);
+    expect(result2.first.baseStats.armor, 0);
+    expect(result2.second.baseStats.armor, 1);
+
+    final enemy3 = makeEnemy('Wolf', attack: 1, health: 6, armor: 2);
+    final result3 = doBattle(first: player, second: enemy3);
+    // Sapphire Ring steals up to 2 armor from the enemy.
+    expect(result3.first.hp, 7);
+    expect(result3.first.baseStats.armor, 0);
+    expect(result3.second.baseStats.armor, 2);
+
+    final enemy4 = makeEnemy('Wolf', attack: 1, health: 6, armor: 3);
+    final result4 = doBattle(first: player, second: enemy4);
+    // Sapphire Ring steals up to 2 armor from the enemy.
+    expect(result4.first.hp, 6);
+    expect(result4.first.baseStats.armor, 0);
+    expect(result4.second.baseStats.armor, 3);
+  });
 }
