@@ -1,6 +1,7 @@
 import 'package:he_is_coming/src/battle.dart';
 import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/creature_catalog.dart';
+import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_catalog.dart';
 import 'package:he_is_coming/src/logger.dart';
@@ -9,11 +10,15 @@ import 'package:test/test.dart';
 
 class _MockLogger extends Mock implements Logger {}
 
-BattleResult doBattle({required Creature first, required Creature second}) {
-  final logger = _MockLogger();
+BattleResult doBattle({
+  required Creature first,
+  required Creature second,
+  bool verbose = false,
+}) {
+  final logger = verbose ? Logger() : _MockLogger();
   return runWithLogger(
     logger,
-    () => Battle.resolve(first: first, second: second),
+    () => Battle.resolve(first: first, second: second, verbose: verbose),
   );
 }
 
@@ -38,5 +43,36 @@ void main() {
     // We are the same speed as the spider so it doesn't get the bonus damage
     // and only hits once (we kill it before it can hit a second time).
     expect(result2.first.hp, 9);
+  });
+
+  test('Black Knight', () {
+    final player = createPlayer();
+    final enemy = creatureCatalog['Black Knight'];
+    final result = doBattle(first: player, second: enemy);
+    // Black Knight should gain our attack so do 2 per hit.
+    // We have the same speed so we will hit first, but will die in 5 hits.
+    expect(result.first.hp, 0);
+    // We will have hit 5 times, never having broken its armor.
+    expect(result.second.hp, 10);
+
+    // I need to confirm this in-game, but...
+    // Player onBattle happens before enemy onBattle, so black knight should
+    // get our increased attack.
+    final player2 = createPlayer(
+      intrinsic: const Stats(maxHp: 20),
+      withItems: [
+        Item(
+          'Ring',
+          Rarity.common,
+          effects: Effects(onBattle: (c) => c.gainAttack(1)),
+        ),
+      ],
+    );
+    // We go first, we hit for 2 and black knight hits for 3.
+    // Black knight has 10 hp and 5 armor so will die in 8 hits.
+    // Black knight kills us in 7 hits.
+    final result2 = doBattle(first: player2, second: enemy);
+    expect(result2.first.hp, 0);
+    expect(result2.second.hp, 1);
   });
 }

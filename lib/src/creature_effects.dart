@@ -16,4 +16,5 @@ final creatureEffects = <String, Effects>{
   'Spider Level 2': _spiderEffect(damage: 4),
   'Spider Level 3': _spiderEffect(damage: 5),
   'Woodland Abomination': Effects(onTurn: (c) => c.gainAttack(1)),
+  'Black Knight': Effects(onBattle: (c) => c.gainAttack(c.enemy.attack)),
 };
