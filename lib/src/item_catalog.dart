@@ -16,6 +16,7 @@ Item? _itemFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final health = yaml['health'] as int? ?? 0;
   final armor = yaml['armor'] as int? ?? 0;
   final speed = yaml['speed'] as int? ?? 0;
+  final unique = yaml['unique'] as bool? ?? false;
   final effectText = yaml['effect'] as String?;
   final effects = lookupEffect(name);
   if (effectText != null && effects == null) {
@@ -31,6 +32,7 @@ Item? _itemFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     armor: armor,
     speed: speed,
     effects: effects,
+    isUnique: unique,
   );
 }
 

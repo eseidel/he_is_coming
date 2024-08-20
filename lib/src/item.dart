@@ -68,6 +68,7 @@ class Item {
     int armor = 0,
     int attack = 0,
     int speed = 0,
+    this.isUnique = false,
     this.effects,
   }) : stats = Stats(
           maxHp: health,
@@ -101,6 +102,10 @@ class Item {
 
   /// Effect of the item.
   final Effects? effects;
+
+  /// Is the item unique.
+  /// Unique items can only be equipped once.
+  final bool isUnique;
 }
 
 /// Enum representing Item kind.

@@ -18,6 +18,7 @@ List<Item> _pickItems(Random random, int count) {
       if (hasWeapon) continue;
       hasWeapon = true;
     }
+    if (item.isUnique && items.any((i) => i.name == item.name)) continue;
     items.add(item);
   }
   return items;

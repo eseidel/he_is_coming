@@ -18,6 +18,22 @@ Creature createPlayer({
     items.add(itemCatalog['Wooden Stick']);
   }
 
+  final itemCounts = items.fold<Map<String, int>>(
+    {},
+    (counts, item) =>
+        counts..update(item.name, (count) => count + 1, ifAbsent: () => 1),
+  );
+  for (final entry in itemCounts.entries) {
+    if (entry.value > 1) {
+      final item = items.firstWhere((item) => item.name == entry.key);
+      if (item.isUnique) {
+        throw ArgumentError(
+          '${item.name} is unique and can only be equipped once.',
+        );
+      }
+    }
+  }
+
   final weaponCount = items.where((item) => item.kind == Kind.weapon).length;
   if (weaponCount > 1) {
     throw ArgumentError('Player can only have one weapon.');
@@ -44,9 +60,6 @@ Creature makeEnemy(
   required int attack,
   int armor = 0,
   int speed = 0,
-  int gold = 1,
-  List<Item> items = const <Item>[],
-  int? hp,
   Effects? effects,
 }) {
   return Creature(
@@ -57,9 +70,7 @@ Creature makeEnemy(
       attack: attack,
       speed: speed,
     ),
-    gold: gold,
-    items: items,
-    hp: hp,
+    gold: 1,
     effects: effects,
   );
 }
@@ -67,7 +78,7 @@ Creature makeEnemy(
 /// Class representing a player or an enemy.
 @immutable
 class Creature {
-  /// Create an enemy.
+  /// Create a Creature (player or enemy).
   Creature({
     required this.name,
     required Stats intrinsic,
