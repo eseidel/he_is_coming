@@ -62,3 +62,8 @@ Cauldron (food combiner)
 
 ## Achievements
 These unlock additional items.
+
+## TODO
+
+Confirm Cracked Bouldershield is common.
+Confirm Granite Hammer has attack 2.

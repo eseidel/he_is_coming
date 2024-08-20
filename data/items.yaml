@@ -119,7 +119,7 @@
   rarity: rare
   effect: 'Battle Start: Convert 1 armor to 3 speed'
 - name: 'Cracked Bouldershield'
-  rarity: common # Guess
+  rarity: common
   effect: 'Exposed: Gain 5 armor'
   material: stone
 - name: 'Brittlebark Club'
@@ -202,7 +202,7 @@
   effect: "If you have more speed than the enemy, gain 2 attack"
 - name: "Granite Hammer"
   rarity: rare
-  attack: 2 # Confirm this
+  attack: 2
   kind: weapon
   material: stone
   effect: "On Hit: Convert 1 armor to 2 attack"
