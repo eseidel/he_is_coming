@@ -8,3 +8,8 @@
   effect: "Battle Start: Stun the enemy for 1 turn"
 - name: "Bleeding Edge"
   effect: "On Hit: Restore 1 health"
+- name: "Cutting Edge"
+  effect: "On Hit: Deal 1 damage"
+- name: Jagged Edge
+  unlock: "Nocturnal Predator: Defeat 5 enemies during one night"
+  effect: "On Hit: Gain 2 thorns and take 1 damage"
