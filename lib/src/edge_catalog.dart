@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/edge_effects.dart';
@@ -42,6 +44,9 @@ class EdgeCatalog {
 
   /// The edges in this catalog.
   final List<Edge> edges;
+
+  /// Get a random Edge.
+  Edge random(Random random) => edges[random.nextInt(edges.length)];
 
   /// Lookup an Edge by name.
   Edge operator [](String name) => edges.firstWhere((i) => i.name == name);

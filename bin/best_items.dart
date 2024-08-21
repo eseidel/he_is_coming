@@ -10,6 +10,10 @@ import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
+extension<T> on List<T> {
+  T pickOne(Random random) => this[random.nextInt(length)];
+}
+
 List<Item> _pickItems(Random random, int count, ItemCatalog itemCatalog) {
   final items = <Item>[
     itemCatalog.randomWeapon(random),
@@ -29,37 +33,67 @@ List<Player> _seedPopulation(
 ) {
   final population = <Creature>[];
   for (var i = 0; i < count; i++) {
-    population.add(
-      createPlayer(withItems: _pickItems(random, 7, itemCatalog)),
-    );
+    population.add(playerForConfig(CreatureConfig.random(random, data)));
   }
   return population;
 }
 
 class CreatureConfig {
-  CreatureConfig(this.items);
+  CreatureConfig({
+    required this.items,
+    required this.edge,
+    required this.oils,
+  });
+
+  factory CreatureConfig.random(Random random, Data data) {
+    final items = _pickItems(random, 7, data.items);
+    // Most edges are strictly beneficial, so just pick one at random.
+    final edge = data.edges.random(random);
+    // Currently there are only 3 oils, you can always only use each once.
+    // No need to support random oils.
+    if (data.oils.oils.length > 3) {
+      throw UnimplementedError('Too many oils');
+    }
+    return CreatureConfig(items: items, edge: edge, oils: data.oils.oils);
+  }
 
   factory CreatureConfig.fromJson(Map<String, dynamic> json) {
     final itemNames = (json['items'] as List).cast<String>();
     final items = itemNames.map<Item>((n) => data.items[n]).toList();
-    return CreatureConfig(items);
+    final edgeName = json['edge'] as String?;
+    final edge = edgeName != null ? data.edges[edgeName] : null;
+    final oilNames = (json['oils'] as List? ?? []).cast<String>();
+    final oils = oilNames.map<Oil>((n) => data.oils[n]).toList();
+    return CreatureConfig(items: items, edge: edge, oils: oils);
   }
 
   factory CreatureConfig.fromPlayer(Player player) {
-    return CreatureConfig(player.items);
+    return CreatureConfig(
+      items: player.items,
+      edge: player.edge,
+      oils: player.oils,
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'items': items.map((i) => i.name).toList(),
+      'edge': edge?.name,
+      'oils': oils.map((o) => o.name).toList(),
     };
   }
 
   final List<Item> items;
+  final Edge? edge;
+  final List<Oil> oils;
 }
 
 Player playerForConfig(CreatureConfig config) {
-  return createPlayer(withItems: config.items);
+  return createPlayer(
+    withItems: config.items,
+    edge: config.edge,
+    oils: config.oils,
+  );
 }
 
 class RunResult {
@@ -104,11 +138,15 @@ RunResult _doBattle({required Creature player, required Creature enemy}) {
 
 List<Player> pop = [];
 
+// TODO(eseidel): This should operate in CreatureConfig space.
 List<Player> _crossover(List<Player> parents, Random random) {
   final children = <Player>[];
   for (var i = 0; i < parents.length; i++) {
-    final parent1 = parents[random.nextInt(parents.length)];
-    final parent2 = parents[random.nextInt(parents.length)];
+    final parent1 = parents.pickOne(random);
+    final parent2 = parents.pickOne(random);
+
+    final childEdge = random.nextBool() ? parent1.edge : parent2.edge;
+    final childOils = random.nextBool() ? parent1.oils : parent2.oils;
     final childItems = <Item>[];
     if (parent1.items.length != parent2.items.length) {
       throw StateError(
@@ -121,7 +159,13 @@ List<Player> _crossover(List<Player> parents, Random random) {
       childItems.add(item);
     }
     try {
-      children.add(createPlayer(withItems: childItems));
+      children.add(
+        createPlayer(
+          withItems: childItems,
+          edge: childEdge,
+          oils: childOils,
+        ),
+      );
     } on ItemException {
       continue;
     }
@@ -163,11 +207,24 @@ class Population {
   final List<CreatureConfig> configs;
 }
 
-void logResult(RunResult result) {
-  logger.info('${result.damage} damage ${result.turns} turns:');
-  for (final item in result.player.items) {
+void logConfig(CreatureConfig config) {
+  logger.info('Items:');
+  for (final item in config.items) {
     logger.info('  ${item.name}');
   }
+  if (config.edge != null) {
+    logger.info('Edge: ${config.edge!.name}');
+  }
+  logger.info('Oils:');
+  for (final oil in config.oils) {
+    logger.info('  ${oil.name}');
+  }
+}
+
+void logResult(RunResult result) {
+  logger.info('${result.damage} damage ${result.turns} turns:');
+  final config = CreatureConfig.fromPlayer(result.player);
+  logConfig(config);
 }
 
 void doMain(List<String> arguments) {
@@ -204,6 +261,7 @@ void doMain(List<String> arguments) {
       ..._crossover(survivors, random),
     ];
     // Mutate some of the children.
+    // TODO(eseidel): Move this onto CreatureConfig.
     for (var j = 0; j < pop.length; j++) {
       if (random.nextDouble() < mutationRate) {
         final mutated = pop[j].items.toList();
@@ -214,7 +272,11 @@ void doMain(List<String> arguments) {
           mutated[index] = data.items.randomNonWeapon(random);
         }
         try {
-          pop[j] = createPlayer(withItems: mutated);
+          pop[j] = createPlayer(
+            withItems: mutated,
+            edge: pop[j].edge,
+            oils: pop[j].oils,
+          );
         } on ItemException {
           continue;
         }
