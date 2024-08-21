@@ -1013,4 +1013,30 @@ void main() {
     // Crimson Cloak triggers even if armor blocks the damage?
     expect(result2.first.hp, 10);
   });
+
+  test('Tree Sap', () {
+    final item = itemCatalog['Tree Sap'];
+    final player = createPlayer(items: [item], hp: 8);
+    expect(player.baseStats.maxHp, 15);
+    expect(player.hp, 8);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Tree Sap heals 1 hp 5 times on wounded, negating all of the wolf's dmg.
+    expect(result.first.hp, 8);
+
+    final onHeal = Item(
+      'onHeal',
+      Rarity.common,
+      effects: Effects(onHeal: (c) => c.gainArmor(1)),
+    );
+    final player2 = createPlayer(items: [item, onHeal], hp: 8);
+    expect(player2.baseStats.maxHp, 15);
+    expect(player2.hp, 8);
+    final result2 = doBattle(first: player2, second: enemy);
+    // Tree Sap heals 1 hp 5 times on wounded, but the onHeal item triggers
+    // and gives us 1 armor every time we heal, so we gain 5 armor.
+    // Thus we get hit once for 1 dmg, then heal 5 times and gain 5 armor.
+    expect(result2.first.hp, 12);
+  });
 }
