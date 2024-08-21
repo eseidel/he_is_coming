@@ -14,4 +14,9 @@ final edgeEffects = <String, Effects>{
   'Lightning Edge': Effects(onBattle: (c) => c.stunEnemy(1)),
   'Thieving Edge':
       Effects(onHit: (c) => _if(c.my.gold < 10, () => c.gainGold(1))),
+  'Jagged Edge': Effects(
+    onHit: (c) => c
+      ..gainThorns(2)
+      ..takeDamage(1),
+  ),
 };

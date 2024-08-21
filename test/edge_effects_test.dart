@@ -61,4 +61,14 @@ void main() {
     // We gain up to 10 from the edge and then +1 for the wolf kill.
     expect(result.first.gold, 11);
   });
+
+  test('Jagged Edge', () {
+    final edge = data.edges['Jagged Edge'];
+    final player = createPlayer(edge: edge);
+    final enemy = makeEnemy('Wolf', health: 6, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // Jagged edge gains 2 thorns on hit and takes 1 damage.
+    // Wolf after 2 attacks so we take 2 wolf damage and 2 jagged edge damage.
+    expect(result.first.hp, 6);
+  });
 }
