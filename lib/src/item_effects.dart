@@ -122,4 +122,5 @@ final itemEffects = <String, Effects>{
     ),
   ),
   'Sapphire Ring': Effects(onBattle: (c) => c.stealArmor(2)),
+  'Horned Helmet': Effects(onBattle: (c) => c.gainThorns(2)),
 };

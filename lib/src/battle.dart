@@ -89,6 +89,13 @@ class EffectContext {
     _battle._adjustAttack(attack: attack, index: _index, source: _sourceName);
   }
 
+  /// Add thorns.
+  void gainThorns(int thorns) {
+    _expectPositive(thorns, 'thorns');
+    _stats = _stats.copyWith(thorns: _stats.thorns + thorns);
+    _battle.log('$_playerName thorns ${_signed(thorns)} from $_sourceName');
+  }
+
   /// Adjust by a negative attack.
   void loseAttack(int attack) {
     _expectPositive(attack, 'attack');
@@ -202,6 +209,7 @@ class CreatureStats {
     this.hasBeenExposed = false,
     this.hasBeenWounded = false,
     this.stunCount = 0,
+    this.thorns = 0,
   });
 
   /// Create a CreatureStats from a Creature.
@@ -244,6 +252,10 @@ class CreatureStats {
   /// Number of turns remaining the creature is stunned.
   final int stunCount;
 
+  /// Damage returned to the attacker when attacking this creature.
+  /// Thorns are cleared after each attack.
+  final int thorns;
+
   /// Returns true if health is currently full.
   bool get isHealthFull => hp == maxHp;
 
@@ -264,6 +276,7 @@ class CreatureStats {
     bool? hasBeenExposed,
     bool? hasBeenWounded,
     int? stunCount,
+    int? thorns,
   }) {
     final newMaxHp = maxHp ?? this.maxHp;
     final newHp = hp ?? this.hp;
@@ -281,6 +294,7 @@ class CreatureStats {
       hasBeenExposed: hasBeenExposed ?? this.hasBeenExposed,
       hasBeenWounded: hasBeenWounded ?? this.hasBeenWounded,
       stunCount: stunCount ?? this.stunCount,
+      thorns: thorns ?? this.thorns,
     );
   }
 
@@ -294,6 +308,8 @@ class CreatureStats {
       _diffString('speed', speed, other.speed),
       _diffString('attack', attack, other.attack),
       _diffString('gold', gold, other.gold),
+      _diffString('stun', stunCount, other.stunCount),
+      _diffString('thorns', thorns, other.thorns),
     ].nonNulls;
     if (diffStrings.isNotEmpty) {
       return diffStrings.join(' ');
@@ -473,6 +489,16 @@ class BattleContext {
     );
     // OnHit only triggers on strikes.
     _trigger(attackerIndex, Effect.onHit);
+
+    // Thorns only trigger on strikes.
+    if (defender.thorns > 0) {
+      dealDamage(
+        damage: defender.thorns,
+        targetIndex: attackerIndex,
+        source: '$defenderName thorns',
+      );
+      setStats(defenderIndex, defender.copyWith(thorns: 0));
+    }
   }
 
   void _trigger(int index, Effect effect) {

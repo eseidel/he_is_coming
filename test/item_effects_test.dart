@@ -992,4 +992,19 @@ void main() {
     expect(result4.first.baseStats.armor, 0);
     expect(result4.second.baseStats.armor, 3);
   });
+
+  test('Horned Helmet', () {
+    final item = itemCatalog['Horned Helmet'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 2);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Horned Helmet gives 2 armor and 2 thorns on battle start.
+    // 2 armor negates 2 hits from wolf and 2 thorns deal 2 dmg to wolf.
+    // Wolf only gets attack 3 times instead of 5 and 2 of those are blocked.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.armor, 2);
+  });
 }

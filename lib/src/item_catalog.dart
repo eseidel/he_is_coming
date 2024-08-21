@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
@@ -91,5 +92,11 @@ class ItemCatalog {
   }
 
   /// Lookup an Item by name.
-  Item operator [](String name) => items.firstWhere((i) => i.name == name);
+  Item operator [](String name) {
+    final item = items.firstWhereOrNull((i) => i.name == name);
+    if (item == null) {
+      throw ArgumentError('Unknown item: $name');
+    }
+    return item;
+  }
 }
