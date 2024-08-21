@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:he_is_coming/src/item_catalog.dart';
+import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
@@ -7,12 +7,12 @@ import 'package:scoped_deps/scoped_deps.dart';
 // Look for repeats.
 
 void doMain(List<String> arguments) {
-  initItemCatalog();
+  data = Data.load();
 
   final firstWords = <String, List<String>>{};
   final lastWords = <String, List<String>>{};
 
-  for (final item in itemCatalog.items) {
+  for (final item in data.items.items) {
     final words = item.name.split(' ');
     firstWords.putIfAbsent(words.first, () => []).add(item.name);
     lastWords.putIfAbsent(words.last, () => []).add(item.name);

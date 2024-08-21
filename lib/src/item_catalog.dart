@@ -5,7 +5,6 @@ import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_effects.dart';
 import 'package:he_is_coming/src/logger.dart';
-import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 Item? _itemFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
@@ -92,14 +91,4 @@ class ItemCatalog {
 
   /// Lookup an Item by name.
   Item operator [](String name) => items.firstWhere((i) => i.name == name);
-}
-
-/// Our global item catalog instance.
-late final ItemCatalog itemCatalog;
-
-final _defaultItemsPath = p.join('data', 'items.yaml');
-
-/// Initialize the global item catalog.
-void initItemCatalog([String? path]) {
-  itemCatalog = ItemCatalog.fromFile(path ?? _defaultItemsPath);
 }

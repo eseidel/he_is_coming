@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
+import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
-import 'package:he_is_coming/src/item_catalog.dart';
 import 'package:meta/meta.dart';
 
 const _kPlayerName = 'Player';
@@ -27,7 +27,7 @@ Player createPlayer({
   // Player must always have a weapon.
   final items = [...withItems];
   if (items.every((item) => item.kind != Kind.weapon)) {
-    items.add(itemCatalog['Wooden Stick']);
+    items.add(data.items['Wooden Stick']);
   }
 
   final itemCounts = items.fold<Map<String, int>>(

@@ -1,6 +1,6 @@
 import 'package:he_is_coming/src/creature.dart';
+import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/item.dart';
-import 'package:he_is_coming/src/item_catalog.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -8,7 +8,9 @@ import 'package:test/test.dart';
 class _MockLogger extends Mock implements Logger {}
 
 void main() {
-  runWithLogger(_MockLogger(), initItemCatalog);
+  runWithLogger(_MockLogger(), () {
+    data = Data.load();
+  });
 
   test('Weapons require attack', () {
     expect(
@@ -25,7 +27,7 @@ void main() {
     final item = Item('Test', Rarity.common, isUnique: true);
     expect(
       () => createPlayer(withItems: [item, item]),
-      throwsA(isA<ArgumentError>()),
+      throwsA(isA<ItemException>()),
     );
   });
 }

@@ -5,13 +5,12 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/battle.dart';
 import 'package:he_is_coming/src/creature.dart';
-import 'package:he_is_coming/src/creature_catalog.dart';
+import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/item.dart';
-import 'package:he_is_coming/src/item_catalog.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
-List<Item> _pickItems(Random random, int count) {
+List<Item> _pickItems(Random random, int count, ItemCatalog itemCatalog) {
   final items = <Item>[
     itemCatalog.randomWeapon(random),
   ];
@@ -23,10 +22,16 @@ List<Item> _pickItems(Random random, int count) {
   return items;
 }
 
-List<Player> _seedPopulation(Random random, int count) {
+List<Player> _seedPopulation(
+  Random random,
+  int count,
+  ItemCatalog itemCatalog,
+) {
   final population = <Creature>[];
   for (var i = 0; i < count; i++) {
-    population.add(createPlayer(withItems: _pickItems(random, 7)));
+    population.add(
+      createPlayer(withItems: _pickItems(random, 7, itemCatalog)),
+    );
   }
   return population;
 }
@@ -36,7 +41,7 @@ class CreatureConfig {
 
   factory CreatureConfig.fromJson(Map<String, dynamic> json) {
     final itemNames = (json['items'] as List).cast<String>();
-    final items = itemNames.map<Item>((n) => itemCatalog[n]).toList();
+    final items = itemNames.map<Item>((n) => data.items[n]).toList();
     return CreatureConfig(items);
   }
 
@@ -166,8 +171,7 @@ void logResult(RunResult result) {
 }
 
 void doMain(List<String> arguments) {
-  initItemCatalog();
-  initCreatureCatalog();
+  data = Data.load();
 
   final random = Random();
   const rounds = 1000;
@@ -176,18 +180,18 @@ void doMain(List<String> arguments) {
   const mutationRate = 0.01;
   const filePath = 'results.json';
   final saved = Population.fromFile(filePath);
-  print('Loaded ${saved.configs.length} saved configs.');
+  logger.info('Loaded ${saved.configs.length} saved configs.');
 
   List<Creature> pop;
   if (saved.configs.isNotEmpty) {
     pop = saved.configs.map(playerForConfig).toList();
   } else {
-    pop = _seedPopulation(random, populationSize);
+    pop = _seedPopulation(random, populationSize, data.items);
   }
   late List<RunResult> bestResults;
 
   for (var i = 0; i < rounds; i++) {
-    final enemy = creatureCatalog['Woodland Abomination'];
+    final enemy = data.creatures['Woodland Abomination'];
     final results =
         pop.map((player) => _doBattle(player: player, enemy: enemy));
     // Select the top 10% of the population.
@@ -205,9 +209,9 @@ void doMain(List<String> arguments) {
         final mutated = pop[j].items.toList();
         final index = random.nextInt(mutated.length);
         if (index == 0) {
-          mutated[index] = itemCatalog.randomWeapon(random);
+          mutated[index] = data.items.randomWeapon(random);
         } else {
-          mutated[index] = itemCatalog.randomNonWeapon(random);
+          mutated[index] = data.items.randomNonWeapon(random);
         }
         try {
           pop[j] = createPlayer(withItems: mutated);
@@ -217,7 +221,9 @@ void doMain(List<String> arguments) {
       }
     }
 
-    pop.addAll(_seedPopulation(random, populationSize - pop.length));
+    pop.addAll(
+      _seedPopulation(random, populationSize - pop.length, data.items),
+    );
     logger.info('Round $i');
     for (final result in bestResults.take(3)) {
       logResult(result);

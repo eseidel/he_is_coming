@@ -3,7 +3,6 @@ import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/creature_effects.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/logger.dart';
-import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
 Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
@@ -64,14 +63,4 @@ class CreatureCatalog {
   /// Lookup an Creature by name.
   Creature operator [](String name) =>
       creatures.firstWhere((i) => i.name == name);
-}
-
-/// Our global creature catalog instance.
-late final CreatureCatalog creatureCatalog;
-
-final _defaultPath = p.join('data', 'creatures.yaml');
-
-/// Initialize the global item catalog.
-void initCreatureCatalog([String? path]) {
-  creatureCatalog = CreatureCatalog.fromFile(path ?? _defaultPath);
 }
