@@ -372,6 +372,7 @@
 - name: "Bloody Steak"
   rarity: cauldron
   effect: "Wounded: Gain armor equal to 50% of max health"
+  parts: ['Stone Steak', 'Vampiric Wine']
 - name: "Golden Redwood Cloak"
   rarity: golden
   material: wood
@@ -382,3 +383,7 @@
   unique: true
   kind: Jewelry
   effect: "If your attack is exactly 1, deal 4 damage on hit"
+- name: Tree Sap
+  health: 5
+  parts: ['Redwood Roast', 'Vampiric Wine']
+  effect: "Wounded: Restore 1 health 5 times"

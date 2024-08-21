@@ -71,3 +71,18 @@ Confirm Granite Hammer has attack 2.
 Add a trigger for death, rather than checking once a turn.  Otherwise it's
 possible to go negative and heal up in the same turn (with separate triggers
 for onTurn and onHit for example).
+
+
+To Test:
+
+Heart Drinker + Jagged Edge + Speed Oil
+Horned Helmet
+Iron Rose
+Crimson Cloak
+Impressive Physique
+Iron Transfusion
+Tree Sap
+Sapphire Earing
+Emerald Earing
+
+58 dmg, 15 turns.
