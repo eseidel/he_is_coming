@@ -23,6 +23,7 @@ Player createPlayer({
   Stats intrinsic = const Stats(),
   List<Item> withItems = const <Item>[],
   Edge? edge,
+  List<Oil> oils = const <Oil>[],
   int? hp,
   int? gold,
 }) {
@@ -65,6 +66,7 @@ Player createPlayer({
     hp: hp,
     items: items,
     edge: edge,
+    oils: oils,
   );
 }
 
@@ -88,6 +90,18 @@ Creature makeEnemy(
     gold: 1,
     effects: effects,
   );
+}
+
+/// Oil applied to a weapon.
+class Oil {
+  /// Create an Oil
+  Oil(this.name, this.stats);
+
+  /// The name of the oil.
+  final String name;
+
+  /// The stats of the oil.
+  final Stats stats;
 }
 
 /// An edge is a special effect that can be applied to a weapon.
@@ -114,11 +128,21 @@ class Creature {
     int? hp,
     this.effects,
     this.edge,
+    this.oils = const <Oil>[],
   })  : _intrinsic = intrinsic,
-        _lostHp = _computeLostHp(intrinsic, items, hp);
+        _lostHp = _computeLostHp(intrinsic, items, oils, hp);
 
-  static int _computeLostHp(Stats intrinsic, List<Item> items, int? hp) {
-    final maxHp = _statsWithItems(intrinsic, items).maxHp;
+  static int _computeLostHp(
+    Stats intrinsic,
+    List<Item> items,
+    List<Oil> oils,
+    int? hp,
+  ) {
+    final maxHp = _statsWithItems(
+      intrinsic,
+      items,
+      oils,
+    ).maxHp;
     return maxHp - (hp ?? maxHp);
   }
 
@@ -137,6 +161,9 @@ class Creature {
   /// The edge on the weapon.
   final Edge? edge;
 
+  /// Oils applied to the weapon.
+  final List<Oil> oils;
+
   /// Items the creature or player is using.
   final List<Item> items;
 
@@ -153,20 +180,18 @@ class Creature {
   /// Returns true if the creature is still alive.
   bool get isAlive => hp > 0;
 
-  static Stats _statsWithItems(Stats stats, List<Item> items) {
-    return items.fold(
+  static Stats _statsWithItems(Stats stats, List<Item> items, List<Oil> oils) {
+    return [
+      ...items.map((item) => item.stats),
+      ...oils.map((oil) => oil.stats),
+    ].fold<Stats>(
       stats,
-      (stats, item) => stats.copyWith(
-        maxHp: stats.maxHp + item.stats.maxHp,
-        armor: stats.armor + item.stats.armor,
-        attack: stats.attack + item.stats.attack,
-        speed: stats.speed + item.stats.speed,
-      ),
+      (acc, stats) => acc + stats,
     );
   }
 
   /// Stats as they would be in the over-world or at fight start.
-  Stats get baseStats => _statsWithItems(_intrinsic, items);
+  Stats get baseStats => _statsWithItems(_intrinsic, items, oils);
 
   /// Make a copy with a changed hp.
   Creature copyWith({int? hp, int? gold}) {
