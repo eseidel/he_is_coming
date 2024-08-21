@@ -449,25 +449,36 @@ class BattleContext {
     final newArmor = target.armor - armorReduction;
     final newHp = target.hp - remainingDamage;
     final armorBefore = target.armor;
-    final newStats = target.copyWith(armor: newArmor, hp: max(newHp, 0));
-    setStats(targetIndex, newStats);
-    log(
-      '$source dealt $damage damage to $targetName '
-      '${newStats.hp} / ${newStats.maxHp} hp '
-      '${newStats.armor} armor',
-    );
+    // newStats is not valid after setStats (which can happen inside a trigger)
+    {
+      final newStats = target.copyWith(armor: newArmor, hp: max(newHp, 0));
+      setStats(targetIndex, newStats);
+      log(
+        '$source dealt $damage damage to $targetName '
+        '${newStats.hp} / ${newStats.maxHp} hp '
+        '${newStats.armor} armor',
+      );
+    }
 
-    // If previously target had armor but now it doesn't
-    final armorWasBroken = armorBefore > 0 && newArmor == 0;
-    if (armorWasBroken && !newStats.hasBeenExposed) {
-      // Set "exposed" flag first to avoid infinite loops.
-      setStats(targetIndex, newStats.copyWith(hasBeenExposed: true));
-      _trigger(targetIndex, Effect.onExposed);
+    // Does it count as damage if it's absorbed by armor?
+    _trigger(defenderIndex, Effect.onTakeDamage);
+
+    // newStats is not valid after setStats (which can happen inside a trigger)
+    {
+      final newStats = stats[targetIndex];
+      // If previously target had armor but now it doesn't
+      final armorWasBroken = armorBefore > 0 && newArmor == 0;
+      if (armorWasBroken && !newStats.hasBeenExposed) {
+        // Set "exposed" flag first to avoid infinite loops.
+        setStats(targetIndex, newStats.copyWith(hasBeenExposed: true));
+        _trigger(targetIndex, Effect.onExposed);
+      }
     }
 
     // Wounded occurs when you cross the 50% hp threshold.
     // https://discord.com/channels/1041414829606449283/1209488302269534209/1274771566231552151
     // Currently enforcing *below* 50% hp, not *at* 50% hp.
+    final newStats = stats[targetIndex];
     if (!target.belowHalfHp &&
         newStats.belowHalfHp &&
         !newStats.hasBeenWounded) {
@@ -531,6 +542,10 @@ class BattleContext {
 
   void _triggerOnBattleStart() {
     for (var index = 0; index < creatures.length; index++) {
+      // OnBattleStart happens before we decide who the attacker is.
+      // Pretend whoever is being triggered is the attacker to allow
+      // effects that depend on attacker/defender to work.
+      _attackerIndex = index;
       _trigger(index, Effect.onBattle);
     }
   }

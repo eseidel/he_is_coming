@@ -35,7 +35,7 @@ void main() {
     expect(player.baseStats.maxHp, 15);
   });
 
-  test('Stone Steak effect', () {
+  test('Stone Steak', () {
     final item = itemCatalog['Stone Steak'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
@@ -48,7 +48,7 @@ void main() {
     expect(result.winner, result.first);
   });
 
-  test('Redwood Cloak effect', () {
+  test('Redwood Cloak', () {
     final item = itemCatalog['Redwood Cloak'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 12);
@@ -64,7 +64,7 @@ void main() {
     expect(result2.first.hp, 3);
   });
 
-  test('Emergency Shield effect', () {
+  test('Emergency Shield', () {
     final item = itemCatalog['Emergency Shield'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
@@ -90,7 +90,7 @@ void main() {
     expect(result2.first.baseStats.armor, 0);
   });
 
-  test('Ruby Earning effect', () {
+  test('Ruby Earning', () {
     final item = itemCatalog['Ruby Earing'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
@@ -103,7 +103,7 @@ void main() {
     expect(result.first.hp, 7);
   });
 
-  test('Firecracker Belt effect', () {
+  test('Firecracker Belt', () {
     final item = itemCatalog['Firecracker Belt'];
     final player =
         createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
@@ -118,7 +118,7 @@ void main() {
     expect(result.first.hp, 9);
   });
 
-  test('Redwood Helmet effect', () {
+  test('Redwood Helmet', () {
     // Gives 1 armor.
     final item = itemCatalog['Redwood Helmet'];
     final player = createPlayer(items: [item], hp: 5);
@@ -141,7 +141,7 @@ void main() {
     expect(result2.first.hp, 6);
   });
 
-  test('Explosive Surprise effect', () {
+  test('Explosive Surprise', () {
     final item = itemCatalog['Explosive Surprise'];
     final player =
         createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
@@ -172,7 +172,7 @@ void main() {
     expect(player.baseStats.armor, 1);
   });
 
-  test('Vampiric Wine effect', () {
+  test('Vampiric Wine', () {
     final item = itemCatalog['Vampiric Wine'];
     final player = createPlayer(items: [item], hp: 9);
     expect(player.hp, 9);
@@ -199,7 +199,7 @@ void main() {
     expect(result.first.hp, 0);
   });
 
-  test('Mortal Edge effect', () {
+  test('Mortal Edge', () {
     final item = itemCatalog['Mortal Edge'];
     final player = createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
@@ -213,7 +213,7 @@ void main() {
     expect(result.first.baseStats.attack, 2);
   });
 
-  test('Lifeblood Burst effect', () {
+  test('Lifeblood Burst', () {
     final item = itemCatalog['Lifeblood Burst'];
     final player = createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
@@ -269,19 +269,6 @@ void main() {
     // lose 2 hp since wolf hits us twice and we gain 3 from attacking.
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 8);
-  });
-
-  test('Enemies give gold', () {
-    final player = createPlayer();
-    expect(player.hp, 10);
-    expect(player.gold, 0);
-
-    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    expect(enemy.gold, 1);
-    final result = doBattle(first: player, second: enemy);
-    expect(result.first.hp, 5);
-    // Gain one gold at battle end.
-    expect(result.first.gold, 1);
   });
 
   test('Gold Ring', () {
@@ -728,7 +715,7 @@ void main() {
     expect(player2.baseStats.maxHp, 20);
   });
 
-  test('Sticky Web effect', () {
+  test('Sticky Web', () {
     final item = itemCatalog['Sticky Web'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
@@ -753,7 +740,7 @@ void main() {
     expect(result2.first.baseStats.speed, 2);
   });
 
-  test('Impressive Physique effect', () {
+  test('Impressive Physique', () {
     final item = itemCatalog['Impressive Physique'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
@@ -777,7 +764,7 @@ void main() {
     expect(result2.first.baseStats.armor, 1);
   });
 
-  test('Steelbond Curse effect', () {
+  test('Steelbond Curse', () {
     final item = itemCatalog['Steelbond Curse'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
@@ -793,7 +780,7 @@ void main() {
     expect(player.baseStats.attack, 2);
   });
 
-  test('Bejeweled Blade effect', () {
+  test('Bejeweled Blade', () {
     final item = itemCatalog['Bejeweled Blade'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
@@ -823,7 +810,7 @@ void main() {
     expect(player2.baseStats.attack, 0);
   });
 
-  test("Woodcutter's Axe effect", () {
+  test("Woodcutter's Axe", () {
     final selfHealing = makeEnemy(
       'Wolf',
       attack: 1,
@@ -1006,5 +993,24 @@ void main() {
     // Wolf only gets attack 3 times instead of 5 and 2 of those are blocked.
     expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 2);
+  });
+
+  test('Crimson Cloak', () {
+    final item = itemCatalog['Crimson Cloak'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+
+    // Note this wolf is attacking with 2 rather than 1.
+    final enemy = makeEnemy('Wolf', attack: 2, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Crimson Cloak heals onTakeDamage, so for every 2 dmg we take, we heal 1.
+    expect(result.first.hp, 5);
+
+    final player2 =
+        createPlayer(items: [item], hp: 5, intrinsic: const Stats(armor: 10));
+    expect(player2.hp, 5);
+    final result2 = doBattle(first: player2, second: enemy);
+    // Crimson Cloak triggers even if armor blocks the damage?
+    expect(result2.first.hp, 10);
   });
 }

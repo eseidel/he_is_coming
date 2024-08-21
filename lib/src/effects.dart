@@ -14,8 +14,11 @@ enum Effect {
 
   /// Called whenever the creature attacks.
   /// This does not include damage dealt by non-attack actions.
-  /// Essentially, this "onStrike" or "onAttack".
+  /// This really should be named onStrike or onAttack.
   onHit,
+
+  /// Called whenever the creature takes damage.
+  onTakeDamage,
 
   /// Called when armor is broken for the first time this battle.
   onExposed,
@@ -35,6 +38,7 @@ class Effects {
     this.onBattle,
     this.onTurn,
     this.onHit,
+    this.onTakeDamage,
     this.onExposed,
     this.onWounded,
     this.onHeal,
@@ -46,6 +50,7 @@ class Effects {
       Effect.onBattle => onBattle,
       Effect.onTurn => onTurn,
       Effect.onHit => onHit,
+      Effect.onTakeDamage => onTakeDamage,
       Effect.onExposed => onExposed,
       Effect.onWounded => onWounded,
       Effect.onHeal => onHeal,
@@ -61,6 +66,9 @@ class Effects {
   /// Called whenever the creature attacks.
   /// This does not include damage dealt by non-attack actions.
   final EffectFn? onHit;
+
+  /// Called whenever the creature takes damage.
+  final EffectFn? onTakeDamage;
 
   /// Called when armor is broken for the first time this battle.
   final EffectFn? onExposed;
