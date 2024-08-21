@@ -27,14 +27,13 @@ Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   );
 }
 
-/// Class to hold all known items.
+/// Class to hold all known creatures.
 class CreatureCatalog {
   /// Create an CreatureCatalog
   CreatureCatalog(this.creatures);
 
   /// Create an CreatureCatalog from a yaml file.
   factory CreatureCatalog.fromFile(String path) {
-    // Effects not implemented for creatures yet.
     final creatures = CatalogReader.read(
       path,
       _creatureFromYaml,
@@ -45,7 +44,7 @@ class CreatureCatalog {
     return CreatureCatalog(creatures);
   }
 
-  /// All the known keys in the enemies yaml, in sorted order.
+  /// All the known keys in the creatures yaml, in sorted order.
   static const List<String> orderedKeys = <String>[
     'name',
     'unlock', // ignored for now

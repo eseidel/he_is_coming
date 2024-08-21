@@ -480,6 +480,12 @@ class BattleContext {
       creature.effects?[effect]?.call(effectCxt);
     }
 
+    // Slightly odd to have the edge trigger before the weapon.
+    if (creature.edge != null) {
+      final effectCxt = EffectContext(this, index, creature.edge!.name);
+      creature.edge!.effects?[effect]?.call(effectCxt);
+    }
+
     for (final item in creature.items) {
       final effectCxt = EffectContext(this, index, item.name);
       item.effects?[effect]?.call(effectCxt);

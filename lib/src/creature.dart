@@ -22,6 +22,7 @@ class ItemException implements Exception {
 Player createPlayer({
   Stats intrinsic = const Stats(),
   List<Item> withItems = const <Item>[],
+  Edge? edge,
   int? hp,
 }) {
   // Player must always have a weapon.
@@ -62,6 +63,7 @@ Player createPlayer({
     gold: 0,
     hp: hp,
     items: items,
+    edge: edge,
   );
 }
 
@@ -87,6 +89,18 @@ Creature makeEnemy(
   );
 }
 
+/// An edge is a special effect that can be applied to a weapon.
+class Edge {
+  /// Create an Edge
+  Edge(this.name, this.effects);
+
+  /// The name of the edge.
+  final String name;
+
+  /// The effects of the edge.
+  final Effects? effects;
+}
+
 /// Class representing a player or an enemy.
 @immutable
 class Creature {
@@ -98,6 +112,7 @@ class Creature {
     this.items = const <Item>[],
     int? hp,
     this.effects,
+    this.edge,
   })  : _intrinsic = intrinsic,
         _lostHp = _computeLostHp(intrinsic, items, hp);
 
@@ -117,6 +132,9 @@ class Creature {
 
   /// Intrinsic effects of this creature.
   final Effects? effects;
+
+  /// The edge on the weapon.
+  final Edge? edge;
 
   /// Items the creature or player is using.
   final List<Item> items;
@@ -157,6 +175,8 @@ class Creature {
       items: items,
       hp: hp ?? this.hp,
       gold: gold ?? this.gold,
+      effects: effects,
+      edge: edge,
     );
   }
 }
