@@ -6,8 +6,20 @@ import 'package:meta/meta.dart';
 
 const _kPlayerName = 'Player';
 
+/// Alias for Creature.
+typedef Player = Creature;
+
+/// ItemException
+class ItemException implements Exception {
+  /// Create ItemException
+  ItemException(this.message);
+
+  /// Message
+  final String message;
+}
+
 /// Create a player.
-Creature createPlayer({
+Player createPlayer({
   Stats intrinsic = const Stats(),
   List<Item> withItems = const <Item>[],
   int? hp,
@@ -27,7 +39,7 @@ Creature createPlayer({
     if (entry.value > 1) {
       final item = items.firstWhere((item) => item.name == entry.key);
       if (item.isUnique) {
-        throw ArgumentError(
+        throw ItemException(
           '${item.name} is unique and can only be equipped once.',
         );
       }
@@ -36,7 +48,7 @@ Creature createPlayer({
 
   final weaponCount = items.where((item) => item.kind == Kind.weapon).length;
   if (weaponCount > 1) {
-    throw ArgumentError('Player can only have one weapon.');
+    throw ItemException('Player can only have one weapon.');
   }
 
   // Weapon is always first.

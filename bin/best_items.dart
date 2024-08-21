@@ -24,90 +24,62 @@ List<Item> _pickItems(Random random, int count) {
   return items;
 }
 
-void _runBattle(Random random, BattleStats stats) {
-  // Pick a random set of items.
-  final player = createPlayer(withItems: _pickItems(random, 7));
-
-  // Battle against the abomination.
-  final abomination = creatureCatalog['Woodland Abomination'];
-  final result = Battle.resolve(first: player, second: abomination);
-  if (result.first.isAlive) {
-    logger.warn('Player won!?');
+List<Player> _seedPopulation(Random random, int count) {
+  final population = <Creature>[];
+  for (var i = 0; i < count; i++) {
+    population.add(createPlayer(withItems: _pickItems(random, 7)));
   }
-  stats.recordItems(player.items, result, abomination);
+  return population;
 }
 
 class RunResult {
-  RunResult({required this.turns, required this.dmg, required this.items});
+  RunResult({required this.turns, required this.damage, required this.player});
 
   RunResult.empty()
       : turns = 0,
-        dmg = 0,
-        items = [];
+        damage = 0,
+        player = Creature(name: 'Empty', intrinsic: const Stats(), gold: 0);
 
   final int turns;
-  final int dmg;
-  List<Item> items;
+  final int damage;
+  final Creature player;
 }
 
-class BattleStats {
-  final itemValues = <String, List<int>>{};
-  RunResult bestTurns = RunResult.empty();
-  RunResult bestDmg = RunResult.empty();
+RunResult _doBattle({required Creature player, required Creature enemy}) {
+  final result = Battle.resolve(first: player, second: enemy);
+  return RunResult(
+    turns: result.turns,
+    damage: enemy.baseStats.maxHp - result.second.hp,
+    player: player,
+  );
+}
 
-  Map<String, double> get averages {
-    final averages = <String, double>{};
-    for (final entry in itemValues.entries) {
-      final sum = entry.value.reduce((a, b) => a + b);
-      averages[entry.key] = sum / entry.value.length;
-    }
-    return averages;
-  }
+List<Player> pop = [];
 
-  void recordItems(List<Item> items, BattleResult result, Creature enemy) {
-    // Record the best items we've seen for turns and damage.
-    final turns = result.turns;
-    final dmg = enemy.baseStats.maxHp - result.second.hp;
-    if (result.turns > bestTurns.turns) {
-      bestTurns = RunResult(turns: turns, dmg: dmg, items: items);
+List<Player> _crossover(List<Player> parents, Random random) {
+  final children = <Player>[];
+  for (var i = 0; i < parents.length; i++) {
+    final parent1 = parents[random.nextInt(parents.length)];
+    final parent2 = parents[random.nextInt(parents.length)];
+    final childItems = <Item>[];
+    // Assume items are always the same length.
+    for (var j = 0; j < parent1.items.length; j++) {
+      final item = random.nextBool() ? parent1.items[j] : parent2.items[j];
+      childItems.add(item);
     }
-    if (dmg > bestDmg.dmg) {
-      bestDmg = RunResult(turns: turns, dmg: dmg, items: items);
-    }
-
-    // Can either look at # of turns survived or total damage dealt.
-    final value = dmg;
-    for (final item in items) {
-      itemValues.putIfAbsent(item.name, () => []).add(value);
+    try {
+      children.add(createPlayer(withItems: childItems));
+    } on ItemException {
+      continue;
     }
   }
+  return children;
+}
 
-  void logAverages() {
-    // Figure out the items which survived the longest on average.
-    final itemAverages = averages.entries.toList()..sortBy<num>((e) => e.value);
-
-    for (final entry in itemAverages) {
-      logger.info('${entry.key}: ${entry.value.toStringAsFixed(1)}');
-    }
-  }
-
-  void logBest() {
-    logger
-      ..info('---')
-      ..info(
-        'Best survivor (${bestTurns.turns} turns,'
-        ' ${bestTurns.dmg} damage):',
-      );
-    for (final item in bestTurns.items) {
-      logger.info(item.name);
-    }
-    logger
-      ..info('---')
-      ..info('Best damage (${bestDmg.turns} turns,'
-          ' ${bestDmg.dmg} damage):');
-    for (final item in bestDmg.items) {
-      logger.info(item.name);
-    }
+void logResult(RunResult result) {
+  logger.info('${result.damage} damage ${result.turns} turns:');
+  for (final item in result.player.items) {
+    logger.info('  ${item.name}');
   }
 }
 
@@ -116,13 +88,33 @@ void doMain(List<String> arguments) {
   initCreatureCatalog();
 
   final random = Random();
-  final stats = BattleStats();
+  const rounds = 10;
+  const populationSize = 1000;
+  final survivorsCount = (populationSize * 0.1).ceil();
+  var pop = _seedPopulation(random, populationSize);
+  late List<RunResult> bestResults;
 
-  for (var i = 0; i < 10000; i++) {
-    _runBattle(random, stats);
+  for (var i = 0; i < rounds; i++) {
+    final enemy = creatureCatalog['Woodland Abomination'];
+    final results =
+        pop.map((player) => _doBattle(player: player, enemy: enemy));
+    // Select the top 10% of the population.
+    final sorted = results.toList()..sortBy<num>((r) => -r.damage);
+    bestResults = sorted.sublist(0, survivorsCount);
+    final survivors = bestResults.map((r) => r.player).toList();
+    // children can be shorter than survivors currently.
+    final children = _crossover(survivors, random);
+    final remaining = populationSize - survivors.length - children.length;
+    pop = [
+      ...survivors,
+      ...children,
+      ..._seedPopulation(random, remaining),
+    ];
+    logger.info('Round $i');
+    logResult(bestResults.first);
   }
-  // stats.logAverages();
-  stats.logBest();
+  // Print the bestResults in order of damage dealt.
+  bestResults.sortBy<num>((r) => -r.damage);
 }
 
 void main(List<String> args) {
