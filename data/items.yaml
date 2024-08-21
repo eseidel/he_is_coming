@@ -360,3 +360,7 @@
   kind: weapon
   rarity: common
   attack: 1
+- name: "Golden Leather Gloves"
+  rarity: golden
+  health: 6
+  speed: 2

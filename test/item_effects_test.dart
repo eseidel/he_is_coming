@@ -847,6 +847,12 @@ void main() {
     expect(player2.baseStats.attack, 2);
     final result2 = doBattle(first: player2, second: selfHealing);
     expect(result2.first.hp, 6);
+
+    final bigArmor = makeEnemy('Wolf', attack: 1, health: 6, armor: 60);
+    final result3 = doBattle(first: player, second: bigArmor);
+    // Woodcutter's Axe reduces maxHp, even if they still have armor.
+    // So we kill this wolf in 3 turns rather than 30.
+    expect(result3.first.hp, 8);
   });
 
   test('Emerald Ring', () {

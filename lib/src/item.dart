@@ -143,6 +143,9 @@ enum Rarity {
 
   /// Heroic, found in graves.
   heroic,
+
+  /// Golden, made by combining commons
+  golden
 }
 
 /// Represents the material of the item.
