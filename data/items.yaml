@@ -364,3 +364,21 @@
   rarity: golden
   health: 6
   speed: 2
+- name: Petrifying Flask
+  rarity: common
+  unlock: "Rock Solid: Win against the Granite Griffin for the first time"
+  material: stone
+  effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
+- name: "Bloody Steak"
+  rarity: cauldron
+  effect: "Wounded: Gain armor equal to 50% of max health"
+- name: "Golden Redwood Cloak"
+  rarity: golden
+  material: wood
+  health: 4
+  effect: "Battle Start: If your health is not full, gain 2 health"
+- name: "Ruby Gemstone"
+  rarity: heroic
+  unique: true
+  kind: Jewelry
+  effect: "If your attack is exactly 1, deal 4 damage on hit"

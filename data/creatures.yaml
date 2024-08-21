@@ -64,13 +64,13 @@
   attack: 4
   health: 5
   speed: 4
-  effect: 'If Hothead has more speed than you, his first strike deals 10 additional damage.'
+  effect: 'If Hothead has more speed than you, his first strike deals 10 additional damage'
 - name: Brittlebark Beast
   level: 1
   health: 40
   attack: 3
   speed: 2
-  effect: 'Whenever Brittlebark beast takes damage, he takes 2 additional damage.'
+  effect: 'Whenever Brittlebark beast takes damage, he takes 2 additional damage'
 - name: Ironstone Golem
   level: 1
   attack: 4
@@ -94,7 +94,13 @@
   attack: 4
   health: 20
   speed: 4
-  effect: 'Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle.'
+  effect: 'Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle'
+- name: "Granite Griffin"
+  level: 2
+  attack: 5
+  health: 10
+  armor: 10
+  effect: "Wounded: Granite Griffin gains 30 armor and gets stunned for 2 turns"
 - name: Leshen
   level: 3
   attack: 7
