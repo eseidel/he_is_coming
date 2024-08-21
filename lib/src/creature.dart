@@ -24,6 +24,7 @@ Player createPlayer({
   List<Item> withItems = const <Item>[],
   Edge? edge,
   int? hp,
+  int? gold,
 }) {
   // Player must always have a weapon.
   final items = [...withItems];
@@ -60,7 +61,7 @@ Player createPlayer({
     // If maxHp wasn't set, default to 10.
     intrinsic:
         (intrinsic.maxHp == 0) ? intrinsic.copyWith(maxHp: 10) : intrinsic,
-    gold: 0,
+    gold: gold ?? 0,
     hp: hp,
     items: items,
     edge: edge,

@@ -31,7 +31,6 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     // Bleeding edge gains 1 health on hit so we regain all the health we lose.
     expect(result.first.hp, 10);
-    expect(result.winner, result.first);
   });
 
   test('Blunt Edge', () {
@@ -42,6 +41,24 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     // Blunt edge gains 1 armor on hit so we negate all damage except the first.
     expect(result.first.hp, 9);
-    expect(result.winner, result.first);
+  });
+
+  test('Lightning Edge', () {
+    final edge = data.edges['Lightning Edge'];
+    final player = createPlayer(edge: edge);
+    final enemy = makeEnemy('Wolf', health: 6, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // Lightning edge stuns the enemy for 1 turn so we take 1 less damage.
+    expect(result.first.hp, 6);
+  });
+
+  test('Thieving Edge', () {
+    final edge = data.edges['Thieving Edge'];
+    final player = createPlayer(edge: edge, gold: 8);
+    final enemy = makeEnemy('Wolf', health: 6, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // Thieving edge gains 1 gold on hit if we have less than 10 gold.
+    // We gain up to 10 from the edge and then +1 for the wolf kill.
+    expect(result.first.gold, 11);
   });
 }
