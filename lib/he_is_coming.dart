@@ -7,9 +7,9 @@ import 'package:he_is_coming/src/logger.dart';
 void runSim() {
   data = Data.load();
 
-  final player = createPlayer(withItems: [data.items['Stone Steak']]);
-  final wolf = data.creatures['Spider Level 1'];
+  final player = createPlayer(items: [data.items['Stone Steak']]);
+  final enemy = data.creatures['Spider Level 1'];
 
-  final result = Battle.resolve(first: player, second: wolf);
+  final result = Battle.resolve(first: player, second: enemy);
   logger.info('${result.winner.name} wins!');
 }

@@ -68,7 +68,7 @@ void main() {
     // so black knight should get our increased attack from onBattle effects.
     final player2 = createPlayer(
       intrinsic: const Stats(maxHp: 20),
-      withItems: [
+      items: [
         Item(
           'Ring',
           Rarity.common,

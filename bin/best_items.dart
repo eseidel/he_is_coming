@@ -90,7 +90,7 @@ class CreatureConfig {
 
 Player playerForConfig(CreatureConfig config) {
   return createPlayer(
-    withItems: config.items,
+    items: config.items,
     edge: config.edge,
     oils: config.oils,
   );
@@ -161,7 +161,7 @@ List<Player> _crossover(List<Player> parents, Random random) {
     try {
       children.add(
         createPlayer(
-          withItems: childItems,
+          items: childItems,
           edge: childEdge,
           oils: childOils,
         ),
@@ -273,7 +273,7 @@ void doMain(List<String> arguments) {
         }
         try {
           pop[j] = createPlayer(
-            withItems: mutated,
+            items: mutated,
             edge: pop[j].edge,
             oils: pop[j].oils,
           );

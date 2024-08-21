@@ -18,17 +18,9 @@ class ItemException implements Exception {
   final String message;
 }
 
-/// Create a player.
-Player createPlayer({
-  Stats intrinsic = const Stats(),
-  List<Item> withItems = const <Item>[],
-  Edge? edge,
-  List<Oil> oils = const <Oil>[],
-  int? hp,
-  int? gold,
-}) {
+List<Item> _enforceItemRules(List<Item> unenforced) {
   // Player must always have a weapon.
-  final items = [...withItems];
+  final items = [...unenforced];
   if (items.every((item) => item.kind != Kind.weapon)) {
     items.add(data.items['Wooden Stick']);
   }
@@ -56,7 +48,18 @@ Player createPlayer({
 
   // Weapon is always first.
   items.sortBy<num>((item) => item.kind == Kind.weapon ? 0 : 1);
+  return items;
+}
 
+/// Create a player.
+Player createPlayer({
+  Stats intrinsic = const Stats(),
+  List<Item> items = const <Item>[],
+  Edge? edge,
+  List<Oil> oils = const <Oil>[],
+  int? hp,
+  int? gold,
+}) {
   return Creature(
     name: _kPlayerName,
     // If maxHp wasn't set, default to 10.
@@ -64,7 +67,7 @@ Player createPlayer({
         (intrinsic.maxHp == 0) ? intrinsic.copyWith(maxHp: 10) : intrinsic,
     gold: gold ?? 0,
     hp: hp,
-    items: items,
+    items: _enforceItemRules(items),
     edge: edge,
     oils: oils,
   );

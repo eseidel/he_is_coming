@@ -1,6 +1,5 @@
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/creature.dart';
-import 'package:he_is_coming/src/edge_effects.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/logger.dart';
@@ -31,7 +30,7 @@ class OilCatalog {
       path,
       _oilFromYaml,
       orderedKeys.toSet(),
-      edgeEffects,
+      {}, // No oils have effects in the game yet.
     );
     logger.info('Loaded ${edges.length} from $path');
     return OilCatalog(edges);
