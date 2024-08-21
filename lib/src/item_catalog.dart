@@ -62,6 +62,7 @@ class ItemCatalog {
     'rarity',
     'material',
     'unlock', // ignored for now
+    'parts', // ignored for now
     'attack',
     'health',
     'armor',

@@ -381,9 +381,10 @@
 - name: "Ruby Gemstone"
   rarity: heroic
   unique: true
-  kind: Jewelry
+  kind: jewelry
   effect: "If your attack is exactly 1, deal 4 damage on hit"
 - name: Tree Sap
+  rarity: cauldron
   health: 5
   parts: ['Redwood Roast', 'Vampiric Wine']
   effect: "Wounded: Restore 1 health 5 times"

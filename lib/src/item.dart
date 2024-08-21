@@ -145,7 +145,10 @@ enum Rarity {
   heroic,
 
   /// Golden, made by combining commons
-  golden
+  golden,
+
+  /// Cauldron, made by combining food in the cauldron.
+  cauldron,
 }
 
 /// Represents the material of the item.
