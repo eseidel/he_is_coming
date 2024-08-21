@@ -12,14 +12,11 @@ import 'package:he_is_coming/src/logger.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
 List<Item> _pickItems(Random random, int count) {
-  final items = <Item>[];
-  var hasWeapon = false;
+  final items = <Item>[
+    itemCatalog.randomWeapon(random),
+  ];
   while (items.length < count) {
-    final item = itemCatalog.items[random.nextInt(itemCatalog.items.length)];
-    if (item.kind == Kind.weapon) {
-      if (hasWeapon) continue;
-      hasWeapon = true;
-    }
+    final item = itemCatalog.randomNonWeapon(random);
     if (item.isUnique && items.any((i) => i.name == item.name)) continue;
     items.add(item);
   }
@@ -108,7 +105,12 @@ List<Player> _crossover(List<Player> parents, Random random) {
     final parent1 = parents[random.nextInt(parents.length)];
     final parent2 = parents[random.nextInt(parents.length)];
     final childItems = <Item>[];
-    // Assume items are always the same length.
+    if (parent1.items.length != parent2.items.length) {
+      throw StateError(
+        'Parents must have the same number of items: '
+        '${parent1.items} vs ${parent2.items}',
+      );
+    }
     for (var j = 0; j < parent1.items.length; j++) {
       final item = random.nextBool() ? parent1.items[j] : parent2.items[j];
       childItems.add(item);
@@ -168,11 +170,13 @@ void doMain(List<String> arguments) {
   initCreatureCatalog();
 
   final random = Random();
-  const rounds = 100;
+  const rounds = 1000;
   const populationSize = 1000;
   final survivorsCount = (populationSize * 0.1).ceil();
+  const mutationRate = 0.01;
   const filePath = 'results.json';
   final saved = Population.fromFile(filePath);
+  print('Loaded ${saved.configs.length} saved configs.');
 
   List<Creature> pop;
   if (saved.configs.isNotEmpty) {
@@ -191,15 +195,33 @@ void doMain(List<String> arguments) {
     bestResults = sorted.sublist(0, survivorsCount);
     final survivors = bestResults.map((r) => r.player).toList();
     // children can be shorter than survivors currently.
-    final children = _crossover(survivors, random);
-    final remaining = populationSize - survivors.length - children.length;
     pop = [
-      ...survivors,
-      ...children,
-      ..._seedPopulation(random, remaining),
+      ...survivors.take(2),
+      ..._crossover(survivors, random),
     ];
+    // Mutate some of the children.
+    for (var j = 0; j < pop.length; j++) {
+      if (random.nextDouble() < mutationRate) {
+        final mutated = pop[j].items.toList();
+        final index = random.nextInt(mutated.length);
+        if (index == 0) {
+          mutated[index] = itemCatalog.randomWeapon(random);
+        } else {
+          mutated[index] = itemCatalog.randomNonWeapon(random);
+        }
+        try {
+          pop[j] = createPlayer(withItems: mutated);
+        } on ItemException {
+          continue;
+        }
+      }
+    }
+
+    pop.addAll(_seedPopulation(random, populationSize - pop.length));
     logger.info('Round $i');
-    logResult(bestResults.first);
+    for (final result in bestResults.take(3)) {
+      logResult(result);
+    }
   }
   Population.fromPlayers(pop).save(filePath);
 }

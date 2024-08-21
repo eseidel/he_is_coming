@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
@@ -70,6 +72,23 @@ class ItemCatalog {
 
   /// The items in this catalog.
   final List<Item> items;
+
+  /// All the weapons in the catalog.
+  List<Item> get weapons => items.where((i) => i.kind == Kind.weapon).toList();
+
+  /// All the non-weapon items in the catalog.
+  List<Item> get nonWeapons =>
+      items.where((i) => i.kind != Kind.weapon).toList();
+
+  /// Get a random weapon from the catalog.
+  Item randomWeapon(Random random) {
+    return weapons[random.nextInt(weapons.length)];
+  }
+
+  /// Get a random non-weapon item from the catalog.
+  Item randomNonWeapon(Random random) {
+    return nonWeapons[random.nextInt(nonWeapons.length)];
+  }
 
   /// Lookup an Item by name.
   Item operator [](String name) => items.firstWhere((i) => i.name == name);

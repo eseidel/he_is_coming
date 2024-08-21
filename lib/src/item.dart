@@ -106,6 +106,11 @@ class Item {
   /// Is the item unique.
   /// Unique items can only be equipped once.
   final bool isUnique;
+
+  @override
+  String toString() {
+    return name;
+  }
 }
 
 /// Enum representing Item kind.
