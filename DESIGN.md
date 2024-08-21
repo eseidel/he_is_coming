@@ -67,3 +67,7 @@ These unlock additional items.
 
 Confirm Cracked Bouldershield is common.
 Confirm Granite Hammer has attack 2.
+
+Add a trigger for death, rather than checking once a turn.  Otherwise it's
+possible to go negative and heal up in the same turn (with separate triggers
+for onTurn and onHit for example).

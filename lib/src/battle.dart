@@ -138,8 +138,11 @@ class EffectContext {
   /// Lose health.  Careful this is not the same as taking damage!
   /// This bypasses armor and is for special effects.
   void loseHealth(int hp) {
-    _expectNegative(hp, 'hp');
-    _stats = _stats.copyWith(hp: min(max(_stats.hp + hp, 0), _stats.maxHp));
+    _expectPositive(hp, 'hp');
+    // Don't clamp hp here, let it go below zero and then when copied
+    // back into the stats it will be clamped to 0.
+    final newHp = min(_stats.hp - hp, _stats.maxHp);
+    _stats = _stats.copyWith(hp: newHp);
     _battle.log('$_playerName hp ${_signed(hp)} from $_sourceName');
   }
 
@@ -578,8 +581,9 @@ class BattleContext {
     final combinedGold = stats[0].gold + stats[1].gold;
     final firstGold = firstWon ? combinedGold : 0;
     final secondGold = firstWon ? 0 : combinedGold;
-    final first = _first.copyWith(hp: stats[0].hp, gold: firstGold);
-    final second = _second.copyWith(hp: stats[1].hp, gold: secondGold);
+    // hp can go below 0 during battle, but copy it out as 0 in the end.
+    final first = _first.copyWith(hp: max(stats[0].hp, 0), gold: firstGold);
+    final second = _second.copyWith(hp: max(stats[1].hp, 0), gold: secondGold);
 
     // Print spoils for the player if they won.
     _logSpoils(before: creatures[0], after: first);

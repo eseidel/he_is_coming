@@ -78,7 +78,7 @@ final itemEffects = <String, Effects>{
   'Iron Transfusion': Effects(
     onTurn: (c) => c
       ..gainArmor(2)
-      ..loseHealth(-1),
+      ..loseHealth(1),
   ),
   'Fortified Gauntlet': Effects(
     onTurn: (c) => _if(c.my.armor > 0, () => c.gainArmor(1)),

@@ -582,6 +582,25 @@ void main() {
     expect(result.first.baseStats.armor, 0);
   });
 
+  test('Iron Transfusion can kill', () {
+    final item = itemCatalog['Iron Transfusion'];
+    final healOnHit = Item(
+      'healOnHit',
+      Rarity.common,
+      effects: Effects(onHit: (c) => c.restoreHealth(1)),
+    );
+    final player = createPlayer(items: [item, item, healOnHit], hp: 1);
+    expect(player.hp, 1);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // We die on the first turn from our own item, even though our healOnHit
+    // item triggers, it's too late.
+    expect(result.first.hp, 0);
+    expect(result.first.baseStats.armor, 0);
+  });
+
   test('Fortified Gauntlet', () {
     final item = itemCatalog['Fortified Gauntlet'];
     final player = createPlayer(items: [item]);
