@@ -33,4 +33,15 @@ void main() {
     expect(result.first.hp, 10);
     expect(result.winner, result.first);
   });
+
+  test('Blunt Edge', () {
+    final edge = data.edges['Blunt Edge'];
+    final player = createPlayer(edge: edge);
+    // Wolf is faster than us so it will hit first.
+    final enemy = makeEnemy('Wolf', health: 6, attack: 1, speed: 1);
+    final result = doBattle(first: player, second: enemy);
+    // Blunt edge gains 1 armor on hit so we negate all damage except the first.
+    expect(result.first.hp, 9);
+    expect(result.winner, result.first);
+  });
 }
