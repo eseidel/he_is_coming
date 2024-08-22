@@ -31,7 +31,7 @@ void main() {
     expect(player.hp, 10);
     expect(player.gold, 0);
 
-    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final enemy = makeEnemy(attack: 1, health: 6);
     expect(enemy.gold, 1);
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 5);
@@ -43,7 +43,7 @@ void main() {
     final player = createPlayer(
       items: [Item.test(effect: onTakeDamage((c) => c.restoreHealth(1)))],
     );
-    final enemy = makeEnemy('Wolf', attack: 10, health: 6);
+    final enemy = makeEnemy(attack: 10, health: 6);
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 0);
     expect(result.second.hp, 5);

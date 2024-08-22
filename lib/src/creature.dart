@@ -76,8 +76,7 @@ Player createPlayer({
 
 /// Create an enemy
 @visibleForTesting
-Creature makeEnemy(
-  String name, {
+Creature makeEnemy({
   required int health,
   required int attack,
   int armor = 0,
@@ -92,7 +91,7 @@ Creature makeEnemy(
     );
   }
   return Creature(
-    name: name,
+    name: 'test',
     intrinsic: Stats(
       maxHp: health,
       armor: armor,
