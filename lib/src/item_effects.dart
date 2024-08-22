@@ -131,4 +131,7 @@ final itemEffects = <String, Effects>{
       ..gainArmor(10)
       ..stunSelf(2),
   ),
+  'Ruby Gemstone': Effects(
+    onHit: (ctx) => _if(ctx.my.attack == 1, () => ctx.dealDamage(4)),
+  ),
 };

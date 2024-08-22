@@ -1054,4 +1054,29 @@ void main() {
     // turns is 0-indexed, turn 7 is the 8th turn.
     expect(result.turns, 7);
   });
+
+  test('Ruby Gemstone', () {
+    final item = itemCatalog['Ruby Gemstone'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 1);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Ruby Gemstone triggers on-hit for 4 if we have exactly 1 attack.
+    // Thus we kill the wolf in 2 hits, losing only 1 hp.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.attack, 1);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(attack: 1),
+      items: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.attack, 2);
+    // If we have more than 1 attack, the Ruby Gemstone does nothing.
+    final result2 = doBattle(first: player2, second: enemy);
+    // We have 2 attack, so wolf dies in 3 hits, we take 2 dmg.
+    expect(result2.first.hp, 8);
+  });
 }
