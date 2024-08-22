@@ -388,3 +388,12 @@
   health: 5
   parts: ['Redwood Roast', 'Vampiric Wine']
   effect: "Wounded: Restore 1 health 5 times"
+- name: Golden Ruby Ring
+  rarity: golden
+  kind: jewelry
+  effect: "Battle Start: Gain 2 attack and take 4 damage"
+- name: Golden Redwood Helmet
+  rarity: golden
+  material: wood
+  armor: 2
+  effect: "Exposed: Restore 6 health"

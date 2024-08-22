@@ -59,6 +59,11 @@
   attack: 1
   speed: 4
   effect: 'Battle Start: If Spider has more speed than you, it deals 5 damage'
+- name: Hedgehog Level 1
+  health: 1
+  attack: 1
+  armor: 1
+  effect: 'Battle Start: Hedgehog gainst 3 thorns'
 - name: Hothead
   level: 1
   attack: 4
@@ -101,6 +106,12 @@
   health: 10
   armor: 10
   effect: "Wounded: Granite Griffin gains 30 armor and gets stunned for 2 turns"
+- name: Mountain Troll
+  level: 2
+  attack: 10
+  health: 20
+  armor: 10
+  effect: "Mountain Troll only strikes every other turn"
 - name: Leshen
   level: 3
   attack: 7
