@@ -94,4 +94,18 @@ void main() {
     expect(result.first.hp, 2);
     expect(result.winner, result.first);
   });
+
+  test('Granite Griffin', () {
+    final player = createPlayer(intrinsic: const Stats(attack: 2, maxHp: 50));
+    expect(player.hp, 50);
+    expect(player.baseStats.attack, 3);
+    final enemy = data.creatures['Granite Griffin'];
+    final result = doBattle(first: player, second: enemy);
+    // Granite Griffin gains 30 armor when wounded and stuns itself for 2 turns.
+    // It hits for 5.  We hit for 3. It has 10 armor and 10 hp to start.
+    // We should kill it in 7 hits, except it gets 30 armor when crossing 4 hp
+    // and then after 2 more turns wakes and kills us in 10 total hits.
+    expect(result.first.hp, 0);
+    expect(result.second.hp, 2);
+  });
 }

@@ -38,4 +38,9 @@ final creatureEffects = <String, Effects>{
   ),
   'Black Knight': Effects(onBattle: (c) => c.gainAttack(c.enemy.attack)),
   'Ironstone Golem': Effects(onExposed: (c) => c.loseAttack(3)),
+  'Granite Griffin': Effects(
+    onWounded: (c) => c
+      ..gainArmor(30)
+      ..stunSelf(2),
+  ),
 };
