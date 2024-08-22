@@ -75,7 +75,7 @@
   health: 40
   attack: 3
   speed: 2
-  effect: 'Whenever Brittlebark beast takes damage, he takes 2 additional damage'
+  effect: 'Whenever Brittlebark Beast takes damage, he takes 2 additional damage'
 - name: Ironstone Golem
   level: 1
   attack: 4
