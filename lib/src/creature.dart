@@ -75,14 +75,22 @@ Player createPlayer({
 }
 
 /// Create an enemy
+@visibleForTesting
 Creature makeEnemy(
   String name, {
   required int health,
   required int attack,
   int armor = 0,
   int speed = 0,
-  Effect? effect,
+  EffectMap? effect,
 }) {
+  Effect? triggers;
+  if (effect != null) {
+    triggers = Effect(
+      callbacks: effect,
+      text: 'test',
+    );
+  }
   return Creature(
     name: name,
     intrinsic: Stats(
@@ -92,7 +100,7 @@ Creature makeEnemy(
       speed: speed,
     ),
     gold: 1,
-    effect: effect,
+    effect: triggers,
   );
 }
 
@@ -117,10 +125,7 @@ class Oil {
 /// An edge is a special effect that can be applied to a weapon.
 class Edge extends CatalogItem {
   /// Create an Edge
-  Edge({required super.name, required this.effect});
-
-  /// The effects of the edge.
-  final Effect? effect;
+  Edge({required super.name, required super.effect});
 
   @override
   String toString() => name;
@@ -144,7 +149,7 @@ class Creature extends CatalogItem {
     required this.gold,
     this.items = const <Item>[],
     int? hp,
-    this.effect,
+    super.effect,
     this.edge,
     this.oils = const <Oil>[],
   })  : _intrinsic = intrinsic,
@@ -169,9 +174,6 @@ class Creature extends CatalogItem {
 
   /// The intrinsic stats of this Creature without any items.
   final Stats _intrinsic;
-
-  /// Intrinsic effects of this creature.
-  final Effect? effect;
 
   /// The edge on the weapon.
   final Edge? edge;

@@ -571,11 +571,7 @@ void main() {
 
   test('Iron Transfusion can kill', () {
     final item = itemCatalog['Iron Transfusion'];
-    final healOnHit = Item(
-      'healOnHit',
-      Rarity.common,
-      effect: onHit((c) => c.restoreHealth(1)),
-    );
+    final healOnHit = Item.test(effect: onHit((c) => c.restoreHealth(1)));
     final player = createPlayer(items: [item, item, healOnHit], hp: 1);
     expect(player.hp, 1);
     expect(player.baseStats.armor, 0);
@@ -615,9 +611,7 @@ void main() {
   });
 
   test('Item order matters', () {
-    final armor = Item(
-      'armor',
-      Rarity.common,
+    final armor = Item.test(
       effect: onTurn((c) => c.gainArmor(1)),
     );
     final gauntlet = itemCatalog['Fortified Gauntlet'];
@@ -645,9 +639,7 @@ void main() {
   });
 
   test('Iron Rose', () {
-    final healOnHit = Item(
-      'healOnHit',
-      Rarity.common,
+    final healOnHit = Item.test(
       effect: onHit((c) => c.restoreHealth(1)),
     );
     final item = itemCatalog['Iron Rose'];
@@ -1027,11 +1019,7 @@ void main() {
     // Tree Sap heals 1 hp 5 times on wounded, negating all of the wolf's dmg.
     expect(result.first.hp, 8);
 
-    final heals = Item(
-      'onHeal',
-      Rarity.common,
-      effect: onHeal((c) => c.gainArmor(1)),
-    );
+    final heals = Item.test(effect: onHeal((c) => c.gainArmor(1)));
     final player2 = createPlayer(items: [item, heals], hp: 8);
     expect(player2.baseStats.maxHp, 15);
     expect(player2.hp, 8);

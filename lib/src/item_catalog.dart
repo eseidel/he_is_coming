@@ -19,10 +19,7 @@ Item? _itemFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final speed = yaml['speed'] as int? ?? 0;
   final unique = yaml['unique'] as bool? ?? false;
   final effectText = yaml['effect'] as String?;
-  final effect = lookupEffect(name);
-  if (effectText != null && effect == null) {
-    return null;
-  }
+  final effect = lookupEffect(name: name, effectText: effectText);
   return Item(
     name,
     kind: kind,

@@ -41,13 +41,7 @@ void main() {
 
   test('Check for Death after every trigger', () {
     final player = createPlayer(
-      items: [
-        Item(
-          'heals',
-          Rarity.common,
-          effect: onTakeDamage((c) => c.restoreHealth(1)),
-        ),
-      ],
+      items: [Item.test(effect: onTakeDamage((c) => c.restoreHealth(1)))],
     );
     final enemy = makeEnemy('Wolf', attack: 10, health: 6);
     final result = doBattle(first: player, second: enemy);

@@ -96,7 +96,15 @@ class CatalogReader {
     if (warnAboutMissingEffects) {
       _warnAboutMissingEffects(yamlList, effectsCatalog, T.toString());
     }
-    Effect? lookupEffect(String name) => effectsCatalog[name];
+    Effect? lookupEffect({required String name, required String? effectText}) {
+      if (effectText == null) {
+        return null;
+      }
+      return Effect(
+        callbacks: effectsCatalog[name] ?? {},
+        text: effectText,
+      );
+    }
 
     return yamlList
         .cast<YamlMap>()
@@ -112,10 +120,13 @@ class CatalogReader {
 /// An item in the catalog.
 abstract class CatalogItem {
   /// Create a catalog item with a name.
-  CatalogItem({required this.name});
+  CatalogItem({required this.name, this.effect});
 
   /// The name of the item.
   final String name;
+
+  /// The effect of the item.
+  final Effect? effect;
 
   @override
   String toString() {
@@ -133,6 +144,14 @@ class Catalog<T extends CatalogItem> {
 
   /// The items in the catalog.
   final List<T> items;
+
+  /// Remove any items that are missing effects.
+  void removeEntriesMissingEffects() {
+    items.removeWhere(
+      (item) =>
+          item.effect != null && item.effect != null && item.effect!.isEmpty,
+    );
+  }
 
   /// Get an item by name or return null if it doesn't exist.
   T? get(String name) => items.firstWhereOrNull((item) => item.name == name);

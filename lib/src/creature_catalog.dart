@@ -2,6 +2,7 @@ import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/creature_effects.dart';
 import 'package:he_is_coming/src/effects.dart';
+import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:yaml/yaml.dart';
 
@@ -12,17 +13,16 @@ Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final armor = yaml['armor'] as int? ?? 0;
   final speed = yaml['speed'] as int? ?? 0;
   final effectText = yaml['effect'] as String?;
-  final effect = lookupEffect(name);
-  if (effectText != null && effect == null) {
-    return null;
-  }
-
-  return makeEnemy(
-    name,
-    health: health,
-    attack: attack,
-    armor: armor,
-    speed: speed,
+  final effect = lookupEffect(name: name, effectText: effectText);
+  return Creature(
+    name: name,
+    intrinsic: Stats(
+      maxHp: health,
+      armor: armor,
+      attack: attack,
+      speed: speed,
+    ),
+    gold: 1,
     effect: effect,
   );
 }

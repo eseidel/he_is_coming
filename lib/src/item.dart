@@ -70,7 +70,7 @@ class Item extends CatalogItem {
     int attack = 0,
     int speed = 0,
     this.isUnique = false,
-    this.effect,
+    super.effect,
   })  : stats = Stats(
           maxHp: health,
           armor: armor,
@@ -87,6 +87,23 @@ class Item extends CatalogItem {
     }
   }
 
+  /// Create a test item.
+  @visibleForTesting
+  factory Item.test({EffectMap? effect}) {
+    Effect? triggers;
+    if (effect != null) {
+      triggers = Effect(
+        callbacks: effect,
+        text: 'test',
+      );
+    }
+    return Item(
+      'test',
+      Rarity.common,
+      effect: triggers,
+    );
+  }
+
   /// Kind of the item.
   final Kind? kind;
 
@@ -98,9 +115,6 @@ class Item extends CatalogItem {
 
   /// Material of the item.
   final Material? material;
-
-  /// Effect of the item.
-  final Effect? effect;
 
   /// Is the item unique.
   /// Unique items can only be equipped once.

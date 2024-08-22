@@ -10,11 +10,7 @@ import 'package:yaml/yaml.dart';
 Edge? _edgeFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final name = yaml['name'] as String;
   final effectText = yaml['effect'] as String?;
-  final effect = lookupEffect(name);
-  if (effectText != null && effect == null) {
-    return null;
-  }
-
+  final effect = lookupEffect(name: name, effectText: effectText);
   return Edge(name: name, effect: effect);
 }
 

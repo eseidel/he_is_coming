@@ -77,9 +77,7 @@ void main() {
     final player2 = createPlayer(
       intrinsic: const Stats(maxHp: 20),
       items: [
-        Item(
-          'Ring',
-          Rarity.common,
+        Item.test(
           effect: onBattle((c) => c.gainAttack(1)),
         ),
       ],
