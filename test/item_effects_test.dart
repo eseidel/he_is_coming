@@ -1048,7 +1048,7 @@ void main() {
     expect(player.hp, 5);
 
     final enemy = makeEnemy('Wolf', attack: 1, health: 6);
-    final result = doBattle(first: player, second: enemy, verbose: true);
+    final result = doBattle(first: player, second: enemy);
     // Petrifying Flask gives 10 armor and self-stuns for 2 turns on wounded.
     expect(result.first.hp, 4);
     // turns is 0-indexed, turn 7 is the 8th turn.
