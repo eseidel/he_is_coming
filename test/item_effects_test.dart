@@ -1079,4 +1079,17 @@ void main() {
     // We have 2 attack, so wolf dies in 3 hits, we take 2 dmg.
     expect(result2.first.hp, 8);
   });
+
+  test('Bloody Steak', () {
+    final item = itemCatalog['Bloody Steak'];
+    final player = createPlayer(items: [item], hp: 6);
+    expect(player.hp, 6);
+
+    final enemy = makeEnemy('Wolf', attack: 2, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // On wounded, gain 50% of maxHp as armor.  In our case, that's 5 hp.
+    // We kill the wolf in 6 hits, so we take 10 dmg, 5 of which is blocked
+    // by armor.
+    expect(result.first.hp, 1);
+  });
 }
