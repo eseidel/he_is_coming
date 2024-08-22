@@ -355,7 +355,7 @@ class BattleContext {
       stats[0].speed >= stats[1].speed ? 0 : 1;
 
   /// Advance to the next non-stunned creature.
-  void nextAttacker() {
+  void _nextAttacker() {
     while (allAlive) {
       _attackerIndex = attackerIndex.isEven ? 1 : 0;
       _turnsTaken++;
@@ -499,7 +499,7 @@ class BattleContext {
   }
 
   /// Strike the defender, defaults to the attacker's attack value.
-  void strike([int? damage]) {
+  void _strike([int? damage]) {
     if (damage != null && damage <= 0) {
       throw ArgumentError('explicit strike damage should be positive');
     }
@@ -639,7 +639,7 @@ class BattleContext {
   }
 
   /// Resolve the battle and return the spoils.
-  BattleResult resolveWithSpoils() {
+  BattleResult _resolveWithSpoils() {
     // Settle up the spoils.
     final firstWon = stats[0].hp > 0;
     final combinedGold = stats[0].gold + stats[1].gold;
@@ -652,6 +652,26 @@ class BattleContext {
     // Print spoils for the player if they won.
     _logSpoils(before: creatures[0], after: first);
     return BattleResult(first: first, second: second, turns: _turnsTaken ~/ 2);
+  }
+
+  /// Run the battle and return the result.
+  BattleResult run() {
+    try {
+      _triggerOnBattleStart();
+      _decideFirstAttacker();
+      log('${creatures[0].name}: ${stats[0]}');
+      log('${creatures[1].name}: ${stats[1]}');
+      while (allAlive) {
+        log('$attackerName turn $turnNumber');
+        _triggerOnTurn();
+        _strike();
+        // Might advance multiple turns if both creatures are stunned.
+        _nextAttacker();
+      }
+    } on _DeathException catch (e) {
+      log('${e.creature.name} has died');
+    }
+    return _resolveWithSpoils();
   }
 }
 
@@ -689,24 +709,6 @@ class Battle {
     bool verbose = false,
   }) {
     final ctx = BattleContext([first, second], verbose: verbose);
-    try {
-      ctx
-        .._triggerOnBattleStart()
-        .._decideFirstAttacker()
-        ..log('${first.name}: ${ctx.stats[0]}')
-        ..log('${second.name}: ${ctx.stats[1]}');
-      while (ctx.allAlive) {
-        ctx.log('${ctx.attackerName} turn ${ctx.turnNumber}');
-        ctx
-          .._triggerOnTurn()
-          ..strike()
-          // Might advance multiple turns if both creatures are stunned.
-          ..nextAttacker();
-      }
-    } on _DeathException catch (e) {
-      logger.info('${e.creature.name} has died');
-    }
-
-    return ctx.resolveWithSpoils();
+    return ctx.run();
   }
 }

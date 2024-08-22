@@ -7,37 +7,37 @@ import 'package:he_is_coming/src/logger.dart';
 void runSim() {
   data = Data.load();
 
-  final items = [
-    'Heart Drinker',
-    'Horned Helmet',
-    'Iron Rose',
-    'Crimson Cloak',
-    'Impressive Physique',
-    'Iron Transfusion',
-    'Tree Sap',
-    'Sapphire Earing',
-    'Emerald Earing',
-  ];
-  const edge = 'Jagged Edge';
-  final oils = [
-    'Speed Oil',
-  ];
-
   // final items = [
-  //   'Granite Hammer',
-  //   'Elderwood Necklace',
+  //   'Heart Drinker',
+  //   'Horned Helmet',
+  //   'Iron Rose',
+  //   'Crimson Cloak',
+  //   'Impressive Physique',
   //   'Iron Transfusion',
-  //   'Iron Transfusion',
-  //   'Iron Transfusion',
-  //   'Plated Helmet',
-  //   'Iron Transfusion',
+  //   'Tree Sap',
+  //   'Sapphire Earing',
+  //   'Emerald Earing',
   // ];
-  // const edge = 'Bleeding Edge';
+  // const edge = 'Jagged Edge';
   // final oils = [
-  //   'Attack Oil',
-  //   'Armor Oil',
   //   'Speed Oil',
   // ];
+
+  final items = [
+    'Granite Hammer',
+    'Elderwood Necklace',
+    'Iron Transfusion',
+    'Iron Transfusion',
+    'Iron Transfusion',
+    'Plated Helmet',
+    'Iron Transfusion',
+  ];
+  const edge = 'Bleeding Edge';
+  final oils = [
+    'Attack Oil',
+    'Armor Oil',
+    'Speed Oil',
+  ];
   final player = createPlayer(
     items: items.map((name) => data.items[name]).toList(),
     edge: data.edges[edge],
