@@ -53,6 +53,14 @@ void main() {
     expect(result.winner, result.first);
   });
 
+  test('Hedgehog Level 1', () {
+    final player = createPlayer();
+    final enemy = data.creatures['Hedgehog Level 1'];
+    final result = doBattle(first: player, second: enemy);
+    // Hedgehog gains 3 thorns on battle start, dies in two hits (1 armor).
+    expect(result.first.hp, 6);
+  });
+
   test('Black Knight', () {
     final player = createPlayer();
     final enemy = data.creatures['Black Knight'];

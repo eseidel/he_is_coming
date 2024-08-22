@@ -63,7 +63,7 @@
   health: 1
   attack: 1
   armor: 1
-  effect: 'Battle Start: Hedgehog gainst 3 thorns'
+  effect: 'Battle Start: Hedgehog gains 3 thorns'
 - name: Hothead
   level: 1
   attack: 4

@@ -20,6 +20,9 @@ Effects _batEffect({required int hp}) {
   );
 }
 
+Effects _hedgehogEffect({required int thorns}) =>
+    onBattle((c) => c.gainThorns(thorns));
+
 /// Effects that can be triggered by creatures.
 final creatureEffects = <String, Effects>{
   'Spider Level 1': _spiderEffect(damage: 3),
@@ -27,6 +30,7 @@ final creatureEffects = <String, Effects>{
   'Spider Level 3': _spiderEffect(damage: 5),
   'Bat Level 1': _batEffect(hp: 1),
   'Bat Level 2': _batEffect(hp: 2),
+  'Hedgehog Level 1': _hedgehogEffect(thorns: 3),
   'Woodland Abomination': onTurn(
     (c) {
       // The game lets the abomination attack once for 0 for whatever reason.
