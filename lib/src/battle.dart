@@ -174,7 +174,7 @@ class EffectContext {
         source: _sourceName,
       );
 
-  /// Take damage (from an item).
+  /// Take damage (from an item), will trigger onTakeDamage, hits armor first.
   void takeDamage(int damage) => _battle.dealDamage(
         damage: damage,
         targetIndex: _index,

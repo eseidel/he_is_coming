@@ -19,4 +19,5 @@ final edgeEffects = <String, Effects>{
       ..gainThorns(2)
       ..takeDamage(1),
   ),
+  'Cutting Edge': Effects(onHit: (c) => c.dealDamage(1)),
 };

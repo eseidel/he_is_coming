@@ -71,4 +71,17 @@ void main() {
     // Wolf after 2 attacks so we take 2 wolf damage and 2 jagged edge damage.
     expect(result.first.hp, 6);
   });
+
+  test('Cutting Edge', () {
+    final edge = data.edges['Cutting Edge'];
+    final player = createPlayer(edge: edge);
+    final enemy = makeEnemy('Wolf', health: 6, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // Cutting edge deals 1 damage on hit.
+    // Effectively gives us +1 attack (not exactly) defeating the Wolf in 3 hits
+    // thus only taking 2 damage.
+    expect(result.first.hp, 8);
+    // "dealDamage" does not trigger thorns, nor is it a strike, but would
+    // trigger onTakeDamage, etc.  We could test for that.
+  });
 }
