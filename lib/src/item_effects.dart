@@ -10,7 +10,7 @@ void _if(bool condition, void Function() fn) {
 
 /// Effects that can be triggered by items.
 final itemEffects = <String, Effects>{
-  'Stone Steak': onBattle((c) => _if(c.isHealthFull, () => c.gainArmor(4))),
+  'Stone Steak': onBattle((c) => _if(c.my.isHealthFull, () => c.gainArmor(4))),
   'Redwood Cloak': onBattle((c) => c.restoreHealth(1)),
   'Emergency Shield': onBattle(
     (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4)),

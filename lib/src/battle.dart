@@ -47,9 +47,6 @@ class EffectContext {
   set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
   String get _playerName => _battle.creatures[_index].name;
 
-  /// Returns true if health is currently full.
-  bool get isHealthFull => _stats.isHealthFull;
-
   /// Returns true if this this creatures's first turn of the battle.
   bool get isFirstTurn => _battle.turnNumber == 1;
 
