@@ -13,3 +13,6 @@
 - name: Jagged Edge
   unlock: "Nocturnal Predator: Defeat 5 enemies during one night"
   effect: "On Hit: Gain 2 thorns and take 1 damage"
+- name: Agile Edge
+  unlock: "Stop hitting yourself: Strike an enemy 2 times before their turn"
+  effect: "Do an additional strike on your first turn"

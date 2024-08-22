@@ -397,3 +397,15 @@
   material: wood
   armor: 2
   effect: "Exposed: Restore 6 health"
+- name: Emerald Gemstone
+  kind: jewelry
+  rarity: heroic
+  effect: Overhealing is dealt as damage
+- name: Golden Emerald Ring
+  rarity: golden
+  kind: jewelry
+  effect: "Battle Start: Restore 4 health"
+- name: Citrine Gemstone
+  kind: jewelry
+  rarity: heroic
+  effect: Your speed stat is inverted
