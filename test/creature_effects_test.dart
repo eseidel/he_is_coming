@@ -80,7 +80,7 @@ void main() {
         Item(
           'Ring',
           Rarity.common,
-          effects: onBattle((c) => c.gainAttack(1)),
+          effect: onBattle((c) => c.gainAttack(1)),
         ),
       ],
     );

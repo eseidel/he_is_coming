@@ -9,7 +9,7 @@ void _if(bool condition, void Function() fn) {
 }
 
 /// Effects that can be triggered by items.
-final itemEffects = <String, Effects>{
+final itemEffects = <String, Effect>{
   'Stone Steak': onBattle((c) => _if(c.my.isHealthFull, () => c.gainArmor(4))),
   'Redwood Cloak': onBattle((c) => c.restoreHealth(1)),
   'Emergency Shield': onBattle(

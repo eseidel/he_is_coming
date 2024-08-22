@@ -4,29 +4,29 @@ import 'package:meta/meta.dart';
 /// Function type for effect callbacks.
 typedef EffectFn = void Function(EffectContext ctx);
 
-/// Creates an [Effects] with an onBattle callback.
-Effects onBattle(EffectFn fn) => Effects(onBattle: fn);
+/// Creates an [Effect] with an onBattle callback.
+Effect onBattle(EffectFn fn) => Effect(onBattle: fn);
 
-/// Creates an [Effects] with an onTurn callback.
-Effects onTurn(EffectFn fn) => Effects(onTurn: fn);
+/// Creates an [Effect] with an onTurn callback.
+Effect onTurn(EffectFn fn) => Effect(onTurn: fn);
 
-/// Creates an [Effects] with an onHit callback.
-Effects onHit(EffectFn fn) => Effects(onHit: fn);
+/// Creates an [Effect] with an onHit callback.
+Effect onHit(EffectFn fn) => Effect(onHit: fn);
 
-/// Creates an [Effects] with an onTakeDamage callback.
-Effects onTakeDamage(EffectFn fn) => Effects(onTakeDamage: fn);
+/// Creates an [Effect] with an onTakeDamage callback.
+Effect onTakeDamage(EffectFn fn) => Effect(onTakeDamage: fn);
 
-/// Creates an [Effects] with an onExposed callback.
-Effects onExposed(EffectFn fn) => Effects(onExposed: fn);
+/// Creates an [Effect] with an onExposed callback.
+Effect onExposed(EffectFn fn) => Effect(onExposed: fn);
 
-/// Creates an [Effects] with an onWounded callback.
-Effects onWounded(EffectFn fn) => Effects(onWounded: fn);
+/// Creates an [Effect] with an onWounded callback.
+Effect onWounded(EffectFn fn) => Effect(onWounded: fn);
 
-/// Creates an [Effects] with an onHeal callback.
-Effects onHeal(EffectFn fn) => Effects(onHeal: fn);
+/// Creates an [Effect] with an onHeal callback.
+Effect onHeal(EffectFn fn) => Effect(onHeal: fn);
 
 /// Enum representing the different effects that can be triggered.
-enum Effect {
+enum Trigger {
   /// Called on battle start.
   onBattle,
 
@@ -53,9 +53,9 @@ enum Effect {
 
 /// Container for callbacks for items.
 @immutable
-class Effects {
+class Effect {
   /// Create a new Effect
-  const Effects({
+  const Effect({
     this.onBattle,
     this.onTurn,
     this.onHit,
@@ -63,18 +63,20 @@ class Effects {
     this.onExposed,
     this.onWounded,
     this.onHeal,
+    // TODO(eseidel): Plumb effect text through.
+    this.text = '',
   });
 
   /// Get the effect callback for a given effect.
-  EffectFn? operator [](Effect effect) {
+  EffectFn? operator [](Trigger effect) {
     return switch (effect) {
-      Effect.onBattle => onBattle,
-      Effect.onTurn => onTurn,
-      Effect.onHit => onHit,
-      Effect.onTakeDamage => onTakeDamage,
-      Effect.onExposed => onExposed,
-      Effect.onWounded => onWounded,
-      Effect.onHeal => onHeal,
+      Trigger.onBattle => onBattle,
+      Trigger.onTurn => onTurn,
+      Trigger.onHit => onHit,
+      Trigger.onTakeDamage => onTakeDamage,
+      Trigger.onExposed => onExposed,
+      Trigger.onWounded => onWounded,
+      Trigger.onHeal => onHeal,
     };
   }
 
@@ -99,10 +101,19 @@ class Effects {
 
   /// Called when any hp is restored.
   final EffectFn? onHeal;
+
+  /// Returns a string representation of the effect.
+  final String text;
+
+  @override
+  String toString() => text;
+
+  /// Returns a json representation of the effect.
+  dynamic toJson() => text;
 }
 
 /// Type for looking up effects by name.
-typedef EffectCatalog = Map<String, Effects>;
+typedef EffectCatalog = Map<String, Effect>;
 
 /// Type for looking up effects by name.
-typedef LookupEffect = Effects? Function(String name);
+typedef LookupEffect = Effect? Function(String name);

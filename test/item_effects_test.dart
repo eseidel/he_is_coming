@@ -574,7 +574,7 @@ void main() {
     final healOnHit = Item(
       'healOnHit',
       Rarity.common,
-      effects: onHit((c) => c.restoreHealth(1)),
+      effect: onHit((c) => c.restoreHealth(1)),
     );
     final player = createPlayer(items: [item, item, healOnHit], hp: 1);
     expect(player.hp, 1);
@@ -618,7 +618,7 @@ void main() {
     final armor = Item(
       'armor',
       Rarity.common,
-      effects: onTurn((c) => c.gainArmor(1)),
+      effect: onTurn((c) => c.gainArmor(1)),
     );
     final gauntlet = itemCatalog['Fortified Gauntlet'];
     final player = createPlayer(items: [armor, gauntlet]);
@@ -648,7 +648,7 @@ void main() {
     final healOnHit = Item(
       'healOnHit',
       Rarity.common,
-      effects: onHit((c) => c.restoreHealth(1)),
+      effect: onHit((c) => c.restoreHealth(1)),
     );
     final item = itemCatalog['Iron Rose'];
     // Order of the items should not matter in this case.
@@ -817,7 +817,7 @@ void main() {
       'Wolf',
       attack: 1,
       health: 6,
-      effects: onTurn((c) => c.restoreHealth(1)),
+      effect: onTurn((c) => c.restoreHealth(1)),
     );
 
     final item = itemCatalog["Woodcutter's Axe"];
@@ -1030,7 +1030,7 @@ void main() {
     final heals = Item(
       'onHeal',
       Rarity.common,
-      effects: onHeal((c) => c.gainArmor(1)),
+      effect: onHeal((c) => c.gainArmor(1)),
     );
     final player2 = createPlayer(items: [item, heals], hp: 8);
     expect(player2.baseStats.maxHp, 15);

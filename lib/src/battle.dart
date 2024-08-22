@@ -444,7 +444,7 @@ class BattleContext {
 
     // If we successfully restored health, trigger onHeal.
     if (restored > 0) {
-      _trigger(targetIndex, Effect.onHeal);
+      _trigger(targetIndex, Trigger.onHeal);
     }
   }
 
@@ -474,7 +474,7 @@ class BattleContext {
     }
 
     // Does it count as damage if it's absorbed by armor?
-    _trigger(targetIndex, Effect.onTakeDamage);
+    _trigger(targetIndex, Trigger.onTakeDamage);
 
     // newStats is not valid after setStats (which can happen inside a trigger)
     {
@@ -484,7 +484,7 @@ class BattleContext {
       if (armorWasBroken && !newStats.hasBeenExposed) {
         // Set "exposed" flag first to avoid infinite loops.
         setStats(targetIndex, newStats.copyWith(hasBeenExposed: true));
-        _trigger(targetIndex, Effect.onExposed);
+        _trigger(targetIndex, Trigger.onExposed);
       }
     }
 
@@ -497,7 +497,7 @@ class BattleContext {
         !newStats.hasBeenWounded) {
       // Set "wounded" flag first to avoid infinite loops.
       setStats(targetIndex, newStats.copyWith(hasBeenWounded: true));
-      _trigger(targetIndex, Effect.onWounded);
+      _trigger(targetIndex, Trigger.onWounded);
     }
   }
 
@@ -512,7 +512,7 @@ class BattleContext {
       source: '$attackerName strike',
     );
     // OnHit only triggers on strikes.
-    _trigger(attackerIndex, Effect.onHit);
+    _trigger(attackerIndex, Trigger.onHit);
 
     // Thorns only trigger on strikes.
     if (defender.thorns > 0) {
@@ -535,25 +535,25 @@ class BattleContext {
     }
   }
 
-  void _trigger(int index, Effect effect) {
+  void _trigger(int index, Trigger trigger) {
     final creature = creatures[index];
     final beforeStats = stats[index];
-    if (creature.effects != null) {
+    if (creature.effect != null) {
       final effectCxt = EffectContext(this, index, creature.name);
-      creature.effects?[effect]?.call(effectCxt);
+      creature.effect?[trigger]?.call(effectCxt);
       _checkForDeath();
     }
 
     // Slightly odd to have the edge trigger before the weapon.
     if (creature.edge != null) {
       final effectCxt = EffectContext(this, index, creature.edge!.name);
-      creature.edge!.effects?[effect]?.call(effectCxt);
+      creature.edge!.effect?[trigger]?.call(effectCxt);
       _checkForDeath();
     }
 
     for (final item in creature.items) {
       final effectCxt = EffectContext(this, index, item.name);
-      item.effects?[effect]?.call(effectCxt);
+      item.effect?[trigger]?.call(effectCxt);
       _checkForDeath();
     }
     final afterStats = stats[index];
@@ -562,7 +562,7 @@ class BattleContext {
     // e.g. if onHit triggers a heal and then onHeal does +1 armor, we'll
     // show +1 armor from the onHeal in both the onHit and onHeal logs.
     if (diffString != null) {
-      log('${creature.name} ${effect.name}: $diffString');
+      log('${creature.name} ${trigger.name}: $diffString');
     }
   }
 
@@ -572,11 +572,11 @@ class BattleContext {
       // Pretend whoever is being triggered is the attacker to allow
       // effects that depend on attacker/defender to work.
       _attackerIndex = index;
-      _trigger(index, Effect.onBattle);
+      _trigger(index, Trigger.onBattle);
     }
   }
 
-  void _triggerOnTurn() => _trigger(attackerIndex, Effect.onTurn);
+  void _triggerOnTurn() => _trigger(attackerIndex, Trigger.onTurn);
 
   /// List of creatures in this battle.
   final List<Creature> creatures;

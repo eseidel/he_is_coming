@@ -45,7 +45,7 @@ void main() {
         Item(
           'heals',
           Rarity.common,
-          effects: onTakeDamage((c) => c.restoreHealth(1)),
+          effect: onTakeDamage((c) => c.restoreHealth(1)),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
@@ -80,7 +81,7 @@ Creature makeEnemy(
   required int attack,
   int armor = 0,
   int speed = 0,
-  Effects? effects,
+  Effect? effect,
 }) {
   return Creature(
     name: name,
@@ -91,7 +92,7 @@ Creature makeEnemy(
       speed: speed,
     ),
     gold: 1,
-    effects: effects,
+    effect: effect,
   );
 }
 
@@ -105,31 +106,45 @@ class Oil {
 
   /// The stats of the oil.
   final Stats stats;
+
+  @override
+  String toString() => name;
+
+  /// Convert to json.
+  dynamic toJson() => name;
 }
 
 /// An edge is a special effect that can be applied to a weapon.
-class Edge {
+class Edge extends CatalogItem {
   /// Create an Edge
-  Edge(this.name, this.effects);
-
-  /// The name of the edge.
-  final String name;
+  Edge({required super.name, required this.effect});
 
   /// The effects of the edge.
-  final Effects? effects;
+  final Effect? effect;
+
+  @override
+  String toString() => name;
+
+  @override
+  dynamic toJson() {
+    return {
+      'name': name,
+      'effect': effect?.toJson(),
+    };
+  }
 }
 
 /// Class representing a player or an enemy.
 @immutable
-class Creature {
+class Creature extends CatalogItem {
   /// Create a Creature (player or enemy).
   Creature({
-    required this.name,
+    required super.name,
     required Stats intrinsic,
     required this.gold,
     this.items = const <Item>[],
     int? hp,
-    this.effects,
+    this.effect,
     this.edge,
     this.oils = const <Oil>[],
   })  : _intrinsic = intrinsic,
@@ -152,14 +167,11 @@ class Creature {
   /// Returns true if this Creature is the player.
   bool get isPlayer => name == _kPlayerName;
 
-  /// Name of the creature or 'Player' if the player.
-  final String name;
-
   /// The intrinsic stats of this Creature without any items.
   final Stats _intrinsic;
 
   /// Intrinsic effects of this creature.
-  final Effects? effects;
+  final Effect? effect;
 
   /// The edge on the weapon.
   final Edge? edge;
@@ -204,8 +216,25 @@ class Creature {
       items: items,
       hp: hp ?? this.hp,
       gold: gold ?? this.gold,
-      effects: effects,
+      effect: effect,
       edge: edge,
     );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'health': _intrinsic.maxHp,
+      'attack': _intrinsic.attack,
+      'armor': _intrinsic.armor,
+      'speed': _intrinsic.speed,
+      'gold': gold,
+      'items': items.map((i) => i.toJson()).toList(),
+      'hp': hp,
+      'effect': effect?.toJson(),
+      'edge': edge?.toJson(),
+      'oils': oils.map((oil) => oil.toJson()).toList(),
+    };
   }
 }

@@ -1,3 +1,4 @@
+import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
 
@@ -57,25 +58,26 @@ class Stats {
 
 /// Represents an item that can be equipped by the player.
 @immutable
-class Item {
+class Item extends CatalogItem {
   /// Create a new Item
   Item(
-    this.name,
+    String name,
     this.rarity, {
-    this.kind = Kind.notSpecified,
-    this.material = Material.notSpecified,
+    this.kind,
+    this.material,
     int health = 0,
     int armor = 0,
     int attack = 0,
     int speed = 0,
     this.isUnique = false,
-    this.effects,
-  }) : stats = Stats(
+    this.effect,
+  })  : stats = Stats(
           maxHp: health,
           armor: armor,
           attack: attack,
           speed: speed,
-        ) {
+        ),
+        super(name: name) {
     if (kind == Kind.weapon && attack == 0) {
       if (name == 'Bejeweled Blade') {
         // Bejeweled Blade is a special case, it is intentionally 0.
@@ -85,11 +87,8 @@ class Item {
     }
   }
 
-  /// Name of the item.
-  final String name;
-
   /// Kind of the item.
-  final Kind kind;
+  final Kind? kind;
 
   /// Stats for the item.
   final Stats stats;
@@ -98,18 +97,29 @@ class Item {
   final Rarity rarity;
 
   /// Material of the item.
-  final Material material;
+  final Material? material;
 
   /// Effect of the item.
-  final Effects? effects;
+  final Effect? effect;
 
   /// Is the item unique.
   /// Unique items can only be equipped once.
   final bool isUnique;
 
   @override
-  String toString() {
-    return name;
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'kind': kind?.toJson(),
+      'rarity': rarity.toString().split('.').last,
+      'material': material.toString().split('.').last,
+      'attack': stats.attack,
+      'health': stats.maxHp,
+      'armor': stats.armor,
+      'speed': stats.speed,
+      'unique': isUnique,
+      'effect': effect?.toJson(),
+    };
   }
 }
 
@@ -117,9 +127,6 @@ class Item {
 enum Kind {
   /// Weapon, can only equip one of these.
   weapon,
-
-  /// Not displayed in the UI.
-  notSpecified,
 
   // Are food and jewelry just "tags"?  The only reason why Food is separate
   // is that there are food + stone items.
@@ -129,11 +136,18 @@ enum Kind {
   food,
 
   /// Jewelry, interacts with items sensitive to jewelry.
-  jewelry,
+  jewelry;
+
+  /// Create a kind from a json string.
+  factory Kind.fromJson(String json) {
+    return Kind.values.firstWhere((e) => e.name == json);
+  }
+
+  /// Convert the kind to a json string.
+  String toJson() => name;
 }
 
 /// Rarity class of an item.
-/// Items within a given rarity can be re-rolled.
 enum Rarity {
   /// Common, found in chests.
   common,
@@ -148,15 +162,20 @@ enum Rarity {
   golden,
 
   /// Cauldron, made by combining food in the cauldron.
-  cauldron,
+  cauldron;
+
+  /// Create a rarity from a json string.
+  factory Rarity.fromJson(String json) {
+    return Rarity.values.firstWhere((e) => e.name == json);
+  }
+
+  /// Convert the rarity to a json string.
+  String toJson() => name;
 }
 
 /// Represents the material of the item.
 // These maybe should just be "tags".
 enum Material {
-  /// Not displayed in the UI.
-  notSpecified,
-
   /// Wood, interacts with items sensitive to wood.
   wood,
 
@@ -167,5 +186,13 @@ enum Material {
   sanguine,
 
   /// Bomb
-  bomb,
+  bomb;
+
+  /// Create a material from a json string.
+  factory Material.fromJson(String json) {
+    return Material.values.firstWhere((e) => e.name == json);
+  }
+
+  /// Convert the material to a json string.
+  String toJson() => name;
 }

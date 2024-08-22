@@ -12,8 +12,8 @@ Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final armor = yaml['armor'] as int? ?? 0;
   final speed = yaml['speed'] as int? ?? 0;
   final effectText = yaml['effect'] as String?;
-  final effects = lookupEffect(name);
-  if (effectText != null && effects == null) {
+  final effect = lookupEffect(name);
+  if (effectText != null && effect == null) {
     return null;
   }
 
@@ -23,14 +23,14 @@ Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     attack: attack,
     armor: armor,
     speed: speed,
-    effects: effects,
+    effect: effect,
   );
 }
 
 /// Class to hold all known creatures.
-class CreatureCatalog {
+class CreatureCatalog extends Catalog<Creature> {
   /// Create an CreatureCatalog
-  CreatureCatalog(this.creatures);
+  CreatureCatalog(super.creatures);
 
   /// Create an CreatureCatalog from a yaml file.
   factory CreatureCatalog.fromFile(String path) {
@@ -57,9 +57,10 @@ class CreatureCatalog {
   ];
 
   /// The creatures in this catalog.
-  final List<Creature> creatures;
+  List<Creature> get creatures => items;
 
   /// Lookup an Creature by name.
+  @override
   Creature operator [](String name) =>
       creatures.firstWhere((i) => i.name == name);
 }

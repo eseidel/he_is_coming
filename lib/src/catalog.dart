@@ -9,10 +9,10 @@ import 'package:yaml/yaml.dart';
 extension LookupOr on YamlMap {
   /// Lookup a key in the yaml, and return the value if it exists.
   /// If the key is missing, return the default value.
-  T lookupOr<T extends Enum>(String key, List<T> values, T defaultValue) {
+  T? get<T extends Enum>(String key, List<T> values) {
     final toFind = this[key] as String?;
     if (toFind == null) {
-      return defaultValue;
+      return null;
     }
     final found = values.firstWhereOrNull((v) => v.name == toFind);
     if (found == null) {
@@ -23,7 +23,7 @@ extension LookupOr on YamlMap {
 
   /// Lookup a key in the yaml, and return the value if it exists.
   /// If the key is missing, throw an exception.
-  T lookup<T extends Enum>(String key, List<T> values) {
+  T expect<T extends Enum>(String key, List<T> values) {
     final toFind = this[key] as String?;
     if (toFind == null) {
       throw Exception('$key is missing from $this');
@@ -96,7 +96,7 @@ class CatalogReader {
     if (warnAboutMissingEffects) {
       _warnAboutMissingEffects(yamlList, effectsCatalog, T.toString());
     }
-    Effects? lookupEffect(String name) => effectsCatalog[name];
+    Effect? lookupEffect(String name) => effectsCatalog[name];
 
     return yamlList
         .cast<YamlMap>()
@@ -107,4 +107,45 @@ class CatalogReader {
         .nonNulls
         .toList();
   }
+}
+
+/// An item in the catalog.
+abstract class CatalogItem {
+  /// Create a catalog item with a name.
+  CatalogItem({required this.name});
+
+  /// The name of the item.
+  final String name;
+
+  @override
+  String toString() {
+    return name;
+  }
+
+  /// Convert the item to a json map.
+  dynamic toJson();
+}
+
+/// A catalog of items.
+class Catalog<T extends CatalogItem> {
+  /// Create a catalog from a list of items.
+  Catalog(this.items);
+
+  /// The items in the catalog.
+  final List<T> items;
+
+  /// Get an item by name or return null if it doesn't exist.
+  T? get(String name) => items.firstWhereOrNull((item) => item.name == name);
+
+  /// Get an item by name, or throw an exception if it doesn't exist.
+  T operator [](String name) {
+    final item = get(name);
+    if (item == null) {
+      throw Exception('Missing $name in $T catalog');
+    }
+    return item;
+  }
+
+  /// Convert the catalog to a json list.
+  List<dynamic> toJson() => items.map((i) => i.toJson()).toList();
 }

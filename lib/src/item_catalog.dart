@@ -10,18 +10,17 @@ import 'package:yaml/yaml.dart';
 
 Item? _itemFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final name = yaml['name'] as String;
-  final kind = yaml.lookupOr('kind', Kind.values, Kind.notSpecified);
-  final rarity = yaml.lookup('rarity', Rarity.values);
-  final material =
-      yaml.lookupOr('material', Material.values, Material.notSpecified);
+  final kind = yaml.get('kind', Kind.values);
+  final rarity = yaml.expect('rarity', Rarity.values);
+  final material = yaml.get('material', Material.values);
   final attack = yaml['attack'] as int? ?? 0;
   final health = yaml['health'] as int? ?? 0;
   final armor = yaml['armor'] as int? ?? 0;
   final speed = yaml['speed'] as int? ?? 0;
   final unique = yaml['unique'] as bool? ?? false;
   final effectText = yaml['effect'] as String?;
-  final effects = lookupEffect(name);
-  if (effectText != null && effects == null) {
+  final effect = lookupEffect(name);
+  if (effectText != null && effect == null) {
     return null;
   }
   return Item(
@@ -33,15 +32,15 @@ Item? _itemFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     health: health,
     armor: armor,
     speed: speed,
-    effects: effects,
+    effect: effect,
     isUnique: unique,
   );
 }
 
 /// Class to hold all known items.
-class ItemCatalog {
+class ItemCatalog extends Catalog<Item> {
   /// Create an ItemCatalog
-  ItemCatalog(this.items);
+  ItemCatalog(super.items);
 
   /// Create an ItemCatalog from a yaml file.
   factory ItemCatalog.fromFile(String path) {
@@ -71,9 +70,6 @@ class ItemCatalog {
     'effect',
   ];
 
-  /// The items in this catalog.
-  final List<Item> items;
-
   /// All the weapons in the catalog.
   List<Item> get weapons => items.where((i) => i.kind == Kind.weapon).toList();
 
@@ -82,16 +78,14 @@ class ItemCatalog {
       items.where((i) => i.kind != Kind.weapon).toList();
 
   /// Get a random weapon from the catalog.
-  Item randomWeapon(Random random) {
-    return weapons[random.nextInt(weapons.length)];
-  }
+  Item randomWeapon(Random random) => weapons[random.nextInt(weapons.length)];
 
   /// Get a random non-weapon item from the catalog.
-  Item randomNonWeapon(Random random) {
-    return nonWeapons[random.nextInt(nonWeapons.length)];
-  }
+  Item randomNonWeapon(Random random) =>
+      nonWeapons[random.nextInt(nonWeapons.length)];
 
   /// Lookup an Item by name.
+  @override
   Item operator [](String name) {
     final item = items.firstWhereOrNull((i) => i.name == name);
     if (item == null) {
