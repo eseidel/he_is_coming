@@ -73,7 +73,7 @@ final itemEffects = <String, Effects>{
   ),
   'Fortified Gauntlet':
       onTurn((c) => _if(c.my.armor > 0, () => c.gainArmor(1))),
-  'Iron Rose': Effects(onHeal: (c) => c.gainArmor(1)),
+  'Iron Rose': onHeal((c) => c.gainArmor(1)),
   'Featherweight Coat': onBattle(
     (c) => _if(
       c.my.armor > 0,
@@ -101,7 +101,7 @@ final itemEffects = <String, Effects>{
   ),
   'Double-plated Armor': onExposed((c) => c.gainArmor(3)),
   'Sapphire Earing':
-      Effects(onTurn: (c) => _if(c.isEveryOtherTurn, () => c.gainArmor(1))),
+      onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainArmor(1))),
   'Emerald Earing': onTurn(
     (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(1)),
   ),

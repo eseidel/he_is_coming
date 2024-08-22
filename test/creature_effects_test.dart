@@ -72,7 +72,7 @@ void main() {
         Item(
           'Ring',
           Rarity.common,
-          effects: Effects(onBattle: (c) => c.gainAttack(1)),
+          effects: onBattle((c) => c.gainAttack(1)),
         ),
       ],
     );

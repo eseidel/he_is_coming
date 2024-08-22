@@ -574,7 +574,7 @@ void main() {
     final healOnHit = Item(
       'healOnHit',
       Rarity.common,
-      effects: Effects(onHit: (c) => c.restoreHealth(1)),
+      effects: onHit((c) => c.restoreHealth(1)),
     );
     final player = createPlayer(items: [item, item, healOnHit], hp: 1);
     expect(player.hp, 1);
@@ -618,7 +618,7 @@ void main() {
     final armor = Item(
       'armor',
       Rarity.common,
-      effects: Effects(onTurn: (c) => c.gainArmor(1)),
+      effects: onTurn((c) => c.gainArmor(1)),
     );
     final gauntlet = itemCatalog['Fortified Gauntlet'];
     final player = createPlayer(items: [armor, gauntlet]);
@@ -648,7 +648,7 @@ void main() {
     final healOnHit = Item(
       'healOnHit',
       Rarity.common,
-      effects: Effects(onHit: (c) => c.restoreHealth(1)),
+      effects: onHit((c) => c.restoreHealth(1)),
     );
     final item = itemCatalog['Iron Rose'];
     // Order of the items should not matter in this case.
@@ -817,7 +817,7 @@ void main() {
       'Wolf',
       attack: 1,
       health: 6,
-      effects: Effects(onTurn: (c) => c.restoreHealth(1)),
+      effects: onTurn((c) => c.restoreHealth(1)),
     );
 
     final item = itemCatalog["Woodcutter's Axe"];
@@ -1027,12 +1027,12 @@ void main() {
     // Tree Sap heals 1 hp 5 times on wounded, negating all of the wolf's dmg.
     expect(result.first.hp, 8);
 
-    final onHeal = Item(
+    final heals = Item(
       'onHeal',
       Rarity.common,
-      effects: Effects(onHeal: (c) => c.gainArmor(1)),
+      effects: onHeal((c) => c.gainArmor(1)),
     );
-    final player2 = createPlayer(items: [item, onHeal], hp: 8);
+    final player2 = createPlayer(items: [item, heals], hp: 8);
     expect(player2.baseStats.maxHp, 15);
     expect(player2.hp, 8);
     final result2 = doBattle(first: player2, second: enemy);
