@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:yaml/yaml.dart';
+import 'package:yaml_edit/yaml_edit.dart';
 
 /// Extensions for reading yaml files.
 extension LookupOr on YamlMap {
@@ -151,6 +152,14 @@ class Catalog<T extends CatalogItem> {
       (item) =>
           item.effect != null && item.effect != null && item.effect!.isEmpty,
     );
+  }
+
+  /// Save the catalog to a yaml file.
+  void save(String path) {
+    final json = toJson();
+    final yamlEditor = YamlEditor('')..update([], json);
+    final sortedItemsYaml = yamlEditor.toString();
+    File(path).writeAsStringSync(sortedItemsYaml);
   }
 
   /// Get an item by name or return null if it doesn't exist.

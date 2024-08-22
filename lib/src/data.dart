@@ -31,6 +31,14 @@ class Data {
     return Data(creatures: creatures, items: items, edges: edges, oils: oils);
   }
 
+  /// Save the data to the yaml files.
+  void save() {
+    creatures.save(_creaturesPath);
+    items.save(_defaultItemsPath);
+    edges.save(_edgesPath);
+    oils.save(_oilsPath);
+  }
+
   /// The creatures in this catalog.
   final CreatureCatalog creatures;
 

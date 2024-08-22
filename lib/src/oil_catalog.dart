@@ -16,13 +16,13 @@ Oil? _oilFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     armor: armor,
     speed: speed,
   );
-  return Oil(name, stats);
+  return Oil(name: name, stats: stats);
 }
 
 /// Class to hold all known Oils.
-class OilCatalog {
+class OilCatalog extends Catalog<Oil> {
   /// Create an OilCatalog
-  OilCatalog(this.oils);
+  OilCatalog(super.oils);
 
   /// Create an EdgeCatalog from a yaml file.
   factory OilCatalog.fromFile(String path) {
@@ -44,9 +44,6 @@ class OilCatalog {
     'speed',
   ];
 
-  /// The edges in this catalog.
-  final List<Oil> oils;
-
-  /// Lookup an Oil by name.
-  Oil operator [](String name) => oils.firstWhere((i) => i.name == name);
+  /// The oils in this catalog.
+  List<Oil> get oils => items;
 }

@@ -104,12 +104,9 @@ Creature makeEnemy({
 }
 
 /// Oil applied to a weapon.
-class Oil {
+class Oil extends CatalogItem {
   /// Create an Oil
-  Oil(this.name, this.stats);
-
-  /// The name of the oil.
-  final String name;
+  Oil({required super.name, required this.stats});
 
   /// The stats of the oil.
   final Stats stats;
@@ -118,6 +115,7 @@ class Oil {
   String toString() => name;
 
   /// Convert to json.
+  @override
   dynamic toJson() => name;
 }
 
