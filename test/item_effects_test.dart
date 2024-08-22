@@ -1092,4 +1092,27 @@ void main() {
     // by armor.
     expect(result.first.hp, 1);
   });
+
+  test('Assault Greaves', () {
+    final item = itemCatalog['Assault Greaves'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6, speed: 2);
+    final result = doBattle(first: player, second: enemy);
+    // Assault Greaves deals 1 dmg every time we take dmg.
+    // Meaning we kill the wolf in 3 turns rather than 5.
+    expect(result.first.hp, 7);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(armor: 1),
+      items: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 1);
+
+    final result2 = doBattle(first: player2, second: enemy);
+    // Assault Greaves triggers even when armor blocks the damage.
+    expect(result2.first.hp, 8);
+  });
 }

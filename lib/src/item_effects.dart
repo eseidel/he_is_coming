@@ -135,4 +135,5 @@ final itemEffects = <String, Effects>{
     onHit: (ctx) => _if(ctx.my.attack == 1, () => ctx.dealDamage(4)),
   ),
   'Bloody Steak': Effects(onWounded: (c) => c.gainArmor(c.my.maxHp ~/ 2)),
+  'Assault Greaves': Effects(onTakeDamage: (c) => c.dealDamage(1)),
 };
