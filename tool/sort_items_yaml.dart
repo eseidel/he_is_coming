@@ -32,7 +32,12 @@ void main() {
     final sortedItem = <String, dynamic>{};
     for (final key in item.keys.toList().cast<String>()
       ..sort(compareItemKeys)) {
-      sortedItem[key] = item[key];
+      final value = item[key];
+      if (value is YamlList) {
+        sortedItem[key] = value.toList();
+      } else {
+        sortedItem[key] = value;
+      }
     }
     items.add(sortedItem);
   }
