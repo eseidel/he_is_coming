@@ -18,6 +18,12 @@
 - name: Blacksmith Bond
   rarity: rare
   effect: Exposed can trigger one additional time
+- name: Bloody Steak
+  rarity: cauldron
+  parts:
+    - Stone Steak
+    - Vampiric Wine
+  effect: "Wounded: Gain armor equal to 50% of max health"
 - name: Bonespine Whip
   kind: weapon
   rarity: heroic
@@ -51,6 +57,10 @@
   kind: jewelry
   rarity: rare
   effect: "Battle Start: If your speed is 6 or higher, your strikes deal double damage"
+- name: Citrine Gemstone
+  kind: jewelry
+  rarity: heroic
+  effect: Your speed stat is inverted
 - name: Citrine Ring
   unique: true
   kind: jewelry
@@ -100,6 +110,10 @@
 - name: Emerald Earing
   rarity: common
   effect: Restore 1 health every other turn
+- name: Emerald Gemstone
+  kind: jewelry
+  rarity: heroic
+  effect: Overhealing is dealt as damage
 - name: Emerald Ring
   kind: jewelry
   rarity: common
@@ -131,6 +145,28 @@
   rarity: rare
   unlock: Fight a boss early and win it
   effect: "Battle Start: Gain 1 gold"
+- name: Golden Emerald Ring
+  kind: jewelry
+  rarity: golden
+  effect: "Battle Start: Restore 4 health"
+- name: Golden Leather Gloves
+  rarity: golden
+  health: 6
+  speed: 2
+- name: Golden Redwood Cloak
+  rarity: golden
+  material: wood
+  health: 4
+  effect: "Battle Start: If your health is not full, gain 2 health"
+- name: Golden Redwood Helmet
+  rarity: golden
+  material: wood
+  armor: 2
+  effect: "Exposed: Restore 6 health"
+- name: Golden Ruby Ring
+  kind: jewelry
+  rarity: golden
+  effect: "Battle Start: Gain 2 attack and take 4 damage"
 - name: Granite Gauntlet
   rarity: common
   material: stone
@@ -236,6 +272,11 @@
   rarity: rare
   material: stone
   effect: "Battle Start: Gain 2 armor for each equipped stone item"
+- name: Petrifying Flask
+  rarity: common
+  material: stone
+  unlock: "Rock Solid: Win against the Granite Griffin for the first time"
+  effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
 - name: Phantom Armor
   rarity: rare
   armor: 4
@@ -278,6 +319,11 @@
   kind: jewelry
   rarity: common
   effect: Deal 1 damage every other turn
+- name: Ruby Gemstone
+  unique: true
+  kind: jewelry
+  rarity: heroic
+  effect: "If your attack is exactly 1, deal 4 damage on hit"
 - name: Ruby Ring
   kind: jewelry
   rarity: rare
@@ -341,6 +387,13 @@
   kind: weapon
   rarity: common
   attack: 3
+- name: Tree Sap
+  rarity: cauldron
+  parts:
+    - Redwood Roast
+    - Vampiric Wine
+  health: 5
+  effect: "Wounded: Restore 1 health 5 times"
 - name: Vampiric Wine
   kind: food
   rarity: common
@@ -360,52 +413,3 @@
   kind: weapon
   rarity: common
   attack: 1
-- name: "Golden Leather Gloves"
-  rarity: golden
-  health: 6
-  speed: 2
-- name: Petrifying Flask
-  rarity: common
-  unlock: "Rock Solid: Win against the Granite Griffin for the first time"
-  material: stone
-  effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
-- name: "Bloody Steak"
-  rarity: cauldron
-  effect: "Wounded: Gain armor equal to 50% of max health"
-  parts: ['Stone Steak', 'Vampiric Wine']
-- name: "Golden Redwood Cloak"
-  rarity: golden
-  material: wood
-  health: 4
-  effect: "Battle Start: If your health is not full, gain 2 health"
-- name: "Ruby Gemstone"
-  rarity: heroic
-  unique: true
-  kind: jewelry
-  effect: "If your attack is exactly 1, deal 4 damage on hit"
-- name: Tree Sap
-  rarity: cauldron
-  health: 5
-  parts: ['Redwood Roast', 'Vampiric Wine']
-  effect: "Wounded: Restore 1 health 5 times"
-- name: Golden Ruby Ring
-  rarity: golden
-  kind: jewelry
-  effect: "Battle Start: Gain 2 attack and take 4 damage"
-- name: Golden Redwood Helmet
-  rarity: golden
-  material: wood
-  armor: 2
-  effect: "Exposed: Restore 6 health"
-- name: Emerald Gemstone
-  kind: jewelry
-  rarity: heroic
-  effect: Overhealing is dealt as damage
-- name: Golden Emerald Ring
-  rarity: golden
-  kind: jewelry
-  effect: "Battle Start: Restore 4 health"
-- name: Citrine Gemstone
-  kind: jewelry
-  rarity: heroic
-  effect: Your speed stat is inverted
