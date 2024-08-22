@@ -8,21 +8,41 @@ void runSim() {
   data = Data.load();
 
   final items = [
-    'Granite Hammer',
-    'Elderwood Necklace',
+    'Heart Drinker',
+    'Horned Helmet',
+    'Iron Rose',
+    'Crimson Cloak',
+    'Impressive Physique',
     'Iron Transfusion',
-    'Iron Transfusion',
-    'Iron Transfusion',
-    'Plated Helmet',
-    'Iron Transfusion',
-  ].map((name) => data.items[name]).toList();
-  final edge = data.edges['Bleeding Edge'];
-  final oils = [
-    data.oils['Attack Oil'],
-    data.oils['Armor Oil'],
-    data.oils['Speed Oil'],
+    'Tree Sap',
+    'Sapphire Earing',
+    'Emerald Earing',
   ];
-  final player = createPlayer(items: items, edge: edge, oils: oils);
+  const edge = 'Jagged Edge';
+  final oils = [
+    'Speed Oil',
+  ];
+
+  // final items = [
+  //   'Granite Hammer',
+  //   'Elderwood Necklace',
+  //   'Iron Transfusion',
+  //   'Iron Transfusion',
+  //   'Iron Transfusion',
+  //   'Plated Helmet',
+  //   'Iron Transfusion',
+  // ];
+  // const edge = 'Bleeding Edge';
+  // final oils = [
+  //   'Attack Oil',
+  //   'Armor Oil',
+  //   'Speed Oil',
+  // ];
+  final player = createPlayer(
+    items: items.map((name) => data.items[name]).toList(),
+    edge: data.edges[edge],
+    oils: oils.map((name) => data.oils[name]).toList(),
+  );
   final enemy = data.creatures['Woodland Abomination'];
 
   // final player = createPlayer(items: [data.items['Stone Steak']]);

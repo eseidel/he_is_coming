@@ -1,6 +1,8 @@
 import 'package:he_is_coming/src/battle.dart';
 import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/data.dart';
+import 'package:he_is_coming/src/effects.dart';
+import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -35,5 +37,21 @@ void main() {
     expect(result.first.hp, 5);
     // Gain one gold at battle end.
     expect(result.first.gold, 1);
+  });
+
+  test('Check for Death after every trigger', () {
+    final player = createPlayer(
+      items: [
+        Item(
+          'heals',
+          Rarity.common,
+          effects: Effects(onTakeDamage: (c) => c.restoreHealth(1)),
+        ),
+      ],
+    );
+    final enemy = makeEnemy('Wolf', attack: 10, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 0);
+    expect(result.second.hp, 5);
   });
 }

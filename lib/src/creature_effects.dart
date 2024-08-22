@@ -27,7 +27,15 @@ final creatureEffects = <String, Effects>{
   'Spider Level 3': _spiderEffect(damage: 5),
   'Bat Level 1': _batEffect(hp: 1),
   'Bat Level 2': _batEffect(hp: 2),
-  'Woodland Abomination': Effects(onTurn: (c) => c.gainAttack(1)),
+  'Woodland Abomination': Effects(
+    onTurn: (c) {
+      // The game lets the abomination attack once for 0 for whatever reason.
+      if (c.isFirstTurn) {
+        return;
+      }
+      c.gainAttack(1);
+    },
+  ),
   'Black Knight': Effects(onBattle: (c) => c.gainAttack(c.enemy.attack)),
   'Ironstone Golem': Effects(onExposed: (c) => c.loseAttack(3)),
 };

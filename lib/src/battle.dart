@@ -148,9 +148,10 @@ class EffectContext {
     _expectPositive(hp, 'hp');
     // Don't clamp hp here, let it go below zero and then when copied
     // back into the stats it will be clamped to 0.
-    final newHp = min(_stats.hp - hp, _stats.maxHp);
+    final delta = -hp;
+    final newHp = min(_stats.hp + delta, _stats.maxHp);
     _stats = _stats.copyWith(hp: newHp);
-    _battle.log('$_playerName hp ${_signed(hp)} from $_sourceName');
+    _battle.log('$_playerName hp $delta from $_sourceName');
   }
 
   /// Reduce the enemy's max hp by a given amount.
@@ -323,6 +324,15 @@ class CreatureStats {
   }
 }
 
+class _DeathException implements Exception {
+  _DeathException(this.creature);
+
+  final Creature creature;
+
+  @override
+  String toString() => 'DeathException: $creature';
+}
+
 /// Context for an in-progress battle.
 class BattleContext {
   /// Create a BattleContext.
@@ -461,7 +471,7 @@ class BattleContext {
     }
 
     // Does it count as damage if it's absorbed by armor?
-    _trigger(defenderIndex, Effect.onTakeDamage);
+    _trigger(targetIndex, Effect.onTakeDamage);
 
     // newStats is not valid after setStats (which can happen inside a trigger)
     {
@@ -512,23 +522,36 @@ class BattleContext {
     }
   }
 
+  /// Probably this only needs to happen within the takeDamage effect?
+  void _checkForDeath() {
+    if (stats[0].hp <= 0) {
+      throw _DeathException(creatures[0]);
+    }
+    if (stats[1].hp <= 0) {
+      throw _DeathException(creatures[1]);
+    }
+  }
+
   void _trigger(int index, Effect effect) {
     final creature = creatures[index];
     final beforeStats = stats[index];
     if (creature.effects != null) {
       final effectCxt = EffectContext(this, index, creature.name);
       creature.effects?[effect]?.call(effectCxt);
+      _checkForDeath();
     }
 
     // Slightly odd to have the edge trigger before the weapon.
     if (creature.edge != null) {
       final effectCxt = EffectContext(this, index, creature.edge!.name);
       creature.edge!.effects?[effect]?.call(effectCxt);
+      _checkForDeath();
     }
 
     for (final item in creature.items) {
       final effectCxt = EffectContext(this, index, item.name);
       item.effects?[effect]?.call(effectCxt);
+      _checkForDeath();
     }
     final afterStats = stats[index];
     final diffString = beforeStats.diffString(afterStats);
@@ -665,19 +688,23 @@ class Battle {
     required Creature second,
     bool verbose = false,
   }) {
-    final ctx = BattleContext([first, second], verbose: verbose)
-      .._triggerOnBattleStart()
-      .._decideFirstAttacker();
-
-    logger
-      ..detail('${first.name}: ${ctx.stats[0]}')
-      ..detail('${second.name}: ${ctx.stats[1]}');
-    while (ctx.allAlive) {
+    final ctx = BattleContext([first, second], verbose: verbose);
+    try {
       ctx
-        .._triggerOnTurn()
-        ..strike()
-        // Might advance multiple turns if both creatures are stunned.
-        ..nextAttacker();
+        .._triggerOnBattleStart()
+        .._decideFirstAttacker()
+        ..log('${first.name}: ${ctx.stats[0]}')
+        ..log('${second.name}: ${ctx.stats[1]}');
+      while (ctx.allAlive) {
+        ctx.log('${ctx.attackerName} turn ${ctx.turnNumber}');
+        ctx
+          .._triggerOnTurn()
+          ..strike()
+          // Might advance multiple turns if both creatures are stunned.
+          ..nextAttacker();
+      }
+    } on _DeathException catch (e) {
+      logger.info('${e.creature.name} has died');
     }
 
     return ctx.resolveWithSpoils();

@@ -661,7 +661,9 @@ void main() {
     // Iron Rose gives 1 armor on (successful) heal, but the first hit we're
     // not damaged, so it does nothing.  Our remaining 5 hits heal 1 each time.
     // Wolf hits us 5 times, the first time for 3 dmg, then 1 for each.
-    expect(result.first.hp, 4);
+    // TODO(eseidel): Should the last hit heal?
+    // The last hit does not heal us (since battle immediately ends)?
+    expect(result.first.hp, 3);
     expect(result.first.baseStats.armor, 0);
 
     // This time w/o the healOnHit item, the iron rose won't trigger.

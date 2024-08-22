@@ -86,3 +86,7 @@ Sapphire Earing
 Emerald Earing
 
 58 dmg, 15 turns.
+
+Currently our sim says:
+Woodland Abomination wins in 15 turns with 60 damage taken.
+Probably thorns doesn't apply once we're dead?
