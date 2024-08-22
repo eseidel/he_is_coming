@@ -4,6 +4,27 @@ import 'package:meta/meta.dart';
 /// Function type for effect callbacks.
 typedef EffectFn = void Function(EffectContext ctx);
 
+/// Creates an [Effects] with an onBattle callback.
+Effects onBattle(EffectFn fn) => Effects(onBattle: fn);
+
+/// Creates an [Effects] with an onTurn callback.
+Effects onTurn(EffectFn fn) => Effects(onTurn: fn);
+
+/// Creates an [Effects] with an onHit callback.
+Effects onHit(EffectFn fn) => Effects(onHit: fn);
+
+/// Creates an [Effects] with an onTakeDamage callback.
+Effects onTakeDamage(EffectFn fn) => Effects(onTakeDamage: fn);
+
+/// Creates an [Effects] with an onExposed callback.
+Effects onExposed(EffectFn fn) => Effects(onExposed: fn);
+
+/// Creates an [Effects] with an onWounded callback.
+Effects onWounded(EffectFn fn) => Effects(onWounded: fn);
+
+/// Creates an [Effects] with an onHeal callback.
+Effects onHeal(EffectFn fn) => Effects(onHeal: fn);
+
 /// Enum representing the different effects that can be triggered.
 enum Effect {
   /// Called on battle start.
