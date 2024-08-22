@@ -108,6 +108,12 @@ class EffectContext {
     _battle._adjustStun(turns: turns, index: _enemyIndex, source: _sourceName);
   }
 
+  /// Stun self for a number of turns.
+  void stunSelf(int turns) {
+    _expectPositive(turns, 'turns');
+    _battle._adjustStun(turns: turns, index: _index, source: _sourceName);
+  }
+
   /// Give armor to the enemy.
   void giveArmorToEnemy(int armor) {
     _expectPositive(armor, 'armor');
@@ -651,7 +657,12 @@ class BattleContext {
 
     // Print spoils for the player if they won.
     _logSpoils(before: creatures[0], after: first);
-    return BattleResult(first: first, second: second, turns: _turnsTaken ~/ 2);
+    return BattleResult(
+      first: first,
+      second: second,
+      // _turnsTaken is 0-indexed, as is turns
+      turns: _turnsTaken ~/ 2,
+    );
   }
 
   /// Run the battle and return the result.

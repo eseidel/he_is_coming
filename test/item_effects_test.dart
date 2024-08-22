@@ -1041,4 +1041,17 @@ void main() {
     // Thus we get hit once for 1 dmg, then heal 5 times and gain 5 armor.
     expect(result2.first.hp, 12);
   });
+
+  test('Petrifying Flask', () {
+    final item = itemCatalog['Petrifying Flask'];
+    final player = createPlayer(items: [item], hp: 5);
+    expect(player.hp, 5);
+
+    final enemy = makeEnemy('Wolf', attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy, verbose: true);
+    // Petrifying Flask gives 10 armor and self-stuns for 2 turns on wounded.
+    expect(result.first.hp, 4);
+    // turns is 0-indexed, turn 7 is the 8th turn.
+    expect(result.turns, 7);
+  });
 }

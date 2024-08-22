@@ -126,4 +126,9 @@ final itemEffects = <String, Effects>{
   'Crimson Cloak': Effects(onTakeDamage: (c) => c.restoreHealth(1)),
   'Tree Sap':
       Effects(onWounded: (c) => [1, 1, 1, 1, 1].forEach(c.restoreHealth)),
+  'Petrifying Flask': Effects(
+    onWounded: (c) => c
+      ..gainArmor(10)
+      ..stunSelf(2),
+  ),
 };
