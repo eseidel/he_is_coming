@@ -67,7 +67,7 @@ jobs:
         working-directory: ui
 
       - name: 👷 Build website
-        run: flutter build web
+        run: flutter build web --release
         working-directory: ui
 
       - name: Upload artifact
