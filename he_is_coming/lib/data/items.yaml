@@ -412,3 +412,10 @@
   kind: weapon
   rarity: common
   attack: 1
+- name: Rock Roast
+  rarity: cauldron
+  health: 5
+  armor: 5
+  parts:
+    - Redwood Roast
+    - Stone Steak
