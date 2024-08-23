@@ -1,5 +1,8 @@
 $schema: https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json
 version: "0.2"
+ignorePaths:
+  - "**/build/**"
+  - "ui/macos/**" # Lots of apple-specific words we don't care about.
 words:
   - Treant
   - Leshen
