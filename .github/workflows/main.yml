@@ -62,6 +62,7 @@ jobs:
 
       - name: 👷 Build website
         run: flutter build web
+        working-directory: ui
 
       - name: ☁️ Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
