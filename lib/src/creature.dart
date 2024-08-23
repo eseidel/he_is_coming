@@ -143,7 +143,8 @@ class Oil extends CatalogItem {
   dynamic toJson() => <String, dynamic>{
         'name': name,
         'unlock': unlock,
-      }..addAll(stats.toJson());
+        ...stats.toJson(),
+      };
 }
 
 /// An edge is a special effect that can be applied to a weapon.
@@ -310,16 +311,14 @@ class Creature extends CatalogItem {
     return {
       'name': name,
       'level': level,
-    }
-      ..addAll(_intrinsic.toJson())
-      ..addAll({
-        if (gold != 1) 'gold': gold,
-        'items': items.map((i) => i.toJson()).toList(),
-        // Not including hp for now.
-        'effect': effect?.toJson(),
-        'edge': edge?.toJson(),
-        'oils': oils.map((oil) => oil.toJson()).toList(),
-        'unlock': unlock,
-      });
+      ..._intrinsic.toJson(),
+      if (gold != 1) 'gold': gold,
+      'items': items.map((i) => i.toJson()).toList(),
+      // Not including hp for now.
+      'effect': effect?.toJson(),
+      'edge': edge?.toJson(),
+      'oils': oils.map((oil) => oil.toJson()).toList(),
+      'unlock': unlock,
+    };
   }
 }

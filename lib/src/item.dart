@@ -188,12 +188,10 @@ class Item extends CatalogItem {
       'rarity': rarity.toJson(),
       'parts': parts,
       'material': material?.toJson(),
-    }
-      ..addAll(stats.toJson())
-      ..addAll({
-        'unlock': unlock,
-        'effect': effect?.toJson(),
-      });
+      ...stats.toJson(),
+      'unlock': unlock,
+      'effect': effect?.toJson(),
+    };
   }
 }
 
