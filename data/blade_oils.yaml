@@ -1,6 +1,6 @@
-- name: "Attack Oil"
+- name: Attack Oil
   attack: 1
-- name: "Armor Oil"
+- name: Armor Oil
   armor: 1
-- name: "Speed Oil"
+- name: Speed Oil
   speed: 1

@@ -1,18 +1,18 @@
 - name: Titan's Edge
-  effect: Only strike every other turn, but deal double damage
+  effect: "Only strike every other turn, but deal double damage"
 - name: Thieving Edge
   effect: "On Hit: If you have less than 10 gold, gain 1 gold"
-- name: "Blunt Edge"
+- name: Blunt Edge
   effect: "On Hit: Gain 1 armor"
-- name: "Lightning Edge"
+- name: Lightning Edge
   effect: "Battle Start: Stun the enemy for 1 turn"
-- name: "Bleeding Edge"
+- name: Bleeding Edge
   effect: "On Hit: Restore 1 health"
-- name: "Cutting Edge"
+- name: Cutting Edge
   effect: "On Hit: Deal 1 damage"
 - name: Jagged Edge
   unlock: "Nocturnal Predator: Defeat 5 enemies during one night"
   effect: "On Hit: Gain 2 thorns and take 1 damage"
 - name: Agile Edge
   unlock: "Stop hitting yourself: Strike an enemy 2 times before their turn"
-  effect: "Do an additional strike on your first turn"
+  effect: Do an additional strike on your first turn
