@@ -20,11 +20,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: dart-lang/setup-dart@v1
+      - name: ⚙️ Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
 
       - name: Install dependencies
         run: dart pub get
         working-directory: he_is_coming
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: ui
 
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
@@ -47,8 +54,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: 3.19.0
-
+  
       - name: 📦 Install Dependencies
         run: flutter pub get
         working-directory: ui
