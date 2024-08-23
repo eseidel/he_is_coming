@@ -67,7 +67,7 @@ jobs:
         working-directory: ui
 
       - name: 👷 Build website
-        run: flutter build web --release
+        run: flutter build web --release --base-href /he-is-coming/
         working-directory: ui
 
       - name: Upload artifact
