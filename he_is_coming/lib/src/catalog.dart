@@ -164,5 +164,8 @@ class Catalog<T extends CatalogItem> {
   T random(Random random) => items[random.nextInt(items.length)];
 
   /// Convert the catalog to a json list.
-  List<dynamic> toJson() => items.map((i) => i.toJson()).toList();
+  List<dynamic> toJson() {
+    final sorted = items.toList()..sort((a, b) => a.name.compareTo(b.name));
+    return sorted.map((item) => item.toJson()).toList();
+  }
 }

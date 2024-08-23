@@ -30,20 +30,64 @@
   armor: 4
   speed: 2
   effect: Bear deals 7 additional damage while you have armor
-- name: Wolf Level 1
-  health: 3
+- name: Black Knight
+  level: 1
+  health: 10
   attack: 1
-  effect: "If player has 5 or less health, wolf gains 2 attack"
-- name: Wolf Level 2
-  health: 6
-  attack: 2
-  speed: 1
-  effect: "If player has 5 or less health, wolf gains 3 attack"
-- name: Wolf Level 3
-  health: 9
+  armor: 5
+  effect: "Battle Start: Black Knight gains attack equal to the players attack"
+- name: Brittlebark Beast
+  level: 1
+  health: 40
   attack: 3
   speed: 2
-  effect: "If player has 5 or less health, wolf gains 4 attack"
+  effect: "Whenever Brittlebark Beast takes damage, he takes 2 additional damage"
+- name: Granite Griffin
+  level: 2
+  health: 10
+  attack: 5
+  armor: 10
+  effect: "Wounded: Granite Griffin gains 30 armor and gets stunned for 2 turns"
+- name: Hedgehog Level 1
+  health: 1
+  attack: 1
+  armor: 1
+  effect: "Battle Start: Hedgehog gains 3 thorns"
+- name: Hothead
+  level: 1
+  health: 5
+  attack: 4
+  speed: 4
+  effect: "If Hothead has more speed than you, his first strike deals 10 additional damage"
+- name: Ironstone Golem
+  level: 1
+  health: 5
+  attack: 4
+  armor: 15
+  effect: "Exposed: Ironstone loses 3 attack"
+- name: Leshen
+  level: 3
+  health: 60
+  attack: 7
+  speed: 3
+- name: Mountain Troll
+  level: 2
+  health: 20
+  attack: 10
+  armor: 10
+  effect: Mountain Troll only strikes every other turn
+- name: Razortusk Hog
+  level: 2
+  health: 20
+  attack: 4
+  speed: 4
+  effect: "Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle"
+- name: Redwood Treant
+  level: 2
+  health: 25
+  attack: 6
+  armor: 15
+  effect: Redwood Treant's attack is halved against armor
 - name: Spider Level 1
   health: 2
   attack: 1
@@ -59,64 +103,20 @@
   attack: 1
   speed: 4
   effect: "Battle Start: If Spider has more speed than you, it deals 5 damage"
-- name: Hedgehog Level 1
-  health: 1
+- name: Wolf Level 1
+  health: 3
   attack: 1
-  armor: 1
-  effect: "Battle Start: Hedgehog gains 3 thorns"
-- name: Hothead
-  level: 1
-  health: 5
-  attack: 4
-  speed: 4
-  effect: "If Hothead has more speed than you, his first strike deals 10 additional damage"
-- name: Brittlebark Beast
-  level: 1
-  health: 40
+  effect: "If player has 5 or less health, wolf gains 2 attack"
+- name: Wolf Level 2
+  health: 6
+  attack: 2
+  speed: 1
+  effect: "If player has 5 or less health, wolf gains 3 attack"
+- name: Wolf Level 3
+  health: 9
   attack: 3
   speed: 2
-  effect: "Whenever Brittlebark Beast takes damage, he takes 2 additional damage"
-- name: Ironstone Golem
-  level: 1
-  health: 5
-  attack: 4
-  armor: 15
-  effect: "Exposed: Ironstone loses 3 attack"
-- name: Black Knight
-  level: 1
-  health: 10
-  attack: 1
-  armor: 5
-  effect: "Battle Start: Black Knight gains attack equal to the players attack"
-- name: Redwood Treant
-  level: 2
-  health: 25
-  attack: 6
-  armor: 15
-  effect: Redwood Treant's attack is halved against armor
-- name: Razortusk Hog
-  level: 2
-  health: 20
-  attack: 4
-  speed: 4
-  effect: "Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle"
-- name: Granite Griffin
-  level: 2
-  health: 10
-  attack: 5
-  armor: 10
-  effect: "Wounded: Granite Griffin gains 30 armor and gets stunned for 2 turns"
-- name: Mountain Troll
-  level: 2
-  health: 20
-  attack: 10
-  armor: 10
-  effect: Mountain Troll only strikes every other turn
-- name: Leshen
-  level: 3
-  health: 60
-  attack: 7
-  speed: 3
+  effect: "If player has 5 or less health, wolf gains 4 attack"
 - name: Woodland Abomination
   level: 3
   health: 1000

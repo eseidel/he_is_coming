@@ -310,6 +310,13 @@
   material: wood
   health: 4
   attack: 2
+- name: Rock Roast
+  rarity: cauldron
+  parts:
+    - Redwood Roast
+    - Stone Steak
+  health: 5
+  armor: 5
 - name: Ruby Crown
   kind: jewelry
   rarity: rare
@@ -412,10 +419,3 @@
   kind: weapon
   rarity: common
   attack: 1
-- name: Rock Roast
-  rarity: cauldron
-  health: 5
-  armor: 5
-  parts:
-    - Redwood Roast
-    - Stone Steak
