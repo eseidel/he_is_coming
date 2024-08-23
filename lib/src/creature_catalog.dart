@@ -8,6 +8,7 @@ import 'package:yaml/yaml.dart';
 
 Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final name = yaml['name'] as String;
+  final level = yaml['level'] as int?;
   final attack = yaml['attack'] as int? ?? 0;
   final health = yaml['health'] as int? ?? 0;
   final armor = yaml['armor'] as int? ?? 0;
@@ -16,6 +17,7 @@ Creature? _creatureFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final effect = lookupEffect(name: name, effectText: effectText);
   return Creature(
     name: name,
+    level: level,
     intrinsic: Stats(
       maxHp: health,
       armor: armor,

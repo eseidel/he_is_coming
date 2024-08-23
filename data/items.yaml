@@ -13,7 +13,6 @@
 - name: Bejeweled Blade
   kind: weapon
   rarity: rare
-  attack: 0
   effect: Gain 2 attack for each equipped jewelry item
 - name: Blacksmith Bond
   rarity: rare
@@ -35,8 +34,8 @@
 - name: Brittlebark Armor
   rarity: heroic
   material: wood
-  unlock: "Barking up the wrong tree: Win against the Brittlebark Beast for the first time"
   health: 10
+  unlock: "Barking up the wrong tree: Win against the Brittlebark Beast for the first time"
   effect: "Whenever you take damage, take 1 additional damage"
 - name: Brittlebark Bow
   kind: weapon
@@ -198,8 +197,8 @@
 - name: Hidden Dagger
   kind: weapon
   rarity: common
-  unlock: "Less is More: Defeat the first boss with only common items in your inventory."
   attack: 2
+  unlock: "Less is More: Defeat the first boss with only common items in your inventory."
   effect: Gets stronger for every new hidden dagger you find
 - name: Hook Blade
   kind: weapon
@@ -309,8 +308,8 @@
   kind: weapon
   rarity: common
   material: wood
-  attack: 2
   health: 4
+  attack: 2
 - name: Ruby Crown
   kind: jewelry
   rarity: rare
@@ -380,8 +379,8 @@
 - name: Swiftstrike Rapier
   kind: weapon
   rarity: rare
-  unlock: "Hunting Season: Win against Razortusk Hog for the first time"
   attack: 2
+  unlock: "Hunting Season: Win against Razortusk Hog for the first time"
   effect: "First Turn: If you have more speed than the enemy, do 2 additional strikes"
 - name: Sword of the Hero
   kind: weapon

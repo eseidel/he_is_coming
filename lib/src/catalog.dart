@@ -121,13 +121,16 @@ class CatalogReader {
 /// An item in the catalog.
 abstract class CatalogItem {
   /// Create a catalog item with a name.
-  CatalogItem({required this.name, this.effect});
+  CatalogItem({required this.name, this.effect, this.unlock});
 
   /// The name of the item.
   final String name;
 
   /// The effect of the item.
   final Effect? effect;
+
+  /// Requirements to unlock this item.
+  final String? unlock;
 
   @override
   String toString() {
@@ -154,9 +157,37 @@ class Catalog<T extends CatalogItem> {
     );
   }
 
+  bool _removeEmptyValues(dynamic json) {
+    if (json is Map) {
+      final keys = json.keys.toList();
+      for (final key in keys) {
+        final value = json[key];
+        if (value is Map || value is List) {
+          if (_removeEmptyValues(value)) {
+            json.remove(key);
+          }
+        } else if (value == null) {
+          json.remove(key);
+        }
+      }
+      return json.isEmpty;
+    } else if (json is List) {
+      for (var i = 0; i < json.length; i++) {
+        if (_removeEmptyValues(json[i])) {
+          json.removeAt(i);
+          i--;
+        }
+      }
+      return json.isEmpty;
+    }
+    return false;
+  }
+
   /// Save the catalog to a yaml file.
   void save(String path) {
     final json = toJson();
+    _removeEmptyValues(json);
+
     final yamlEditor = YamlEditor('')..update([], json);
     final sortedItemsYaml = yamlEditor.toString();
     File(path).writeAsStringSync(sortedItemsYaml);

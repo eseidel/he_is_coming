@@ -9,9 +9,10 @@ import 'package:yaml/yaml.dart';
 
 Edge? _edgeFromYaml(YamlMap yaml, LookupEffect lookupEffect) {
   final name = yaml['name'] as String;
+  final unlock = yaml['unlock'] as String?;
   final effectText = yaml['effect'] as String?;
   final effect = lookupEffect(name: name, effectText: effectText);
-  return Edge(name: name, effect: effect);
+  return Edge(name: name, effect: effect, unlock: unlock);
 }
 
 /// Class to hold all known edges.

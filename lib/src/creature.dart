@@ -106,7 +106,7 @@ Creature makeEnemy({
 /// Oil applied to a weapon.
 class Oil extends CatalogItem {
   /// Create an Oil
-  Oil({required super.name, required this.stats});
+  Oil({required super.name, required this.stats, super.unlock});
 
   /// The stats of the oil.
   final Stats stats;
@@ -116,13 +116,16 @@ class Oil extends CatalogItem {
 
   /// Convert to json.
   @override
-  dynamic toJson() => name;
+  dynamic toJson() => <String, dynamic>{
+        'name': name,
+        'unlock': unlock,
+      }..addAll(stats.toJson());
 }
 
 /// An edge is a special effect that can be applied to a weapon.
 class Edge extends CatalogItem {
   /// Create an Edge
-  Edge({required super.name, required super.effect});
+  Edge({required super.name, required super.effect, super.unlock});
 
   @override
   String toString() => name;
@@ -131,6 +134,7 @@ class Edge extends CatalogItem {
   dynamic toJson() {
     return {
       'name': name,
+      'unlock': unlock,
       'effect': effect?.toJson(),
     };
   }
@@ -148,6 +152,8 @@ class Creature extends CatalogItem {
     int? hp,
     super.effect,
     this.edge,
+    super.unlock,
+    this.level,
     this.oils = const <Oil>[],
   })  : _intrinsic = intrinsic,
         _lostHp = _computeLostHp(intrinsic, items, oils, hp);
@@ -187,6 +193,10 @@ class Creature extends CatalogItem {
   /// How much gold is on this creature or player.
   final int gold;
 
+  /// The level this creature appears in.
+  // This belongs somewhere else.
+  final int? level;
+
   /// Current health of the creature.
   /// Combat can't change maxHp, so we can compute it from baseStats.
   int get hp => baseStats.maxHp - _lostHp;
@@ -217,6 +227,8 @@ class Creature extends CatalogItem {
       gold: gold ?? this.gold,
       effect: effect,
       edge: edge,
+      unlock: unlock,
+      level: level,
     );
   }
 
@@ -224,16 +236,17 @@ class Creature extends CatalogItem {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'health': _intrinsic.maxHp,
-      'attack': _intrinsic.attack,
-      'armor': _intrinsic.armor,
-      'speed': _intrinsic.speed,
-      'gold': gold,
-      'items': items.map((i) => i.toJson()).toList(),
-      'hp': hp,
-      'effect': effect?.toJson(),
-      'edge': edge?.toJson(),
-      'oils': oils.map((oil) => oil.toJson()).toList(),
-    };
+      'level': level,
+    }
+      ..addAll(_intrinsic.toJson())
+      ..addAll({
+        if (gold != 1) 'gold': gold,
+        'items': items.map((i) => i.toJson()).toList(),
+        // Not including hp for now.
+        'effect': effect?.toJson(),
+        'edge': edge?.toJson(),
+        'oils': oils.map((oil) => oil.toJson()).toList(),
+        'unlock': unlock,
+      });
   }
 }

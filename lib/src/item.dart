@@ -44,8 +44,8 @@ class Stats {
   }) {
     return Stats(
       maxHp: maxHp ?? this.maxHp,
-      armor: armor ?? this.armor,
       attack: attack ?? this.attack,
+      armor: armor ?? this.armor,
       speed: speed ?? this.speed,
     );
   }
@@ -53,6 +53,16 @@ class Stats {
   @override
   String toString() {
     return 'MaxHP: $maxHp, Armor: $armor, Attack: $attack, Speed: $speed';
+  }
+
+  /// Convert to json.
+  Map<String, dynamic> toJson() {
+    return {
+      if (maxHp != 0) 'health': maxHp,
+      if (attack != 0) 'attack': attack,
+      if (armor != 0) 'armor': armor,
+      if (speed != 0) 'speed': speed,
+    };
   }
 }
 
@@ -71,6 +81,8 @@ class Item extends CatalogItem {
     int speed = 0,
     this.isUnique = false,
     super.effect,
+    super.unlock,
+    this.parts = const [],
   })  : stats = Stats(
           maxHp: health,
           armor: armor,
@@ -97,11 +109,7 @@ class Item extends CatalogItem {
         text: 'test',
       );
     }
-    return Item(
-      'test',
-      Rarity.common,
-      effect: triggers,
-    );
+    return Item('test', Rarity.common, effect: triggers);
   }
 
   /// Kind of the item.
@@ -120,20 +128,24 @@ class Item extends CatalogItem {
   /// Unique items can only be equipped once.
   final bool isUnique;
 
+  /// Items combined to make this item.
+  final List<String>? parts;
+
   @override
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      if (isUnique) 'unique': isUnique,
       'kind': kind?.toJson(),
-      'rarity': rarity.toString().split('.').last,
-      'material': material.toString().split('.').last,
-      'attack': stats.attack,
-      'health': stats.maxHp,
-      'armor': stats.armor,
-      'speed': stats.speed,
-      'unique': isUnique,
-      'effect': effect?.toJson(),
-    };
+      'rarity': rarity.toJson(),
+      'parts': parts,
+      'material': material?.toJson(),
+    }
+      ..addAll(stats.toJson())
+      ..addAll({
+        'unlock': unlock,
+        'effect': effect?.toJson(),
+      });
   }
 }
 
