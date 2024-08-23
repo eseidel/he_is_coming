@@ -1,18 +1,26 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/creature_effects.dart';
 import 'package:he_is_coming/src/edge_effects.dart';
+import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_effects.dart';
-import 'package:he_is_coming/src/logger.dart';
 import 'package:path/path.dart' as p;
+import 'package:yaml/yaml.dart';
 
-final _creaturesPath = p.join('data', 'creatures.yaml');
-final _defaultItemsPath = p.join('data', 'items.yaml');
-final _edgesPath = p.join('data', 'edges.yaml');
-final _oilsPath = p.join('data', 'blade_oils.yaml');
+class _Paths {
+  _Paths(this.dir);
+
+  final String dir;
+
+  String get creatures => p.join(dir, 'creatures.yaml');
+  String get items => p.join(dir, 'items.yaml');
+  String get edges => p.join(dir, 'edges.yaml');
+  String get oils => p.join(dir, 'blade_oils.yaml');
+}
 
 /// The data for the game.
 class Data {
@@ -25,20 +33,28 @@ class Data {
   });
 
   /// Load the data from the yaml files.
-  factory Data.load() {
-    final creatures = CreatureCatalog.fromFile(_creaturesPath);
-    final items = ItemCatalog.fromFile(_defaultItemsPath);
-    final edges = EdgeCatalog.fromFile(_edgesPath);
-    final oils = OilCatalog.fromFile(_oilsPath);
-    return Data(creatures: creatures, items: items, edges: edges, oils: oils);
+  factory Data.load([String path = 'lib/data']) {
+    final paths = _Paths(path);
+    T load<T>(String path, T Function(YamlList) fromYaml) {
+      final yaml = loadYaml(File(path).readAsStringSync()) as YamlList;
+      return fromYaml(yaml);
+    }
+
+    return Data(
+      creatures: load(paths.creatures, CreatureCatalog.fromYaml),
+      items: load(paths.items, ItemCatalog.fromYaml),
+      edges: load(paths.edges, EdgeCatalog.fromYaml),
+      oils: load(paths.oils, OilCatalog.fromYaml),
+    );
   }
 
   /// Save the data to the yaml files.
-  void save() {
-    creatures.save(_creaturesPath);
-    items.save(_defaultItemsPath);
-    edges.save(_edgesPath);
-    oils.save(_oilsPath);
+  void save([String path = 'lib/data']) {
+    final paths = _Paths(path);
+    creatures.save(paths.creatures);
+    items.save(paths.items);
+    edges.save(paths.edges);
+    oils.save(paths.oils);
   }
 
   /// The creatures in this catalog.
@@ -63,14 +79,13 @@ class CreatureCatalog extends Catalog<Creature> {
   CreatureCatalog(super.creatures);
 
   /// Create an CreatureCatalog from a yaml file.
-  factory CreatureCatalog.fromFile(String path) {
-    final creatures = CatalogReader.read(
-      path,
+  factory CreatureCatalog.fromYaml(YamlList yaml) {
+    final creatures = CatalogReader.parseYaml(
+      yaml,
       Creature.fromYaml,
       Creature.orderedKeys.toSet(),
       creatureEffects,
     );
-    logger.info('Loaded ${creatures.length} from $path');
     return CreatureCatalog(creatures);
   }
 
@@ -84,14 +99,13 @@ class EdgeCatalog extends Catalog<Edge> {
   EdgeCatalog(super.edges);
 
   /// Create an EdgeCatalog from a yaml file.
-  factory EdgeCatalog.fromFile(String path) {
-    final edges = CatalogReader.read(
-      path,
+  factory EdgeCatalog.fromYaml(YamlList yaml) {
+    final edges = CatalogReader.parseYaml(
+      yaml,
       Edge.fromYaml,
       orderedKeys.toSet(),
       edgeEffects,
     );
-    logger.info('Loaded ${edges.length} from $path');
     return EdgeCatalog(edges);
   }
 
@@ -112,14 +126,13 @@ class ItemCatalog extends Catalog<Item> {
   ItemCatalog(super.items);
 
   /// Create an ItemCatalog from a yaml file.
-  factory ItemCatalog.fromFile(String path) {
-    final items = CatalogReader.read(
-      path,
+  factory ItemCatalog.fromYaml(YamlList yaml) {
+    final items = CatalogReader.parseYaml(
+      yaml,
       Item.fromYaml,
       Item.orderedKeys.toSet(),
       itemEffects,
     );
-    logger.info('Loaded ${items.length} from $path');
     return ItemCatalog(items);
   }
 
@@ -144,14 +157,13 @@ class OilCatalog extends Catalog<Oil> {
   OilCatalog(super.oils);
 
   /// Create an EdgeCatalog from a yaml file.
-  factory OilCatalog.fromFile(String path) {
-    final oils = CatalogReader.read(
-      path,
+  factory OilCatalog.fromYaml(YamlList yaml) {
+    final oils = CatalogReader.parseYaml(
+      yaml,
       Oil.fromYaml,
       Oil.orderedKeys.toSet(),
-      {}, // No oils have effects in the game yet.
+      EffectCatalog({}), // No oils have effects in the game yet.
     );
-    logger.info('Loaded ${oils.length} from $path');
     return OilCatalog(oils);
   }
 

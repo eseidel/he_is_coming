@@ -24,7 +24,7 @@ EffectMap _hedgehogEffect({required int thorns}) =>
     onBattle((c) => c.gainThorns(thorns));
 
 /// Effects that can be triggered by creatures.
-final creatureEffects = <String, EffectMap>{
+final creatureEffects = EffectCatalog(<String, EffectMap>{
   'Spider Level 1': _spiderEffect(damage: 3),
   'Spider Level 2': _spiderEffect(damage: 4),
   'Spider Level 3': _spiderEffect(damage: 5),
@@ -47,4 +47,4 @@ final creatureEffects = <String, EffectMap>{
       ..gainArmor(30)
       ..stunSelf(2),
   ),
-};
+});

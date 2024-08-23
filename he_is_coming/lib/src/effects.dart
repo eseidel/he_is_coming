@@ -82,8 +82,25 @@ class Effect {
   dynamic toJson() => text;
 }
 
-/// Type for looking up effects by name.
-typedef EffectCatalog = Map<String, EffectMap>;
+/// Catalog of effects.
+class EffectCatalog {
+  /// Create a new EffectCatalog
+  EffectCatalog(this.catalog);
+
+  /// The catalog of effects.
+  final Map<String, EffectMap> catalog;
+
+  /// Look up an effect by name.
+  Effect? lookup({required String name, required String? effectText}) {
+    if (effectText == null) {
+      return null;
+    }
+    return Effect(
+      callbacks: catalog[name] ?? {},
+      text: effectText,
+    );
+  }
+}
 
 /// Type for looking up effects by name.
 typedef LookupEffect = Effect? Function({

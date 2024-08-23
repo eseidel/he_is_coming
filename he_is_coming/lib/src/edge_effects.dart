@@ -8,7 +8,7 @@ void _if(bool condition, void Function() fn) {
 }
 
 /// Effects that can be triggered by edges.
-final edgeEffects = <String, EffectMap>{
+final edgeEffects = EffectCatalog(<String, EffectMap>{
   'Bleeding Edge': onHit((c) => c.restoreHealth(1)),
   'Blunt Edge': onHit((c) => c.gainArmor(1)),
   'Lightning Edge': onBattle((c) => c.stunEnemy(1)),
@@ -19,4 +19,4 @@ final edgeEffects = <String, EffectMap>{
       ..takeDamage(1),
   ),
   'Cutting Edge': onHit((c) => c.dealDamage(1)),
-};
+});

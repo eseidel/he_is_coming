@@ -11,6 +11,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
+  he_is_coming:
+    path: ../he_is_coming
 
 dev_dependencies:
   flutter_test:
@@ -18,3 +20,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - packages/he_is_coming/data/blade_oils.yaml
+    - packages/he_is_coming/data/creatures.yaml
+    - packages/he_is_coming/data/edges.yaml
+    - packages/he_is_coming/data/items.yaml
+    - packages/he_is_coming/data/triggers.yaml
