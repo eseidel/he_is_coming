@@ -1,6 +1,7 @@
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
+import 'package:yaml/yaml.dart';
 
 /// Class representing stats for a Creature.
 @immutable
@@ -112,6 +113,37 @@ class Item extends CatalogItem {
     return Item('test', Rarity.common, effect: triggers);
   }
 
+  /// Create an item from a yaml map.
+  factory Item.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
+    final name = yaml['name'] as String;
+    final kind = yaml.get('kind', Kind.values);
+    final rarity = yaml.expect('rarity', Rarity.values);
+    final material = yaml.get('material', Material.values);
+    final attack = yaml['attack'] as int? ?? 0;
+    final health = yaml['health'] as int? ?? 0;
+    final armor = yaml['armor'] as int? ?? 0;
+    final speed = yaml['speed'] as int? ?? 0;
+    final unlock = yaml['unlock'] as String?;
+    final unique = yaml['unique'] as bool? ?? false;
+    final effectText = yaml['effect'] as String?;
+    final parts = yaml['parts'] as List?;
+    final effect = lookupEffect(name: name, effectText: effectText);
+    return Item(
+      name,
+      kind: kind,
+      rarity,
+      material: material,
+      attack: attack,
+      health: health,
+      armor: armor,
+      speed: speed,
+      effect: effect,
+      isUnique: unique,
+      unlock: unlock,
+      parts: parts?.cast<String>(),
+    );
+  }
+
   /// Kind of the item.
   final Kind? kind;
 
@@ -130,6 +162,22 @@ class Item extends CatalogItem {
 
   /// Items combined to make this item.
   final List<String>? parts;
+
+  /// All the known keys in the item yaml, in sorted order.
+  static const List<String> orderedKeys = <String>[
+    'name',
+    'unique',
+    'kind',
+    'rarity',
+    'material',
+    'unlock', // ignored for now
+    'parts', // ignored for now
+    'attack',
+    'health',
+    'armor',
+    'speed',
+    'effect',
+  ];
 
   @override
   Map<String, dynamic> toJson() {

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/effects.dart';
@@ -88,7 +89,7 @@ class CatalogReader {
   /// Read a yaml file and return a list of items.
   static List<T> read<T extends Object>(
     String path,
-    T? Function(YamlMap, LookupEffect) fromYaml,
+    T Function(YamlMap, LookupEffect) fromYaml,
     Set<String> validKeys,
     EffectCatalog effectsCatalog, {
     bool warnAboutMissingEffects = true,
@@ -204,6 +205,9 @@ class Catalog<T extends CatalogItem> {
     }
     return item;
   }
+
+  /// Get a random item.
+  T random(Random random) => items[random.nextInt(items.length)];
 
   /// Convert the catalog to a json list.
   List<dynamic> toJson() => items.map((i) => i.toJson()).toList();
