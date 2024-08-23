@@ -48,6 +48,26 @@ class Data {
     );
   }
 
+  /// Create a new data object from strings.
+  static Future<Data> fromStrings({
+    required Future<String> creatures,
+    required Future<String> items,
+    required Future<String> edges,
+    required Future<String> oils,
+  }) async {
+    T load<T>(String content, T Function(YamlList) fromYaml) {
+      final yaml = loadYaml(content) as YamlList;
+      return fromYaml(yaml);
+    }
+
+    return Data(
+      creatures: load(await creatures, CreatureCatalog.fromYaml),
+      items: load(await items, ItemCatalog.fromYaml),
+      edges: load(await edges, EdgeCatalog.fromYaml),
+      oils: load(await oils, OilCatalog.fromYaml),
+    );
+  }
+
   /// Save the data to the yaml files.
   void save([String path = 'lib/data']) {
     final paths = _Paths(path);

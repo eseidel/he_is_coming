@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:he_is_coming/src/data.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,18 +37,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  bool isLoading = true;
+  late final Data data;
 
   @override
   void initState() {
     super.initState();
-    rootBundle.loadString('packages/he_is_coming/data/items.yaml').then(print);
+    isLoading = true;
+    loadData().then((value) {
+      setState(() {
+        data = value;
+        isLoading = false;
+      });
+    });
+  }
+
+  Future<Data> loadData() async {
+    final creatures =
+        rootBundle.loadString('packages/he_is_coming/data/creatures.yaml');
+    final items =
+        rootBundle.loadString('packages/he_is_coming/data/items.yaml');
+    final edges =
+        rootBundle.loadString('packages/he_is_coming/data/edges.yaml');
+    final oils =
+        rootBundle.loadString('packages/he_is_coming/data/blade_oils.yaml');
+    return Data.fromStrings(
+      creatures: creatures,
+      items: items,
+      edges: edges,
+      oils: oils,
+    );
   }
 
   @override
@@ -58,23 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: isLoading
+            ? const CircularProgressIndicator()
+            : Text(data.creatures.creatures.first.name),
       ),
     );
   }

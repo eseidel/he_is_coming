@@ -1,8 +1,23 @@
-import 'package:mason_logger/mason_logger.dart';
 import 'package:meta/meta.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
-export 'package:mason_logger/mason_logger.dart';
+/// A simple logger class that prints messages to the console.
+class Logger {
+  /// Create a new logger.
+  void info(String message) {
+    print('INFO: $message'); // ignore: avoid_print
+  }
+
+  /// Log an error message.
+  void err(String message) {
+    print('ERROR: $message'); // ignore: avoid_print
+  }
+
+  /// Log a warning message.
+  void warn(String message) {
+    print('WARNING: $message'); // ignore: avoid_print
+  }
+}
 
 /// A reference to the global logger using package:scoped to create.
 final loggerRef = create(Logger.new);

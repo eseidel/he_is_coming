@@ -349,8 +349,6 @@ class BattleContext {
   void log(String message) {
     if (verbose) {
       logger.info(message);
-    } else {
-      logger.detail(message);
     }
   }
 
