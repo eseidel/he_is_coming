@@ -383,19 +383,17 @@ class ItemGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Card(
-          elevation: 8,
-          child: GridView.builder(
-            padding: const EdgeInsets.all(12),
-            gridDelegate: _CustomGridDelegate(dimension: 240),
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ItemView(item: items[index]);
-            },
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Card(
+        elevation: 8,
+        child: GridView.builder(
+          padding: const EdgeInsets.all(12),
+          gridDelegate: _CustomGridDelegate(dimension: 240),
+          itemCount: items.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ItemView(item: items[index]);
+          },
         ),
       ),
     );
