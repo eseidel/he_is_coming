@@ -5,7 +5,7 @@ import 'package:scoped_deps/scoped_deps.dart';
 class Logger {
   /// Create a new logger.
   void info(String message) {
-    print('INFO: $message'); // ignore: avoid_print
+    print(message); // ignore: avoid_print
   }
 
   /// Log an error message.
