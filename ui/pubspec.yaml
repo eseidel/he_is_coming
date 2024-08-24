@@ -11,6 +11,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
+  google_fonts: ^6.2.1
   he_is_coming:
     path: ../he_is_coming
 

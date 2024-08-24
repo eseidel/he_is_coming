@@ -26,6 +26,9 @@ class Stats {
   /// Current speed.
   final int speed;
 
+  /// Return true if all stats are 0.
+  bool get isEmpty => this == const Stats();
+
   /// Add two Stats together.
   Stats operator +(Stats other) {
     return copyWith(
