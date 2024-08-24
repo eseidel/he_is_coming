@@ -6,17 +6,17 @@ void doMain(List<String> arguments) {
   final data = Data.load();
   final foods =
       data.items.items.where((item) => item.kind == ItemKind.food).toList();
-  print('${foods.length} food items found:');
+  logger.info('${foods.length} food items found:');
   for (final food in foods) {
-    print('  ${food.name}');
+    logger.info('  ${food.name}');
   }
 
   final cauldronItems = data.items.items
       .where((item) => item.rarity == ItemRarity.cauldron)
       .toList();
-  print('${cauldronItems.length} cauldron items found:');
+  logger.info('${cauldronItems.length} cauldron items found:');
   for (final item in cauldronItems) {
-    print('  ${item.name}');
+    logger.info('  ${item.name}');
   }
 }
 
