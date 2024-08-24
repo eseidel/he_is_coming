@@ -673,6 +673,14 @@ class BattleContext {
         _strike();
         // Might advance multiple turns if both creatures are stunned.
         _nextAttacker();
+        if (_attackerIndex == 1 && turnNumber > 100) {
+          // https://discord.com/channels/1041414829606449283/1209488593219756063/1276997595071512596
+          dealDamage(
+            damage: 10,
+            targetIndex: _attackerIndex,
+            source: 'Time Limit',
+          );
+        }
       }
     } on _DeathException catch (e) {
       log('${e.creature.name} has died');
