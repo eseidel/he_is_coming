@@ -332,7 +332,7 @@
   effect: "If your attack is exactly 1, deal 4 damage on hit"
 - name: Ruby Ring
   kind: jewelry
-  rarity: rare
+  rarity: common
   effect: "Battle Start: Gain 1 attack and take 2 damage"
 - name: Sapphire Crown
   kind: jewelry

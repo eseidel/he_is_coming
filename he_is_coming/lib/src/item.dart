@@ -86,6 +86,7 @@ class Item extends CatalogItem {
     this.isUnique = false,
     super.effect,
     super.unlock,
+    this.inferred = false,
     this.parts = const [],
   })  : stats = Stats(
           maxHp: health,
@@ -131,6 +132,7 @@ class Item extends CatalogItem {
     final effectText = yaml['effect'] as String?;
     final parts = yaml['parts'] as List?;
     final effect = lookupEffect(name: name, effectText: effectText);
+    final inferred = yaml['inferred'] as bool? ?? false;
     return Item(
       name,
       kind: kind,
@@ -144,6 +146,7 @@ class Item extends CatalogItem {
       isUnique: unique,
       unlock: unlock,
       parts: parts?.cast<String>(),
+      inferred: inferred,
     );
   }
 
@@ -163,6 +166,9 @@ class Item extends CatalogItem {
   /// Unique items can only be equipped once.
   final bool isUnique;
 
+  /// Is the item inferred.
+  final bool inferred;
+
   /// Items combined to make this item.
   final List<String>? parts;
 
@@ -180,6 +186,7 @@ class Item extends CatalogItem {
     'armor',
     'speed',
     'effect',
+    'inferred',
   ];
 
   @override
@@ -194,6 +201,7 @@ class Item extends CatalogItem {
       ...stats.toJson(),
       'unlock': unlock,
       'effect': effect?.toJson(),
+      if (inferred) 'inferred': inferred,
     };
   }
 }

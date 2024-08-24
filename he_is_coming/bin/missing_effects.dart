@@ -22,7 +22,6 @@ void logMissingEffects(Catalog catalog) {
 }
 
 void doMain(List<String> arguments) {
-  // Just loading the data should print the effects warnings.
   final data = Data.load();
   logMissingEffects(data.items);
   logMissingEffects(data.creatures);
