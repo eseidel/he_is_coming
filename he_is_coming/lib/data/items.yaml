@@ -359,7 +359,6 @@
   attack: 1
   armor: 4
 - name: Steelbond Curse
-  kind: weapon
   rarity: rare
   attack: 2
   effect: "Battle Start: Give 8 armor to the enemy"
@@ -419,3 +418,19 @@
   kind: weapon
   rarity: common
   attack: 1
+- name: Thorn Ring
+  rarity: heroic
+  unlock: "Grave Mistake: Die from your own items"
+  effect: "Battle Start: Gain 6 thorns and lose 1 health"
+- name: Golden Firecracker Belt
+  rarity: golden
+  effect: "Exposed: Deal 1 damage 6 times"
+  material: bomb
+- name: Bramble Buckler
+  rarity: rare
+  unlock: "It's a secret to everybody: Find a hidden item set"
+  effect: "Turn Start: Convert 1 armor to 2 thorns"
+  armor: 2
+- name: Golden Shield of the Hero
+  rarity: golden
+  armor: 6
