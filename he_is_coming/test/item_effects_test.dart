@@ -758,19 +758,20 @@ void main() {
   });
 
   test('Steelbond Curse', () {
+    // Steelbond Curse is not a weapon, so we keep our wooden stick.
     final item = itemCatalog['Steelbond Curse'];
     final player = createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
-    expect(player.baseStats.attack, 2);
+    expect(player.baseStats.attack, 3);
 
     final enemy = makeEnemy(attack: 1, health: 6);
     final result = doBattle(first: player, second: enemy);
     // Steelbond Curse gives 8 armor to the enemy, so it takes 14 dmg to kill
-    // and it hits for 2, so that's 7 hits, so we take 6 dmg.
-    expect(result.first.hp, 4);
+    // We hit for 3, so that's 5 hits, so we take 4 dmg.
+    expect(result.first.hp, 6);
     expect(player.baseStats.armor, 0);
-    expect(player.baseStats.attack, 2);
+    expect(player.baseStats.attack, 3);
   });
 
   test('Bejeweled Blade', () {
