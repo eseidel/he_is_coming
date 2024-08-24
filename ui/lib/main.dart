@@ -13,6 +13,9 @@ class Palette {
   /// White, used for all UI and text.
   static final Color white = Colors.brown[100]!;
 
+  /// Black, used for all UI and text.
+  static final Color black = Colors.brown[900]!;
+
   /// Text color.
   static final Color text = Palette.white;
 
@@ -194,26 +197,21 @@ class TagsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      spacing: 4,
+      runSpacing: 4,
       children: [
         for (final tag in tags)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: Palette.white,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  tag,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .apply(color: Colors.black, fontWeightDelta: 2),
-                ),
+          DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: Palette.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                tag,
+                style: TextStyle(color: Palette.black),
               ),
             ),
           ),
@@ -272,7 +270,7 @@ class ItemView extends StatelessWidget {
   /// Item to display
   final Item item;
 
-  Widget _colorEffectText(String text) {
+  Widget _colorEffectText(String text, {required BuildContext context}) {
     // Color a few special words:
     final specialWords = <String, Color>{
       'health': Palette.health,
@@ -284,6 +282,7 @@ class ItemView extends StatelessWidget {
     final words = text.split(' ');
     return RichText(
       text: TextSpan(
+        style: Theme.of(context).textTheme.bodySmall,
         children: [
           for (final word in words)
             TextSpan(
@@ -310,10 +309,13 @@ class ItemView extends StatelessWidget {
             child: Column(
               children: [
                 Text(item.name, style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 8),
-                if (item.effect != null) _colorEffectText(item.effect!.text),
+                if (item.effect != null)
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child:
+                        _colorEffectText(item.effect!.text, context: context),
+                  ),
                 if (!item.stats.isEmpty) StatsRow(stats: item.stats),
-                const SizedBox(height: 8),
                 TagsRow(tags: item.tags),
               ],
             ),
