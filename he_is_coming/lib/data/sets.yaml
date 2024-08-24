@@ -1,0 +1,8 @@
+- name: Hero's Return
+  parts:
+   - Sword of the Hero
+   - Shield of the Hero
+   - Boots of the Hero
+  attack: 1
+  armor: 1
+  speed: 1
