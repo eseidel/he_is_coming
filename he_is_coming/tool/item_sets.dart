@@ -7,7 +7,7 @@ import 'package:scoped_deps/scoped_deps.dart';
 // Look for repeats.
 
 void doMain(List<String> arguments) {
-  data = Data.load();
+  final data = Data.load();
 
   final firstWords = <String, List<String>>{};
   final lastWords = <String, List<String>>{};

@@ -20,9 +20,8 @@ BattleResult doBattle({
 }
 
 void main() {
-  runWithLogger(_MockLogger(), () {
-    data = Data.load();
-  });
+  final data = runWithLogger(_MockLogger(), Data.load);
+  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Enemies give gold', () {
     final player = createPlayer();

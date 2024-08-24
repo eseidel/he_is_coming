@@ -23,7 +23,7 @@ List<Item> _enforceItemRules(List<Item> unenforced) {
   // Player must always have a weapon.
   final items = [...unenforced];
   if (items.every((item) => item.kind != ItemKind.weapon)) {
-    items.add(data.items['Wooden Stick']);
+    items.add(Creature.defaultPlayerWeapon);
   }
 
   final itemCounts = items.fold<Map<String, int>>(
@@ -232,6 +232,9 @@ class Creature extends CatalogItem {
 
   /// Returns true if this Creature is the player.
   bool get isPlayer => name == _kPlayerName;
+
+  /// The default player item.
+  static late final Item defaultPlayerWeapon;
 
   /// The intrinsic stats of this Creature without any items.
   final Stats _intrinsic;

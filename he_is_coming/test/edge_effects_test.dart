@@ -19,12 +19,12 @@ BattleResult doBattle({
 }
 
 void main() {
-  runWithLogger(_MockLogger(), () {
-    data = Data.load();
-  });
+  final data = runWithLogger(_MockLogger(), Data.load);
+  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
+  final edges = data.edges;
 
   test('Bleeding Edge', () {
-    final edge = data.edges['Bleeding Edge'];
+    final edge = edges['Bleeding Edge'];
     final player = createPlayer(edge: edge);
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
@@ -33,7 +33,7 @@ void main() {
   });
 
   test('Blunt Edge', () {
-    final edge = data.edges['Blunt Edge'];
+    final edge = edges['Blunt Edge'];
     final player = createPlayer(edge: edge);
     // Wolf is faster than us so it will hit first.
     final enemy = makeEnemy(health: 6, attack: 1, speed: 1);
@@ -43,7 +43,7 @@ void main() {
   });
 
   test('Lightning Edge', () {
-    final edge = data.edges['Lightning Edge'];
+    final edge = edges['Lightning Edge'];
     final player = createPlayer(edge: edge);
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
@@ -52,7 +52,7 @@ void main() {
   });
 
   test('Thieving Edge', () {
-    final edge = data.edges['Thieving Edge'];
+    final edge = edges['Thieving Edge'];
     final player = createPlayer(edge: edge, gold: 8);
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
@@ -62,7 +62,7 @@ void main() {
   });
 
   test('Jagged Edge', () {
-    final edge = data.edges['Jagged Edge'];
+    final edge = edges['Jagged Edge'];
     final player = createPlayer(edge: edge);
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
@@ -72,7 +72,7 @@ void main() {
   });
 
   test('Cutting Edge', () {
-    final edge = data.edges['Cutting Edge'];
+    final edge = edges['Cutting Edge'];
     final player = createPlayer(edge: edge);
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);

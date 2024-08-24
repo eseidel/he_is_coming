@@ -6,9 +6,8 @@ import 'package:test/test.dart';
 class _MockLogger extends Mock implements Logger {}
 
 void main() {
-  runWithLogger(_MockLogger(), () {
-    data = Data.load();
-  });
+  final data = runWithLogger(_MockLogger(), Data.load);
+  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Weapons require attack', () {
     expect(

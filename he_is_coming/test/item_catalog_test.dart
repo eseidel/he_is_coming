@@ -6,9 +6,7 @@ import 'package:test/test.dart';
 class _MockLogger extends Mock implements Logger {}
 
 void main() {
-  runWithLogger(_MockLogger(), () {
-    data = Data.load();
-  });
+  final data = runWithLogger(_MockLogger(), Data.load);
 
   test('ItemCatalog smoke test', () {
     final item = data.items['Wooden Stick'];

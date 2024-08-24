@@ -6,7 +6,8 @@ export 'package:he_is_coming/src/data.dart';
 
 /// Simulate one game with a player.
 void runSim() {
-  data = Data.load();
+  final data = Data.load();
+  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   // final items = [
   //   'Heart Drinker',

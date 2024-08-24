@@ -93,9 +93,6 @@ class Data {
   final OilCatalog oils;
 }
 
-/// Global data object.
-late final Data data;
-
 /// Class to hold all known creatures.
 class CreatureCatalog extends Catalog<Creature> {
   /// Create an CreatureCatalog

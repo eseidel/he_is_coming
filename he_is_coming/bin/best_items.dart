@@ -27,7 +27,7 @@ List<Item> _pickItems(Random random, int count, ItemCatalog itemCatalog) {
 List<Player> _seedPopulation(
   Random random,
   int count,
-  ItemCatalog itemCatalog,
+  Data data,
 ) {
   final population = <Creature>[];
   for (var i = 0; i < count; i++) {
@@ -55,7 +55,7 @@ class CreatureConfig {
     return CreatureConfig(items: items, edge: edge, oils: data.oils.oils);
   }
 
-  factory CreatureConfig.fromJson(Map<String, dynamic> json) {
+  factory CreatureConfig.fromJson(Map<String, dynamic> json, Data data) {
     final itemNames = (json['items'] as List).cast<String>();
     final items = itemNames.map<Item>((n) => data.items[n]).toList();
     final edgeName = json['edge'] as String?;
@@ -97,9 +97,9 @@ Player playerForConfig(CreatureConfig config) {
 class RunResult {
   RunResult({required this.turns, required this.damage, required this.player});
 
-  factory RunResult.fromJson(Map<String, dynamic> json) {
+  factory RunResult.fromJson(Map<String, dynamic> json, Data data) {
     final config =
-        CreatureConfig.fromJson(json['config'] as Map<String, dynamic>);
+        CreatureConfig.fromJson(json['config'] as Map<String, dynamic>, data);
     return RunResult(
       turns: json['turns'] as int,
       damage: json['damage'] as int,
@@ -174,19 +174,19 @@ List<Player> _crossover(List<Player> parents, Random random) {
 class Population {
   Population(this.configs);
 
-  factory Population.fromFile(String path) {
+  factory Population.fromFile(String path, Data data) {
     if (!File(path).existsSync()) {
       return Population([]);
     }
     final contents = File(path).readAsStringSync();
     final json = jsonDecode(contents);
-    return Population.fromJson(json);
+    return Population.fromJson(json, data);
   }
 
-  factory Population.fromJson(dynamic json) {
+  factory Population.fromJson(dynamic json, Data data) {
     final results = (json as List)
         .map<CreatureConfig>(
-          (r) => CreatureConfig.fromJson(r as Map<String, dynamic>),
+          (r) => CreatureConfig.fromJson(r as Map<String, dynamic>, data),
         )
         .toList();
     return Population(results);
@@ -226,7 +226,8 @@ void logResult(RunResult result) {
 }
 
 void doMain(List<String> arguments) {
-  data = Data.load();
+  final data = Data.load();
+  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   final random = Random();
   const rounds = 1000;
@@ -234,14 +235,14 @@ void doMain(List<String> arguments) {
   final survivorsCount = (populationSize * 0.1).ceil();
   const mutationRate = 0.01;
   const filePath = 'results.json';
-  final saved = Population.fromFile(filePath);
+  final saved = Population.fromFile(filePath, data);
   logger.info('Loaded ${saved.configs.length} saved configs.');
 
   List<Creature> pop;
   if (saved.configs.isNotEmpty) {
     pop = saved.configs.map(playerForConfig).toList();
   } else {
-    pop = _seedPopulation(random, populationSize, data.items);
+    pop = _seedPopulation(random, populationSize, data);
   }
   late List<RunResult> bestResults;
 
@@ -282,7 +283,7 @@ void doMain(List<String> arguments) {
     }
 
     pop.addAll(
-      _seedPopulation(random, populationSize - pop.length, data.items),
+      _seedPopulation(random, populationSize - pop.length, data),
     );
     logger.info('Round $i');
     for (final result in bestResults.take(3)) {
