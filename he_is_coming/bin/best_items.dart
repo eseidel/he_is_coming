@@ -4,9 +4,7 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/battle.dart';
-import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/data.dart';
-import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 

@@ -11,6 +11,9 @@ import 'package:he_is_coming/src/item_effects.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+export 'package:he_is_coming/src/creature.dart';
+export 'package:he_is_coming/src/item.dart';
+
 class _Paths {
   _Paths(this.dir);
 
@@ -157,11 +160,12 @@ class ItemCatalog extends Catalog<Item> {
   }
 
   /// All the weapons in the catalog.
-  List<Item> get weapons => items.where((i) => i.kind == Kind.weapon).toList();
+  List<Item> get weapons =>
+      items.where((i) => i.kind == ItemKind.weapon).toList();
 
   /// All the non-weapon items in the catalog.
   List<Item> get nonWeapons =>
-      items.where((i) => i.kind != Kind.weapon).toList();
+      items.where((i) => i.kind != ItemKind.weapon).toList();
 
   /// Get a random weapon from the catalog.
   Item randomWeapon(Random random) => weapons[random.nextInt(weapons.length)];

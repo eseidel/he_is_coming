@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
-import 'package:he_is_coming/src/item.dart';
 import 'package:meta/meta.dart';
 import 'package:yaml/yaml.dart';
 
@@ -23,7 +22,7 @@ class ItemException implements Exception {
 List<Item> _enforceItemRules(List<Item> unenforced) {
   // Player must always have a weapon.
   final items = [...unenforced];
-  if (items.every((item) => item.kind != Kind.weapon)) {
+  if (items.every((item) => item.kind != ItemKind.weapon)) {
     items.add(data.items['Wooden Stick']);
   }
 
@@ -43,13 +42,14 @@ List<Item> _enforceItemRules(List<Item> unenforced) {
     }
   }
 
-  final weaponCount = items.where((item) => item.kind == Kind.weapon).length;
+  final weaponCount =
+      items.where((item) => item.kind == ItemKind.weapon).length;
   if (weaponCount > 1) {
     throw ItemException('Player can only have one weapon.');
   }
 
   // Weapon is always first.
-  items.sortBy<num>((item) => item.kind == Kind.weapon ? 0 : 1);
+  items.sortBy<num>((item) => item.kind == ItemKind.weapon ? 0 : 1);
   return items;
 }
 

@@ -1,5 +1,4 @@
 import 'package:he_is_coming/src/battle.dart';
-import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:mocktail/mocktail.dart';

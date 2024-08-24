@@ -2,32 +2,57 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:google_fonts/google_fonts.dart';
-import 'package:he_is_coming/src/data.dart';
-import 'package:he_is_coming/src/item.dart' as i;
+import 'package:he_is_coming/he_is_coming.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
+/// Color palette
 class Palette {
+  /// White, used for all UI and text.
   static final Color white = Colors.brown[100]!;
+
+  /// Text color.
   static final Color text = Palette.white;
 
+  /// Weapon Items color.
   static const Color weapon = Palette.attack;
+
+  /// Sanguine Items color.
   static final Color sanguine = Colors.red[900]!;
+
+  /// Food Items color.
   static final Color food = Colors.green[800]!;
-  static final Color jewelry = Colors.blue[800]!;
+
+  /// Stone Items color.
   static final Color stone = Colors.grey[800]!;
 
+  /// Heroic Rarity color.
   static const Color heroic = Colors.teal;
+
+  /// Rare Rarity color.
   static const Color rare = Colors.blue;
+
+  /// Common Rarity color.
   static const Color common = Colors.green;
+
+  /// Golden Rarity color.
   static const Color golden = Colors.yellow;
+
+  /// Cauldron Rarity color.
   static const Color cauldron = Colors.orange;
 
+  /// Health stat color.
   static const Color health = Colors.green;
+
+  /// Attack stat color.
   static const Color attack = Colors.red;
+
+  /// Armor stat color.
   static const Color armor = Colors.grey;
+
+  /// Speed stat color.
   static const Color speed = Colors.yellow;
 }
 
@@ -48,56 +73,53 @@ class MyApp extends StatelessWidget {
           displayColor: Palette.text,
         ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomePage(),
     );
   }
 }
 
 /// MyHomePage widget
-class MyHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   /// MyHomePage constructor
-  const MyHomePage({required this.title, super.key});
-
-  /// Title
-  final String title;
+  const HomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _MyHomePageState();
 }
 
-extension on i.Rarity {
+extension on ItemRarity {
   Color get color {
     switch (this) {
-      case i.Rarity.common:
+      case ItemRarity.common:
         return Palette.common;
-      case i.Rarity.rare:
+      case ItemRarity.rare:
         return Palette.rare;
-      case i.Rarity.heroic:
+      case ItemRarity.heroic:
         return Palette.heroic;
-      case i.Rarity.golden:
+      case ItemRarity.golden:
         return Palette.golden;
-      case i.Rarity.cauldron:
+      case ItemRarity.cauldron:
         return Palette.cauldron;
     }
   }
 }
 
-extension on i.Item {
+extension on Item {
   Color get color {
-    if (kind == i.Kind.weapon) {
+    if (kind == ItemKind.weapon) {
       return Palette.weapon;
     }
-    if (material == i.Material.stone) {
+    if (material == ItemMaterial.stone) {
       return Palette.stone;
     }
-    if (material == i.Material.sanguine) {
+    if (material == ItemMaterial.sanguine) {
       return Palette.sanguine;
     }
     return Colors.orange;
   }
 
   Color get borderColor {
-    if (kind == i.Kind.weapon) {
+    if (kind == ItemKind.weapon) {
       return Palette.weapon;
     }
     return Palette.white;
@@ -118,21 +140,25 @@ extension on i.Item {
   List<String> get tags {
     return [
       if (isUnique) 'Unique',
-      if (kind == i.Kind.food) 'Food',
-      if (kind == i.Kind.jewelry) 'Jewelry',
-      if (material == i.Material.stone) 'Stone',
-      if (material == i.Material.sanguine) 'Sanguine',
-      if (material == i.Material.wood) 'Wood',
+      if (kind == ItemKind.food) 'Food',
+      if (kind == ItemKind.jewelry) 'Jewelry',
+      if (material == ItemMaterial.stone) 'Stone',
+      if (material == ItemMaterial.sanguine) 'Sanguine',
+      if (material == ItemMaterial.wood) 'Wood',
     ];
   }
 }
 
+/// Stats when displayed horizontally.
 class StatsRow extends StatelessWidget {
+  /// StatsRow constructor
   const StatsRow({
     required this.stats,
     super.key,
   });
-  final i.Stats stats;
+
+  /// Stats to display
+  final Stats stats;
 
   @override
   Widget build(BuildContext context) {
@@ -155,11 +181,15 @@ class StatsRow extends StatelessWidget {
   }
 }
 
+/// Tags when displayed horizontally.
 class TagsRow extends StatelessWidget {
+  /// TagsRow constructor
   const TagsRow({
     required this.tags,
     super.key,
   });
+
+  /// Tags to display
   final List<String> tags;
 
   @override
@@ -192,12 +222,16 @@ class TagsRow extends StatelessWidget {
   }
 }
 
+/// ItemBox widget
 class ItemBox extends StatelessWidget {
+  /// ItemBox constructor
   const ItemBox({
     required this.item,
     super.key,
   });
-  final i.Item item;
+
+  /// Item to display
+  final Item item;
 
   @override
   Widget build(BuildContext context) {
@@ -227,12 +261,16 @@ class ItemBox extends StatelessWidget {
   }
 }
 
+/// ItemView widget
 class ItemView extends StatelessWidget {
+  /// ItemView constructor
   const ItemView({
     required this.item,
     super.key,
   });
-  final i.Item item;
+
+  /// Item to display
+  final Item item;
 
   Widget _colorEffectText(String text) {
     // Color a few special words:
@@ -286,7 +324,7 @@ class ItemView extends StatelessWidget {
   }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<HomePage> {
   bool isLoading = true;
   late final Data data;
 
@@ -324,7 +362,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: const Text('He is Coming'),
       ),
       body: Center(
         child: isLoading
@@ -335,10 +373,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+/// ItemGrid widget
 class ItemGrid extends StatelessWidget {
+  /// ItemGrid constructor
   const ItemGrid({required this.items, super.key});
 
-  final List<i.Item> items;
+  /// Items to display
+  final List<Item> items;
 
   @override
   Widget build(BuildContext context) {
@@ -349,7 +390,7 @@ class ItemGrid extends StatelessWidget {
           elevation: 8,
           child: GridView.builder(
             padding: const EdgeInsets.all(12),
-            gridDelegate: CustomGridDelegate(dimension: 240),
+            gridDelegate: _CustomGridDelegate(dimension: 240),
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) {
               return ItemView(item: items[index]);
@@ -361,11 +402,11 @@ class ItemGrid extends StatelessWidget {
   }
 }
 
-class CustomGridDelegate extends SliverGridDelegate {
-  CustomGridDelegate({required this.dimension});
+class _CustomGridDelegate extends SliverGridDelegate {
+  _CustomGridDelegate({required this.dimension});
 
-  // This is the desired height of each row (and width of each square).
-  // When there is not enough room, we shrink this to the width of the scroll view.
+  // This is the desired height of each row (and width of each square). When
+  // there is not enough room, we shrink this to the width of the scroll view.
   final double dimension;
 
   // The layout is two rows of squares, then one very wide cell, repeat.
@@ -378,7 +419,7 @@ class CustomGridDelegate extends SliverGridDelegate {
       count = 1; // Always fit at least one regardless.
     }
     final squareDimension = constraints.crossAxisExtent / count;
-    return CustomGridLayout(
+    return _CustomGridLayout(
       crossAxisCount: count,
       fullRowPeriod:
           3, // Number of rows per block (one of which is the full row).
@@ -387,18 +428,18 @@ class CustomGridDelegate extends SliverGridDelegate {
   }
 
   @override
-  bool shouldRelayout(CustomGridDelegate oldDelegate) {
+  bool shouldRelayout(_CustomGridDelegate oldDelegate) {
     return dimension != oldDelegate.dimension;
   }
 }
 
-class CustomGridLayout extends SliverGridLayout {
-  const CustomGridLayout({
+class _CustomGridLayout extends SliverGridLayout {
+  const _CustomGridLayout({
     required this.crossAxisCount,
     required this.dimension,
     required this.fullRowPeriod,
-  })  : assert(crossAxisCount > 0),
-        assert(fullRowPeriod > 1),
+  })  : assert(crossAxisCount > 0, 'crossAxisCount must be greater than zero'),
+        assert(fullRowPeriod > 1, 'fullRowPeriod must be greater than one'),
         loopLength = crossAxisCount * (fullRowPeriod - 1) + 1,
         loopHeight = fullRowPeriod * dimension;
 
@@ -412,10 +453,11 @@ class CustomGridLayout extends SliverGridLayout {
 
   @override
   double computeMaxScrollOffset(int childCount) {
-    // This returns the scroll offset of the end side of the childCount'th child.
-    // In the case of this example, this method is not used, since the grid is
-    // infinite. However, if one set an itemCount on the GridView above, this
-    // function would be used to determine how far to allow the user to scroll.
+    // This returns the scroll offset of the end side of the childCount'th
+    // child. In the case of this example, this method is not used, since the
+    // grid is infinite. However, if one set an itemCount on the GridView above,
+    // this function would be used to determine how far to allow the user to
+    // scroll.
     if (childCount == 0 || dimension == 0) {
       return 0;
     }
@@ -467,8 +509,8 @@ class CustomGridLayout extends SliverGridLayout {
     // the scroll offset passed to getMaxChildIndexForScrollOffset.
     //
     // It is the responsibility of the SliverGridLayout to ensure that
-    // getGeometryForChildIndex is consistent with getMinChildIndexForScrollOffset
-    // and getMaxChildIndexForScrollOffset.
+    // getGeometryForChildIndex is consistent with
+    // getMinChildIndexForScrollOffset and getMaxChildIndexForScrollOffset.
     //
     // Not every child between the minimum child index and the maximum child
     // index need be visible (some may have scroll offsets that are outside the

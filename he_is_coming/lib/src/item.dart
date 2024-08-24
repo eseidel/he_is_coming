@@ -94,7 +94,7 @@ class Item extends CatalogItem {
           speed: speed,
         ),
         super(name: name) {
-    if (kind == Kind.weapon && attack == 0) {
+    if (kind == ItemKind.weapon && attack == 0) {
       if (name == 'Bejeweled Blade') {
         // Bejeweled Blade is a special case, it is intentionally 0.
         return;
@@ -113,15 +113,15 @@ class Item extends CatalogItem {
         text: 'test',
       );
     }
-    return Item('test', Rarity.common, effect: triggers);
+    return Item('test', ItemRarity.common, effect: triggers);
   }
 
   /// Create an item from a yaml map.
   factory Item.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     final name = yaml['name'] as String;
-    final kind = yaml.get('kind', Kind.values);
-    final rarity = yaml.expect('rarity', Rarity.values);
-    final material = yaml.get('material', Material.values);
+    final kind = yaml.get('kind', ItemKind.values);
+    final rarity = yaml.expect('rarity', ItemRarity.values);
+    final material = yaml.get('material', ItemMaterial.values);
     final attack = yaml['attack'] as int? ?? 0;
     final health = yaml['health'] as int? ?? 0;
     final armor = yaml['armor'] as int? ?? 0;
@@ -148,16 +148,16 @@ class Item extends CatalogItem {
   }
 
   /// Kind of the item.
-  final Kind? kind;
+  final ItemKind? kind;
 
   /// Stats for the item.
   final Stats stats;
 
   /// Rarity of the item.
-  final Rarity rarity;
+  final ItemRarity rarity;
 
   /// Material of the item.
-  final Material? material;
+  final ItemMaterial? material;
 
   /// Is the item unique.
   /// Unique items can only be equipped once.
@@ -199,7 +199,7 @@ class Item extends CatalogItem {
 }
 
 /// Enum representing Item kind.
-enum Kind {
+enum ItemKind {
   /// Weapon, can only equip one of these.
   weapon,
 
@@ -214,8 +214,8 @@ enum Kind {
   jewelry;
 
   /// Create a kind from a json string.
-  factory Kind.fromJson(String json) {
-    return Kind.values.firstWhere((e) => e.name == json);
+  factory ItemKind.fromJson(String json) {
+    return ItemKind.values.firstWhere((e) => e.name == json);
   }
 
   /// Convert the kind to a json string.
@@ -223,7 +223,7 @@ enum Kind {
 }
 
 /// Rarity class of an item.
-enum Rarity {
+enum ItemRarity {
   /// Common, found in chests.
   common,
 
@@ -240,8 +240,8 @@ enum Rarity {
   cauldron;
 
   /// Create a rarity from a json string.
-  factory Rarity.fromJson(String json) {
-    return Rarity.values.firstWhere((e) => e.name == json);
+  factory ItemRarity.fromJson(String json) {
+    return ItemRarity.values.firstWhere((e) => e.name == json);
   }
 
   /// Convert the rarity to a json string.
@@ -250,7 +250,7 @@ enum Rarity {
 
 /// Represents the material of the item.
 // These maybe should just be "tags".
-enum Material {
+enum ItemMaterial {
   /// Wood, interacts with items sensitive to wood.
   wood,
 
@@ -264,8 +264,8 @@ enum Material {
   bomb;
 
   /// Create a material from a json string.
-  factory Material.fromJson(String json) {
-    return Material.values.firstWhere((e) => e.name == json);
+  factory ItemMaterial.fromJson(String json) {
+    return ItemMaterial.values.firstWhere((e) => e.name == json);
   }
 
   /// Convert the material to a json string.

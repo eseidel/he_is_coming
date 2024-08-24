@@ -1,8 +1,6 @@
 import 'package:he_is_coming/src/battle.dart';
-import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
-import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
@@ -510,7 +508,8 @@ void main() {
     expect(result.first.hp, 7);
     expect(result.first.baseStats.armor, 0);
 
-    final other = Item('other', Rarity.common, material: Material.stone);
+    final other =
+        Item('other', ItemRarity.common, material: ItemMaterial.stone);
     final player2 = createPlayer(items: [item, other]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
@@ -789,8 +788,8 @@ void main() {
 
     final jewelry = Item(
       'jewelry',
-      kind: Kind.jewelry,
-      Rarity.common,
+      kind: ItemKind.jewelry,
+      ItemRarity.common,
     );
     final player2 = createPlayer(items: [item, jewelry]);
     expect(player2.hp, 10);
