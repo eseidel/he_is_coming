@@ -1,62 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:google_fonts/google_fonts.dart';
 import 'package:he_is_coming/he_is_coming.dart';
+import 'package:ui/style.dart';
 
 void main() {
   runApp(const MyApp());
-}
-
-/// Color palette
-class Palette {
-  /// White, used for all UI and text.
-  static final Color white = Colors.brown[100]!;
-
-  /// Black, used for all UI and text.
-  static final Color black = Colors.brown[900]!;
-
-  /// Text color.
-  static final Color text = Palette.white;
-
-  /// Weapon Items color.
-  static const Color weapon = Palette.attack;
-
-  /// Sanguine Items color.
-  static final Color sanguine = Colors.red[900]!;
-
-  /// Food Items color.
-  static final Color food = Colors.green[800]!;
-
-  /// Stone Items color.
-  static final Color stone = Colors.grey[800]!;
-
-  /// Heroic Rarity color.
-  static const Color heroic = Colors.teal;
-
-  /// Rare Rarity color.
-  static const Color rare = Colors.blue;
-
-  /// Common Rarity color.
-  static const Color common = Colors.green;
-
-  /// Golden Rarity color.
-  static const Color golden = Colors.yellow;
-
-  /// Cauldron Rarity color.
-  static const Color cauldron = Colors.orange;
-
-  /// Health stat color.
-  static const Color health = Colors.green;
-
-  /// Attack stat color.
-  static const Color attack = Colors.red;
-
-  /// Armor stat color.
-  static const Color armor = Colors.grey;
-
-  /// Speed stat color.
-  static const Color speed = Colors.yellow;
 }
 
 /// MyApp widget
@@ -70,11 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: const ColorScheme.dark(),
-        useMaterial3: true,
-        textTheme: GoogleFonts.pressStart2pTextTheme().apply(
-          bodyColor: Palette.text,
-          displayColor: Palette.text,
-        ),
+        textTheme: Style.textTheme,
       ),
       home: const HomePage(),
     );
@@ -168,7 +113,7 @@ class StatsRow extends StatelessWidget {
     Widget padded(String text) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Text(text),
+        child: Text(text, style: Style.stats),
       );
     }
 
@@ -209,10 +154,7 @@ class TagsRow extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                tag,
-                style: TextStyle(color: Palette.black),
-              ),
+              child: Text(tag, style: Style.tags),
             ),
           ),
       ],
@@ -282,7 +224,7 @@ class ItemView extends StatelessWidget {
     final words = text.split(' ');
     return RichText(
       text: TextSpan(
-        style: Theme.of(context).textTheme.bodySmall,
+        style: Style.effect,
         children: [
           for (final word in words)
             TextSpan(
@@ -308,7 +250,7 @@ class ItemView extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                Text(item.name, style: Theme.of(context).textTheme.titleLarge),
+                Text(item.name, style: Theme.of(context).textTheme.labelLarge),
                 if (item.effect != null)
                   Padding(
                     padding: const EdgeInsets.all(4),
