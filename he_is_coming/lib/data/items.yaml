@@ -201,7 +201,7 @@
   armor: 4
   effect: "Battle Start: Gain 4 thorns"
   inferred: true
-- name: Golden Leather Gloves
+- name: Golden Leather Glove
   rarity: golden
   health: 6
   speed: 2
@@ -334,7 +334,7 @@
 - name: Leather Boots
   rarity: rare
   effect: "If you have more speed than the enemy, gain 2 attack"
-- name: Leather Gloves
+- name: Leather Glove
   rarity: common
   health: 3
   speed: 1
@@ -526,3 +526,10 @@
   kind: weapon
   rarity: common
   attack: 1
+- name: Explosive Sword
+  kind: weapon
+  rarity: rare
+  material: bomb
+  attack: 4
+  unlock: "Welcome Back: Equip the same weapon you discarded earlier in the same run."
+  effect: "Exposed: Deal 6 damage and set attack to 0"

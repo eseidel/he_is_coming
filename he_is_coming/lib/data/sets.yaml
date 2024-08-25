@@ -6,3 +6,9 @@
   attack: 1
   armor: 1
   speed: 1
+- name: Redwood Crown
+  parts:
+   - Redwood Cloak
+   - Redwood Rod
+   - Redwood Helmet
+  effect: "Wounded: Restore health to full"
