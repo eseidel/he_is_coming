@@ -897,8 +897,8 @@ void main() {
     expect(player2.hp, 10);
 
     final result2 = doBattle(first: player2, second: enemy);
-    // Golden Emerald Ring restores 4 hp on battle start (but player is already at max),
-    // then wolf does 5 dmg.
+    // Golden Emerald Ring restores 4 hp on battle start (but player is already
+    // at max), then wolf does 5 dmg.
     expect(result2.first.hp, 5);
   });
 
