@@ -88,11 +88,11 @@ Creature makeEnemy({
   if (effect != null) {
     triggers = Effect(
       callbacks: effect,
-      text: 'test',
+      text: 'Enemy',
     );
   }
   return Creature(
-    name: 'test',
+    name: 'Enemy',
     intrinsic: Stats(
       maxHp: health,
       armor: armor,

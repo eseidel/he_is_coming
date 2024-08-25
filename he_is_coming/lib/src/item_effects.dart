@@ -21,6 +21,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Golden Firecracker Belt':
       onExposed((c) => [1, 1, 1, 1, 1, 1].forEach(c.dealDamage)),
   'Redwood Helmet': onExposed((c) => c.restoreHealth(3)),
+  'Golden Redwood Helmet': onExposed((c) => c.restoreHealth(6)),
   'Explosive Surprise': onExposed((c) => c.dealDamage(5)),
   'Cracked Bouldershield': onExposed((c) => c.gainArmor(5)),
   'Vampiric Wine': onWounded((c) => c.restoreHealth(4)),

@@ -153,6 +153,29 @@ void main() {
     expect(result2.first.hp, 6);
   });
 
+  test('Golden Redwood Helmet', () {
+    final item = itemCatalog['Golden Redwood Helmet'];
+    final player = createPlayer(items: [item], hp: 5);
+    expect(player.hp, 5);
+    expect(player.baseStats.armor, 2);
+
+    final enemy = makeEnemy(attack: 1, health: 12);
+    // We would kill the wolf in 12 turns (take 9 dmg, 2 absorbed by armor), but
+    // the golden helmet triggers after the armor is broken, healing 6 hp.
+    // 6 would over-heal, so we only get 5 hp.
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 1);
+
+    final player2 = createPlayer(items: [item]);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 2);
+
+    // But if we fight with full health, the helmet triggers at exposed
+    // and does nothing because we're already at full health.
+    final result2 = doBattle(first: player2, second: enemy);
+    expect(result2.first.hp, 1);
+  });
+
   test('Explosive Surprise', () {
     final item = itemCatalog['Explosive Surprise'];
     final player =
