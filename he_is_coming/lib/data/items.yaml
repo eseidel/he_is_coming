@@ -149,18 +149,72 @@
   rarity: rare
   unlock: Fight a boss early and win it
   effect: "Battle Start: Gain 1 gold"
+- name: Golden Bearpelt Plate
+  rarity: golden
+  armor: 10
+  effect: Take 6 additional damage from the enemies first strike
+  inferred: true
+- name: Golden Boots of the hero
+  rarity: golden
+  speed: 4
+  inferred: true
+- name: Golden Cracked Bouldershield
+  rarity: golden
+  material: stone
+  effect: "Exposed: Gain 10 armor"
+  inferred: true
+- name: Golden Cracked Whetstone
+  rarity: golden
+  material: stone
+  effect: "First Turn: Gain 4 attack"
+  inferred: true
+- name: Golden Double-plated Armor
+  rarity: golden
+  armor: 4
+  speed: -4
+  effect: "Exposed: Gain 6 armor"
+  inferred: true
+- name: Golden Emerald Earing
+  rarity: golden
+  effect: Restore 2 health every other turn
+  inferred: true
 - name: Golden Emerald Ring
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Restore 4 health"
+- name: Golden Emergency Shield
+  rarity: golden
+  effect: "Battle Start: If you have less speed than the enemy, gain 8 armor"
+  inferred: true
 - name: Golden Firecracker Belt
   rarity: golden
   material: bomb
   effect: "Exposed: Deal 1 damage 6 times"
+- name: Golden Granite Gauntlet
+  rarity: golden
+  material: stone
+  health: -4
+  effect: "Battle start: Gain 10 armor"
+  inferred: true
+- name: Golden Horned Helmet
+  rarity: golden
+  armor: 4
+  effect: "Battle Start: Gain 4 thorns"
+  inferred: true
 - name: Golden Leather Gloves
   rarity: golden
   health: 6
   speed: 2
+- name: Golden Leather Vest
+  rarity: golden
+  armor: 4
+  speed: 2
+  inferred: true
+- name: Golden Petrifying Flask
+  rarity: golden
+  material: stone
+  effect: "Wounded: Gain 20 armor and stun yourself for 4 turns"
+  inferred: true
 - name: Golden Redwood Cloak
   rarity: golden
   material: wood
@@ -171,13 +225,50 @@
   material: wood
   armor: 2
   effect: "Exposed: Restore 6 health"
+- name: Golden Redwood Roast
+  kind: food
+  rarity: golden
+  material: wood
+  health: 10
+  inferred: true
+- name: Golden Ruby Earing
+  kind: jewelry
+  rarity: golden
+  effect: Deal 2 damage every other turn
+  inferred: true
 - name: Golden Ruby Ring
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Gain 2 attack and take 4 damage"
+- name: Golden Sapphire Earing
+  rarity: golden
+  effect: Gain 2 armor every other turn
+  inferred: true
+- name: Golden Sapphire Ring
+  kind: jewelry
+  rarity: golden
+  effect: "Battle Start: Steal 4 armor from the enemy"
+  inferred: true
 - name: Golden Shield of the Hero
   rarity: golden
   armor: 6
+- name: Golden Stone Steak
+  kind: food
+  rarity: golden
+  material: stone
+  effect: "Battle Start: If your health is full, gain 8 armor"
+  inferred: true
+- name: Golden Vampiric Wine
+  kind: food
+  rarity: golden
+  material: sanguine
+  effect: "Wounded: Restore 8 health"
+  inferred: true
+- name: Golden Weighted Bracelet
+  rarity: golden
+  attack: 2
+  speed: -2
+  inferred: true
 - name: Granite Gauntlet
   rarity: common
   material: stone

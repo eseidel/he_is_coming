@@ -95,7 +95,7 @@ void doMain(List<String> arguments) {
     }
   }
 
-  // data.save();
+  data.save();
 }
 
 void main(List<String> args) {
