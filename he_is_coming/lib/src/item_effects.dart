@@ -125,4 +125,9 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Bloody Steak': onWounded((c) => c.gainArmor(c.my.maxHp ~/ 2)),
   'Assault Greaves': onTakeDamage((c) => c.dealDamage(1)),
+  'Thorn Ring': onBattle(
+    (c) => c
+      ..gainThorns(6)
+      ..loseHealth(1),
+  ),
 });

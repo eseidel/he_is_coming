@@ -1101,4 +1101,19 @@ void main() {
     // Assault Greaves triggers even when armor blocks the damage.
     expect(result2.first.hp, 8);
   });
+
+  test('Thorn Ring', () {
+    final item = itemCatalog['Thorn Ring'];
+    final player =
+        createPlayer(items: [item], intrinsic: const Stats(armor: 1));
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 1);
+
+    final enemy = makeEnemy(attack: 1, health: 9);
+    final result = doBattle(first: player, second: enemy);
+    // Thorn Ring adds 6 thorns on battle start (for the cost of 1 hp).
+    // "lose 1 hp" ignores armor.  Wolf hits us twice for 1 dmg each.
+    expect(result.first.hp, 8);
+    expect(result.first.baseStats.armor, 1);
+  });
 }
