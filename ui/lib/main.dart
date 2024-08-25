@@ -545,7 +545,7 @@ extension on String {
 }
 
 class _FilteredItemsViewState extends State<FilteredItemsView> {
-  final List<String> possible = [
+  static final List<String> possible = [
     'Weapon',
     'Food',
     'Jewelry',
@@ -560,8 +560,7 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
     'Golden',
     'Cauldron',
   ];
-  // Modeled as disabled for easier filtering of items.
-  final Set<String> disabled = {};
+  final Set<String> enabled = possible.toSet();
 
   Set<String> tagsForItem(Item item) {
     return {
@@ -574,7 +573,7 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
 
   List<Item> get items {
     return widget.items.where((item) {
-      return tagsForItem(item).intersection(disabled).isEmpty;
+      return tagsForItem(item).intersection(enabled).isNotEmpty;
     }).toList();
   }
 
@@ -587,13 +586,13 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
           children: possible.map((String tag) {
             return FilterChip(
               label: Text(tag),
-              selected: !disabled.contains(tag),
+              selected: enabled.contains(tag),
               onSelected: (bool selected) {
                 setState(() {
                   if (selected) {
-                    disabled.remove(tag);
+                    enabled.add(tag);
                   } else {
-                    disabled.add(tag);
+                    enabled.remove(tag);
                   }
                 });
               },
