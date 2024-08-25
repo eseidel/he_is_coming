@@ -136,3 +136,10 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
+- name: Bearserker
+  level: 2
+  effect: "Ignores armor"
+  health: 20
+  attack: 4
+  armor: 10
+  speed: 2
