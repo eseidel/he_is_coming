@@ -22,7 +22,7 @@ void logMissingEffects(Catalog catalog) {
 }
 
 void doMain(List<String> arguments) {
-  final data = Data.load();
+  final data = Data.load()..removeInferredItems();
   logMissingEffects(data.items);
   logMissingEffects(data.creatures);
   logMissingEffects(data.oils);

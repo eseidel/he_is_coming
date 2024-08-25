@@ -18,6 +18,8 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Granite Gauntlet': onBattle((c) => c.gainArmor(5)),
   'Ruby Earing': onTurn((c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1))),
   'Firecracker Belt': onExposed((c) => [1, 1, 1].forEach(c.dealDamage)),
+  'Golden Firecracker Belt':
+      onExposed((c) => [1, 1, 1, 1, 1, 1].forEach(c.dealDamage)),
   'Redwood Helmet': onExposed((c) => c.restoreHealth(3)),
   'Explosive Surprise': onExposed((c) => c.dealDamage(5)),
   'Cracked Bouldershield': onExposed((c) => c.gainArmor(5)),

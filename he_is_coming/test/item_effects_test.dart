@@ -115,6 +115,21 @@ void main() {
     expect(result.first.hp, 9);
   });
 
+  test('Golden Firecracker Belt', () {
+    final item = itemCatalog['Golden Firecracker Belt'];
+    final player =
+        createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 1);
+
+    // Normally we would kill the wolf in 10 turns (take 9 dmg), but the armor
+    // reduces one damage, and then the firecracker belt triggers after the
+    // armor is broken, dealing 6 dmg to the wolf, killing it in 4 turns
+    final enemy = makeEnemy(attack: 1, health: 10);
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 8);
+  });
+
   test('Redwood Helmet', () {
     // Gives 1 armor.
     final item = itemCatalog['Redwood Helmet'];
