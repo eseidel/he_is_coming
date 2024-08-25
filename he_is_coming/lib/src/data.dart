@@ -94,6 +94,9 @@ class Data {
     items.save(paths.items);
     edges.save(paths.edges);
     oils.save(paths.oils);
+    sets.save(paths.sets);
+    triggers.save(paths.triggers);
+    challenges.save(paths.challenges);
   }
 
   /// Remove any items that are missing effects.
@@ -307,18 +310,18 @@ class Challenge extends CatalogItem {
   /// Create a new challenge.
   Challenge({
     required super.name,
-    required this.description,
+    required super.unlock,
     required this.reward,
   });
 
   /// Create a challenge from a yaml map.
   factory Challenge.fromYaml(YamlMap yaml, LookupEffect _) {
     final name = yaml['name'] as String;
-    final description = yaml['unlock'] as String;
+    final unlock = yaml['unlock'] as String;
     final reward = yaml['reward'] as String;
     return Challenge(
       name: name,
-      description: description,
+      unlock: unlock,
       reward: reward,
     );
   }
@@ -330,9 +333,6 @@ class Challenge extends CatalogItem {
     'reward',
   ];
 
-  /// The description of the challenge.
-  final String description;
-
   /// The reward for completing the challenge.
   final String reward;
 
@@ -342,7 +342,7 @@ class Challenge extends CatalogItem {
   @override
   dynamic toJson() => {
         'name': name,
-        'description': description,
+        'unlock': unlock,
         'reward': reward,
       };
 }

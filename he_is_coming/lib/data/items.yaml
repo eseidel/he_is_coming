@@ -164,7 +164,7 @@
 - name: Gold Ring
   kind: jewelry
   rarity: rare
-  unlock: Fight a boss early and win it
+  unlock: "Early Riser: Fight a boss early and win it"
   effect: "Battle Start: Gain 1 gold"
 - name: Golden Bearpelt Plate
   rarity: golden
