@@ -39,6 +39,16 @@ class Stats {
     );
   }
 
+  /// Multiply all stats by a factor.
+  Stats operator *(int factor) {
+    return copyWith(
+      maxHp: maxHp * factor,
+      armor: armor * factor,
+      attack: attack * factor,
+      speed: speed * factor,
+    );
+  }
+
   /// Create a copy of Stats with updated values.
   Stats copyWith({
     int? maxHp,
@@ -79,23 +89,14 @@ class Item extends CatalogItem {
     this.rarity, {
     this.kind,
     this.material,
-    int health = 0,
-    int armor = 0,
-    int attack = 0,
-    int speed = 0,
+    this.stats = const Stats(),
     this.isUnique = false,
     super.effect,
     super.unlock,
     this.inferred = false,
     this.parts = const [],
-  })  : stats = Stats(
-          maxHp: health,
-          armor: armor,
-          attack: attack,
-          speed: speed,
-        ),
-        super(name: name) {
-    if (kind == ItemKind.weapon && attack == 0) {
+  }) : super(name: name) {
+    if (kind == ItemKind.weapon && stats.attack == 0) {
       if (name == 'Bejeweled Blade') {
         // Bejeweled Blade is a special case, it is intentionally 0.
         return;
@@ -138,10 +139,12 @@ class Item extends CatalogItem {
       kind: kind,
       rarity,
       material: material,
-      attack: attack,
-      health: health,
-      armor: armor,
-      speed: speed,
+      stats: Stats(
+        maxHp: health,
+        armor: armor,
+        attack: attack,
+        speed: speed,
+      ),
       effect: effect,
       isUnique: unique,
       unlock: unlock,
@@ -196,7 +199,7 @@ class Item extends CatalogItem {
       if (isUnique) 'unique': isUnique,
       'kind': kind?.toJson(),
       'rarity': rarity.toJson(),
-      'parts': parts,
+      if (parts != null && parts!.isNotEmpty) 'parts': parts,
       'material': material?.toJson(),
       ...stats.toJson(),
       'unlock': unlock,

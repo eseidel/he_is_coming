@@ -156,7 +156,7 @@
   rarity: golden
   material: wood
   health: 4
-  effect: "Battle Start: If your health is not full, gain 2 health"
+  effect: "Battle Start: If your health is not full, restore 2 health"
 - name: Golden Redwood Helmet
   rarity: golden
   material: wood
@@ -292,6 +292,7 @@
   effect: "Exposed: Armor now deals damage when removed"
 - name: Redwood Cloak
   rarity: common
+  material: wood
   health: 2
   effect: "Battle Start: If your health is not full, restore 1 health"
 - name: Redwood Helmet

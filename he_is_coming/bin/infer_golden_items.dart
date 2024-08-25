@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/logger.dart';
+import 'package:json_diff/json_diff.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
 String doubleNumbers(String text) {
@@ -26,13 +30,18 @@ Item inferGoldenItem(Item item) {
     kind: item.kind,
     effect: effect,
     inferred: true,
-    health: item.stats.maxHp,
-    attack: item.stats.attack,
-    armor: item.stats.armor,
-    speed: item.stats.speed,
+    stats: item.stats * 2,
     // Should this have parts of item x 2?
   );
   return goldenItem;
+}
+
+DiffNode diffWithGolden(Item item, Item golden) {
+  final actualString = jsonEncode(item);
+  final goldenJson = golden.toJson()..remove('inferred');
+  final expectedString = jsonEncode(goldenJson);
+  final differ = JsonDiffer(actualString, expectedString);
+  return differ.diff();
 }
 
 void doMain(List<String> arguments) {
@@ -48,11 +57,11 @@ void doMain(List<String> arguments) {
       .toList();
   final golden =
       items.where((item) => item.rarity == ItemRarity.golden).toList();
-  final inferred = combinable.map(inferGoldenItem).toList();
-  // Compare the inferred items with the golden items.
-  // Add any missing golden items to the data.
+  final inferredItems = combinable.map(inferGoldenItem).toList();
+
+  // Warn about any golden items that are missing or unexpected.
   final goldenNames = golden.map((item) => item.name).toSet();
-  final inferredNames = inferred.map((item) => item.name).toSet();
+  final inferredNames = inferredItems.map((item) => item.name).toSet();
   final missing = inferredNames.difference(goldenNames);
   final unexpected = goldenNames.difference(inferredNames);
   if (missing.isEmpty) {
@@ -69,6 +78,24 @@ void doMain(List<String> arguments) {
       logger.info('  $item');
     }
   }
+
+  // Compare the inferred items with the golden items.
+  // Add any missing golden items to the data.
+  for (final inferred in inferredItems) {
+    final actual = golden.firstWhereOrNull((i) => i.name == inferred.name);
+    if (actual == null) {
+      logger.info('Adding: ${inferred.name}');
+      data.items.items.add(inferred);
+      continue;
+    }
+    // Otherwise check that the golden item matches the inferred item.
+    final diff = diffWithGolden(actual, inferred);
+    if (!diff.hasNothing) {
+      logger.warn('${actual.name} does not match expected: $diff');
+    }
+  }
+
+  // data.save();
 }
 
 void main(List<String> args) {
