@@ -99,6 +99,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   "Woodcutter's Axe": onHit((c) => c.reduceEnemyMaxHp(2)),
   'Emerald Ring': onBattle((c) => c.restoreHealth(2)),
+  'Golden Emerald Ring': onBattle((c) => c.restoreHealth(4)),
   'Ironskin Potion': onBattle(
     (c) => _if(c.my.lostHp > 0, () => c.gainArmor(c.my.lostHp)),
   ),

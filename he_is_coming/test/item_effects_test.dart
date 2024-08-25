@@ -882,6 +882,25 @@ void main() {
     // Emerald ring restores 2 hp on battle start, then wolf does 5 dmg.
     expect(result.first.hp, 4);
   });
+  test('Golden Emerald Ring', () {
+    final item = itemCatalog['Golden Emerald Ring'];
+    final player = createPlayer(items: [item], hp: 5);
+    expect(player.hp, 5);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Golden Emerald Ring restores 4 hp on battle start, then wolf does 5 dmg.
+    expect(result.first.hp, 4);
+
+    // Test with full health
+    final player2 = createPlayer(items: [item]);
+    expect(player2.hp, 10);
+
+    final result2 = doBattle(first: player2, second: enemy);
+    // Golden Emerald Ring restores 4 hp on battle start (but player is already at max),
+    // then wolf does 5 dmg.
+    expect(result2.first.hp, 5);
+  });
 
   test('Ironskin Potion', () {
     final item = itemCatalog['Ironskin Potion'];
