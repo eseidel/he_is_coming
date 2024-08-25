@@ -12,3 +12,8 @@
    - Redwood Rod
    - Redwood Helmet
   effect: "Wounded: Restore health to full"
+- name: Briar Greaves
+  parts:
+   - Assault Greaves
+   - Jagged Edge
+  effect: Whenever you take damage, gain 1 thorn

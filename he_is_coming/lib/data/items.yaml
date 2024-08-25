@@ -14,6 +14,11 @@
   kind: weapon
   rarity: rare
   effect: Gain 2 attack for each equipped jewelry item
+- name: Blackbriar Blade
+  rarity: rare
+  attack: 1
+  unlock: "Ouch!: Deal 10 or more damage with thorns in a single turn"
+  effect: Gain 2 attack for each thorns
 - name: Blacksmith Bond
   rarity: rare
   effect: Exposed can trigger one additional time
@@ -207,7 +212,6 @@
   rarity: golden
   armor: 4
   effect: "Battle Start: Gain 4 thorns"
-  inferred: true
 - name: Golden Leather Glove
   rarity: golden
   health: 6
@@ -275,7 +279,6 @@
   rarity: golden
   attack: 2
   speed: -2
-  inferred: true
 - name: Granite Gauntlet
   rarity: common
   material: stone
