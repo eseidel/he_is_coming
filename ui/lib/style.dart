@@ -70,4 +70,7 @@ class Palette {
 
   /// Speed stat color.
   static const Color speed = Colors.yellow;
+
+  /// Creature color.
+  static const Color creature = Colors.red;
 }

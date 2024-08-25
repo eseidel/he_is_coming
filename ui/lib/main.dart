@@ -162,6 +162,40 @@ class TagsRow extends StatelessWidget {
   }
 }
 
+/// OutlinedBox widget
+class OutlinedBox extends StatelessWidget {
+  /// OutlinedBox constructor
+  const OutlinedBox({
+    required this.child,
+    required this.borderColor,
+    super.key,
+  });
+
+  /// Child widget
+  final Widget child;
+
+  /// Border color
+  final Color borderColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: SizedBox(
+        width: 64,
+        height: 64,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(4),
+            border: Border.all(color: borderColor, width: 3),
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
 /// ItemBox widget
 class ItemBox extends StatelessWidget {
   /// ItemBox constructor
@@ -177,19 +211,9 @@ class ItemBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: SizedBox(
-            width: 64,
-            height: 64,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                border: Border.all(color: item.borderColor, width: 3),
-              ),
-              child: Icon(item.icon, color: item.color),
-            ),
-          ),
+        OutlinedBox(
+          borderColor: item.borderColor,
+          child: Icon(item.icon, color: item.color),
         ),
         Positioned(
           right: 4,
@@ -201,18 +225,19 @@ class ItemBox extends StatelessWidget {
   }
 }
 
-/// ItemView widget
-class ItemView extends StatelessWidget {
-  /// ItemView constructor
-  const ItemView({
-    required this.item,
+/// ColoredEffectText widget
+class ColoredEffectText extends StatelessWidget {
+  /// ColoredEffectText constructor
+  const ColoredEffectText({
+    required this.text,
     super.key,
   });
 
-  /// Item to display
-  final Item item;
+  /// Text to display
+  final String text;
 
-  Widget _colorEffectText(String text, {required BuildContext context}) {
+  @override
+  Widget build(BuildContext context) {
     // Color a few special words:
     final specialWords = <String, Color>{
       'health': Palette.health,
@@ -237,9 +262,24 @@ class ItemView extends StatelessWidget {
       ),
     );
   }
+}
+
+/// ItemView widget
+class ItemView extends StatelessWidget {
+  /// ItemView constructor
+  const ItemView({
+    required this.item,
+    super.key,
+  });
+
+  /// Item to display
+  final Item item;
 
   @override
   Widget build(BuildContext context) {
+    final name = item.name;
+    final effect = item.effect;
+    final stats = item.stats;
     return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
@@ -250,15 +290,144 @@ class ItemView extends StatelessWidget {
           Expanded(
             child: Column(
               children: [
-                Text(item.name, style: Theme.of(context).textTheme.labelLarge),
-                if (item.effect != null)
+                Text(name, style: Theme.of(context).textTheme.labelLarge),
+                if (effect != null)
                   Padding(
                     padding: const EdgeInsets.all(4),
-                    child:
-                        _colorEffectText(item.effect!.text, context: context),
+                    child: ColoredEffectText(text: effect.text),
                   ),
-                if (!item.stats.isEmpty) StatsRow(stats: item.stats),
+                if (!stats.isEmpty) StatsRow(stats: stats),
                 TagsRow(tags: item.tags),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Display a Creature
+class CreatureView extends StatelessWidget {
+  /// CreatureView constructor
+  const CreatureView({
+    required this.creature,
+    super.key,
+  });
+
+  /// Creature to display
+  final Creature creature;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = creature.name;
+    final effect = creature.effect;
+    final stats = creature.baseStats;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          // TODO(eseidel): Creatures use a different box than items.
+          const OutlinedBox(
+            borderColor: Palette.creature,
+            child: Icon(Icons.bug_report, color: Palette.creature),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(name, style: Theme.of(context).textTheme.labelLarge),
+                if (effect != null)
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: ColoredEffectText(text: effect.text),
+                  ),
+                if (!stats.isEmpty) StatsRow(stats: stats),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Display an Edge
+class EdgeView extends StatelessWidget {
+  /// EdgeView constructor
+  const EdgeView({
+    required this.edge,
+    super.key,
+  });
+
+  /// Edge to display
+  final Edge edge;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = edge.name;
+    final effect = edge.effect;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          OutlinedBox(
+            borderColor: Palette.white, // Edges always use white.
+            child: Icon(Icons.bug_report, color: Palette.white),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(name, style: Theme.of(context).textTheme.labelLarge),
+                if (effect != null)
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: ColoredEffectText(text: effect.text),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Display an Oil
+class OilView extends StatelessWidget {
+  /// OilView constructor
+  const OilView({
+    required this.oil,
+    super.key,
+  });
+
+  /// Oil to display
+  final Oil oil;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = oil.name;
+    final stats = oil.stats;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        children: [
+          // Oils don't have an outline I don't think?
+          // They just have an oil droplet in the color of the stat they modify.
+          OutlinedBox(
+            borderColor: Palette.white,
+            child: Icon(Icons.bug_report, color: Palette.white),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(name, style: Theme.of(context).textTheme.labelLarge),
+                if (!stats.isEmpty) StatsRow(stats: stats),
               ],
             ),
           ),
@@ -303,27 +472,80 @@ class _MyHomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('He is Coming'),
-      ),
-      body: Center(
-        child: isLoading
-            ? const CircularProgressIndicator()
-            : ItemGrid(items: data.items.items),
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: const Text('He is Coming'),
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(text: 'Items'),
+              Tab(text: 'Creatures'),
+              Tab(text: 'Edges'),
+              Tab(text: 'Oils'),
+            ],
+          ),
+        ),
+        body: isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : TabBarView(
+                children: <Widget>[
+                  ScrollingGrid(
+                    maxCrossAxisExtent: 240,
+                    itemCount: data.items.items.length,
+                    itemBuilder: (context, index) {
+                      return ItemView(item: data.items.items[index]);
+                    },
+                  ),
+                  ScrollingGrid(
+                    maxCrossAxisExtent: 240,
+                    itemCount: data.creatures.creatures.length,
+                    itemBuilder: (context, index) {
+                      return CreatureView(
+                        creature: data.creatures.creatures[index],
+                      );
+                    },
+                  ),
+                  ScrollingGrid(
+                    maxCrossAxisExtent: 240,
+                    itemCount: data.edges.edges.length,
+                    itemBuilder: (context, index) {
+                      return EdgeView(edge: data.edges.edges[index]);
+                    },
+                  ),
+                  ScrollingGrid(
+                    maxCrossAxisExtent: 240,
+                    itemCount: data.oils.oils.length,
+                    itemBuilder: (context, index) {
+                      return OilView(oil: data.oils.oils[index]);
+                    },
+                  ),
+                ],
+              ),
       ),
     );
   }
 }
 
-/// ItemGrid widget
-class ItemGrid extends StatelessWidget {
-  /// ItemGrid constructor
-  const ItemGrid({required this.items, super.key});
+/// ScrollingGrid widget
+class ScrollingGrid extends StatelessWidget {
+  /// ScrollingGrid constructor
+  const ScrollingGrid({
+    required this.maxCrossAxisExtent,
+    required this.itemCount,
+    required this.itemBuilder,
+    super.key,
+  });
 
-  /// Items to display
-  final List<Item> items;
+  /// Maximum cross axis extent
+  final double maxCrossAxisExtent;
+
+  /// Item count
+  final int itemCount;
+
+  /// Item builder
+  final Widget Function(BuildContext, int) itemBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -333,11 +555,11 @@ class ItemGrid extends StatelessWidget {
         elevation: 8,
         child: GridView.builder(
           padding: const EdgeInsets.all(12),
-          gridDelegate: _CustomGridDelegate(dimension: 240),
-          itemCount: items.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ItemView(item: items[index]);
-          },
+          gridDelegate: _CustomGridDelegate(
+            dimension: maxCrossAxisExtent,
+          ),
+          itemCount: itemCount,
+          itemBuilder: itemBuilder,
         ),
       ),
     );
