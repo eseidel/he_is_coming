@@ -76,7 +76,12 @@ class CatalogReader {
 /// An item in the catalog.
 abstract class CatalogItem {
   /// Create a catalog item with a name.
-  CatalogItem({required this.name, this.effect, this.unlock});
+  CatalogItem({
+    required this.name,
+    this.effect,
+    this.unlock,
+    this.inferred = false,
+  });
 
   /// The name of the item.
   final String name;
@@ -87,10 +92,11 @@ abstract class CatalogItem {
   /// Requirements to unlock this item.
   final String? unlock;
 
+  /// If the item was inferred rather than seen in the wild.
+  final bool inferred;
+
   @override
-  String toString() {
-    return name;
-  }
+  String toString() => name;
 
   /// Convert the item to a json map.
   dynamic toJson();
@@ -110,6 +116,11 @@ class Catalog<T extends CatalogItem> {
       (item) =>
           item.effect != null && item.effect != null && item.effect!.isEmpty,
     );
+  }
+
+  /// Remove any items that are inferred.
+  void removeInferredItems() {
+    items.removeWhere((item) => item.inferred);
   }
 
   bool _removeEmptyValues(dynamic json) {

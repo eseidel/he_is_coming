@@ -82,11 +82,19 @@ class Data {
 
   /// Remove any items that are missing effects.
   void removeEntriesMissingEffects() {
-    creatures.removeEntriesMissingEffects();
-    items.removeEntriesMissingEffects();
-    edges.removeEntriesMissingEffects();
-    oils.removeEntriesMissingEffects();
+    for (final catalog in _catalogs) {
+      catalog.removeEntriesMissingEffects();
+    }
   }
+
+  /// Remove any items that are inferred.
+  void removeInferredItems() {
+    for (final catalog in _catalogs) {
+      catalog.removeInferredItems();
+    }
+  }
+
+  List<Catalog> get _catalogs => [creatures, items, edges, oils];
 
   /// The creatures in this catalog.
   final CreatureCatalog creatures;

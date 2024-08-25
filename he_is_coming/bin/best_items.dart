@@ -228,7 +228,9 @@ void logResult(RunResult result) {
 void doMain(List<String> arguments) {
   final data = Data.load();
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
-  data.removeEntriesMissingEffects();
+  data
+    ..removeEntriesMissingEffects()
+    ..removeInferredItems();
 
   final random = Random();
   const rounds = 1000;

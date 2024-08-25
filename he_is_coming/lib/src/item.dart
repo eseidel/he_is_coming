@@ -93,7 +93,7 @@ class Item extends CatalogItem {
     this.isUnique = false,
     super.effect,
     super.unlock,
-    this.inferred = false,
+    super.inferred = false,
     this.parts = const [],
   }) : super(name: name) {
     if (kind == ItemKind.weapon && stats.attack == 0) {
@@ -168,9 +168,6 @@ class Item extends CatalogItem {
   /// Is the item unique.
   /// Unique items can only be equipped once.
   final bool isUnique;
-
-  /// Is the item inferred.
-  final bool inferred;
 
   /// Items combined to make this item.
   final List<String>? parts;
