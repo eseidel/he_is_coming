@@ -458,6 +458,11 @@
   kind: jewelry
   rarity: common
   effect: "Battle Start: Gain 1 attack and take 2 damage"
+- name: Sanguine Rose
+  unique: true
+  rarity: rare
+  unlock: "Battle Medic: Restore 15 or more health in a single turn"
+  effect: "Whenever you restore health, restore 1 additional health"
 - name: Sapphire Crown
   kind: jewelry
   rarity: rare
