@@ -14,6 +14,7 @@ dependencies:
   google_fonts: ^6.2.1
   he_is_coming:
     path: ../he_is_coming
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +31,4 @@ flutter:
     - packages/he_is_coming/data/triggers.yaml
     - packages/he_is_coming/data/challenges.yaml
     - packages/he_is_coming/data/sets.yaml
+    - assets/steam_logo.png

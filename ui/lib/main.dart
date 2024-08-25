@@ -3,6 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:ui/scrolling_grid.dart';
 import 'package:ui/style.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'He is Coming',
       theme: ThemeData(
         colorScheme: const ColorScheme.dark(),
         textTheme: Style.textTheme,
@@ -477,6 +478,22 @@ class _MyHomePageState extends State<HomePage> {
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text('He is Coming'),
+          leading: GestureDetector(
+            onTap: () {
+              launchUrl(
+                Uri.parse(
+                  'https://store.steampowered.com/app/2824490/He_is_coming/',
+                ),
+              );
+            },
+            child: Center(
+              child: Image.asset(
+                'assets/steam_logo.png',
+                width: 24,
+                height: 24,
+              ),
+            ),
+          ),
           bottom: const TabBar(
             tabs: <Widget>[
               Tab(text: 'Items'),
