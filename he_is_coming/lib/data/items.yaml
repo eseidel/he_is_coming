@@ -31,6 +31,11 @@
 - name: Boots of the hero
   rarity: common
   speed: 2
+- name: Bramble Buckler
+  rarity: rare
+  armor: 2
+  unlock: "It's a secret to everybody: Find a hidden item set"
+  effect: "Turn Start: Convert 1 armor to 2 thorns"
 - name: Brittlebark Armor
   rarity: heroic
   material: wood
@@ -148,6 +153,10 @@
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Restore 4 health"
+- name: Golden Firecracker Belt
+  rarity: golden
+  material: bomb
+  effect: "Exposed: Deal 1 damage 6 times"
 - name: Golden Leather Gloves
   rarity: golden
   health: 6
@@ -166,6 +175,9 @@
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Gain 2 attack and take 4 damage"
+- name: Golden Shield of the Hero
+  rarity: golden
+  armor: 6
 - name: Granite Gauntlet
   rarity: common
   material: stone
@@ -393,6 +405,10 @@
   kind: weapon
   rarity: common
   attack: 3
+- name: Thorn Ring
+  rarity: heroic
+  unlock: "Grave Mistake: Die from your own items"
+  effect: "Battle Start: Gain 6 thorns and lose 1 health"
 - name: Tree Sap
   rarity: cauldron
   parts:
@@ -419,19 +435,3 @@
   kind: weapon
   rarity: common
   attack: 1
-- name: Thorn Ring
-  rarity: heroic
-  unlock: "Grave Mistake: Die from your own items"
-  effect: "Battle Start: Gain 6 thorns and lose 1 health"
-- name: Golden Firecracker Belt
-  rarity: golden
-  effect: "Exposed: Deal 1 damage 6 times"
-  material: bomb
-- name: Bramble Buckler
-  rarity: rare
-  unlock: "It's a secret to everybody: Find a hidden item set"
-  effect: "Turn Start: Convert 1 armor to 2 thorns"
-  armor: 2
-- name: Golden Shield of the Hero
-  rarity: golden
-  armor: 6
