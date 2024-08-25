@@ -202,7 +202,6 @@
 - name: Golden Emergency Shield
   rarity: golden
   effect: "Battle Start: If you have less speed than the enemy, gain 8 armor"
-  inferred: true
 - name: Golden Firecracker Belt
   rarity: golden
   material: bomb
@@ -246,7 +245,6 @@
   rarity: golden
   material: wood
   health: 10
-  inferred: true
 - name: Golden Ruby Earing
   kind: jewelry
   rarity: golden
@@ -403,6 +401,11 @@
   rarity: rare
   armor: 4
   effect: Enemies first strike ignores armor
+- name: Pinecone Plate
+  rarity: rare
+  material: wood
+  unlock: "Rose and thorn: Win against Gentle Giant for the first time"
+  effect: "Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle"
 - name: Plated Helmet
   rarity: heroic
   effect: "Turn Start: If you are below 50% health, gain 2 armor"

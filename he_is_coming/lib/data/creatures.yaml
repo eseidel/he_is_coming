@@ -42,6 +42,9 @@
   attack: 3
   speed: 2
   effect: "Whenever Brittlebark Beast takes damage, he takes 2 additional damage"
+- name: Gentle Giant
+  health: 40
+  effect: "Whenever Gentle Giant takes damage he gains 2 thorns.  Wounded: Gain 4 thorns instead"
 - name: Granite Griffin
   level: 2
   health: 10
