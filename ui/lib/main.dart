@@ -454,19 +454,18 @@ class _MyHomePageState extends State<HomePage> {
   }
 
   Future<Data> loadData() async {
-    final creatures =
-        rootBundle.loadString('packages/he_is_coming/data/creatures.yaml');
-    final items =
-        rootBundle.loadString('packages/he_is_coming/data/items.yaml');
-    final edges =
-        rootBundle.loadString('packages/he_is_coming/data/edges.yaml');
-    final oils =
-        rootBundle.loadString('packages/he_is_coming/data/blade_oils.yaml');
+    Future<String> load(String name) {
+      return rootBundle.loadString('packages/he_is_coming/data/$name.yaml');
+    }
+
     return Data.fromStrings(
-      creatures: creatures,
-      items: items,
-      edges: edges,
-      oils: oils,
+      creatures: load('creatures'),
+      edges: load('edges'),
+      items: load('items'),
+      oils: load('oils'),
+      challenges: load('challenges'),
+      triggers: load('triggers'),
+      sets: load('sets'),
     );
   }
 

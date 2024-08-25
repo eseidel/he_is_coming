@@ -14,6 +14,20 @@ class Stats {
     this.speed = 0,
   });
 
+  /// Create stats from a yaml map.
+  factory Stats.fromYaml(YamlMap yaml) {
+    final health = yaml['health'] as int? ?? 0;
+    final armor = yaml['armor'] as int? ?? 0;
+    final attack = yaml['attack'] as int? ?? 0;
+    final speed = yaml['speed'] as int? ?? 0;
+    return Stats(
+      maxHp: health,
+      armor: armor,
+      attack: attack,
+      speed: speed,
+    );
+  }
+
   /// Max health of the creature.
   final int maxHp;
 
@@ -28,6 +42,14 @@ class Stats {
 
   /// Return true if all stats are 0.
   bool get isEmpty => this == const Stats();
+
+  /// All the known keys in the stats yaml, in sorted order.
+  static const List<String> orderedKeys = <String>[
+    'health',
+    'armor',
+    'attack',
+    'speed',
+  ];
 
   /// Add two Stats together.
   Stats operator +(Stats other) {
@@ -124,10 +146,7 @@ class Item extends CatalogItem {
     final kind = yaml.get('kind', ItemKind.values);
     final rarity = yaml.expect('rarity', ItemRarity.values);
     final material = yaml.get('material', ItemMaterial.values);
-    final attack = yaml['attack'] as int? ?? 0;
-    final health = yaml['health'] as int? ?? 0;
-    final armor = yaml['armor'] as int? ?? 0;
-    final speed = yaml['speed'] as int? ?? 0;
+    final stats = Stats.fromYaml(yaml);
     final unlock = yaml['unlock'] as String?;
     final unique = yaml['unique'] as bool? ?? false;
     final effectText = yaml['effect'] as String?;
@@ -139,12 +158,7 @@ class Item extends CatalogItem {
       kind: kind,
       rarity,
       material: material,
-      stats: Stats(
-        maxHp: health,
-        armor: armor,
-        attack: attack,
-        speed: speed,
-      ),
+      stats: stats,
       effect: effect,
       isUnique: unique,
       unlock: unlock,
@@ -181,10 +195,7 @@ class Item extends CatalogItem {
     'material',
     'unlock', // ignored for now
     'parts', // ignored for now
-    'attack',
-    'health',
-    'armor',
-    'speed',
+    ...Stats.orderedKeys,
     'effect',
     'inferred',
   ];
