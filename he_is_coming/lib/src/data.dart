@@ -80,6 +80,14 @@ class Data {
     oils.save(paths.oils);
   }
 
+  /// Remove any items that are missing effects.
+  void removeEntriesMissingEffects() {
+    creatures.removeEntriesMissingEffects();
+    items.removeEntriesMissingEffects();
+    edges.removeEntriesMissingEffects();
+    oils.removeEntriesMissingEffects();
+  }
+
   /// The creatures in this catalog.
   final CreatureCatalog creatures;
 
