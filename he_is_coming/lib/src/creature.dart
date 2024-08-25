@@ -107,7 +107,7 @@ Creature makeEnemy({
 /// Oil applied to a weapon.
 class Oil extends CatalogItem {
   /// Create an Oil
-  Oil({required super.name, required this.stats, super.unlock});
+  Oil({required super.name, required this.stats});
 
   /// Create an Oil from a yaml map.
   factory Oil.fromYaml(YamlMap yaml, LookupEffect _) {
@@ -142,7 +142,6 @@ class Oil extends CatalogItem {
   @override
   dynamic toJson() => <String, dynamic>{
         'name': name,
-        'unlock': unlock,
         ...stats.toJson(),
       };
 }
@@ -150,15 +149,14 @@ class Oil extends CatalogItem {
 /// An edge is a special effect that can be applied to a weapon.
 class Edge extends CatalogItem {
   /// Create an Edge
-  Edge({required super.name, required super.effect, super.unlock});
+  Edge({required super.name, required super.effect});
 
   /// Create an Edge from a yaml map.
   factory Edge.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     final name = yaml['name'] as String;
-    final unlock = yaml['unlock'] as String?;
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
-    return Edge(name: name, effect: effect, unlock: unlock);
+    return Edge(name: name, effect: effect);
   }
 
   @override
@@ -168,7 +166,6 @@ class Edge extends CatalogItem {
   dynamic toJson() {
     return {
       'name': name,
-      'unlock': unlock,
       'effect': effect?.toJson(),
     };
   }
@@ -186,7 +183,6 @@ class Creature extends CatalogItem {
     int? hp,
     super.effect,
     this.edge,
-    super.unlock,
     this.level,
     this.oils = const <Oil>[],
   })  : _intrinsic = intrinsic,
@@ -288,7 +284,6 @@ class Creature extends CatalogItem {
       gold: gold ?? this.gold,
       effect: effect,
       edge: edge,
-      unlock: unlock,
       level: level,
     );
   }
@@ -321,7 +316,6 @@ class Creature extends CatalogItem {
       'effect': effect?.toJson(),
       'edge': edge?.toJson(),
       'oils': oils.map((oil) => oil.toJson()).toList(),
-      'unlock': unlock,
     };
   }
 }

@@ -1,5 +1,4 @@
 - name: Agile Edge
-  unlock: "Stop hitting yourself: Strike an enemy 2 times before their turn"
   effect: Do an additional strike on your first turn
 - name: Bleeding Edge
   effect: "On Hit: Restore 1 health"
@@ -8,7 +7,6 @@
 - name: Cutting Edge
   effect: "On Hit: Deal 1 damage"
 - name: Jagged Edge
-  unlock: "Nocturnal Predator: Defeat 5 enemies during one night"
   effect: "On Hit: Gain 2 thorns and take 1 damage"
 - name: Lightning Edge
   effect: "Battle Start: Stun the enemy for 1 turn"

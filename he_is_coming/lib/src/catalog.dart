@@ -79,7 +79,6 @@ abstract class CatalogItem {
   CatalogItem({
     required this.name,
     this.effect,
-    this.unlock,
     this.inferred = false,
   });
 
@@ -88,9 +87,6 @@ abstract class CatalogItem {
 
   /// The effect of the item.
   final Effect? effect;
-
-  /// Requirements to unlock this item.
-  final String? unlock;
 
   /// If the item was inferred rather than seen in the wild.
   final bool inferred;

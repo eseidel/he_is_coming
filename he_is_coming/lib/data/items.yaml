@@ -17,7 +17,6 @@
 - name: Blackbriar Blade
   rarity: rare
   attack: 1
-  unlock: "Ouch!: Deal 10 or more damage with thorns in a single turn"
   effect: Gain 2 attack for each thorns
 - name: Blacksmith Bond
   rarity: rare
@@ -39,13 +38,11 @@
 - name: Bramble Buckler
   rarity: rare
   armor: 2
-  unlock: "It's a secret to everybody: Find a hidden item set"
   effect: "Turn Start: Convert 1 armor to 2 thorns"
 - name: Brittlebark Armor
   rarity: heroic
   material: wood
   health: 10
-  unlock: "Barking up the wrong tree: Win against the Brittlebark Beast for the first time"
   effect: "Whenever you take damage, take 1 additional damage"
 - name: Brittlebark Bow
   kind: weapon
@@ -139,7 +136,6 @@
   rarity: rare
   material: bomb
   attack: 4
-  unlock: "Welcome Back: Equip the same weapon you discarded earlier in the same run."
   effect: "Exposed: Deal 6 damage and set attack to 0"
 - name: Featherweight Blade
   kind: weapon
@@ -159,12 +155,10 @@
 - name: Gemstone Scepter
   rarity: heroic
   attack: 2
-  unlock: "The Collector: Equip 3 copies of the same item"
   effect: "Draws power from emerald, ruby, sapphire and citrine items"
 - name: Gold Ring
   kind: jewelry
   rarity: rare
-  unlock: "Early Riser: Fight a boss early and win it"
   effect: "Battle Start: Gain 1 gold"
 - name: Golden Bearpelt Plate
   rarity: golden
@@ -313,7 +307,6 @@
   kind: weapon
   rarity: common
   attack: 2
-  unlock: "Less is More: Defeat the first boss with only common items in your inventory."
   effect: Gets stronger for every new hidden dagger you find
 - name: Hook Blade
   kind: weapon
@@ -347,7 +340,6 @@
   rarity: rare
   material: stone
   speed: -1
-  unlock: "Slowpoke: Start a battle with -5 base speed"
   effect: When you have armor gain 3 attack
 - name: Leather Boots
   rarity: rare
@@ -395,7 +387,6 @@
 - name: Petrifying Flask
   rarity: common
   material: stone
-  unlock: "Rock Solid: Win against the Granite Griffin for the first time"
   effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
 - name: Phantom Armor
   rarity: rare
@@ -404,7 +395,6 @@
 - name: Pinecone Plate
   rarity: rare
   material: wood
-  unlock: "Rose and thorn: Win against Gentle Giant for the first time"
   effect: "Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle"
 - name: Plated Helmet
   rarity: heroic
@@ -419,7 +409,6 @@
 - name: Razorvine Talisman
   unique: true
   rarity: rare
-  unlock: "Eye of the storm: Win against Storm Druid for the first time"
   effect: "Whenever you gain thorns, gain 1 additional thorn"
 - name: Redwood Cloak
   rarity: common
@@ -469,7 +458,6 @@
 - name: Sanguine Rose
   unique: true
   rarity: rare
-  unlock: "Battle Medic: Restore 15 or more health in a single turn"
   effect: "Whenever you restore health, restore 1 additional health"
 - name: Sapphire Crown
   kind: jewelry
@@ -501,7 +489,6 @@
   effect: "Battle Start: Give 8 armor to the enemy"
 - name: Sticky Web
   rarity: rare
-  unlock: "Smoked: Win against Fen Fire for the first time"
   effect: "Battle Start: If you have less speed than the enemy, stun the enemy for 1 turn"
 - name: Stone Steak
   kind: food
@@ -523,7 +510,6 @@
   kind: weapon
   rarity: rare
   attack: 2
-  unlock: "Hunting Season: Win against Razortusk Hog for the first time"
   effect: "First Turn: If you have more speed than the enemy, do 2 additional strikes"
 - name: Sword of the Hero
   kind: weapon
@@ -531,7 +517,6 @@
   attack: 3
 - name: Thorn Ring
   rarity: heroic
-  unlock: "Grave Mistake: Die from your own items"
   effect: "Battle Start: Gain 6 thorns and lose 1 health"
 - name: Tree Sap
   rarity: cauldron

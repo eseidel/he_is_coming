@@ -310,7 +310,7 @@ class Challenge extends CatalogItem {
   /// Create a new challenge.
   Challenge({
     required super.name,
-    required super.unlock,
+    required this.unlock,
     required this.reward,
   });
 
@@ -335,6 +335,9 @@ class Challenge extends CatalogItem {
 
   /// The reward for completing the challenge.
   final String reward;
+
+  /// Requirements to meet this challenge.
+  final String unlock;
 
   // We're not currently recording the position in the challenge map,
   // or what page its on, or what other challenges this unlocks.

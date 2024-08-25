@@ -114,7 +114,6 @@ class Item extends CatalogItem {
     this.stats = const Stats(),
     this.isUnique = false,
     super.effect,
-    super.unlock,
     super.inferred = false,
     this.parts = const [],
   }) : super(name: name) {
@@ -147,7 +146,6 @@ class Item extends CatalogItem {
     final rarity = yaml.expect('rarity', ItemRarity.values);
     final material = yaml.get('material', ItemMaterial.values);
     final stats = Stats.fromYaml(yaml);
-    final unlock = yaml['unlock'] as String?;
     final unique = yaml['unique'] as bool? ?? false;
     final effectText = yaml['effect'] as String?;
     final parts = yaml['parts'] as List?;
@@ -161,7 +159,6 @@ class Item extends CatalogItem {
       stats: stats,
       effect: effect,
       isUnique: unique,
-      unlock: unlock,
       parts: parts?.cast<String>(),
       inferred: inferred,
     );
@@ -210,7 +207,6 @@ class Item extends CatalogItem {
       if (parts != null && parts!.isNotEmpty) 'parts': parts,
       'material': material?.toJson(),
       ...stats.toJson(),
-      'unlock': unlock,
       'effect': effect?.toJson(),
       if (inferred) 'inferred': inferred,
     };
