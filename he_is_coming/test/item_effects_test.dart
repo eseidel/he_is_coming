@@ -1147,4 +1147,20 @@ void main() {
     expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 3);
   });
+
+  test('Stormcloud Spear', () {
+    final item = itemCatalog['Stormcloud Spear'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 26);
+    final result = doBattle(first: player, second: enemy);
+
+    // Stormcloud Spear stuns the enemy for 2 turns every 5 strikes
+    // Player attacks 13 times.
+    // Enemy should be stunned twice (on 5th and 10th strike) for 2 turns each.
+    // Enemy should only attack 8 times (1, 2, 3, 4, 7, 8, 9, 13)
+    expect(result.first.hp, 2);
+    expect(result.second.hp, 0);
+  });
 }

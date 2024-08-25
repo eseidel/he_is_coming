@@ -20,12 +20,6 @@ void _expectNonNegative(int value, String valueName) {
   }
 }
 
-void _expectNegative(int value, String valueName) {
-  if (value >= 0) {
-    throw ArgumentError('$valueName ($value) must be negative');
-  }
-}
-
 /// Passed to all Effect callbacks.
 class EffectContext {
   /// Create an EffectContext
@@ -53,6 +47,12 @@ class EffectContext {
   /// Returns true if this is "every other turn" for this creature.
   // I tested with Emerald Earning and it was first turn, then every other turn.
   bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
+
+  /// Returns the number of strikes the attacker has made this battle.
+  int get strikeCount => _battle.stats[_index].strikeCount;
+
+  /// Returns true if this is the nth strike for this creature.
+  bool everyNStrikes(int n) => strikeCount % n == n - 1;
 
   /// Add gold.
   void gainGold(int gold) {
@@ -214,6 +214,7 @@ class CreatureStats {
     this.hasBeenWounded = false,
     this.stunCount = 0,
     this.thorns = 0,
+    this.strikeCount = 0,
   });
 
   /// Create a CreatureStats from a Creature.
@@ -256,6 +257,9 @@ class CreatureStats {
   /// Number of turns remaining the creature is stunned.
   final int stunCount;
 
+  /// Number of strikes this creature has made this battle.
+  final int strikeCount;
+
   /// Damage returned to the attacker when attacking this creature.
   /// Thorns are cleared after each attack.
   final int thorns;
@@ -281,6 +285,7 @@ class CreatureStats {
     bool? hasBeenWounded,
     int? stunCount,
     int? thorns,
+    int? strikeCount,
   }) {
     final newMaxHp = maxHp ?? this.maxHp;
     final newHp = hp ?? this.hp;
@@ -299,6 +304,7 @@ class CreatureStats {
       hasBeenWounded: hasBeenWounded ?? this.hasBeenWounded,
       stunCount: stunCount ?? this.stunCount,
       thorns: thorns ?? this.thorns,
+      strikeCount: strikeCount ?? this.strikeCount,
     );
   }
 
@@ -314,6 +320,7 @@ class CreatureStats {
       _diffString('gold', gold, other.gold),
       _diffString('stun', stunCount, other.stunCount),
       _diffString('thorns', thorns, other.thorns),
+      _diffString('strikeCount', strikeCount, other.strikeCount),
     ].nonNulls;
     if (diffStrings.isNotEmpty) {
       return diffStrings.join(' ');
@@ -521,6 +528,11 @@ class BattleContext {
       );
       setStats(defenderIndex, defender.copyWith(thorns: 0));
     }
+
+    setStats(
+      attackerIndex,
+      attacker.copyWith(strikeCount: attacker.strikeCount + 1),
+    );
   }
 
   /// Probably this only needs to happen within the takeDamage effect?

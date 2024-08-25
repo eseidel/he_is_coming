@@ -140,4 +140,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
         ..gainThorns(2),
     ),
   ),
+  'Stormcloud Spear':
+      onTurn((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
 });
