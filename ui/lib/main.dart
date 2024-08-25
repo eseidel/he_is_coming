@@ -538,76 +538,67 @@ class FilteredItemsView extends StatefulWidget {
   State<FilteredItemsView> createState() => _FilteredItemsViewState();
 }
 
+extension on String {
+  String capitalize() {
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+  }
+}
+
 class _FilteredItemsViewState extends State<FilteredItemsView> {
-  bool showGolden = false;
-  bool showWeapons = true;
-  bool showFood = true;
-  bool showJewelry = true;
+  final List<String> possible = [
+    'Weapon',
+    'Food',
+    'Jewelry',
+    'Stone',
+    'Sanguine',
+    'Wood',
+    'Bomb',
+    'Unique',
+    'Common',
+    'Rare',
+    'Heroic',
+    'Golden',
+    'Cauldron',
+  ];
+  // Modeled as disabled for easier filtering of items.
+  final Set<String> disabled = {};
+
+  Set<String> tagsForItem(Item item) {
+    return {
+      if (item.kind != null) item.kind!.name.capitalize(),
+      if (item.material != null) item.material!.name.capitalize(),
+      if (item.isUnique) 'Unique',
+      item.rarity.name.capitalize(),
+    };
+  }
 
   List<Item> get items {
     return widget.items.where((item) {
-      if (!showGolden && item.rarity == ItemRarity.golden) {
-        return false;
-      }
-      if (!showWeapons && item.kind == ItemKind.weapon) {
-        return false;
-      }
-      if (!showFood && item.kind == ItemKind.food) {
-        return false;
-      }
-      if (!showJewelry && item.kind == ItemKind.jewelry) {
-        return false;
-      }
-      return true;
+      return tagsForItem(item).intersection(disabled).isEmpty;
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget filterToggle(
-      String label,
-      bool value, // ignore: avoid_positional_boolean_parameters
-      void Function(
-        bool newValue, // ignore: avoid_positional_boolean_parameters
-      ) onChanged,
-    ) {
-      return Expanded(
-        child: CheckboxListTile(
-          title: Text(label),
-          value: value,
-          onChanged: (b) => onChanged(b!),
-        ),
-      );
-    }
-
     return Column(
       children: [
-        SizedBox(
-          height: 64,
-          child: Row(
-            children: [
-              filterToggle('Weapons', showWeapons, (value) {
+        Wrap(
+          spacing: 5,
+          children: possible.map((String tag) {
+            return FilterChip(
+              label: Text(tag),
+              selected: !disabled.contains(tag),
+              onSelected: (bool selected) {
                 setState(() {
-                  showWeapons = value;
+                  if (selected) {
+                    disabled.remove(tag);
+                  } else {
+                    disabled.add(tag);
+                  }
                 });
-              }),
-              filterToggle('Food', showFood, (value) {
-                setState(() {
-                  showFood = value;
-                });
-              }),
-              filterToggle('Jewelry', showJewelry, (value) {
-                setState(() {
-                  showJewelry = value;
-                });
-              }),
-              filterToggle('Golden', showGolden, (value) {
-                setState(() {
-                  showGolden = value;
-                });
-              }),
-            ],
-          ),
+              },
+            );
+          }).toList(),
         ),
         Expanded(
           child: ScrollingGrid(
