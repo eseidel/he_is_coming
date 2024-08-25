@@ -117,6 +117,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Sapphire Ring': onBattle((c) => c.stealArmor(2)),
   'Horned Helmet': onBattle((c) => c.gainThorns(2)),
+  'Golden Horned Helmet': onBattle((c) => c.gainThorns(4)),
   'Crimson Cloak': onTakeDamage((c) => c.restoreHealth(1)),
   'Tree Sap': onWounded((c) => [1, 1, 1, 1, 1].forEach(c.restoreHealth)),
   'Petrifying Flask': onWounded(

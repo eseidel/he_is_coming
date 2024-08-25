@@ -1044,6 +1044,21 @@ void main() {
     expect(result.first.baseStats.armor, 2);
   });
 
+  test('Golden Horned Helmet', () {
+    final item = itemCatalog['Golden Horned Helmet'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 4);
+
+    final enemy = makeEnemy(attack: 1, health: 10);
+    final result = doBattle(first: player, second: enemy);
+    // Golden Horned Helmet gives 4 armor and 4 thorns on battle start.
+    // 4 armor negates 4 hits from wolf and 4 thorns deal 4 dmg to wolf.
+    // Wolf only gets attack 5 times instead of 9 and 4 of those are blocked.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.armor, 4);
+  });
+
   test('Crimson Cloak', () {
     final item = itemCatalog['Crimson Cloak'];
     final player = createPlayer(items: [item]);
