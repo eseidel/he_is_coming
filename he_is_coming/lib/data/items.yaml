@@ -129,6 +129,13 @@
   rarity: rare
   material: bomb
   effect: "Exposed: Deal 5 damage"
+- name: Explosive Sword
+  kind: weapon
+  rarity: rare
+  material: bomb
+  attack: 4
+  unlock: "Welcome Back: Equip the same weapon you discarded earlier in the same run."
+  effect: "Exposed: Deal 6 damage and set attack to 0"
 - name: Featherweight Blade
   kind: weapon
   rarity: common
@@ -526,10 +533,3 @@
   kind: weapon
   rarity: common
   attack: 1
-- name: Explosive Sword
-  kind: weapon
-  rarity: rare
-  material: bomb
-  attack: 4
-  unlock: "Welcome Back: Equip the same weapon you discarded earlier in the same run."
-  effect: "Exposed: Deal 6 damage and set attack to 0"
