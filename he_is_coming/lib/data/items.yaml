@@ -338,6 +338,12 @@
   material: stone
   attack: 4
   speed: -2
+- name: Ironstone Sandals
+  rarity: rare
+  material: stone
+  speed: -1
+  unlock: "Slowpoke: Start a battle with -5 base speed"
+  effect: When you have armor gain 3 attack
 - name: Leather Boots
   rarity: rare
   effect: "If you have more speed than the enemy, gain 2 attack"
