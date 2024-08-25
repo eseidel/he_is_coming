@@ -462,7 +462,7 @@ class _MyHomePageState extends State<HomePage> {
       creatures: load('creatures'),
       edges: load('edges'),
       items: load('items'),
-      oils: load('oils'),
+      oils: load('blade_oils'),
       challenges: load('challenges'),
       triggers: load('triggers'),
       sets: load('sets'),
@@ -490,12 +490,8 @@ class _MyHomePageState extends State<HomePage> {
             ? const Center(child: CircularProgressIndicator())
             : TabBarView(
                 children: <Widget>[
-                  ScrollingGrid(
-                    maxCrossAxisExtent: 240,
-                    itemCount: data.items.items.length,
-                    itemBuilder: (context, index) {
-                      return ItemView(item: data.items.items[index]);
-                    },
+                  FilteredItemsView(
+                    items: data.items.items,
                   ),
                   ScrollingGrid(
                     maxCrossAxisExtent: 240,
@@ -523,6 +519,106 @@ class _MyHomePageState extends State<HomePage> {
                 ],
               ),
       ),
+    );
+  }
+}
+
+/// FilteredItemsView widget
+class FilteredItemsView extends StatefulWidget {
+  /// FilteredItemsView constructor
+  const FilteredItemsView({
+    required this.items,
+    super.key,
+  });
+
+  /// Items to display
+  final List<Item> items;
+
+  @override
+  State<FilteredItemsView> createState() => _FilteredItemsViewState();
+}
+
+class _FilteredItemsViewState extends State<FilteredItemsView> {
+  bool showGolden = false;
+  bool showWeapons = true;
+  bool showFood = true;
+  bool showJewelry = true;
+
+  List<Item> get items {
+    return widget.items.where((item) {
+      if (!showGolden && item.rarity == ItemRarity.golden) {
+        return false;
+      }
+      if (!showWeapons && item.kind == ItemKind.weapon) {
+        return false;
+      }
+      if (!showFood && item.kind == ItemKind.food) {
+        return false;
+      }
+      if (!showJewelry && item.kind == ItemKind.jewelry) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget filterToggle(
+      String label,
+      bool value, // ignore: avoid_positional_boolean_parameters
+      void Function(
+        bool newValue, // ignore: avoid_positional_boolean_parameters
+      ) onChanged,
+    ) {
+      return Expanded(
+        child: CheckboxListTile(
+          title: Text(label),
+          value: value,
+          onChanged: (b) => onChanged(b!),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        SizedBox(
+          height: 64,
+          child: Row(
+            children: [
+              filterToggle('Weapons', showWeapons, (value) {
+                setState(() {
+                  showWeapons = value;
+                });
+              }),
+              filterToggle('Food', showFood, (value) {
+                setState(() {
+                  showFood = value;
+                });
+              }),
+              filterToggle('Jewelry', showJewelry, (value) {
+                setState(() {
+                  showJewelry = value;
+                });
+              }),
+              filterToggle('Golden', showGolden, (value) {
+                setState(() {
+                  showGolden = value;
+                });
+              }),
+            ],
+          ),
+        ),
+        Expanded(
+          child: ScrollingGrid(
+            maxCrossAxisExtent: 240,
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return ItemView(item: items[index]);
+            },
+          ),
+        ),
+      ],
     );
   }
 }

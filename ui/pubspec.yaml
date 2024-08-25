@@ -28,3 +28,5 @@ flutter:
     - packages/he_is_coming/data/edges.yaml
     - packages/he_is_coming/data/items.yaml
     - packages/he_is_coming/data/triggers.yaml
+    - packages/he_is_coming/data/challenges.yaml
+    - packages/he_is_coming/data/sets.yaml
