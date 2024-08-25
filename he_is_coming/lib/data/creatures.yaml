@@ -79,6 +79,11 @@
   attack: 10
   armor: 10
   effect: Mountain Troll only strikes every other turn
+- name: Raven Level 2
+  health: 5
+  attack: 2
+  speed: 3
+  effect: Strikes steal gold instead of dealing damage
 - name: Razortusk Hog
   level: 2
   health: 20
@@ -106,6 +111,12 @@
   attack: 1
   speed: 4
   effect: "Battle Start: If Spider has more speed than you, it deals 5 damage"
+- name: Stormcloud Druid
+  level: 1
+  health: 20
+  attack: 3
+  speed: 2
+  effect: "If Stormcloud Druid takes damage more than once per turn, stun the player for 1 turn"
 - name: Wolf Level 1
   health: 3
   attack: 1
@@ -125,14 +136,3 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
-- name: Raven Level 2
-  effect: Strikes steal gold instead of dealing damage
-  attack: 2
-  speed: 3
-  health: 5
-- name: Stormcloud Druid
-  level: 1
-  health: 20
-  attack: 3
-  speed: 2
-  effect: "If Stormcloud Druid takes damage more than once per turn, stun the player for 1 turn"

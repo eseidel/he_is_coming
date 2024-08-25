@@ -416,6 +416,11 @@
 - name: Razor Scales
   rarity: heroic
   effect: "Exposed: Armor now deals damage when removed"
+- name: Razorvine Talisman
+  unique: true
+  rarity: rare
+  unlock: "Eye of the storm: Win against Storm Druid for the first time"
+  effect: "Whenever you gain thorns, gain 1 additional thorn"
 - name: Redwood Cloak
   rarity: common
   material: wood
@@ -554,8 +559,3 @@
   kind: weapon
   rarity: common
   attack: 1
-- name: Razorvine Talisman
-  rarity: rare
-  unique: true
-  unlock: "Eye of the storm: Win against Storm Druid for the first time"
-  effect: "Whenever you gain thorns, gain 1 additional thorn"
