@@ -30,6 +30,13 @@
   armor: 4
   speed: 2
   effect: Bear deals 7 additional damage while you have armor
+- name: Bearserker
+  level: 2
+  health: 20
+  attack: 4
+  armor: 10
+  speed: 2
+  effect: Ignores armor
 - name: Black Knight
   level: 1
   health: 10
@@ -136,10 +143,3 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
-- name: Bearserker
-  level: 2
-  effect: "Ignores armor"
-  health: 20
-  attack: 4
-  armor: 10
-  speed: 2
