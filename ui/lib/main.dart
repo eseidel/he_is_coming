@@ -585,9 +585,7 @@ class _CustomGridDelegate extends SliverGridDelegate {
     final squareDimension = constraints.crossAxisExtent / count;
     return _CustomGridLayout(
       crossAxisCount: count,
-      fullRowPeriod:
-          3, // Number of rows per block (one of which is the full row).
-      dimension: squareDimension,
+      childSize: Size(squareDimension, squareDimension),
     );
   }
 
@@ -600,67 +598,39 @@ class _CustomGridDelegate extends SliverGridDelegate {
 class _CustomGridLayout extends SliverGridLayout {
   const _CustomGridLayout({
     required this.crossAxisCount,
-    required this.dimension,
-    required this.fullRowPeriod,
-  })  : assert(crossAxisCount > 0, 'crossAxisCount must be greater than zero'),
-        assert(fullRowPeriod > 1, 'fullRowPeriod must be greater than one'),
-        loopLength = crossAxisCount * (fullRowPeriod - 1) + 1,
-        loopHeight = fullRowPeriod * dimension;
+    required this.childSize,
+  }) : assert(crossAxisCount > 0, 'crossAxisCount must be greater than zero');
 
+  final Size childSize;
   final int crossAxisCount;
-  final double dimension;
-  final int fullRowPeriod;
-
-  // Computed values.
-  final int loopLength;
-  final double loopHeight;
 
   @override
   double computeMaxScrollOffset(int childCount) {
     // This returns the scroll offset of the end side of the childCount'th
-    // child. In the case of this example, this method is not used, since the
-    // grid is infinite. However, if one set an itemCount on the GridView above,
-    // this function would be used to determine how far to allow the user to
-    // scroll.
-    if (childCount == 0 || dimension == 0) {
+    // child. Determines how far to allow the user to scroll.
+    if (childCount == 0) {
       return 0;
     }
-    return (childCount ~/ loopLength) * loopHeight +
-        ((childCount % loopLength) ~/ crossAxisCount) * dimension;
+    return (childCount ~/ crossAxisCount) * childSize.height;
   }
 
   @override
   SliverGridGeometry getGeometryForChildIndex(int index) {
-    // This returns the position of the index'th tile.
+    // This returns the start of the index'th tile.
     //
     // The SliverGridGeometry object returned from this method has four
     // properties. For a grid that scrolls down, as in this example, the four
     // properties are equivalent to x,y,width,height. However, since the
     // GridView is direction agnostic, the names used for SliverGridGeometry are
     // also direction-agnostic.
-    //
-    // Try changing the scrollDirection and reverse properties on the GridView
-    // to see how this algorithm works in any direction (and why, therefore, the
-    // names are direction-agnostic).
-    final loop = index ~/ loopLength;
-    final loopIndex = index % loopLength;
-    if (loopIndex == loopLength - 1) {
-      // Full width case.
-      return SliverGridGeometry(
-        scrollOffset: (loop + 1) * loopHeight - dimension, // "y"
-        crossAxisOffset: 0, // "x"
-        mainAxisExtent: dimension, // "height"
-        crossAxisExtent: crossAxisCount * dimension, // "width"
-      );
-    }
-    // Square case.
-    final rowIndex = loopIndex ~/ crossAxisCount;
-    final columnIndex = loopIndex % crossAxisCount;
+
+    final rowIndex = index ~/ crossAxisCount;
+    final columnIndex = index % crossAxisCount;
     return SliverGridGeometry(
-      scrollOffset: (loop * loopHeight) + (rowIndex * dimension), // "y"
-      crossAxisOffset: columnIndex * dimension, // "x"
-      mainAxisExtent: dimension, // "height"
-      crossAxisExtent: dimension, // "width"
+      scrollOffset: rowIndex * childSize.height, // "y"
+      crossAxisOffset: columnIndex * childSize.width, // "x"
+      mainAxisExtent: childSize.height, // "height"
+      crossAxisExtent: childSize.width, // "width"
     );
   }
 
@@ -682,22 +652,14 @@ class _CustomGridLayout extends SliverGridLayout {
     // order). However, doing this means the grid view is less efficient, as it
     // will do work for children that are not visible. It is preferred that the
     // children are returned in the order that they are laid out.
-    final rows = scrollOffset ~/ dimension;
-    final loops = rows ~/ fullRowPeriod;
-    final extra = rows % fullRowPeriod;
-    return loops * loopLength + extra * crossAxisCount;
+    final rows = scrollOffset ~/ childSize.height;
+    return rows * crossAxisCount;
   }
 
   @override
   int getMaxChildIndexForScrollOffset(double scrollOffset) {
     // (See commentary above.)
-    final rows = scrollOffset ~/ dimension;
-    final loops = rows ~/ fullRowPeriod;
-    final extra = rows % fullRowPeriod;
-    final count = loops * loopLength + extra * crossAxisCount;
-    if (extra == fullRowPeriod - 1) {
-      return count;
-    }
-    return count + crossAxisCount - 1;
+    final rows = scrollOffset ~/ childSize.height;
+    return (rows + 1) * crossAxisCount - 1;
   }
 }
