@@ -554,3 +554,8 @@
   kind: weapon
   rarity: common
   attack: 1
+- name: Razorvine Talisman
+  rarity: rare
+  unique: true
+  unlock: "Eye of the storm: Win against Storm Druid for the first time"
+  effect: "Whenever you gain thorns, gain 1 additional thorn"

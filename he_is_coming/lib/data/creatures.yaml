@@ -125,3 +125,14 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
+- name: Raven Level 2
+  effect: Strikes steal gold instead of dealing damage
+  attack: 2
+  speed: 3
+  health: 5
+- name: Stormcloud Druid
+  level: 1
+  health: 20
+  attack: 3
+  speed: 2
+  effect: "If Stormcloud Druid takes damage more than once per turn, stun the player for 1 turn"

@@ -90,3 +90,18 @@ Emerald Earing
 Currently our sim says:
 Woodland Abomination wins in 15 turns with 60 damage taken.
 Probably thorns doesn't apply once we're dead?
+
+
+To Test:
+
+Granite Hammer
+Sapphire Gemstone
+Iron Rose
+Iron Rose
+Sanguine Rose
+Crimson Cloak
+Golden Sapphire Earing
+Fortified Gauntlet
+Fortified Gauntlet
+
+146 dmg, turn 13
