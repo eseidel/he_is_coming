@@ -1116,4 +1116,20 @@ void main() {
     expect(result.first.hp, 8);
     expect(result.first.baseStats.armor, 1);
   });
+
+  test('Bramble Buckler', () {
+    final item = itemCatalog['Bramble Buckler'];
+    final player =
+        createPlayer(items: [item], intrinsic: const Stats(armor: 1));
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 3);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Bramble Buckler gives 2 armor. onTurn we convert 1 armor to 2 thorns.
+    // Wolf takes 4 dmg from thorns, 2 dmg from attacks.
+    // Wolf attacks 2 times, first is blocked by armor, second hits for 1.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.armor, 3);
+  });
 }

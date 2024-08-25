@@ -62,7 +62,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     (c) => _if(
       c.my.armor > 0,
       () => c
-        ..loseArmor(-1)
+        ..loseArmor(1)
         ..gainAttack(2),
     ),
   ),
@@ -78,7 +78,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     (c) => _if(
       c.my.armor > 0,
       () => c
-        ..loseArmor(-1)
+        ..loseArmor(1)
         ..gainSpeed(3),
     ),
   ),
@@ -129,5 +129,13 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     (c) => c
       ..gainThorns(6)
       ..loseHealth(1),
+  ),
+  'Bramble Buckler': onTurn(
+    (c) => _if(
+      c.my.armor > 0,
+      () => c
+        ..loseArmor(1)
+        ..gainThorns(2),
+    ),
   ),
 });

@@ -69,8 +69,8 @@ class EffectContext {
 
   /// Remove armor.
   void loseArmor(int armor) {
-    _expectNegative(armor, 'armor');
-    _battle._adjustArmor(index: _index, armor: armor, source: _sourceName);
+    _expectPositive(armor, 'armor');
+    _battle._adjustArmor(index: _index, armor: -armor, source: _sourceName);
   }
 
   /// Add speed.
