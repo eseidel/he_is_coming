@@ -156,6 +156,11 @@
 - name: Fortified Gauntlet
   rarity: rare
   effect: "Turn Start: If you have armor, gain 1 additional armor"
+- name: Gemstone Scepter
+  rarity: heroic
+  attack: 2
+  unlock: "The Collector: Equip 3 copies of the same item"
+  effect: "Draws power from emerald, ruby, sapphire and citrine items"
 - name: Gold Ring
   kind: jewelry
   rarity: rare
@@ -274,7 +279,6 @@
   rarity: golden
   material: sanguine
   effect: "Wounded: Restore 8 health"
-  inferred: true
 - name: Golden Weighted Bracelet
   rarity: golden
   attack: 2
