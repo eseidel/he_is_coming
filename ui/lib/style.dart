@@ -66,7 +66,7 @@ class Palette {
   static const Color attack = Colors.red;
 
   /// Armor stat color.
-  static const Color armor = Colors.grey;
+  static final Color armor = Colors.blueGrey[400]!;
 
   /// Speed stat color.
   static const Color speed = Colors.yellow;

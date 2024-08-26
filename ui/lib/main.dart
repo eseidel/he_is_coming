@@ -96,18 +96,9 @@ extension on Item {
   }
 }
 
-class StatIcon extends StatelessWidget {
-  const StatIcon({
-    required this.statType,
-    super.key,
-  });
-
-  static const Size borderSize = Size(24, 24);
-  static const Size iconSize = Size(14, 14);
-  final StatType statType;
-
+extension on StatType {
   Color get color {
-    switch (statType) {
+    switch (this) {
       case StatType.attack:
         return Palette.attack;
       case StatType.health:
@@ -118,6 +109,17 @@ class StatIcon extends StatelessWidget {
         return Palette.speed;
     }
   }
+}
+
+class StatIcon extends StatelessWidget {
+  const StatIcon({
+    required this.statType,
+    super.key,
+  });
+
+  static const Size borderSize = Size(36, 36);
+  static const Size iconSize = Size(24, 24);
+  final StatType statType;
 
   Widget get icon {
     switch (statType) {
@@ -158,7 +160,7 @@ class StatIcon extends StatelessWidget {
         pixelSize: 2,
         textStyle: Style.stats,
         backgroundColor: Palette.black,
-        borderColor: color,
+        borderColor: statType.color,
       ),
       child: SizedBox(
         width: borderSize.width,
@@ -173,19 +175,24 @@ class StatLine extends StatelessWidget {
   const StatLine({
     required this.stats,
     required this.statType,
+    this.hideValue = false,
     super.key,
   });
 
   final Stats stats;
   final StatType statType;
+  final bool hideValue;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         StatIcon(statType: statType),
-        const SizedBox(width: 4),
-        Text(stats[statType].toString(), style: Style.stats),
+        const SizedBox(width: 8),
+        Text(
+          hideValue ? '???' : stats[statType].toString(),
+          style: Style.stats.copyWith(color: statType.color),
+        ),
       ],
     );
   }
@@ -197,10 +204,12 @@ class StatsRow extends StatelessWidget {
   const StatsRow({
     required this.stats,
     super.key,
+    this.hide = const {},
   });
 
   /// Stats to display
   final Stats stats;
+  final Set<StatType> hide;
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +221,11 @@ class StatsRow extends StatelessWidget {
         }
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: StatLine(stats: stats, statType: statType),
+          child: StatLine(
+            stats: stats,
+            statType: statType,
+            hideValue: hide.contains(statType),
+          ),
         );
       }).toList(),
     );
@@ -338,8 +351,9 @@ class ColoredEffectText extends StatelessWidget {
 
     final words = text.split(' ');
     return RichText(
+      textAlign: TextAlign.center,
       text: TextSpan(
-        style: Style.effect,
+        style: Style.effect.copyWith(height: 1.5),
         children: [
           for (final word in words)
             TextSpan(
@@ -374,24 +388,36 @@ class ItemView extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
-        children: [
-          ItemBox(item: item),
-          Expanded(
-            child: Column(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Row(
               children: [
-                Text(name, style: Theme.of(context).textTheme.labelLarge),
-                if (effect != null)
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: ColoredEffectText(text: effect.text),
+                ItemBox(item: item),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    name,
+                    style: Theme.of(context).textTheme.labelLarge,
+                    textAlign: TextAlign.center,
                   ),
-                if (!stats.isEmpty) StatsRow(stats: stats),
-                TagsRow(tags: item.tags),
+                ),
               ],
             ),
-          ),
-        ],
+            if (effect != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: ColoredEffectText(text: effect.text),
+              ),
+            if (!stats.isEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4),
+                child: StatsRow(stats: stats),
+              ),
+            TagsRow(tags: item.tags),
+          ],
+        ),
       ),
     );
   }
@@ -408,6 +434,13 @@ class CreatureView extends StatelessWidget {
   /// Creature to display
   final Creature creature;
 
+  Set<StatType> get hideStats {
+    if (creature.name == 'Woodland Abomination') {
+      return {StatType.health};
+    }
+    return {};
+  }
+
   @override
   Widget build(BuildContext context) {
     final name = creature.name;
@@ -417,26 +450,35 @@ class CreatureView extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
+      child: Column(
         children: [
-          // TODO(eseidel): Creatures use a different box than items.
-          const OutlinedBox(
-            borderColor: Palette.creature,
-            child: Icon(Icons.bug_report, color: Palette.creature),
+          Row(
+            children: [
+              // TODO(eseidel): Creatures use a different box than items.
+              const OutlinedBox(
+                borderColor: Palette.creature,
+                child: Icon(Icons.bug_report, color: Palette.creature),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  name,
+                  style: Theme.of(context).textTheme.labelLarge,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
           ),
-          Expanded(
-            child: Column(
-              children: [
-                Text(name, style: Theme.of(context).textTheme.labelLarge),
-                if (effect != null)
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: ColoredEffectText(text: effect.text),
-                  ),
-                if (!stats.isEmpty) StatsRow(stats: stats),
-              ],
+          if (effect != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: ColoredEffectText(text: effect.text),
             ),
-          ),
+          if (!stats.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              child: StatsRow(stats: stats, hide: hideStats),
+            ),
         ],
       ),
     );
@@ -462,24 +504,21 @@ class EdgeView extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
+      child: Column(
         children: [
           OutlinedBox(
             borderColor: Palette.white, // Edges always use white.
             child: Icon(Icons.bug_report, color: Palette.white),
           ),
-          Expanded(
-            child: Column(
-              children: [
-                Text(name, style: Theme.of(context).textTheme.labelLarge),
-                if (effect != null)
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: ColoredEffectText(text: effect.text),
-                  ),
-              ],
-            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(name, style: Theme.of(context).textTheme.labelLarge),
           ),
+          if (effect != null)
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: ColoredEffectText(text: effect.text),
+            ),
         ],
       ),
     );
@@ -497,6 +536,19 @@ class OilView extends StatelessWidget {
   /// Oil to display
   final Oil oil;
 
+  Color get color {
+    if (oil.name == 'Attack Oil') {
+      return Palette.attack;
+    }
+    if (oil.name == 'Speed Oil') {
+      return Palette.speed;
+    }
+    if (oil.name == 'Armor Oil') {
+      return Palette.armor;
+    }
+    return Palette.white;
+  }
+
   @override
   Widget build(BuildContext context) {
     final name = oil.name;
@@ -505,22 +557,18 @@ class OilView extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Row(
+      child: Column(
         children: [
-          // Oils don't have an outline I don't think?
-          // They just have an oil droplet in the color of the stat they modify.
           OutlinedBox(
+            // Oils shouldn't have an outline.
             borderColor: Palette.white,
-            child: Icon(Icons.bug_report, color: Palette.white),
+            child: Icon(Icons.water_drop, color: color),
           ),
-          Expanded(
-            child: Column(
-              children: [
-                Text(name, style: Theme.of(context).textTheme.labelLarge),
-                if (!stats.isEmpty) StatsRow(stats: stats),
-              ],
-            ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(name, style: Theme.of(context).textTheme.labelLarge),
           ),
+          if (!stats.isEmpty) StatsRow(stats: stats),
         ],
       ),
     );
@@ -629,28 +677,12 @@ class _MyHomePageState extends State<HomePage> {
   }
 }
 
-/// FilteredItemsView widget
-class FilteredItemsView extends StatefulWidget {
-  /// FilteredItemsView constructor
+class FilteredItemsView extends StatelessWidget {
   const FilteredItemsView({
     required this.items,
     super.key,
   });
 
-  /// Items to display
-  final List<Item> items;
-
-  @override
-  State<FilteredItemsView> createState() => _FilteredItemsViewState();
-}
-
-extension on String {
-  String capitalize() {
-    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
-  }
-}
-
-class _FilteredItemsViewState extends State<FilteredItemsView> {
   static final List<String> possible = [
     'Weapon',
     'Food',
@@ -666,7 +698,6 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
     'Golden',
     'Cauldron',
   ];
-  final Set<String> enabled = possible.toSet();
 
   Set<String> tagsForItem(Item item) {
     return {
@@ -677,9 +708,64 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
     };
   }
 
-  List<Item> get items {
+  final List<Item> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilteringHeader(
+      filters: possible,
+      items: items,
+      tagsForItem: tagsForItem,
+      builder: (context, items) => ScrollingGrid(
+        maxCrossAxisExtent: 240,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return ItemView(item: items[index]);
+        },
+      ),
+    );
+  }
+}
+
+/// FilteredItemsView widget
+class FilteringHeader<T> extends StatefulWidget {
+  /// FilteredItemsView constructor
+  const FilteringHeader({
+    required this.items,
+    required this.filters,
+    required this.tagsForItem,
+    required this.builder,
+    super.key,
+  });
+
+  /// Items to display
+  final List<T> items;
+  final List<String> filters;
+  final Set<String> Function(T) tagsForItem;
+  final Widget Function(BuildContext, List<T>) builder;
+
+  @override
+  State<FilteringHeader<T>> createState() => _FilteringHeaderState();
+}
+
+extension on String {
+  String capitalize() {
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+  }
+}
+
+class _FilteringHeaderState<T> extends State<FilteringHeader<T>> {
+  late final Set<String> enabled;
+
+  @override
+  void initState() {
+    super.initState();
+    enabled = widget.filters.toSet();
+  }
+
+  List<T> get items {
     return widget.items.where((item) {
-      return tagsForItem(item).intersection(enabled).isNotEmpty;
+      return widget.tagsForItem(item).intersection(enabled).isNotEmpty;
     }).toList();
   }
 
@@ -692,7 +778,7 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
           children: [
             Wrap(
               spacing: 5,
-              children: possible.map((String tag) {
+              children: widget.filters.map((String tag) {
                 return FilterChip(
                   label: Text(tag),
                   selected: enabled.contains(tag),
@@ -710,15 +796,7 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
             ),
           ],
         ),
-        Expanded(
-          child: ScrollingGrid(
-            maxCrossAxisExtent: 240,
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return ItemView(item: items[index]);
-            },
-          ),
-        ),
+        Expanded(child: widget.builder(context, items)),
       ],
     );
   }
