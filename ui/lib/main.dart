@@ -687,23 +687,28 @@ class _FilteredItemsViewState extends State<FilteredItemsView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Wrap(
-          spacing: 5,
-          children: possible.map((String tag) {
-            return FilterChip(
-              label: Text(tag),
-              selected: enabled.contains(tag),
-              onSelected: (bool selected) {
-                setState(() {
-                  if (selected) {
-                    enabled.add(tag);
-                  } else {
-                    enabled.remove(tag);
-                  }
-                });
-              },
-            );
-          }).toList(),
+        ExpansionTile(
+          title: const Text('Filter'),
+          children: [
+            Wrap(
+              spacing: 5,
+              children: possible.map((String tag) {
+                return FilterChip(
+                  label: Text(tag),
+                  selected: enabled.contains(tag),
+                  onSelected: (bool selected) {
+                    setState(() {
+                      if (selected) {
+                        enabled.add(tag);
+                      } else {
+                        enabled.remove(tag);
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          ],
         ),
         Expanded(
           child: ScrollingGrid(
