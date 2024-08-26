@@ -3,10 +3,18 @@ import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
 import 'package:yaml/yaml.dart';
 
+/// A type of stat.
 enum StatType {
+  /// Health (max hp) of the creature.
   health,
+
+  /// Armor of the creature.
   armor,
+
+  /// Attack of the creature.
   attack,
+
+  /// Speed of the creature.
   speed,
 }
 
@@ -78,6 +86,7 @@ class Stats {
     );
   }
 
+  /// return the stat value for a given type.
   int operator [](StatType type) {
     switch (type) {
       case StatType.health:

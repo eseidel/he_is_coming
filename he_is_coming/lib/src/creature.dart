@@ -171,6 +171,18 @@ class Edge extends CatalogItem {
   }
 }
 
+/// The type of creature.
+enum CreatureType {
+  /// A player.
+  player,
+
+  /// An overland enemy.
+  mob,
+
+  /// A boss.
+  boss,
+}
+
 /// Class representing a player or an enemy.
 @immutable
 class Creature extends CatalogItem {
@@ -179,6 +191,7 @@ class Creature extends CatalogItem {
     required super.name,
     required Stats intrinsic,
     required this.gold,
+    this.type = CreatureType.mob,
     this.items = const <Item>[],
     int? hp,
     super.effect,
@@ -192,12 +205,16 @@ class Creature extends CatalogItem {
   factory Creature.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     final name = yaml['name'] as String;
     final level = yaml['level'] as int?;
+    if (level == null) {
+      throw ArgumentError('Creature $name must have a level.');
+    }
     final attack = yaml['attack'] as int? ?? 0;
     final health = yaml['health'] as int? ?? 0;
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
+    final type = yaml['boss'] == true ? CreatureType.boss : CreatureType.mob;
     return Creature(
       name: name,
       level: level,
@@ -209,6 +226,7 @@ class Creature extends CatalogItem {
       ),
       gold: 1,
       effect: effect,
+      type: type,
     );
   }
 
@@ -225,9 +243,6 @@ class Creature extends CatalogItem {
     ).maxHp;
     return maxHp - (hp ?? maxHp);
   }
-
-  /// Returns true if this Creature is the player.
-  bool get isPlayer => name == _kPlayerName;
 
   /// The default player item.
   static late final Item defaultPlayerWeapon;
@@ -253,6 +268,12 @@ class Creature extends CatalogItem {
   /// The level this creature appears in.
   // This belongs somewhere else.
   final int? level;
+
+  /// Returns true if this Creature is the player.
+  bool get isPlayer => type == CreatureType.player;
+
+  /// The type of creature.
+  final CreatureType type;
 
   /// Current health of the creature.
   /// Combat can't change maxHp, so we can compute it from baseStats.
@@ -292,6 +313,7 @@ class Creature extends CatalogItem {
   static List<String> orderedKeys = <String>[
     'name',
     'level',
+    'boss',
     'attack',
     'health',
     'armor',
@@ -309,6 +331,8 @@ class Creature extends CatalogItem {
     return {
       'name': name,
       'level': level,
+      // We don't currently serialize the player type.
+      if (type == CreatureType.boss) 'boss': true,
       ..._intrinsic.toJson(),
       if (gold != 1) 'gold': gold,
       'items': items.map((i) => i.toJson()).toList(),

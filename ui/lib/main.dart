@@ -111,43 +111,47 @@ extension on StatType {
   }
 }
 
+/// StatIcon widget
 class StatIcon extends StatelessWidget {
+  /// StatIcon constructor
   const StatIcon({
     required this.statType,
     super.key,
   });
 
-  static const Size borderSize = Size(36, 36);
-  static const Size iconSize = Size(24, 24);
+  static const Size _borderSize = Size(36, 36);
+  static const Size _iconSize = Size(24, 24);
+
+  /// Stat type
   final StatType statType;
 
-  Widget get icon {
+  Widget get _icon {
     switch (statType) {
       case StatType.attack:
         return NesIcon(
           iconData: NesIcons.sword,
           primaryColor: Palette.attack,
           secondaryColor: Palette.black,
-          size: iconSize,
+          size: _iconSize,
         );
       case StatType.health:
         return Icon(
           Icons.favorite,
           color: Palette.health,
-          size: iconSize.height,
+          size: _iconSize.height,
         );
       case StatType.armor:
         return NesIcon(
           iconData: NesIcons.shield,
           primaryColor: Palette.armor,
           accentColor: Palette.black,
-          size: iconSize,
+          size: _iconSize,
         );
       case StatType.speed:
         return Icon(
           Icons.directions_run,
           color: Palette.speed,
-          size: iconSize.height,
+          size: _iconSize.height,
         );
     }
   }
@@ -163,15 +167,17 @@ class StatIcon extends StatelessWidget {
         borderColor: statType.color,
       ),
       child: SizedBox(
-        width: borderSize.width,
-        height: borderSize.height,
-        child: Center(child: icon),
+        width: _borderSize.width,
+        height: _borderSize.height,
+        child: Center(child: _icon),
       ),
     );
   }
 }
 
+/// StatLine widget
 class StatLine extends StatelessWidget {
+  /// StatLine constructor
   const StatLine({
     required this.stats,
     required this.statType,
@@ -179,8 +185,13 @@ class StatLine extends StatelessWidget {
     super.key,
   });
 
+  /// Stats to display
   final Stats stats;
+
+  /// Stat type
   final StatType statType;
+
+  /// Whether to hide the value (show ??? instead)
   final bool hideValue;
 
   @override
@@ -209,6 +220,8 @@ class StatsRow extends StatelessWidget {
 
   /// Stats to display
   final Stats stats;
+
+  /// Stats to hide (show ??? instead)
   final Set<StatType> hide;
 
   @override
@@ -434,7 +447,7 @@ class CreatureView extends StatelessWidget {
   /// Creature to display
   final Creature creature;
 
-  Set<StatType> get hideStats {
+  Set<StatType> get _hideStats {
     if (creature.name == 'Woodland Abomination') {
       return {StatType.health};
     }
@@ -477,7 +490,7 @@ class CreatureView extends StatelessWidget {
           if (!stats.isEmpty)
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: StatsRow(stats: stats, hide: hideStats),
+              child: StatsRow(stats: stats, hide: _hideStats),
             ),
         ],
       ),
@@ -536,7 +549,7 @@ class OilView extends StatelessWidget {
   /// Oil to display
   final Oil oil;
 
-  Color get color {
+  Color get _color {
     if (oil.name == 'Attack Oil') {
       return Palette.attack;
     }
@@ -562,7 +575,7 @@ class OilView extends StatelessWidget {
           OutlinedBox(
             // Oils shouldn't have an outline.
             borderColor: Palette.white,
-            child: Icon(Icons.water_drop, color: color),
+            child: Icon(Icons.water_drop, color: _color),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -644,17 +657,11 @@ class _MyHomePageState extends State<HomePage> {
             ? const Center(child: CircularProgressIndicator())
             : TabBarView(
                 children: <Widget>[
-                  FilteredItemsView(
+                  FilteredItems(
                     items: data.items.items,
                   ),
-                  ScrollingGrid(
-                    maxCrossAxisExtent: 240,
-                    itemCount: data.creatures.creatures.length,
-                    itemBuilder: (context, index) {
-                      return CreatureView(
-                        creature: data.creatures.creatures[index],
-                      );
-                    },
+                  FilteredCreatures(
+                    creatures: data.creatures.creatures,
                   ),
                   ScrollingGrid(
                     maxCrossAxisExtent: 240,
@@ -677,13 +684,15 @@ class _MyHomePageState extends State<HomePage> {
   }
 }
 
-class FilteredItemsView extends StatelessWidget {
-  const FilteredItemsView({
+/// Shows a scrolling grid of items with a filter.
+class FilteredItems extends StatelessWidget {
+  /// FilteredItems constructor
+  const FilteredItems({
     required this.items,
     super.key,
   });
 
-  static final List<String> possible = [
+  static final List<String> _possible = [
     'Weapon',
     'Food',
     'Jewelry',
@@ -699,7 +708,7 @@ class FilteredItemsView extends StatelessWidget {
     'Cauldron',
   ];
 
-  Set<String> tagsForItem(Item item) {
+  Set<String> _tagsForItem(Item item) {
     return {
       if (item.kind != null) item.kind!.name.capitalize(),
       if (item.material != null) item.material!.name.capitalize(),
@@ -708,19 +717,62 @@ class FilteredItemsView extends StatelessWidget {
     };
   }
 
+  /// Items to display
   final List<Item> items;
 
   @override
   Widget build(BuildContext context) {
     return FilteringHeader(
-      filters: possible,
+      filters: _possible,
       items: items,
-      tagsForItem: tagsForItem,
+      tagsForItem: _tagsForItem,
       builder: (context, items) => ScrollingGrid(
         maxCrossAxisExtent: 240,
         itemCount: items.length,
         itemBuilder: (context, index) {
           return ItemView(item: items[index]);
+        },
+      ),
+    );
+  }
+}
+
+/// Shows a scrolling grid of creatures with a filter.
+class FilteredCreatures extends StatelessWidget {
+  /// FilteredCreatures constructor
+  const FilteredCreatures({
+    required this.creatures,
+    super.key,
+  });
+
+  static final List<String> _possible = [
+    'Level 1',
+    'Level 2',
+    'Level 3',
+    'End',
+  ];
+
+  Set<String> _tagsForCreature(Creature creature) {
+    return {
+      'Level ${creature.level}',
+      if (creature.level == 4) 'End',
+    };
+  }
+
+  /// Creatures to display
+  final List<Creature> creatures;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilteringHeader(
+      filters: _possible,
+      items: creatures,
+      tagsForItem: _tagsForCreature,
+      builder: (context, items) => ScrollingGrid(
+        maxCrossAxisExtent: 240,
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return CreatureView(creature: items[index]);
         },
       ),
     );
@@ -740,8 +792,14 @@ class FilteringHeader<T> extends StatefulWidget {
 
   /// Items to display
   final List<T> items;
+
+  /// Filters being offered
   final List<String> filters;
+
+  /// Get the tags for an item
   final Set<String> Function(T) tagsForItem;
+
+  /// Build the child widget displaying the items
   final Widget Function(BuildContext, List<T>) builder;
 
   @override
