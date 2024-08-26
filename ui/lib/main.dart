@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:he_is_coming/he_is_coming.dart';
+import 'package:nes_ui/nes_ui.dart';
 import 'package:ui/scrolling_grid.dart';
 import 'package:ui/style.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,10 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'He is Coming',
-      theme: ThemeData(
-        colorScheme: const ColorScheme.dark(),
-        textTheme: Style.textTheme,
-      ),
+      theme: flutterNesTheme(brightness: Brightness.dark),
       home: const HomePage(),
     );
   }
@@ -98,6 +96,101 @@ extension on Item {
   }
 }
 
+class StatIcon extends StatelessWidget {
+  const StatIcon({
+    required this.statType,
+    super.key,
+  });
+
+  static const Size borderSize = Size(24, 24);
+  static const Size iconSize = Size(14, 14);
+  final StatType statType;
+
+  Color get color {
+    switch (statType) {
+      case StatType.attack:
+        return Palette.attack;
+      case StatType.health:
+        return Palette.health;
+      case StatType.armor:
+        return Palette.armor;
+      case StatType.speed:
+        return Palette.speed;
+    }
+  }
+
+  Widget get icon {
+    switch (statType) {
+      case StatType.attack:
+        return NesIcon(
+          iconData: NesIcons.sword,
+          primaryColor: Palette.attack,
+          secondaryColor: Palette.black,
+          size: iconSize,
+        );
+      case StatType.health:
+        return Icon(
+          Icons.favorite,
+          color: Palette.health,
+          size: iconSize.height,
+        );
+      case StatType.armor:
+        return NesIcon(
+          iconData: NesIcons.shield,
+          primaryColor: Palette.armor,
+          accentColor: Palette.black,
+          size: iconSize,
+        );
+      case StatType.speed:
+        return Icon(
+          Icons.directions_run,
+          color: Palette.speed,
+          size: iconSize.height,
+        );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: NesContainerRoundedBorderPainter(
+        label: null,
+        pixelSize: 2,
+        textStyle: Style.stats,
+        backgroundColor: Palette.black,
+        borderColor: color,
+      ),
+      child: SizedBox(
+        width: borderSize.width,
+        height: borderSize.height,
+        child: Center(child: icon),
+      ),
+    );
+  }
+}
+
+class StatLine extends StatelessWidget {
+  const StatLine({
+    required this.stats,
+    required this.statType,
+    super.key,
+  });
+
+  final Stats stats;
+  final StatType statType;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        StatIcon(statType: statType),
+        const SizedBox(width: 4),
+        Text(stats[statType].toString(), style: Style.stats),
+      ],
+    );
+  }
+}
+
 /// Stats when displayed horizontally.
 class StatsRow extends StatelessWidget {
   /// StatsRow constructor
@@ -111,21 +204,17 @@ class StatsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget padded(String text) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: Text(text, style: Style.stats),
-      );
-    }
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (stats.attack > 0) padded('⚔️${stats.attack}'),
-        if (stats.maxHp > 0) padded('❤️${stats.maxHp}'),
-        if (stats.armor > 0) padded('🛡️${stats.armor}'),
-        if (stats.speed > 0) padded('👟${stats.speed}'),
-      ],
+      children: StatType.values.map((statType) {
+        if (stats[statType] == 0) {
+          return const SizedBox();
+        }
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: StatLine(stats: stats, statType: statType),
+        );
+      }).toList(),
     );
   }
 }

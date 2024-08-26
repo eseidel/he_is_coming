@@ -3,6 +3,13 @@ import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
 import 'package:yaml/yaml.dart';
 
+enum StatType {
+  health,
+  armor,
+  attack,
+  speed,
+}
+
 /// Class representing stats for a Creature.
 @immutable
 class Stats {
@@ -69,6 +76,19 @@ class Stats {
       attack: attack * factor,
       speed: speed * factor,
     );
+  }
+
+  int operator [](StatType type) {
+    switch (type) {
+      case StatType.health:
+        return maxHp;
+      case StatType.armor:
+        return armor;
+      case StatType.attack:
+        return attack;
+      case StatType.speed:
+        return speed;
+    }
   }
 
   /// Create a copy of Stats with updated values.
