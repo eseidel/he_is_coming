@@ -347,7 +347,8 @@ class _DeathException implements Exception {
 class BattleContext {
   /// Create a BattleContext.
   BattleContext(this.creatures, {this.verbose = false})
-      : stats = creatures.map(CreatureStats.fromCreature).toList() {
+      : stats = creatures.map(CreatureStats.fromCreature).toList(),
+        initialCreatures = List.unmodifiable(creatures) {
     log('${_first.name}: ${_first.baseStats}');
     log('${_second.name}: ${_second.baseStats}');
   }
@@ -588,7 +589,10 @@ class BattleContext {
 
   void _triggerOnTurn() => _trigger(attackerIndex, Trigger.onTurn);
 
-  /// List of creatures in this battle.
+  /// Initial list of creatures in this battle.
+  final List<Creature> initialCreatures;
+
+  /// List of creatures in this battle, includes changes during battle.
   final List<Creature> creatures;
 
   /// Current stats for the battling creatures.
@@ -661,12 +665,22 @@ class BattleContext {
     // hp can go below 0 during battle, but copy it out as 0 in the end.
     final first = _first.copyWith(hp: max(stats[0].hp, 0), gold: firstGold);
     final second = _second.copyWith(hp: max(stats[1].hp, 0), gold: secondGold);
+    final firstDelta = CreatureDelta(
+      gold: firstGold - initialCreatures[0].gold,
+      hp: first.hp - initialCreatures[0].hp,
+    );
+    final secondDelta = CreatureDelta(
+      gold: secondGold - initialCreatures[1].gold,
+      hp: second.hp - initialCreatures[1].hp,
+    );
 
     // Print spoils for the player if they won.
     _logSpoils(before: creatures[0], after: first);
     return BattleResult(
       first: first,
+      firstDelta: firstDelta,
       second: second,
+      secondDelta: secondDelta,
       // _turnsTaken is 0-indexed, as is turns
       turns: _turnsTaken ~/ 2,
     );
@@ -701,23 +715,63 @@ class BattleContext {
   }
 }
 
+/// Represents a change to a creature from the start of a battle.
+@immutable
+class CreatureDelta {
+  /// Create a CreatureDelta.
+  const CreatureDelta({
+    required this.gold,
+    required this.hp,
+  });
+
+  /// Gold change.
+  final int gold;
+
+  /// HP change.
+  final int hp;
+
+  @override
+  String toString() {
+    final parts = <String>[];
+    if (gold != 0) {
+      parts.add('gold: $gold');
+    }
+    if (hp != 0) {
+      parts.add('hp: $hp');
+    }
+    if (parts.isEmpty) {
+      return 'no change';
+    }
+    return parts.join(', ');
+  }
+}
+
 /// Represents the results of a battle.
+@immutable
 class BattleResult {
   /// Create a BattleResult
-  BattleResult({
+  const BattleResult({
     required this.first,
+    required this.firstDelta,
     required this.second,
+    required this.secondDelta,
     required this.turns,
   });
 
   /// First creature in this battle.
   final Creature first;
 
+  /// Changes relative to the start of the battle.
+  final CreatureDelta firstDelta;
+
   /// Second creature in this battle.
   final Creature second;
 
+  /// Changes relative to the start of the battle.
+  final CreatureDelta secondDelta;
+
   /// Number of turns taken in this battle.
-  int turns;
+  final int turns;
 
   /// Winner of the battle.
   /// By convention, the second creature wins if the first one is dead.

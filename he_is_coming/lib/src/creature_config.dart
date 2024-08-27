@@ -74,3 +74,12 @@ class CreatureConfig {
   /// The oils the creature should have.
   final List<Oil> oils;
 }
+
+/// Create a player from a creature configuration.
+Player playerForConfig(CreatureConfig config) {
+  return createPlayer(
+    items: config.items,
+    edge: config.edge,
+    oils: config.oils,
+  );
+}

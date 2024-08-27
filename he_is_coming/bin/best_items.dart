@@ -25,14 +25,6 @@ List<Player> _seedPopulation(
   return population;
 }
 
-Player playerForConfig(CreatureConfig config) {
-  return createPlayer(
-    items: config.items,
-    edge: config.edge,
-    oils: config.oils,
-  );
-}
-
 class RunResult {
   RunResult({required this.turns, required this.damage, required this.player});
 
@@ -68,7 +60,7 @@ RunResult _doBattle({required Creature player, required Creature enemy}) {
   final result = Battle.resolve(first: player, second: enemy);
   return RunResult(
     turns: result.turns,
-    damage: enemy.baseStats.maxHp - result.second.hp,
+    damage: result.secondDelta.hp,
     player: player,
   );
 }

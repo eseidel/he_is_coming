@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Icon size configuration
+@immutable
+class IconSize {
+  /// Icon size configuration
+  const IconSize({
+    required this.border,
+    required this.icon,
+  });
+
+  /// Border size
+  final double border;
+
+  /// Icon size
+  final double icon;
+}
+
 /// App theme
 class Style {
   /// App Text Theme
@@ -19,6 +35,12 @@ class Style {
 
   /// Effect Text Style
   static final TextStyle effect = Style.textTheme.labelSmall!;
+
+  /// Stat Icons when displayed alone
+  static const statIconSize = IconSize(border: 36, icon: 24);
+
+  /// Stat Icons when displayed inline
+  static const inlineStatIconSize = IconSize(border: 24, icon: 16);
 }
 
 /// Color palette
@@ -70,6 +92,9 @@ class Palette {
 
   /// Speed stat color.
   static const Color speed = Colors.yellow;
+
+  /// Gold (money) color.
+  static final Color gold = Colors.amber[400]!;
 
   /// Creature color.
   static const Color creature = Colors.red;

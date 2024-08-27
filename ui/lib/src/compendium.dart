@@ -79,52 +79,51 @@ extension on StatType {
         return Palette.speed;
     }
   }
-}
 
-/// StatIcon widget
-class StatIcon extends StatelessWidget {
-  /// StatIcon constructor
-  const StatIcon({
-    required this.statType,
-    super.key,
-  });
-
-  static const Size _borderSize = Size(36, 36);
-  static const Size _iconSize = Size(24, 24);
-
-  /// Stat type
-  final StatType statType;
-
-  Widget get _icon {
-    switch (statType) {
+  Widget icon(double size) {
+    final nesSize = Size(size, size);
+    switch (this) {
       case StatType.attack:
         return NesIcon(
           iconData: NesIcons.sword,
           primaryColor: Palette.attack,
           secondaryColor: Palette.black,
-          size: _iconSize,
+          size: nesSize,
         );
       case StatType.health:
         return Icon(
           Icons.favorite,
           color: Palette.health,
-          size: _iconSize.height,
+          size: size,
         );
       case StatType.armor:
         return NesIcon(
           iconData: NesIcons.shield,
           primaryColor: Palette.armor,
           accentColor: Palette.black,
-          size: _iconSize,
+          size: nesSize,
         );
       case StatType.speed:
         return Icon(
           Icons.directions_run,
           color: Palette.speed,
-          size: _iconSize.height,
+          size: size,
         );
     }
   }
+}
+
+class _Bordered extends StatelessWidget {
+  /// _BorderedIcon constructor
+  const _Bordered({
+    required this.borderColor,
+    required this.size,
+    required this.child,
+  });
+
+  final Color borderColor;
+  final double size;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -134,12 +133,63 @@ class StatIcon extends StatelessWidget {
         pixelSize: 2,
         textStyle: Style.stats,
         backgroundColor: Palette.black,
-        borderColor: statType.color,
+        borderColor: borderColor,
       ),
       child: SizedBox(
-        width: _borderSize.width,
-        height: _borderSize.height,
-        child: Center(child: _icon),
+        width: size,
+        height: size,
+        child: Center(child: child),
+      ),
+    );
+  }
+}
+
+/// StatIcon widget
+class StatIcon extends StatelessWidget {
+  /// StatIcon constructor
+  const StatIcon({
+    required this.statType,
+    this.size = Style.statIconSize,
+    super.key,
+  });
+
+  /// Stat type
+  final StatType statType;
+
+  /// Icon size
+  final IconSize size;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Bordered(
+      borderColor: statType.color,
+      size: size.border,
+      child: statType.icon(size.icon),
+    );
+  }
+}
+
+/// GoldIcon widget
+/// Gold isn't tracked as a stat, but is a special icon of the same size.
+class GoldIcon extends StatelessWidget {
+  /// GoldIcon constructor
+  const GoldIcon({
+    super.key,
+    this.size = Style.statIconSize,
+  });
+
+  /// Icon size
+  final IconSize size;
+
+  @override
+  Widget build(BuildContext context) {
+    return _Bordered(
+      borderColor: Palette.gold,
+      size: size.border,
+      child: Icon(
+        Icons.monetization_on,
+        color: Palette.gold,
+        size: size.icon,
       ),
     );
   }
