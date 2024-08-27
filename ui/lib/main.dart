@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:nes_ui/nes_ui.dart';
-import 'package:ui/scrolling_grid.dart';
 import 'package:ui/src/compendium.dart';
+import 'package:ui/src/scrolling_grid.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
