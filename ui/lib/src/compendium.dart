@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:nes_ui/nes_ui.dart';
-import 'package:ui/scrolling_grid.dart';
-import 'package:ui/style.dart';
+import 'package:ui/src/scrolling_grid.dart';
+import 'package:ui/src/style.dart';
 
 extension on ItemRarity {
   Color get color {
