@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:he_is_coming/he_is_coming.dart';
@@ -130,6 +132,73 @@ class _MyHomePageState extends State<HomePage> {
                   ),
                 ],
               ),
+      ),
+    );
+  }
+}
+
+// Battle display
+// Has player on left and enemy results on the right.
+// Lists the stats and items of player.
+// Has a list of enemy results (changes in stats) and success/fail.
+// Has a re-roll button for items.
+// And maybe some sort of picker for the enemy.
+
+/// BattlePage widget
+class BattlePage extends StatefulWidget {
+  /// BattlePage constructor
+  const BattlePage({required this.data, super.key});
+
+  /// Data
+  final Data data;
+
+  @override
+  State<BattlePage> createState() => _BattlePageState();
+}
+
+class _BattlePageState extends State<BattlePage> {
+  late CreatureConfig player;
+
+  @override
+  void initState() {
+    super.initState();
+    player = CreatureConfig.random(Random(), widget.data);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Battle'),
+      ),
+      body: const Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Text('Player'),
+                    // Player stats
+                    // Player items
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Text('Enemy'),
+                    // Enemy stats
+                    // Enemy items
+                  ],
+                ),
+              ),
+            ],
+          ),
+          // List of enemy results
+          // Re-roll button
+          // Enemy picker
+        ],
       ),
     );
   }

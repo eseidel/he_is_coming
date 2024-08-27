@@ -4,24 +4,13 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/battle.dart';
+import 'package:he_is_coming/src/creature_config.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/logger.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
 extension<T> on List<T> {
   T pickOne(Random random) => this[random.nextInt(length)];
-}
-
-List<Item> _pickItems(Random random, int count, ItemCatalog itemCatalog) {
-  final items = <Item>[
-    itemCatalog.randomWeapon(random),
-  ];
-  while (items.length < count) {
-    final item = itemCatalog.randomNonWeapon(random);
-    if (item.isUnique && items.any((i) => i.name == item.name)) continue;
-    items.add(item);
-  }
-  return items;
 }
 
 List<Player> _seedPopulation(
@@ -34,56 +23,6 @@ List<Player> _seedPopulation(
     population.add(playerForConfig(CreatureConfig.random(random, data)));
   }
   return population;
-}
-
-class CreatureConfig {
-  CreatureConfig({
-    required this.items,
-    required this.edge,
-    required this.oils,
-  });
-
-  factory CreatureConfig.random(Random random, Data data) {
-    final items = _pickItems(random, 7, data.items);
-    // Most edges are strictly beneficial, so just pick one at random.
-    final edge = data.edges.random(random);
-    // Currently there are only 3 oils, you can always only use each once.
-    // No need to support random oils.
-    if (data.oils.oils.length > 3) {
-      throw UnimplementedError('Too many oils');
-    }
-    return CreatureConfig(items: items, edge: edge, oils: data.oils.oils);
-  }
-
-  factory CreatureConfig.fromJson(Map<String, dynamic> json, Data data) {
-    final itemNames = (json['items'] as List).cast<String>();
-    final items = itemNames.map<Item>((n) => data.items[n]).toList();
-    final edgeName = json['edge'] as String?;
-    final edge = edgeName != null ? data.edges[edgeName] : null;
-    final oilNames = (json['oils'] as List? ?? []).cast<String>();
-    final oils = oilNames.map<Oil>((n) => data.oils[n]).toList();
-    return CreatureConfig(items: items, edge: edge, oils: oils);
-  }
-
-  factory CreatureConfig.fromPlayer(Player player) {
-    return CreatureConfig(
-      items: player.items,
-      edge: player.edge,
-      oils: player.oils,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'items': items.map((i) => i.name).toList(),
-      'edge': edge?.name,
-      'oils': oils.map((o) => o.name).toList(),
-    };
-  }
-
-  final List<Item> items;
-  final Edge? edge;
-  final List<Oil> oils;
 }
 
 Player playerForConfig(CreatureConfig config) {
