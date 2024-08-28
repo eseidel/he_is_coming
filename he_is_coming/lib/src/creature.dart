@@ -10,6 +10,32 @@ const _kPlayerName = 'Player';
 /// Alias for Creature.
 typedef Player = Creature;
 
+/// Level
+enum Level {
+  /// Level 1
+  one('Level 1'),
+
+  /// Level 2
+  two('Level 2'),
+
+  /// Level 3
+  three('Level 3'),
+
+  /// Final boss
+  end('End');
+
+  const Level(this.name);
+
+  /// Converts a (1-indexed) number into level enum.
+  factory Level.fromJson(int level) => values[level - 1];
+
+  /// Display name of this level.
+  final String name;
+
+  /// Converts to json.
+  dynamic toJson() => index + 1;
+}
+
 /// ItemException
 class ItemException implements Exception {
   /// Create ItemException
@@ -204,10 +230,11 @@ class Creature extends CatalogItem {
   /// Create a creature from a yaml map.
   factory Creature.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     final name = yaml['name'] as String;
-    final level = yaml['level'] as int?;
-    if (level == null) {
+    final levelNumber = yaml['level'] as int?;
+    if (levelNumber == null) {
       throw ArgumentError('Creature $name must have a level.');
     }
+    final level = Level.fromJson(levelNumber);
     final attack = yaml['attack'] as int? ?? 0;
     final health = yaml['health'] as int? ?? 0;
     final armor = yaml['armor'] as int? ?? 0;
@@ -267,7 +294,7 @@ class Creature extends CatalogItem {
 
   /// The level this creature appears in.
   // This belongs somewhere else.
-  final int? level;
+  final Level? level;
 
   /// Returns true if this Creature is the player.
   bool get isPlayer => type == CreatureType.player;
@@ -281,6 +308,17 @@ class Creature extends CatalogItem {
 
   /// Returns true if the creature is still alive.
   bool get isAlive => hp > 0;
+
+  /// Returns number of item slots for the level.
+  static int itemSlotCount(Level level) {
+    // 8 normal slots, 1 weapon.
+    return switch (level) {
+      Level.one => 5,
+      Level.two => 7,
+      Level.three => 9,
+      Level.end => 9,
+    };
+  }
 
   static Stats _statsWithItems(Stats stats, List<Item> items, List<Oil> oils) {
     return [

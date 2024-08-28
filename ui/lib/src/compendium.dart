@@ -669,18 +669,11 @@ class FilteredCreatures extends StatelessWidget {
     super.key,
   });
 
-  static final List<String> _possible = [
-    'Level 1',
-    'Level 2',
-    'Level 3',
-    'End',
-  ];
+  static final List<String> _possible =
+      Level.values.map((e) => e.name).toList();
 
   Set<String> _tagsForCreature(Creature creature) {
-    return {
-      'Level ${creature.level}',
-      if (creature.level == 4) 'End',
-    };
+    return {creature.level!.name};
   }
 
   /// Creatures to display

@@ -207,26 +207,51 @@ class BattlePage extends StatefulWidget {
 }
 
 class _BattlePageState extends State<BattlePage> {
-  late CreatureConfig playerConfig;
+  late CreatureConfig _rootConfig;
   List<BattleResult> results = [];
+  Level level = Level.one;
 
   @override
   void initState() {
     super.initState();
-    reroll();
+    _reroll();
   }
 
-  void reroll() {
+  void _reroll() {
     setState(() {
-      playerConfig = CreatureConfig.random(Random(), widget.data);
-      // For each enemy, run the battle and gather the results.
-      final player = playerForConfig(playerConfig);
-      final enemies = widget.data.creatures.creatures;
-      results = enemies
-          .map(
-            (enemy) => Battle.resolve(first: player, second: enemy),
-          )
-          .toList();
+      _rootConfig = CreatureConfig.random(Random(), widget.data);
+      _updateResults();
+    });
+  }
+
+  List<Creature> get enemies {
+    return widget.data.creatures.creatures
+        .where((c) => c.level == level)
+        .toList();
+  }
+
+  CreatureConfig get playerConfig {
+    return CreatureConfig(
+      items: _rootConfig.items.sublist(0, Creature.itemSlotCount(level)),
+      edge: _rootConfig.edge,
+      oils: _rootConfig.oils,
+    );
+  }
+
+  void _updateResults() {
+    // For each enemy, run the battle and gather the results.
+    final player = playerForConfig(playerConfig);
+    results = enemies
+        .map(
+          (enemy) => Battle.resolve(first: player, second: enemy),
+        )
+        .toList();
+  }
+
+  void _setLevel(Level level) {
+    setState(() {
+      this.level = level;
+      _updateResults();
     });
   }
 
@@ -285,8 +310,13 @@ class _BattlePageState extends State<BattlePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    NesIterableOptions(
+                      values: Level.values,
+                      onChange: _setLevel,
+                      value: level,
+                    ),
                     ElevatedButton(
-                      onPressed: reroll,
+                      onPressed: _reroll,
                       child: const Icon(Icons.casino),
                     ),
                     const Text('Player'),

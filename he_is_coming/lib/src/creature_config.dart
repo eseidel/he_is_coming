@@ -25,7 +25,7 @@ class CreatureConfig {
 
   /// Create a random creature configuration.
   factory CreatureConfig.random(Random random, Data data) {
-    final items = _pickItems(random, 7, data.items);
+    final items = _pickItems(random, 9, data.items);
     // Most edges are strictly beneficial, so just pick one at random.
     final edge = data.edges.random(random);
     // Currently there are only 3 oils, you can always only use each once.
