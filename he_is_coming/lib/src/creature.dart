@@ -368,9 +368,9 @@ class Creature extends CatalogItem {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'level': level,
       // We don't currently serialize the player type.
       if (type == CreatureType.boss) 'boss': true,
+      if (level != null) 'level': level?.toJson(),
       ..._intrinsic.toJson(),
       if (gold != 1) 'gold': gold,
       'items': items.map((i) => i.toJson()).toList(),

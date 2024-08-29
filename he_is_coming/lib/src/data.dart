@@ -281,7 +281,7 @@ class SetBonus extends CatalogItem {
         'name': name,
         'parts': parts,
         ...stats.toJson(),
-        'effect': effect.toString(),
+        if (effect != null) 'effect': effect.toString(),
       };
 }
 
