@@ -61,6 +61,22 @@ void main() {
     expect(result2.first.hp, 3);
   });
 
+  test('Golden Redwood Cloak', () {
+    final item = itemCatalog['Golden Redwood Cloak'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 14);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Lose 5 hp from the wolf, since cloak doesn't trigger.
+    expect(result.first.hp, 9);
+
+    // Fight the same battle again, should heal on start this time.
+    final result2 = doBattle(first: result.first, second: enemy);
+    // Lose 5 more from wolf, but heal 2 from cloak.
+    expect(result2.first.hp, 6);
+  });
+
   test('Emergency Shield', () {
     final item = itemCatalog['Emergency Shield'];
     final player = createPlayer(items: [item]);

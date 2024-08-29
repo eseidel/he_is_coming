@@ -12,6 +12,7 @@ void _if(bool condition, void Function() fn) {
 final itemEffects = EffectCatalog(<String, EffectMap>{
   'Stone Steak': onBattle((c) => _if(c.my.isHealthFull, () => c.gainArmor(4))),
   'Redwood Cloak': onBattle((c) => c.restoreHealth(1)),
+  'Golden Redwood Cloak': onBattle((c) => c.restoreHealth(2)),
   'Emergency Shield': onBattle(
     (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4)),
   ),
