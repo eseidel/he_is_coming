@@ -3,10 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:he_is_coming/src/battle.dart';
-import 'package:he_is_coming/src/data.dart';
-import 'package:he_is_coming/src/logger.dart';
-import 'package:scoped_deps/scoped_deps.dart';
+import 'package:he_is_coming/he_is_coming.dart';
 
 extension<T> on List<T> {
   T pickOne(Random random) => this[random.nextInt(length)];
@@ -44,15 +41,6 @@ class RunResult {
       'config': config.toJson(),
     };
   }
-}
-
-RunResult _doBattle({required Creature player, required Creature enemy}) {
-  final result = Battle.resolve(first: player, second: enemy);
-  return RunResult(
-    turns: result.turns,
-    damage: result.secondDelta.hp,
-    config: player.inventory!,
-  );
 }
 
 class Population {
@@ -189,20 +177,24 @@ class BestItemFinder {
     late List<RunResult> bestResults;
     final survivorsCount = (populationSize * survivalRate).ceil();
     var pop = initial.toList();
+    final enemy = data.creatures['Woodland Abomination'];
+
+    RunResult doBattle(Inventory inventory) {
+      final player = playerWithInventory(level, inventory);
+      final result = Battle.resolve(first: player, second: enemy);
+      return RunResult(
+        turns: result.turns,
+        damage: -result.secondDelta.hp,
+        config: inventory,
+      );
+    }
 
     for (var i = 0; i < rounds; i++) {
-      final fillSize = min(populationSize - pop.length, 0);
+      final fillSize = max(populationSize - pop.length, 0);
       pop.addAll(_seedPopulation(random, fillSize, data));
 
-      final enemy = data.creatures['Woodland Abomination'];
-      final results = pop.map(
-        (inventory) => _doBattle(
-          player: playerWithInventory(level, inventory),
-          enemy: enemy,
-        ),
-      );
       // Select the top 10% of the population.
-      final sorted = results.toList()..sortBy<num>((r) => -r.damage);
+      final sorted = pop.map(doBattle).toList()..sortBy<num>((r) => -r.damage);
       bestResults = sorted.sublist(0, survivorsCount);
       final survivors = bestResults.map((r) => r.config).toList();
       pop = [
