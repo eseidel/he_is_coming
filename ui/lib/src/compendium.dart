@@ -673,7 +673,7 @@ class FilteredCreatures extends StatelessWidget {
       Level.values.map((e) => e.name).toList();
 
   Set<String> _tagsForCreature(Creature creature) {
-    return {creature.level!.name};
+    return {creature.level.name};
   }
 
   /// Creatures to display

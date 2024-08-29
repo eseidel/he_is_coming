@@ -3,7 +3,6 @@ import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/logger.dart';
 
 export 'package:he_is_coming/src/battle.dart';
-export 'package:he_is_coming/src/creature_config.dart';
 export 'package:he_is_coming/src/data.dart';
 export 'package:he_is_coming/src/logger.dart';
 export 'package:scoped_deps/scoped_deps.dart';

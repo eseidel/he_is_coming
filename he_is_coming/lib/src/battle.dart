@@ -180,16 +180,14 @@ class EffectContext {
 
   /// Returns the number of items of a given material.
   int materialCount(ItemMaterial material) {
-    return _battle.creatures[_index].items
-        .where((item) => item.material == material)
-        .length;
+    final inventory = _battle.creatures[_index].inventory;
+    return inventory == null ? 0 : inventory.materialCount(material);
   }
 
   /// Returns the number of items of a given kind.
   int kindCount(ItemKind kind) {
-    return _battle.creatures[_index].items
-        .where((item) => item.kind == kind)
-        .length;
+    final inventory = _battle.creatures[_index].inventory;
+    return inventory == null ? 0 : inventory.kindCount(kind);
   }
 }
 
@@ -555,18 +553,23 @@ class BattleContext {
       _checkForDeath();
     }
 
-    // Slightly odd to have the edge trigger before the weapon.
-    if (creature.edge != null) {
-      final effectCxt = EffectContext(this, index, creature.edge!.name);
-      creature.edge!.effect?[trigger]?.call(effectCxt);
-      _checkForDeath();
+    final inventory = creature.inventory;
+    if (inventory != null) {
+      // Slightly odd to have the edge trigger before the weapon.
+      final edge = inventory.edge;
+      if (edge != null) {
+        final effectCxt = EffectContext(this, index, edge.name);
+        edge.effect?[trigger]?.call(effectCxt);
+        _checkForDeath();
+      }
+
+      for (final item in inventory.items) {
+        final effectCxt = EffectContext(this, index, item.name);
+        item.effect?[trigger]?.call(effectCxt);
+        _checkForDeath();
+      }
     }
 
-    for (final item in creature.items) {
-      final effectCxt = EffectContext(this, index, item.name);
-      item.effect?[trigger]?.call(effectCxt);
-      _checkForDeath();
-    }
     final afterStats = stats[index];
     final diffString = beforeStats.diffString(afterStats);
     // TODO(eseidel):  This can show diffs twice for nested effects.

@@ -207,9 +207,10 @@ class BattlePage extends StatefulWidget {
 }
 
 class _BattlePageState extends State<BattlePage> {
-  late CreatureConfig _rootConfig;
+  late Inventory _endConfig;
   List<BattleResult> results = [];
   Level level = Level.one;
+  final random = Random();
 
   @override
   void initState() {
@@ -219,7 +220,7 @@ class _BattlePageState extends State<BattlePage> {
 
   void _reroll() {
     setState(() {
-      _rootConfig = CreatureConfig.random(Random(), widget.data);
+      _endConfig = Inventory.random(Level.end, random, widget.data);
       _updateResults();
     });
   }
@@ -230,17 +231,18 @@ class _BattlePageState extends State<BattlePage> {
         .toList();
   }
 
-  CreatureConfig get playerConfig {
-    return CreatureConfig(
-      items: _rootConfig.items.sublist(0, Creature.itemSlotCount(level)),
-      edge: _rootConfig.edge,
-      oils: _rootConfig.oils,
+  Inventory get inventory {
+    return Inventory(
+      level: level,
+      items: _endConfig.items.sublist(0, Creature.itemSlotCount(level)),
+      edge: _endConfig.edge,
+      oils: _endConfig.oils,
     );
   }
 
   void _updateResults() {
     // For each enemy, run the battle and gather the results.
-    final player = playerForConfig(playerConfig);
+    final player = playerWithInventory(inventory);
     results = enemies
         .map(
           (enemy) => Battle.resolve(first: player, second: enemy),
@@ -320,7 +322,7 @@ class _BattlePageState extends State<BattlePage> {
                       child: const Icon(Icons.casino),
                     ),
                     const Text('Player'),
-                    ...playerConfig.items.map((item) => Text(item.name)),
+                    ...inventory.items.map((item) => Text(item.name)),
                   ],
                 ),
               ),

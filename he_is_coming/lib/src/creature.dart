@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/data.dart';
@@ -45,38 +47,161 @@ class ItemException implements Exception {
   final String message;
 }
 
-List<Item> _enforceItemRules(List<Item> unenforced) {
-  // Player must always have a weapon.
-  final items = [...unenforced];
-  if (items.every((item) => item.kind != ItemKind.weapon)) {
-    items.add(Creature.defaultPlayerWeapon);
-  }
-
-  final itemCounts = items.fold<Map<String, int>>(
-    {},
-    (counts, item) =>
-        counts..update(item.name, (count) => count + 1, ifAbsent: () => 1),
-  );
-  for (final entry in itemCounts.entries) {
-    if (entry.value > 1) {
-      final item = items.firstWhere((item) => item.name == entry.key);
-      if (item.isUnique) {
-        throw ItemException(
-          '${item.name} is unique and can only be equipped once.',
-        );
-      }
+/// Player's inventory.
+class Inventory {
+  /// Create an inventory.
+  Inventory({
+    required Level level,
+    required List<Item> items,
+    required this.edge,
+    required this.oils,
+  }) {
+    this.items = _enforceItemRules(level, items);
+    if (oils.length > 3) {
+      throw UnimplementedError('Too many oils');
     }
   }
 
-  final weaponCount =
-      items.where((item) => item.kind == ItemKind.weapon).length;
-  if (weaponCount > 1) {
-    throw ItemException('Player can only have one weapon.');
+  /// Create a random creature configuration.
+  factory Inventory.random(Level level, Random random, Data data) {
+    final slotCount = Creature.itemSlotCount(level);
+    final items = _pickItems(random, slotCount, data.items);
+    // Most edges are strictly beneficial, so just pick one at random.
+    final edge = data.edges.random(random);
+    // Currently there are only 3 oils, you can always only use each once.
+    // No need to support random oils.
+    final oils = data.oils.oils.toList();
+    return Inventory(
+      level: level,
+      items: items,
+      edge: edge,
+      oils: oils,
+    );
   }
 
-  // Weapon is always first.
-  items.sortBy<num>((item) => item.kind == ItemKind.weapon ? 0 : 1);
-  return items;
+  /// Create an inventory from json.
+  Inventory.fromJson(
+    Map<String, dynamic> json,
+    Level level,
+    Data data,
+  )   : edge = json['edge'] != null ? data.edges[json['edge'] as String] : null,
+        oils = (json['oils'] as List? ?? [])
+            .map<Oil>((name) => data.oils[name as String])
+            .toList() {
+    final unenforced = (json['items'] as List? ?? [])
+        .map<Item>((name) => data.items[name as String])
+        .toList();
+    items = _enforceItemRules(level, unenforced);
+  }
+
+  /// Create an empty inventory.
+  Inventory.empty()
+      : edge = null,
+        oils = const <Oil>[],
+        items = [];
+
+  static List<Item> _pickItems(
+    Random random,
+    int count,
+    ItemCatalog itemCatalog,
+  ) {
+    final items = <Item>[
+      itemCatalog.randomWeapon(random),
+    ];
+    while (items.length < count) {
+      final item = itemCatalog.randomNonWeapon(random);
+      if (item.isUnique && items.any((i) => i.name == item.name)) continue;
+      items.add(item);
+    }
+    return items;
+  }
+
+  static List<Item> _enforceItemRules(Level level, List<Item> unenforced) {
+    if (unenforced.length > Creature.itemSlotCount(level)) {
+      throw ItemException('Too many items for level $level.');
+    }
+
+    // Player must always have a weapon.
+    final items = [...unenforced];
+    if (items.every((item) => item.kind != ItemKind.weapon)) {
+      items.add(Creature.defaultPlayerWeapon);
+    }
+
+    final itemCounts = items.fold<Map<String, int>>(
+      {},
+      (counts, item) =>
+          counts..update(item.name, (count) => count + 1, ifAbsent: () => 1),
+    );
+    for (final entry in itemCounts.entries) {
+      if (entry.value > 1) {
+        final item = items.firstWhere((item) => item.name == entry.key);
+        if (item.isUnique) {
+          throw ItemException(
+            '${item.name} is unique and can only be equipped once.',
+          );
+        }
+      }
+    }
+
+    final weaponCount =
+        items.where((item) => item.kind == ItemKind.weapon).length;
+    if (weaponCount > 1) {
+      throw ItemException('Player can only have one weapon.');
+    }
+
+    // Weapon is always first.
+    items.sortBy<num>((item) => item.kind == ItemKind.weapon ? 0 : 1);
+    return items;
+  }
+
+  /// Resolve stats with items.
+  Stats statsWithItems(Stats intrinsic) {
+    return [
+      ...items.map((item) => item.stats),
+      ...oils.map((oil) => oil.stats),
+    ].fold<Stats>(
+      intrinsic,
+      (acc, stats) => acc + stats,
+    );
+  }
+
+  /// The edge on the weapon.
+  final Edge? edge;
+
+  /// Oils applied to the weapon.
+  final List<Oil> oils;
+
+  /// Items in the inventory.
+  late final List<Item> items;
+
+  /// Count of items in the inventory.
+  int materialCount(ItemMaterial material) {
+    return items.where((item) => item.material == material).length;
+  }
+
+  /// Count of items in the inventory.
+  int kindCount(ItemKind kind) {
+    return items.where((item) => item.kind == kind).length;
+  }
+
+  /// Convert to json.
+  Map<String, dynamic> toJson() {
+    return {
+      if (items.isNotEmpty)
+        'items': items.map((item) => item.toJson()).toList(),
+      if (edge != null) 'edge': edge!.name,
+      if (oils.isNotEmpty) 'oils': oils.map((oil) => oil.toJson()).toList(),
+    };
+  }
+}
+
+/// Create a player from a creature configuration.
+Player playerWithInventory(Inventory inventory) {
+  return createPlayer(
+    items: inventory.items,
+    edge: inventory.edge,
+    oils: inventory.oils,
+  );
 }
 
 /// Create a player.
@@ -87,17 +212,17 @@ Player createPlayer({
   List<Oil> oils = const <Oil>[],
   int? hp,
   int? gold,
+  Level level = Level.end,
 }) {
   return Creature(
     name: _kPlayerName,
+    level: level,
     // If maxHp wasn't set, default to 10.
     intrinsic:
         (intrinsic.maxHp == 0) ? intrinsic.copyWith(maxHp: 10) : intrinsic,
     gold: gold ?? 0,
     hp: hp,
-    items: _enforceItemRules(items),
-    edge: edge,
-    oils: oils,
+    inventory: Inventory(level: level, edge: edge, oils: oils, items: items),
   );
 }
 
@@ -109,6 +234,7 @@ Creature makeEnemy({
   int armor = 0,
   int speed = 0,
   EffectMap? effect,
+  Level level = Level.one,
 }) {
   Effect? triggers;
   if (effect != null) {
@@ -119,6 +245,8 @@ Creature makeEnemy({
   }
   return Creature(
     name: 'Enemy',
+    level: level,
+    inventory: null,
     intrinsic: Stats(
       maxHp: health,
       armor: armor,
@@ -217,15 +345,13 @@ class Creature extends CatalogItem {
     required super.name,
     required Stats intrinsic,
     required this.gold,
+    required this.level,
+    required this.inventory,
     this.type = CreatureType.mob,
-    this.items = const <Item>[],
     int? hp,
     super.effect,
-    this.edge,
-    this.level,
-    this.oils = const <Oil>[],
   })  : _intrinsic = intrinsic,
-        _lostHp = _computeLostHp(intrinsic, items, oils, hp);
+        _lostHp = _computeLostHp(intrinsic, inventory, hp);
 
   /// Create a creature from a yaml map.
   factory Creature.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
@@ -245,6 +371,7 @@ class Creature extends CatalogItem {
     return Creature(
       name: name,
       level: level,
+      inventory: null,
       intrinsic: Stats(
         maxHp: health,
         armor: armor,
@@ -259,15 +386,10 @@ class Creature extends CatalogItem {
 
   static int _computeLostHp(
     Stats intrinsic,
-    List<Item> items,
-    List<Oil> oils,
+    Inventory? inventory,
     int? hp,
   ) {
-    final maxHp = _statsWithItems(
-      intrinsic,
-      items,
-      oils,
-    ).maxHp;
+    final maxHp = inventory?.statsWithItems(intrinsic).maxHp ?? intrinsic.maxHp;
     return maxHp - (hp ?? maxHp);
   }
 
@@ -277,14 +399,8 @@ class Creature extends CatalogItem {
   /// The intrinsic stats of this Creature without any items.
   final Stats _intrinsic;
 
-  /// The edge on the weapon.
-  final Edge? edge;
-
-  /// Oils applied to the weapon.
-  final List<Oil> oils;
-
-  /// Items the creature or player is using.
-  final List<Item> items;
+  /// Inventory of the player or null for non-players.
+  final Inventory? inventory;
 
   /// How much hp has been lost.
   final int _lostHp;
@@ -292,9 +408,8 @@ class Creature extends CatalogItem {
   /// How much gold is on this creature or player.
   final int gold;
 
-  /// The level this creature appears in.
-  // This belongs somewhere else.
-  final Level? level;
+  /// The level this creature appears in or Level the player is on.
+  final Level level;
 
   /// Returns true if this Creature is the player.
   bool get isPlayer => type == CreatureType.player;
@@ -320,29 +435,18 @@ class Creature extends CatalogItem {
     };
   }
 
-  static Stats _statsWithItems(Stats stats, List<Item> items, List<Oil> oils) {
-    return [
-      ...items.map((item) => item.stats),
-      ...oils.map((oil) => oil.stats),
-    ].fold<Stats>(
-      stats,
-      (acc, stats) => acc + stats,
-    );
-  }
-
   /// Stats as they would be in the over-world or at fight start.
-  Stats get baseStats => _statsWithItems(_intrinsic, items, oils);
+  Stats get baseStats => inventory?.statsWithItems(_intrinsic) ?? _intrinsic;
 
   /// Make a copy with a changed hp.
   Creature copyWith({int? hp, int? gold}) {
     return Creature(
       name: name,
       intrinsic: _intrinsic,
-      items: items,
+      inventory: inventory,
       hp: hp ?? this.hp,
       gold: gold ?? this.gold,
       effect: effect,
-      edge: edge,
       level: level,
     );
   }
@@ -370,14 +474,12 @@ class Creature extends CatalogItem {
       'name': name,
       // We don't currently serialize the player type.
       if (type == CreatureType.boss) 'boss': true,
-      if (level != null) 'level': level?.toJson(),
+      'level': level.toJson(),
       ..._intrinsic.toJson(),
       if (gold != 1) 'gold': gold,
-      'items': items.map((i) => i.toJson()).toList(),
+      if (inventory != null) ...?inventory?.toJson(),
       // Not including hp for now.
       'effect': effect?.toJson(),
-      'edge': edge?.toJson(),
-      'oils': oils.map((oil) => oil.toJson()).toList(),
     };
   }
 }
