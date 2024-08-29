@@ -109,11 +109,6 @@ Fortified Gauntlet
 
 ## Missing Effects
 
-### Possible today
-
-  Wounded: Restore 8 health for Golden Vampiric Wine
-
-
 ### Damage Modifiers:
   Deal double damage to armor for Battle Axe
 - Damage modifiers
@@ -144,9 +139,6 @@ Fortified Gauntlet
   Your speed stat is inverted for Citrine Gemstone
 - Computed Stats
 
-  When you have armor gain 3 attack for Ironstone Sandals
-- Computed Stats
-
   Gain 2 health for each equipped wood item for Oak Heart
 - Computed Stats
 
@@ -154,6 +146,9 @@ Fortified Gauntlet
 ### Temporary Stats
   Gain 2 attack for each thorns for Blackbriar Blade
 - Temporary Stats modifiers
+
+  When you have armor gain 3 attack for Ironstone Sandals
+- Computed Stats
 
   First Turn: Gain 2 attack for Cracked Whetstone
 - Temporary Stat modifiers or onTurnEnd?
@@ -178,7 +173,6 @@ Fortified Gauntlet
 
   Exposed & Wounded: Lose 2 attack for Brittlebark Club
 - wasExposed/wasWounded?
-
 
   Overhealing is dealt as damage for Emerald Gemstone
 - onOverheal?
@@ -208,14 +202,14 @@ Fortified Gauntlet
   Exposed: Armor now deals damage when removed for Razor Scales
 - OnArmorDamage
 
+  Whenever you lose armor, restore that much health for Sapphire Gemstone
+- OnArmorDamage
+
   Whenever you gain thorns, gain 1 additional thorn for Razorvine Talisman
 - OnGainThorn
 
   Whenever you restore health, restore 1 additional health for Sanguine Rose
 - Health adjust modifiers
-
-  Whenever you lose armor, restore that much health for Sapphire Gemstone
-- OnArmorDamage
 
 
 WARNING: 15 Creatures with missing effects found:
