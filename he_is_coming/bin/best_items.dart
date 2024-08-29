@@ -12,19 +12,6 @@ extension<T> on List<T> {
   T pickOne(Random random) => this[random.nextInt(length)];
 }
 
-List<Inventory> _seedPopulation(
-  Level level,
-  Random random,
-  int count,
-  Data data,
-) {
-  final population = <Inventory>[];
-  for (var i = 0; i < count; i++) {
-    population.add(Inventory.random(level, random, data));
-  }
-  return population;
-}
-
 class RunResult {
   RunResult({required this.turns, required this.damage, required this.player});
 
@@ -72,41 +59,6 @@ RunResult _doBattle({required Creature player, required Creature enemy}) {
     damage: result.secondDelta.hp,
     player: player,
   );
-}
-
-List<Player> pop = [];
-
-List<Inventory> _crossover(
-  Level level,
-  List<Inventory> parents,
-  Random random,
-) {
-  final children = <Inventory>[];
-  for (var i = 0; i < parents.length; i++) {
-    final parent1 = parents.pickOne(random);
-    final parent2 = parents.pickOne(random);
-
-    final edge = random.nextBool() ? parent1.edge : parent2.edge;
-    final oils = random.nextBool() ? parent1.oils : parent2.oils;
-    final items = <Item>[];
-    if (parent1.items.length != parent2.items.length) {
-      throw StateError(
-        'Parents must have the same number of items: '
-        '${parent1.items} vs ${parent2.items}',
-      );
-    }
-    for (var j = 0; j < parent1.items.length; j++) {
-      final item = random.nextBool() ? parent1.items[j] : parent2.items[j];
-      items.add(item);
-    }
-    try {
-      children
-          .add(Inventory(level: level, items: items, edge: edge, oils: oils));
-    } on ItemException {
-      continue;
-    }
-  }
-  return children;
 }
 
 class Population {
@@ -157,6 +109,122 @@ void logResult(RunResult result) {
   logConfig(result.player.inventory!);
 }
 
+class BestItemFinder {
+  BestItemFinder(this.data);
+
+  final Data data;
+
+  final level = Level.end;
+  final random = Random();
+  final populationSize = 1000;
+  final survivalRate = 0.1;
+  final mutationRate = 0.01;
+
+  List<Inventory> _seedPopulation(
+    Random random,
+    int count,
+    Data data,
+  ) {
+    final population = <Inventory>[];
+    for (var i = 0; i < count; i++) {
+      population.add(Inventory.random(level, random, data));
+    }
+    return population;
+  }
+
+  List<Inventory> _crossover(
+    List<Inventory> parents,
+    Random random,
+  ) {
+    final children = <Inventory>[];
+    for (var i = 0; i < parents.length; i++) {
+      final parent1 = parents.pickOne(random);
+      final parent2 = parents.pickOne(random);
+
+      final edge = random.nextBool() ? parent1.edge : parent2.edge;
+      final oils = random.nextBool() ? parent1.oils : parent2.oils;
+      final items = <Item>[];
+      if (parent1.items.length != parent2.items.length) {
+        throw StateError(
+          'Parents must have the same number of items: '
+          '${parent1.items} vs ${parent2.items}',
+        );
+      }
+      for (var j = 0; j < parent1.items.length; j++) {
+        final item = random.nextBool() ? parent1.items[j] : parent2.items[j];
+        items.add(item);
+      }
+      try {
+        children
+            .add(Inventory(level: level, items: items, edge: edge, oils: oils));
+      } on ItemException {
+        continue;
+      }
+    }
+    return children;
+  }
+
+  Inventory _mutate(
+    Inventory config,
+    Random random,
+    double mutationRate,
+  ) {
+    if (random.nextDouble() > mutationRate) {
+      return config;
+    }
+    final mutated = config.items.toList();
+    final index = random.nextInt(mutated.length);
+    if (index == 0) {
+      mutated[index] = data.items.randomWeapon(random);
+    } else {
+      mutated[index] = data.items.randomNonWeapon(random);
+    }
+    try {
+      return Inventory(
+        level: level,
+        items: mutated,
+        edge: config.edge,
+        oils: config.oils,
+      );
+    } on ItemException {
+      return config;
+    }
+  }
+
+  List<Inventory> run(List<Inventory> initial, int rounds) {
+    late List<RunResult> bestResults;
+    final survivorsCount = (populationSize * survivalRate).ceil();
+    var pop = initial.toList();
+
+    for (var i = 0; i < rounds; i++) {
+      final fillSize = min(populationSize - pop.length, 0);
+      pop.addAll(_seedPopulation(random, fillSize, data));
+
+      final enemy = data.creatures['Woodland Abomination'];
+      final results = pop.map(
+        (inventory) =>
+            _doBattle(player: playerWithInventory(inventory), enemy: enemy),
+      );
+      // Select the top 10% of the population.
+      final sorted = results.toList()..sortBy<num>((r) => -r.damage);
+      bestResults = sorted.sublist(0, survivorsCount);
+      final survivors = bestResults.map((r) => r.player.inventory!).toList();
+      pop = [
+        ...survivors.take(2),
+        ..._crossover(survivors, random),
+      ];
+      // Mutate some of the children.
+      pop = pop.map((c) => _mutate(c, random, mutationRate)).toList();
+
+      logger.info('Round $i');
+      for (final result in bestResults.take(3)) {
+        logResult(result);
+      }
+    }
+    return pop;
+  }
+}
+
 void doMain(List<String> arguments) {
   final data = Data.load();
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
@@ -164,72 +232,16 @@ void doMain(List<String> arguments) {
     ..removeEntriesMissingEffects()
     ..removeInferredItems();
 
-  const level = Level.end;
-  final random = Random();
-  const rounds = 1000;
-  const populationSize = 1000;
-  final survivorsCount = (populationSize * 0.1).ceil();
-  const mutationRate = 0.01;
   const filePath = 'results.json';
   final saved = Population.fromFile(filePath, data);
   logger.info('Loaded ${saved.configs.length} saved configs.');
 
-  List<Inventory> pop;
-  if (saved.configs.isNotEmpty) {
-    pop = saved.configs.toList();
-  } else {
-    pop = _seedPopulation(level, random, populationSize, data);
-  }
-  late List<RunResult> bestResults;
+  final pop = saved.configs.toList();
+  final finder = BestItemFinder(data);
+  const rounds = 1000;
+  final newPop = finder.run(pop, rounds);
 
-  for (var i = 0; i < rounds; i++) {
-    final enemy = data.creatures['Woodland Abomination'];
-    final results = pop.map(
-      (inventory) =>
-          _doBattle(player: playerWithInventory(inventory), enemy: enemy),
-    );
-    // Select the top 10% of the population.
-    final sorted = results.toList()..sortBy<num>((r) => -r.damage);
-    bestResults = sorted.sublist(0, survivorsCount);
-    final survivors = bestResults.map((r) => r.player.inventory!).toList();
-    // children can be shorter than survivors currently.
-    pop = [
-      ...survivors.take(2),
-      ..._crossover(level, survivors, random),
-    ];
-    // Mutate some of the children.
-    // TODO(eseidel): Move this onto CreatureConfig.
-    for (var j = 0; j < pop.length; j++) {
-      if (random.nextDouble() < mutationRate) {
-        final mutated = pop[j].items.toList();
-        final index = random.nextInt(mutated.length);
-        if (index == 0) {
-          mutated[index] = data.items.randomWeapon(random);
-        } else {
-          mutated[index] = data.items.randomNonWeapon(random);
-        }
-        try {
-          pop[j] = Inventory(
-            level: level,
-            items: mutated,
-            edge: pop[j].edge,
-            oils: pop[j].oils,
-          );
-        } on ItemException {
-          continue;
-        }
-      }
-    }
-
-    pop.addAll(
-      _seedPopulation(level, random, populationSize - pop.length, data),
-    );
-    logger.info('Round $i');
-    for (final result in bestResults.take(3)) {
-      logResult(result);
-    }
-  }
-  Population(pop).save(filePath);
+  Population(newPop).save(filePath);
 }
 
 void main(List<String> args) {
