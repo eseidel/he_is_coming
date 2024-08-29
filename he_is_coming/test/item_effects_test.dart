@@ -87,6 +87,32 @@ void main() {
     expect(result2.first.baseStats.armor, 0);
   });
 
+  test('Golden Emergency Shield', () {
+    final item = itemCatalog['Golden Emergency Shield'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.speed, 0);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy(attack: 1, health: 6, speed: 2);
+    final result = doBattle(first: player, second: enemy);
+    // Wolf is faster, so does 6 dmg to us, but we get 8 armor from the shield.
+    expect(result.first.hp, 10);
+    expect(result.first.baseStats.armor, 0);
+
+    final player2 =
+        createPlayer(intrinsic: const Stats(speed: 2), items: [item]);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.speed, 2);
+    expect(player2.baseStats.armor, 0);
+
+    final result2 = doBattle(first: player2, second: enemy);
+    // Wolf is same speed, so only does 5 dmg to us.
+    // Emergency Shield won't give armor, since player has >= enemy speed.
+    expect(result2.first.hp, 5);
+    expect(result2.first.baseStats.armor, 0);
+  });
+
   test('Ruby Earning', () {
     final item = itemCatalog['Ruby Earing'];
     final player = createPlayer(items: [item]);

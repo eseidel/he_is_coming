@@ -15,6 +15,9 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Emergency Shield': onBattle(
     (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4)),
   ),
+  'Golden Emergency Shield': onBattle(
+    (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(8)),
+  ),
   'Granite Gauntlet': onBattle((c) => c.gainArmor(5)),
   'Ruby Earing': onTurn((c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1))),
   'Firecracker Belt': onExposed((c) => [1, 1, 1].forEach(c.dealDamage)),

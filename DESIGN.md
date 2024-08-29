@@ -111,7 +111,6 @@ Fortified Gauntlet
 
 ### Possible today
 
-  Exposed: Deal 6 damage and set attack to 0 for Explosive Sword
   Battle Start: If you have less speed than the enemy, gain 8 armor for Golden Emergency Shield
   Battle Start: If your health is not full, restore 2 health for Golden Redwood Cloak
   Battle Start: Gain 2 attack and take 4 damage for Golden Ruby Ring
