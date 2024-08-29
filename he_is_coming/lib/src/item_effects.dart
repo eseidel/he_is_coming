@@ -44,6 +44,11 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
       ..gainAttack(1)
       ..takeDamage(2),
   ),
+  'Golden Ruby Ring': onBattle(
+    (c) => c
+      ..gainAttack(2)
+      ..takeDamage(4),
+  ),
   'Ruby Crown': onBattle((c) => _if(c.my.attack >= 6, () => c.gainAttack(2))),
   'Melting Iceblade': onHit((c) => c.loseAttack(1)),
   'Double-edged Sword': onHit((c) => c.takeDamage(1)),

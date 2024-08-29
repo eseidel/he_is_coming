@@ -374,6 +374,19 @@ void main() {
     expect(result.first.hp, 6);
   });
 
+  test('Golden Ruby Ring', () {
+    final item = itemCatalog['Golden Ruby Ring'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 1);
+
+    // Ruby Ring gives 2 attack and takes 4 damage at the start of battle.
+    // Which means we only take 1 dmg from wolf, but 4 from ring.
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 5);
+  });
+
   test('Ruby Crown', () {
     final item = itemCatalog['Ruby Crown'];
     final player =
