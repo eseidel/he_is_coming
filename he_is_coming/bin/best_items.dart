@@ -151,22 +151,28 @@ class BestItemFinder {
     Random random,
     double mutationRate,
   ) {
-    if (random.nextDouble() > mutationRate) {
-      return config;
-    }
+    bool shouldMutate() => random.nextDouble() < mutationRate;
+
     final mutated = config.items.toList();
-    final index = random.nextInt(mutated.length);
-    if (index == 0) {
-      mutated[index] = data.items.randomWeapon(random);
-    } else {
-      mutated[index] = data.items.randomNonWeapon(random);
+    for (var i = 0; i < mutated.length; i++) {
+      if (!shouldMutate()) {
+        continue;
+      }
+      if (i == 0) {
+        mutated[i] = data.items.randomWeapon(random);
+      } else {
+        mutated[i] = data.items.randomNonWeapon(random);
+      }
     }
+    final edge = shouldMutate() ? data.edges.random(random) : config.edge;
+    // No need to mutate oils since there are only 3.
+    final oils = config.oils.toList();
     try {
       return Inventory(
         level: level,
         items: mutated,
-        edge: config.edge,
-        oils: config.oils,
+        edge: edge,
+        oils: oils,
       );
     } on ItemException {
       return config;
