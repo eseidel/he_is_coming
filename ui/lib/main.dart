@@ -234,7 +234,7 @@ class _BattlePageState extends State<BattlePage> {
   Inventory get inventory {
     return Inventory(
       level: level,
-      items: _endConfig.items.sublist(0, Creature.itemSlotCount(level)),
+      items: _endConfig.items.sublist(0, Inventory.itemSlotCount(level)),
       edge: _endConfig.edge,
       oils: _endConfig.oils,
     );

@@ -64,7 +64,7 @@ class Inventory {
 
   /// Create a random creature configuration.
   factory Inventory.random(Level level, Random random, Data data) {
-    final slotCount = Creature.itemSlotCount(level);
+    final slotCount = itemSlotCount(level);
     final items = _pickItems(random, slotCount, data.items);
     // Most edges are strictly beneficial, so just pick one at random.
     final edge = data.edges.random(random);
@@ -81,18 +81,25 @@ class Inventory {
 
   /// Create an inventory from json.
   /// This expects names, not full item definitions.
-  Inventory.fromJson(
+  factory Inventory.fromJson(
     Map<String, dynamic> json,
     Level level,
     Data data,
-  )   : edge = json['edge'] != null ? data.edges[json['edge'] as String] : null,
-        oils = (json['oils'] as List? ?? [])
-            .map<Oil>((name) => data.oils[name as String])
-            .toList() {
-    final unenforced = (json['items'] as List? ?? [])
+  ) {
+    final edge =
+        json['edge'] != null ? data.edges[json['edge'] as String] : null;
+    final oils = (json['oils'] as List? ?? [])
+        .map<Oil>((name) => data.oils[name as String])
+        .toList();
+    final items = (json['items'] as List? ?? [])
         .map<Item>((name) => data.items[name as String])
         .toList();
-    items = _enforceItemRules(level, unenforced);
+    return Inventory(
+      level: level,
+      items: items,
+      edge: edge,
+      oils: oils,
+    );
   }
 
   /// Create an empty inventory.
@@ -100,6 +107,17 @@ class Inventory {
       : edge = null,
         oils = const <Oil>[],
         items = [];
+
+  /// Returns number of item slots for the level.
+  static int itemSlotCount(Level level) {
+    // 8 normal slots, 1 weapon.
+    return switch (level) {
+      Level.one => 5,
+      Level.two => 7,
+      Level.three => 9,
+      Level.end => 9,
+    };
+  }
 
   static List<Item> _pickItems(
     Random random,
@@ -118,7 +136,7 @@ class Inventory {
   }
 
   static List<Item> _enforceItemRules(Level level, List<Item> unenforced) {
-    if (unenforced.length > Creature.itemSlotCount(level)) {
+    if (unenforced.length > itemSlotCount(level)) {
       throw ItemException('Too many items for level $level.');
     }
 
@@ -426,17 +444,6 @@ class Creature extends CatalogItem {
 
   /// Returns true if the creature is still alive.
   bool get isAlive => hp > 0;
-
-  /// Returns number of item slots for the level.
-  static int itemSlotCount(Level level) {
-    // 8 normal slots, 1 weapon.
-    return switch (level) {
-      Level.one => 5,
-      Level.two => 7,
-      Level.three => 9,
-      Level.end => 9,
-    };
-  }
 
   /// Stats as they would be in the over-world or at fight start.
   Stats get baseStats => inventory?.statsWithItems(_intrinsic) ?? _intrinsic;
