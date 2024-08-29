@@ -10,10 +10,14 @@ extension<T> on List<T> {
 }
 
 class RunResult {
-  RunResult({required this.turns, required this.damage, required this.config});
+  RunResult({
+    required this.turns,
+    required this.damage,
+    required this.inventory,
+  });
 
   factory RunResult.fromJson(Map<String, dynamic> json, Data data) {
-    final config = Inventory.fromJson(
+    final inventory = Inventory.fromJson(
       json['config'] as Map<String, dynamic>,
       Level.end, // Hard coding for now.
       data,
@@ -21,24 +25,24 @@ class RunResult {
     return RunResult(
       turns: json['turns'] as int,
       damage: json['damage'] as int,
-      config: config,
+      inventory: inventory,
     );
   }
 
   RunResult.empty()
       : turns = 0,
         damage = 0,
-        config = Inventory.empty();
+        inventory = Inventory.empty();
 
   final int turns;
   final int damage;
-  final Inventory config;
+  final Inventory inventory;
 
   Map<String, dynamic> toJson() {
     return {
       'turns': turns,
       'damage': damage,
-      'config': config.toJson(),
+      'config': inventory.toJson(),
     };
   }
 }
@@ -88,7 +92,7 @@ void logConfig(Inventory config) {
 
 void logResult(RunResult result) {
   logger.info('${result.damage} damage ${result.turns} turns:');
-  logConfig(result.config);
+  logConfig(result.inventory);
 }
 
 class BestItemFinder {
@@ -120,6 +124,7 @@ class BestItemFinder {
   ) {
     final children = <Inventory>[];
     for (var i = 0; i < parents.length; i++) {
+      // Should probably pick unique parents?
       final parent1 = parents.pickOne(random);
       final parent2 = parents.pickOne(random);
 
@@ -147,13 +152,13 @@ class BestItemFinder {
   }
 
   Inventory _mutate(
-    Inventory config,
+    Inventory inventory,
     Random random,
     double mutationRate,
   ) {
     bool shouldMutate() => random.nextDouble() < mutationRate;
 
-    final mutated = config.items.toList();
+    final mutated = inventory.items.toList();
     for (var i = 0; i < mutated.length; i++) {
       if (!shouldMutate()) {
         continue;
@@ -164,9 +169,9 @@ class BestItemFinder {
         mutated[i] = data.items.randomNonWeapon(random);
       }
     }
-    final edge = shouldMutate() ? data.edges.random(random) : config.edge;
+    final edge = shouldMutate() ? data.edges.random(random) : inventory.edge;
     // No need to mutate oils since there are only 3.
-    final oils = config.oils.toList();
+    final oils = inventory.oils.toList();
     try {
       return Inventory(
         level: level,
@@ -175,7 +180,7 @@ class BestItemFinder {
         oils: oils,
       );
     } on ItemException {
-      return config;
+      return inventory;
     }
   }
 
@@ -191,24 +196,26 @@ class BestItemFinder {
       return RunResult(
         turns: result.turns,
         damage: -result.secondDelta.hp,
-        config: inventory,
+        inventory: inventory,
       );
     }
 
     for (var i = 0; i < rounds; i++) {
+      // Fill in any missing population with random.
       final fillSize = max(populationSize - pop.length, 0);
       pop.addAll(_seedPopulation(random, fillSize, data));
 
-      // Select the top 10% of the population.
       final sorted = pop.map(doBattle).toList()..sortBy<num>((r) => -r.damage);
+      // Select the top survivorRate of the population.
       bestResults = sorted.sublist(0, survivorsCount);
-      final survivors = bestResults.map((r) => r.config).toList();
+      final survivors = bestResults.map((r) => r.inventory).toList();
       pop = [
+        // Keep the best survivors.
         ...survivors.take(2),
+        // Crossover the survivors.
         ..._crossover(survivors, random),
-      ];
-      // Mutate some of the children.
-      pop = pop.map((c) => _mutate(c, random, mutationRate)).toList();
+        // And apply mutations.
+      ].map((c) => _mutate(c, random, mutationRate)).toList();
 
       logger.info('Round $i');
       for (final result in bestResults.take(3)) {
