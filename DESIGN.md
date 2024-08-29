@@ -105,3 +105,151 @@ Fortified Gauntlet
 Fortified Gauntlet
 
 146 dmg, turn 13
+
+
+## Missing Effects
+
+### Possible today
+
+  Exposed: Deal 6 damage and set attack to 0 for Explosive Sword
+  Battle Start: If you have less speed than the enemy, gain 8 armor for Golden Emergency Shield
+  Battle Start: If your health is not full, restore 2 health for Golden Redwood Cloak
+  Battle Start: Gain 2 attack and take 4 damage for Golden Ruby Ring
+  Wounded: Restore 8 health for Golden Vampiric Wine
+
+
+### Damage Modifiers:
+  Deal double damage to armor for Battle Axe
+- Damage modifiers
+
+  Take 3 additional damage from the enemies first strike for Bearpelt Plate
+- Incoming Damage Modifiers
+
+  Whenever you take damage, take 1 additional damage for Brittlebark Armor
+- Damage Modifiers
+
+  Battle Start: If your speed is 6 or higher, your strikes deal double damage for Citrine Crown
+- Damage modifiers
+
+  Enemies first strike ignores armor for Phantom Armor
+- Damage Modifiers
+
+  The first time the enemy strikes, their damage is halved for Protecting Charm
+- Damage Modifiers
+
+- Damage modifiers
+  Whenever Brittlebark Beast takes damage, he takes 2 additional damage for Brittlebark Beast
+- Damage modifiers
+  Whenever Gentle Giant takes damage he gains 2 thorns.  Wounded: Gain 4 thorns instead for Gentle Giant
+
+
+
+### Computed Stats
+  Your speed stat is inverted for Citrine Gemstone
+- Computed Stats
+
+  When you have armor gain 3 attack for Ironstone Sandals
+- Computed Stats
+
+  Gain 2 health for each equipped wood item for Oak Heart
+- Computed Stats
+
+
+### Temporary Stats
+  Gain 2 attack for each thorns for Blackbriar Blade
+- Temporary Stats modifiers
+
+  First Turn: Gain 2 attack for Cracked Whetstone
+- Temporary Stat modifiers or onTurnEnd?
+
+
+### Other stuff
+
+  Exposed can trigger one additional time for Blacksmith Bond
+- Expose Counter
+
+  Do two additional strikes that always deal 1 damage for Bonespine Whip
+- Additional Strikes?  or onAfterAttack?
+
+  Wounded: Do an additional strike on your next turn for Dueling Gauntlet
+- Additional Strikes
+
+  First Turn: If you have more speed than the enemy, do 2 additional strikes for Swiftstrike Rapier
+- OnAfterAttack?
+
+  After 3 strikes, lose 2 attack for Brittlebark Bow
+- onAfterStrike?
+
+  Exposed & Wounded: Lose 2 attack for Brittlebark Club
+- wasExposed/wasWounded?
+
+
+  Overhealing is dealt as damage for Emerald Gemstone
+- onOverheal?
+
+  Draws power from emerald, ruby, sapphire and citrine items for Gemstone Scepter
+- Unclear effects
+
+  The next weapon you equip gains 2 attack for Grindstone Club
+- onWeaponEquip
+
+  Every 3 strikes, deal triple damage for Haymaker
+- Strike Counter
+- Damage Modifier
+
+  Gets stronger for every new hidden dagger you find for Hidden Dagger
+- OnWeaponEquip?
+
+  Whenever you deal damage to the enemy's armor, gain that much armor for Hook Blade
+- onEnemyArmorDamage?
+
+  Resilience: 50% chance to survive with 1 health for Lifethread Pendant
+- Random
+
+  Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle for Pinecone Plate
+- Per-effect state?
+
+  Exposed: Armor now deals damage when removed for Razor Scales
+- OnArmorDamage
+
+  Whenever you gain thorns, gain 1 additional thorn for Razorvine Talisman
+- OnGainThorn
+
+  Whenever you restore health, restore 1 additional health for Sanguine Rose
+- Health adjust modifiers
+
+  Whenever you lose armor, restore that much health for Sapphire Gemstone
+- OnArmorDamage
+
+
+WARNING: 15 Creatures with missing effects found:
+  Bear deals 3 additional damage while you have armor for Bear Level 1
+- ComputedStats?  OnEnemyGainArmor?
+  Bear deals 5 additional damage while you have armor for Bear Level 2
+  Bear deals 7 additional damage while you have armor for Bear Level 3
+  Ignores armor for Bearserker
+
+- Possible today
+  If Hothead has more speed than you, his first strike deals 10 additional damage for Hothead
+- Damage Modifier?  Or onHit?
+  Mountain Troll only strikes every other turn for Mountain Troll
+- onWillStrike?  How does this interact with stun?
+  Strikes steal gold instead of dealing damage for Raven Level 2
+- Damage modifier?
+  Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle for Razortusk Hog
+- HadMoreSpeedAtStart?
+- OnExtraStrikes?
+  Redwood Treant's attack is halved against armor for Redwood Treant
+- DamageModifiers?
+  If Stormcloud Druid takes damage more than once per turn, stun the player for 1 turn for Stormcloud Druid
+- Damage Counters?
+  If player has 5 or less health, wolf gains 2 attack for Wolf Level 1
+- ComputedStats?
+  If player has 5 or less health, wolf gains 3 attack for Wolf Level 2
+  If player has 5 or less health, wolf gains 4 attack for Wolf Level 3
+All Oil effects found.
+WARNING: 2 Edges with missing effects found:
+  Do an additional strike on your first turn for Agile Edge
+- OnExtraStrikes
+  Only strike every other turn, but deal double damage for Titan's Edge
+- StrikeEveryOtherTurn

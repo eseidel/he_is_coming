@@ -145,4 +145,9 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Stormcloud Spear':
       onTurn((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
+  'Explosive Sword': onExposed(
+    (c) => c
+      ..dealDamage(6)
+      ..loseAttack(c.my.attack),
+  ),
 });

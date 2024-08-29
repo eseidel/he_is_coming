@@ -1220,4 +1220,30 @@ void main() {
     expect(result.first.hp, 2);
     expect(result.second.hp, 0);
   });
+
+  test('Explosive Sword', () {
+    final item = itemCatalog['Explosive Sword'];
+    final player = createPlayer(items: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 20);
+    final result = doBattle(first: player, second: enemy);
+
+    // Explosive Sword deals 4 dmg, does 6 dmg and sets attack=0 on exposed.
+    // We kill the wolf in 5 hits, taking 4 dmg.
+    expect(result.first.hp, 6);
+
+    final player2 = createPlayer(
+      intrinsic: const Stats(armor: 1),
+      items: [item],
+    );
+    expect(player2.hp, 10);
+    expect(player2.baseStats.armor, 1);
+
+    final result2 = doBattle(first: player2, second: enemy);
+    // Explosive Sword deals 4 dmg, does 6 dmg and sets attack=0 on exposed.
+    // Wolf breaks our armor on the first hit, we lose all attack and die.
+    expect(result2.first.hp, 0);
+    expect(result2.second.hp, 10);
+  });
 }
