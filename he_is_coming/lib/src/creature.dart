@@ -196,11 +196,13 @@ class Inventory {
 }
 
 /// Create a player from a creature configuration.
-Player playerWithInventory(Inventory inventory) {
-  return createPlayer(
-    items: inventory.items,
-    edge: inventory.edge,
-    oils: inventory.oils,
+Player playerWithInventory(Level level, Inventory inventory) {
+  return Creature(
+    name: _kPlayerName,
+    intrinsic: const Stats(),
+    gold: 0,
+    level: level,
+    inventory: inventory,
   );
 }
 

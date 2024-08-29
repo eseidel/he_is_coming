@@ -242,7 +242,7 @@ class _BattlePageState extends State<BattlePage> {
 
   void _updateResults() {
     // For each enemy, run the battle and gather the results.
-    final player = playerWithInventory(inventory);
+    final player = playerWithInventory(level, inventory);
     results = enemies
         .map(
           (enemy) => Battle.resolve(first: player, second: enemy),

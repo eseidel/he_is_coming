@@ -13,7 +13,7 @@ extension<T> on List<T> {
 }
 
 class RunResult {
-  RunResult({required this.turns, required this.damage, required this.player});
+  RunResult({required this.turns, required this.damage, required this.config});
 
   factory RunResult.fromJson(Map<String, dynamic> json, Data data) {
     final config = Inventory.fromJson(
@@ -24,30 +24,24 @@ class RunResult {
     return RunResult(
       turns: json['turns'] as int,
       damage: json['damage'] as int,
-      player: playerWithInventory(config),
+      config: config,
     );
   }
 
   RunResult.empty()
       : turns = 0,
         damage = 0,
-        player = Creature(
-          name: 'Empty',
-          intrinsic: const Stats(),
-          inventory: Inventory.empty(),
-          gold: 0,
-          level: Level.one,
-        );
+        config = Inventory.empty();
 
   final int turns;
   final int damage;
-  final Creature player;
+  final Inventory config;
 
   Map<String, dynamic> toJson() {
     return {
       'turns': turns,
       'damage': damage,
-      'config': player.inventory!.toJson(),
+      'config': config.toJson(),
     };
   }
 }
@@ -57,7 +51,7 @@ RunResult _doBattle({required Creature player, required Creature enemy}) {
   return RunResult(
     turns: result.turns,
     damage: result.secondDelta.hp,
-    player: player,
+    config: player.inventory!,
   );
 }
 
@@ -106,7 +100,7 @@ void logConfig(Inventory config) {
 
 void logResult(RunResult result) {
   logger.info('${result.damage} damage ${result.turns} turns:');
-  logConfig(result.player.inventory!);
+  logConfig(result.config);
 }
 
 class BestItemFinder {
@@ -202,13 +196,15 @@ class BestItemFinder {
 
       final enemy = data.creatures['Woodland Abomination'];
       final results = pop.map(
-        (inventory) =>
-            _doBattle(player: playerWithInventory(inventory), enemy: enemy),
+        (inventory) => _doBattle(
+          player: playerWithInventory(level, inventory),
+          enemy: enemy,
+        ),
       );
       // Select the top 10% of the population.
       final sorted = results.toList()..sortBy<num>((r) => -r.damage);
       bestResults = sorted.sublist(0, survivorsCount);
-      final survivors = bestResults.map((r) => r.player.inventory!).toList();
+      final survivors = bestResults.map((r) => r.config).toList();
       pop = [
         ...survivors.take(2),
         ..._crossover(survivors, random),
