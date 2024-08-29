@@ -111,7 +111,6 @@ Fortified Gauntlet
 
 ### Possible today
 
-  Battle Start: Gain 2 attack and take 4 damage for Golden Ruby Ring
   Wounded: Restore 8 health for Golden Vampiric Wine
 
 

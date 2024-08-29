@@ -29,6 +29,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Explosive Surprise': onExposed((c) => c.dealDamage(5)),
   'Cracked Bouldershield': onExposed((c) => c.gainArmor(5)),
   'Vampiric Wine': onWounded((c) => c.restoreHealth(4)),
+  'Golden Vampiric Wine': onWounded((c) => c.restoreHealth(8)),
   'Mortal Edge': onWounded(
     (c) => c
       ..gainAttack(5)

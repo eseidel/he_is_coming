@@ -261,6 +261,18 @@ void main() {
     expect(result.first.hp, 8);
   });
 
+  test('Golden Vampiric Wine', () {
+    final item = itemCatalog['Golden Vampiric Wine'];
+    final player = createPlayer(items: [item], hp: 9);
+    expect(player.hp, 9);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // Normally take 5 dmg but the wine triggers
+    // when we're below 50% health, healing 8 hp.
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 10);
+  });
+
   test('Wounded when already below 50%', () {
     final item = itemCatalog['Vampiric Wine'];
     final player = createPlayer(items: [item], hp: 4);
