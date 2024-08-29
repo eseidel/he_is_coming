@@ -80,6 +80,7 @@ class Inventory {
   }
 
   /// Create an inventory from json.
+  /// This expects names, not full item definitions.
   Inventory.fromJson(
     Map<String, dynamic> json,
     Level level,
@@ -186,11 +187,11 @@ class Inventory {
 
   /// Convert to json.
   Map<String, dynamic> toJson() {
+    // This is not meant for defining items, so we only serialize the names.
     return {
-      if (items.isNotEmpty)
-        'items': items.map((item) => item.toJson()).toList(),
+      if (items.isNotEmpty) 'items': items.map((item) => item.name).toList(),
       if (edge != null) 'edge': edge!.name,
-      if (oils.isNotEmpty) 'oils': oils.map((oil) => oil.toJson()).toList(),
+      if (oils.isNotEmpty) 'oils': oils.map((oil) => oil.name).toList(),
     };
   }
 }

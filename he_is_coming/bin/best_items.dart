@@ -84,10 +84,7 @@ void logConfig(Inventory config) {
   if (config.edge != null) {
     logger.info('Edge: ${config.edge!.name}');
   }
-  logger.info('Oils:');
-  for (final oil in config.oils) {
-    logger.info('  ${oil.name}');
-  }
+  logger.info('Oils: ${config.oils.map((o) => o.name).join(', ')}');
 }
 
 void logResult(RunResult result) {
@@ -131,17 +128,16 @@ class BestItemFinder {
       final edge = random.nextBool() ? parent1.edge : parent2.edge;
       final oils = random.nextBool() ? parent1.oils : parent2.oils;
       final items = <Item>[];
-      if (parent1.items.length != parent2.items.length) {
-        throw StateError(
-          'Parents must have the same number of items: '
-          '${parent1.items} vs ${parent2.items}',
-        );
-      }
+      assert(
+        parent1.items.length == parent2.items.length,
+        'Parents must have same number of items.',
+      );
       for (var j = 0; j < parent1.items.length; j++) {
         final item = random.nextBool() ? parent1.items[j] : parent2.items[j];
         items.add(item);
       }
       try {
+        // Constructor can throw if items break rules (e.g. duplicate unique).
         children
             .add(Inventory(level: level, items: items, edge: edge, oils: oils));
       } on ItemException {
@@ -173,6 +169,7 @@ class BestItemFinder {
     // No need to mutate oils since there are only 3.
     final oils = inventory.oils.toList();
     try {
+      // Constructor can throw if items break rules (e.g. duplicate unique).
       return Inventory(
         level: level,
         items: mutated,
