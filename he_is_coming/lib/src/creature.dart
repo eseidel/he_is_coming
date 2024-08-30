@@ -117,9 +117,20 @@ class Inventory {
     Edge? edge,
     SetBonusCatalog setBonuses,
   ) {
+    String baseName(Item item) {
+      final name = item.name;
+      if (name.startsWith('Golden ')) {
+        return name.substring(7);
+      }
+      if (name.startsWith('Diamond ')) {
+        return name.substring(8);
+      }
+      return name;
+    }
+
     // Gather all "names" in the inventory.
     final names = {
-      for (final item in items) item.name,
+      for (final item in items) baseName(item),
       if (edge != null) edge.name,
     };
     // Walk through the set bonuses and see if any of them are satisfied.

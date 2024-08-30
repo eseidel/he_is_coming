@@ -46,7 +46,10 @@ void main() {
 
   test('Redwood Crown', () {
     final needed = _lookupSet('Redwood Crown', data);
-    final player = data.createPlayer(items: needed.items, edge: needed.edge);
+    final player = data.createPlayer(
+      items: needed.items,
+      edge: needed.edge,
+    );
     expect(player.hp, 16); // 4 from rod, 2 from cloak
     expect(player.baseStats.armor, 1); // from Redwood Helmet
     expect(player.baseStats.attack, 2); // from Redwood Rod
@@ -55,6 +58,27 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     // Wolf does 14 dmg over 7 hits, 1 is absorbed by armor.
     // Helmet restores 3 on exposed, player is only down 1 hp at that time.
+    // Crown restores all health on wounded (after the 6th hit).
+    expect(result.first.hp, 14);
+  });
+
+  // Sets work, even when the items are golden.
+  test('Golden items', () {
+    final itemNames = [
+      'Redwood Rod',
+      'Redwood Cloak',
+      'Golden Redwood Helmet',
+    ];
+    final items = itemNames.map((name) => data.items[name]).toList();
+    final player = data.createPlayer(items: items);
+    expect(player.hp, 16); // 4 from rod, 2 from cloak
+    expect(player.baseStats.armor, 2); // from Redwood Helmet
+    expect(player.baseStats.attack, 2); // from Redwood Rod
+
+    final enemy = makeEnemy(health: 16, attack: 2);
+    final result = doBattle(first: player, second: enemy);
+    // Wolf does 14 dmg over 7 hits, 2 is absorbed by armor.
+    // Helmet restores 6 on exposed, player is at full health at that time.
     // Crown restores all health on wounded (after the 6th hit).
     expect(result.first.hp, 14);
   });
