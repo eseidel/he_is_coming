@@ -263,6 +263,41 @@ Player playerWithInventory(Level level, Inventory inventory) {
 /// Adds a method to create a player from a data object.
 extension CreatePlayer on Data {
   /// Create a player.
+  Player player({
+    int maxHp = 10,
+    int attack = 0,
+    int armor = 0,
+    int speed = 0,
+    List<String> items = const <String>[],
+    String? edge,
+    List<String> oils = const <String>[],
+    int? hp,
+    int gold = 0,
+    Level level = Level.end,
+  }) {
+    final intrinsic = Stats(
+      maxHp: maxHp,
+      attack: attack,
+      armor: armor,
+      speed: speed,
+    );
+    return Creature(
+      name: _kPlayerName,
+      level: level,
+      intrinsic: intrinsic,
+      gold: gold,
+      hp: hp,
+      inventory: Inventory(
+        level: level,
+        edge: edge != null ? edges[edge] : null,
+        oils: oils.map((name) => this.oils[name]).toList(),
+        items: items.map((name) => this.items[name]).toList(),
+        setBonuses: sets,
+      ),
+    );
+  }
+
+  /// Create a player.
   Player createPlayer({
     Stats intrinsic = const Stats(),
     List<Item> items = const <Item>[],

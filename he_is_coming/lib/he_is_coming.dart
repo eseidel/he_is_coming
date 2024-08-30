@@ -41,14 +41,10 @@ void runSim() {
     'Armor Oil',
     'Speed Oil',
   ];
-  final player = data.createPlayer(
-    items: items.map((name) => data.items[name]).toList(),
-    edge: data.edges[edge],
-    oils: oils.map((name) => data.oils[name]).toList(),
-  );
+  final player = data.player(items: items, edge: edge, oils: oils);
   final enemy = data.creatures['Woodland Abomination'];
 
-  // final player = data.createPlayer(items: [data.items['Stone Steak']]);
+  // final player = data.player(items: [data.items['Stone Steak']]);
   // final enemy = data.creatures['Spider Level 1'];
 
   final result = Battle.resolve(first: player, second: enemy, verbose: true);

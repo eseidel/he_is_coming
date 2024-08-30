@@ -2,50 +2,6 @@
 
 Attempting to document He Is Coming design to see what we need to sim.
 
-## Character
-Has stats (attack, health, armor, speed)
-Also has current hp and current gold.
-Depending on your level you have N slots.
-level 1: 1 weapon + 4 slots
-level 2: 1 weapon + 6 slots
-level 3: 1 weapon + 8 slots
-
-## Items
-Items have name, stats, effects, tags and rarity (another tag?).
-Item effects:
-- onTurn
-- onBattle
-- onHit
-- onExposed
-- onWounded
-
-## Battle
-There is an opponent during battle.
-Items only matter during battle.
-The resolution of battle is some change in hp as well as gold.
-
-## Creatures
-- Wolf (+X if below 5 hp)
-- Spider (first turn dmg if slower than)
-- Bear (+X dmg when armored)
-
-## Bosses
-Level 1
-- Black Knight
-- Hot Head
-
-Level 2
-- Mountain Troll
-- Rock Golem
-
-Level 3
-- Leshen
-- Gentle Giant
-
-Final
-- Woodland Abomination
-
-
 ## Events
 Campfire (+10 hp, skip to morning)
 House (full hp, skip to morning)
@@ -59,9 +15,6 @@ Lookout Tower (reveal map, ignored)
 Crystal Ball (reveal event, ignored)
 Golem (weapon combiner)
 Cauldron (food combiner)
-
-## Achievements
-These unlock additional items.
 
 ## TODO
 
@@ -111,29 +64,28 @@ Fortified Gauntlet
 
 ### Damage Modifiers:
   Deal double damage to armor for Battle Axe
-- Damage modifiers
+- onModifyDamageThem(c.multiplyArmorDamage(2))
 
   Take 3 additional damage from the enemies first strike for Bearpelt Plate
-- Incoming Damage Modifiers
+- onModifyDamageMe((c) => _if(c.them.isFirstStrike, c.addDamage(3))
 
   Whenever you take damage, take 1 additional damage for Brittlebark Armor
-- Damage Modifiers
+- onModifyDamageMe((c) => c.addDamage(1))
 
   Battle Start: If your speed is 6 or higher, your strikes deal double damage for Citrine Crown
-- Damage modifiers
+- onBattle(_if(c.me.speed >= 6))
 
   Enemies first strike ignores armor for Phantom Armor
-- Damage Modifiers
+- onModifyDamageMe(_if(c.them.isFirstStrike, c.ignoreArmor))
 
   The first time the enemy strikes, their damage is halved for Protecting Charm
-- Damage Modifiers
+- onModifyDamageMe(_if(c.them.isFirstStrike, c.multiplyDamage(.5)))
 
-- Damage modifiers
   Whenever Brittlebark Beast takes damage, he takes 2 additional damage for Brittlebark Beast
-- Damage modifiers
+- onModifyDamageMe((c.addDamage(2)))
+
   Whenever Gentle Giant takes damage he gains 2 thorns.  Wounded: Gain 4 thorns instead for Gentle Giant
-
-
+- onTakeDamage(c.gainThorns(c.isWounded ? 4 : 2))
 
 ### Computed Stats
   Your speed stat is inverted for Citrine Gemstone

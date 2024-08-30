@@ -23,21 +23,21 @@ void main() {
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Attack Oil', () {
-    final oil = data.oils['Attack Oil'];
-    final player = data.createPlayer(oils: [oil]);
+    const oil = 'Attack Oil';
+    final player = data.player(oils: [oil]);
     // One from the oil and one from the Wooden Stick.
     expect(player.baseStats.attack, 2);
   });
 
   test('Armor Oil', () {
-    final oil = data.oils['Armor Oil'];
-    final player = data.createPlayer(oils: [oil]);
+    const oil = 'Armor Oil';
+    final player = data.player(oils: [oil]);
     expect(player.baseStats.armor, 1);
   });
 
   test('Speed Oil', () {
-    final oil = data.oils['Speed Oil'];
-    final player = data.createPlayer(oils: [oil]);
+    const oil = 'Speed Oil';
+    final player = data.player(oils: [oil]);
     expect(player.baseStats.speed, 1);
   });
 }

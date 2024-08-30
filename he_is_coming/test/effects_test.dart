@@ -24,7 +24,7 @@ void main() {
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Enemies give gold', () {
-    final player = data.createPlayer();
+    final player = data.player();
     expect(player.hp, 10);
     expect(player.gold, 0);
 

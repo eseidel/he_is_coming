@@ -19,8 +19,8 @@ BattleResult doBattle({
 }
 
 class _Needed {
-  List<Item> items = [];
-  Edge? edge;
+  List<String> items = [];
+  String? edge;
 }
 
 _Needed _lookupSet(String name, Data data) {
@@ -29,13 +29,13 @@ _Needed _lookupSet(String name, Data data) {
   for (final part in set.parts) {
     final item = data.items.get(part);
     if (item != null) {
-      needed.items.add(item);
+      needed.items.add(item.name);
       continue;
     }
     if (needed.edge != null) {
       throw Exception('Multiple edges in set $name');
     }
-    needed.edge = data.edges[part];
+    needed.edge = part;
   }
   return needed;
 }
@@ -46,7 +46,7 @@ void main() {
 
   Creature playerWithSet(String name) {
     final needed = _lookupSet(name, data);
-    return data.createPlayer(
+    return data.player(
       items: needed.items,
       edge: needed.edge,
     );
@@ -68,13 +68,12 @@ void main() {
 
   // Sets work, even when the items are golden.
   test('Golden items', () {
-    final itemNames = [
+    final items = [
       'Redwood Rod',
       'Redwood Cloak',
       'Golden Redwood Helmet',
     ];
-    final items = itemNames.map((name) => data.items[name]).toList();
-    final player = data.createPlayer(items: items);
+    final player = data.player(items: items);
     expect(player.hp, 16); // 4 from rod, 2 from cloak
     expect(player.baseStats.armor, 2); // from Redwood Helmet
     expect(player.baseStats.attack, 2); // from Redwood Rod

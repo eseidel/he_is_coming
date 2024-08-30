@@ -21,11 +21,9 @@ BattleResult doBattle({
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
-  final edges = data.edges;
 
   test('Bleeding Edge', () {
-    final edge = edges['Bleeding Edge'];
-    final player = data.createPlayer(edge: edge);
+    final player = data.player(edge: 'Bleeding Edge');
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
     // Bleeding edge gains 1 health on hit so we regain all the health we lose.
@@ -33,8 +31,7 @@ void main() {
   });
 
   test('Blunt Edge', () {
-    final edge = edges['Blunt Edge'];
-    final player = data.createPlayer(edge: edge);
+    final player = data.player(edge: 'Blunt Edge');
     // Wolf is faster than us so it will hit first.
     final enemy = makeEnemy(health: 6, attack: 1, speed: 1);
     final result = doBattle(first: player, second: enemy);
@@ -43,8 +40,7 @@ void main() {
   });
 
   test('Lightning Edge', () {
-    final edge = edges['Lightning Edge'];
-    final player = data.createPlayer(edge: edge);
+    final player = data.player(edge: 'Lightning Edge');
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
     // Lightning edge stuns the enemy for 1 turn so we take 1 less damage.
@@ -52,8 +48,7 @@ void main() {
   });
 
   test('Thieving Edge', () {
-    final edge = edges['Thieving Edge'];
-    final player = data.createPlayer(edge: edge, gold: 8);
+    final player = data.player(edge: 'Thieving Edge', gold: 8);
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
     // Thieving edge gains 1 gold on hit if we have less than 10 gold.
@@ -62,8 +57,7 @@ void main() {
   });
 
   test('Jagged Edge', () {
-    final edge = edges['Jagged Edge'];
-    final player = data.createPlayer(edge: edge);
+    final player = data.player(edge: 'Jagged Edge');
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
     // Jagged edge gains 2 thorns on hit and takes 1 damage.
@@ -72,8 +66,7 @@ void main() {
   });
 
   test('Cutting Edge', () {
-    final edge = edges['Cutting Edge'];
-    final player = data.createPlayer(edge: edge);
+    final player = data.player(edge: 'Cutting Edge');
     final enemy = makeEnemy(health: 6, attack: 1);
     final result = doBattle(first: player, second: enemy);
     // Cutting edge deals 1 damage on hit.
