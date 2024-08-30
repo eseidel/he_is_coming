@@ -568,6 +568,13 @@ class BattleContext {
         item.effect?[trigger]?.call(effectCxt);
         _checkForDeath();
       }
+
+      final sets = inventory.sets;
+      for (final set in sets) {
+        final effectCxt = EffectContext(this, index, set.name);
+        set.effect?[trigger]?.call(effectCxt);
+        _checkForDeath();
+      }
     }
 
     final afterStats = stats[index];

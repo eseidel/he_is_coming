@@ -8,6 +8,7 @@ import 'package:he_is_coming/src/edge_effects.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_effects.dart';
+import 'package:he_is_coming/src/set_effects.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
@@ -296,7 +297,7 @@ class SetBonusCatalog extends Catalog<SetBonus> {
       yaml,
       SetBonus.fromYaml,
       SetBonus.orderedKeys.toSet(),
-      itemEffects,
+      setEffects,
     );
     return SetBonusCatalog(sets);
   }
