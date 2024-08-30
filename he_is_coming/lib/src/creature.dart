@@ -269,6 +269,7 @@ extension CreatePlayer on Data {
     int armor = 0,
     int speed = 0,
     List<String> items = const <String>[],
+    List<Item> customItems = const <Item>[],
     String? edge,
     List<String> oils = const <String>[],
     int? hp,
@@ -291,35 +292,7 @@ extension CreatePlayer on Data {
         level: level,
         edge: edge != null ? edges[edge] : null,
         oils: oils.map((name) => this.oils[name]).toList(),
-        items: items.map((name) => this.items[name]).toList(),
-        setBonuses: sets,
-      ),
-    );
-  }
-
-  /// Create a player.
-  Player createPlayer({
-    Stats intrinsic = const Stats(),
-    List<Item> items = const <Item>[],
-    Edge? edge,
-    List<Oil> oils = const <Oil>[],
-    int? hp,
-    int? gold,
-    Level level = Level.end,
-  }) {
-    return Creature(
-      name: _kPlayerName,
-      level: level,
-      // If maxHp wasn't set, default to 10.
-      intrinsic:
-          (intrinsic.maxHp == 0) ? intrinsic.copyWith(maxHp: 10) : intrinsic,
-      gold: gold ?? 0,
-      hp: hp,
-      inventory: Inventory(
-        level: level,
-        edge: edge,
-        oils: oils,
-        items: items,
+        items: [...customItems, ...items.map((name) => this.items[name])],
         setBonuses: sets,
       ),
     );
@@ -494,6 +467,7 @@ class Creature extends CatalogItem {
   }
 
   /// The default player item.
+  // TODO(eseidel): Remove defaultPlayerWeapon.
   static late final Item defaultPlayerWeapon;
 
   /// The intrinsic stats of this Creature without any items.

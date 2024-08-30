@@ -37,8 +37,8 @@ void main() {
   });
 
   test('Check for Death after every trigger', () {
-    final player = data.createPlayer(
-      items: [Item.test(effect: onTakeDamage((c) => c.restoreHealth(1)))],
+    final player = data.player(
+      customItems: [Item.test(effect: onTakeDamage((c) => c.restoreHealth(1)))],
     );
     final enemy = makeEnemy(attack: 10, health: 6);
     final result = doBattle(first: player, second: enemy);

@@ -590,7 +590,7 @@ void main() {
 
     final other =
         Item('other', ItemRarity.common, material: ItemMaterial.stone);
-    final player2 = data.createPlayer(items: [itemCatalog[item], other]);
+    final player2 = data.player(customItems: [itemCatalog[item], other]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
 
@@ -648,7 +648,7 @@ void main() {
   test('Iron Transfusion can kill', () {
     final item = itemCatalog['Iron Transfusion'];
     final healOnHit = Item.test(effect: onHit((c) => c.restoreHealth(1)));
-    final player = data.createPlayer(items: [item, item, healOnHit], hp: 1);
+    final player = data.player(customItems: [item, item, healOnHit], hp: 1);
     expect(player.hp, 1);
     expect(player.baseStats.armor, 0);
 
@@ -688,7 +688,7 @@ void main() {
       effect: onTurn((c) => c.gainArmor(1)),
     );
     final gauntlet = itemCatalog['Fortified Gauntlet'];
-    final player = data.createPlayer(items: [armor, gauntlet]);
+    final player = data.player(customItems: [armor, gauntlet]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -699,7 +699,7 @@ void main() {
     expect(result.first.hp, 10);
     expect(result.first.baseStats.armor, 0);
 
-    final player2 = data.createPlayer(items: [gauntlet, armor]);
+    final player2 = data.player(customItems: [gauntlet, armor]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
 
@@ -717,7 +717,7 @@ void main() {
     );
     final item = itemCatalog['Iron Rose'];
     // Order of the items should not matter in this case.
-    final player = data.createPlayer(items: [item, healOnHit]);
+    final player = data.player(customItems: [item, healOnHit]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -732,7 +732,7 @@ void main() {
     expect(result.first.baseStats.armor, 0);
 
     // This time w/o the healOnHit item, the iron rose won't trigger.
-    final player2 = data.createPlayer(items: [item], hp: 5);
+    final player2 = data.player(customItems: [item], hp: 5);
     expect(player2.hp, 5);
     expect(player2.baseStats.armor, 0);
 
@@ -843,7 +843,7 @@ void main() {
 
   test('Bejeweled Blade', () {
     final item = itemCatalog['Bejeweled Blade'];
-    final player = data.createPlayer(items: [item]);
+    final player = data.player(customItems: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 0);
 
@@ -859,7 +859,7 @@ void main() {
       kind: ItemKind.jewelry,
       ItemRarity.common,
     );
-    final player2 = data.createPlayer(items: [item, jewelry]);
+    final player2 = data.player(customItems: [item, jewelry]);
     expect(player2.hp, 10);
     // We've implemented Bejeweled Blade onBattle so this is still 0.
     expect(player2.baseStats.attack, 0);
@@ -1109,7 +1109,7 @@ void main() {
 
   test('Tree Sap', () {
     final item = itemCatalog['Tree Sap'];
-    final player = data.createPlayer(items: [item], hp: 8);
+    final player = data.player(customItems: [item], hp: 8);
     expect(player.baseStats.maxHp, 15);
     expect(player.hp, 8);
 
@@ -1119,7 +1119,7 @@ void main() {
     expect(result.first.hp, 8);
 
     final heals = Item.test(effect: onHeal((c) => c.gainArmor(1)));
-    final player2 = data.createPlayer(items: [item, heals], hp: 8);
+    final player2 = data.player(customItems: [item, heals], hp: 8);
     expect(player2.baseStats.maxHp, 15);
     expect(player2.hp, 8);
     final result2 = doBattle(first: player2, second: enemy);

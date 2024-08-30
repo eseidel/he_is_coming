@@ -72,9 +72,9 @@ void main() {
     // I need to confirm this in-game, but...
     // Player onBattle happens before enemy onBattle (regardless of speed?)
     // so black knight should get our increased attack from onBattle effects.
-    final player2 = data.createPlayer(
-      intrinsic: const Stats(maxHp: 20),
-      items: [
+    final player2 = data.player(
+      maxHp: 20,
+      customItems: [
         Item.test(
           effect: onBattle((c) => c.gainAttack(1)),
         ),
