@@ -32,7 +32,7 @@
   rarity: heroic
   attack: 2
   effect: Do two additional strikes that always deal 1 damage
-- name: Boots of the hero
+- name: Boots of the Hero
   rarity: common
   speed: 2
 - name: Bramble Buckler
@@ -165,7 +165,7 @@
   armor: 10
   effect: Take 6 additional damage from the enemies first strike
   inferred: true
-- name: Golden Boots of the hero
+- name: Golden Boots of the Hero
   rarity: golden
   speed: 4
   inferred: true

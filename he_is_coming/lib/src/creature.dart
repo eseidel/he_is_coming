@@ -209,6 +209,7 @@ class Inventory {
     return [
       ...items.map((item) => item.stats),
       ...oils.map((oil) => oil.stats),
+      ...sets.map((set) => set.stats),
     ].fold<Stats>(
       intrinsic,
       (acc, stats) => acc + stats,

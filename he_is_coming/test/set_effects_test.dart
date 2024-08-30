@@ -44,12 +44,16 @@ void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
-  test('Redwood Crown', () {
-    final needed = _lookupSet('Redwood Crown', data);
-    final player = data.createPlayer(
+  Creature playerWithSet(String name) {
+    final needed = _lookupSet(name, data);
+    return data.createPlayer(
       items: needed.items,
       edge: needed.edge,
     );
+  }
+
+  test('Redwood Crown', () {
+    final player = playerWithSet('Redwood Crown');
     expect(player.hp, 16); // 4 from rod, 2 from cloak
     expect(player.baseStats.armor, 1); // from Redwood Helmet
     expect(player.baseStats.attack, 2); // from Redwood Rod
@@ -81,5 +85,14 @@ void main() {
     // Helmet restores 6 on exposed, player is at full health at that time.
     // Crown restores all health on wounded (after the 6th hit).
     expect(result.first.hp, 14);
+  });
+
+  test("Hero's Return", () {
+    // Hero's return just gives +1 armor, +1 attack, +1 speed, no effects.
+    final player = playerWithSet("Hero's Return");
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 4);
+    expect(player.baseStats.attack, 4);
+    expect(player.baseStats.speed, 3);
   });
 }
