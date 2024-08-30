@@ -27,6 +27,7 @@ void doMain(List<String> arguments) {
   logMissingEffects(data.creatures);
   logMissingEffects(data.oils);
   logMissingEffects(data.edges);
+  logMissingEffects(data.sets);
 }
 
 void main(List<String> args) {
