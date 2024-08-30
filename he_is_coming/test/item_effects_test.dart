@@ -26,7 +26,7 @@ void main() {
 
   test('maxHp from items', () {
     final item = itemCatalog['Redwood Roast'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     // Redwood Roast gives 5 maxHp, so the player should have 15 maxHp.
     expect(player.hp, 15);
     expect(player.baseStats.maxHp, 15);
@@ -34,7 +34,7 @@ void main() {
 
   test('Stone Steak', () {
     final item = itemCatalog['Stone Steak'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -47,7 +47,7 @@ void main() {
 
   test('Redwood Cloak', () {
     final item = itemCatalog['Redwood Cloak'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 12);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -63,7 +63,7 @@ void main() {
 
   test('Golden Redwood Cloak', () {
     final item = itemCatalog['Golden Redwood Cloak'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 14);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -79,7 +79,7 @@ void main() {
 
   test('Emergency Shield', () {
     final item = itemCatalog['Emergency Shield'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.speed, 0);
     expect(player.baseStats.armor, 0);
@@ -91,7 +91,7 @@ void main() {
     expect(result.first.baseStats.armor, 0);
 
     final player2 =
-        createPlayer(intrinsic: const Stats(speed: 2), items: [item]);
+        data.createPlayer(intrinsic: const Stats(speed: 2), items: [item]);
     expect(player2.hp, 10);
     expect(player2.baseStats.speed, 2);
     expect(player2.baseStats.armor, 0);
@@ -105,7 +105,7 @@ void main() {
 
   test('Golden Emergency Shield', () {
     final item = itemCatalog['Golden Emergency Shield'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.speed, 0);
     expect(player.baseStats.armor, 0);
@@ -117,7 +117,7 @@ void main() {
     expect(result.first.baseStats.armor, 0);
 
     final player2 =
-        createPlayer(intrinsic: const Stats(speed: 2), items: [item]);
+        data.createPlayer(intrinsic: const Stats(speed: 2), items: [item]);
     expect(player2.hp, 10);
     expect(player2.baseStats.speed, 2);
     expect(player2.baseStats.armor, 0);
@@ -131,7 +131,7 @@ void main() {
 
   test('Ruby Earning', () {
     final item = itemCatalog['Ruby Earing'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -145,7 +145,7 @@ void main() {
   test('Firecracker Belt', () {
     final item = itemCatalog['Firecracker Belt'];
     final player =
-        createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
+        data.createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 1);
 
@@ -160,7 +160,7 @@ void main() {
   test('Golden Firecracker Belt', () {
     final item = itemCatalog['Golden Firecracker Belt'];
     final player =
-        createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
+        data.createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 1);
 
@@ -175,7 +175,7 @@ void main() {
   test('Redwood Helmet', () {
     // Gives 1 armor.
     final item = itemCatalog['Redwood Helmet'];
-    final player = createPlayer(items: [item], hp: 5);
+    final player = data.createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
     expect(player.baseStats.armor, 1);
 
@@ -185,7 +185,7 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 4);
 
-    final player2 = createPlayer(items: [item]);
+    final player2 = data.createPlayer(items: [item]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 1);
 
@@ -197,7 +197,7 @@ void main() {
 
   test('Golden Redwood Helmet', () {
     final item = itemCatalog['Golden Redwood Helmet'];
-    final player = createPlayer(items: [item], hp: 5);
+    final player = data.createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
     expect(player.baseStats.armor, 2);
 
@@ -208,7 +208,7 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 1);
 
-    final player2 = createPlayer(items: [item]);
+    final player2 = data.createPlayer(items: [item]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 2);
 
@@ -221,7 +221,7 @@ void main() {
   test('Explosive Surprise', () {
     final item = itemCatalog['Explosive Surprise'];
     final player =
-        createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
+        data.createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 1);
 
@@ -236,7 +236,7 @@ void main() {
   test('Cracked Bouldershield', () {
     final item = itemCatalog['Cracked Bouldershield'];
     final player =
-        createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
+        data.createPlayer(intrinsic: const Stats(armor: 1), items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 1);
 
@@ -251,7 +251,7 @@ void main() {
 
   test('Vampiric Wine', () {
     final item = itemCatalog['Vampiric Wine'];
-    final player = createPlayer(items: [item], hp: 9);
+    final player = data.createPlayer(items: [item], hp: 9);
     expect(player.hp, 9);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -263,7 +263,7 @@ void main() {
 
   test('Golden Vampiric Wine', () {
     final item = itemCatalog['Golden Vampiric Wine'];
-    final player = createPlayer(items: [item], hp: 9);
+    final player = data.createPlayer(items: [item], hp: 9);
     expect(player.hp, 9);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -275,7 +275,7 @@ void main() {
 
   test('Wounded when already below 50%', () {
     final item = itemCatalog['Vampiric Wine'];
-    final player = createPlayer(items: [item], hp: 4);
+    final player = data.createPlayer(items: [item], hp: 4);
     expect(player.hp, 4);
 
     // Wounded does not trigger when we're already below 50% health.
@@ -290,7 +290,7 @@ void main() {
 
   test('Mortal Edge', () {
     final item = itemCatalog['Mortal Edge'];
-    final player = createPlayer(items: [item], hp: 5);
+    final player = data.createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
     expect(player.baseStats.attack, 2);
 
@@ -304,7 +304,7 @@ void main() {
 
   test('Lifeblood Burst', () {
     final item = itemCatalog['Lifeblood Burst'];
-    final player = createPlayer(items: [item], hp: 5);
+    final player = data.createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -317,7 +317,7 @@ void main() {
 
   test('Chain Mail', () {
     final item = itemCatalog['Chain Mail'];
-    final player = createPlayer(
+    final player = data.createPlayer(
       intrinsic: const Stats(armor: 3),
       items: [item],
       hp: 5,
@@ -335,7 +335,7 @@ void main() {
 
   test('Stoneslab Sword', () {
     final item = itemCatalog['Stoneslab Sword'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 2);
     expect(player.baseStats.armor, 0);
@@ -350,7 +350,7 @@ void main() {
 
   test('Heart Drinker', () {
     final item = itemCatalog['Heart Drinker'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
 
     final enemy = makeEnemy(attack: 2, health: 6);
@@ -362,7 +362,7 @@ void main() {
 
   test('Gold Ring', () {
     final item = itemCatalog['Gold Ring'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.gold, 0);
 
@@ -375,7 +375,7 @@ void main() {
 
   test('Ruby Ring', () {
     final item = itemCatalog['Ruby Ring'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 1);
 
@@ -388,7 +388,7 @@ void main() {
 
   test('Golden Ruby Ring', () {
     final item = itemCatalog['Golden Ruby Ring'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 1);
 
@@ -402,7 +402,7 @@ void main() {
   test('Ruby Crown', () {
     final item = itemCatalog['Ruby Crown'];
     final player =
-        createPlayer(intrinsic: const Stats(attack: 1), items: [item]);
+        data.createPlayer(intrinsic: const Stats(attack: 1), items: [item]);
     expect(player.hp, 10);
     // We have 1 attack from intrinsic and 1 from "Wooden Stick".
     expect(player.baseStats.attack, 2);
@@ -413,7 +413,7 @@ void main() {
     // Wolf dies in 7 attacks, so we lose 6 hp.
     expect(result.first.hp, 4);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(attack: 5),
       items: [item],
     );
@@ -427,7 +427,7 @@ void main() {
 
   test('Melting Iceblade', () {
     final item = itemCatalog['Melting Iceblade'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 7);
 
@@ -444,7 +444,7 @@ void main() {
   test('Melting Iceblade attack clamping', () {
     final item = itemCatalog['Melting Iceblade'];
     final player =
-        createPlayer(intrinsic: const Stats(maxHp: 100), items: [item]);
+        data.createPlayer(intrinsic: const Stats(maxHp: 100), items: [item]);
     expect(player.hp, 100);
     expect(player.baseStats.attack, 7);
 
@@ -460,7 +460,7 @@ void main() {
 
   test('Double-edged Sword', () {
     final item = itemCatalog['Double-edged Sword'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 5);
 
@@ -474,7 +474,7 @@ void main() {
   test('Sapphire Crown', () {
     final item = itemCatalog['Sapphire Crown'];
     final player =
-        createPlayer(intrinsic: const Stats(armor: 15), items: [item]);
+        data.createPlayer(intrinsic: const Stats(armor: 15), items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 15);
 
@@ -485,7 +485,7 @@ void main() {
     expect(result.first.hp, 10);
     expect(result.first.baseStats.armor, 15);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(armor: 14),
       items: [item],
     );
@@ -502,7 +502,7 @@ void main() {
   test('Citrine Ring', () {
     final item = itemCatalog['Citrine Ring'];
     final player =
-        createPlayer(items: [item], intrinsic: const Stats(speed: 2));
+        data.createPlayer(items: [item], intrinsic: const Stats(speed: 2));
     expect(player.baseStats.speed, 2);
 
     // Citrine Ring deals damage equal to our speed at the start of battle.
@@ -511,7 +511,7 @@ void main() {
     expect(result.first.hp, 7);
 
     final player2 =
-        createPlayer(items: [item], intrinsic: const Stats(speed: -2));
+        data.createPlayer(items: [item], intrinsic: const Stats(speed: -2));
     expect(player2.baseStats.speed, -2);
 
     // Speed can be negative, but won't deal negative damage.
@@ -523,7 +523,7 @@ void main() {
   test('Marble Mirror', () {
     final item = itemCatalog['Marble Mirror'];
     final player =
-        createPlayer(items: [item], intrinsic: const Stats(attack: 1));
+        data.createPlayer(items: [item], intrinsic: const Stats(attack: 1));
     expect(player.hp, 10);
     expect(player.baseStats.attack, 2);
     expect(player.baseStats.armor, 0);
@@ -536,7 +536,7 @@ void main() {
     expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 0);
 
-    final player2 = createPlayer(items: [item]);
+    final player2 = data.createPlayer(items: [item]);
     expect(player2.hp, 10);
     expect(player2.baseStats.attack, 1);
     expect(player2.baseStats.armor, 0);
@@ -552,7 +552,7 @@ void main() {
   test('Leather Boots', () {
     final item = itemCatalog['Leather Boots'];
     final player =
-        createPlayer(items: [item], intrinsic: const Stats(speed: 2));
+        data.createPlayer(items: [item], intrinsic: const Stats(speed: 2));
     expect(player.hp, 10);
     expect(player.baseStats.speed, 2);
     expect(player.baseStats.attack, 1);
@@ -565,7 +565,7 @@ void main() {
     expect(result.first.baseStats.attack, 1);
 
     final player2 =
-        createPlayer(items: [item], intrinsic: const Stats(speed: 1));
+        data.createPlayer(items: [item], intrinsic: const Stats(speed: 1));
     expect(player2.hp, 10);
     expect(player2.baseStats.speed, 1);
     expect(player2.baseStats.attack, 1);
@@ -577,7 +577,7 @@ void main() {
 
   test('Plated Helmet', () {
     final item = itemCatalog['Plated Helmet'];
-    final player = createPlayer(items: [item], hp: 5);
+    final player = data.createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
     expect(player.baseStats.armor, 0);
 
@@ -589,7 +589,7 @@ void main() {
     expect(result.first.hp, 4);
     expect(result.first.baseStats.armor, 0);
 
-    final player2 = createPlayer(items: [item]);
+    final player2 = data.createPlayer(items: [item]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
 
@@ -601,7 +601,7 @@ void main() {
 
   test('Ore Heart', () {
     final item = itemCatalog['Ore Heart'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -614,7 +614,7 @@ void main() {
 
     final other =
         Item('other', ItemRarity.common, material: ItemMaterial.stone);
-    final player2 = createPlayer(items: [item, other]);
+    final player2 = data.createPlayer(items: [item, other]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
 
@@ -626,7 +626,7 @@ void main() {
 
   test('Granite Hammer', () {
     final item = itemCatalog['Granite Hammer'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 2);
     expect(player.baseStats.armor, 0);
@@ -640,7 +640,7 @@ void main() {
     expect(result.first.baseStats.attack, 2);
     expect(result.first.baseStats.armor, 0);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(armor: 1),
       items: [item],
     );
@@ -659,7 +659,7 @@ void main() {
 
   test('Iron Transfusion', () {
     final item = itemCatalog['Iron Transfusion'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -675,7 +675,7 @@ void main() {
   test('Iron Transfusion can kill', () {
     final item = itemCatalog['Iron Transfusion'];
     final healOnHit = Item.test(effect: onHit((c) => c.restoreHealth(1)));
-    final player = createPlayer(items: [item, item, healOnHit], hp: 1);
+    final player = data.createPlayer(items: [item, item, healOnHit], hp: 1);
     expect(player.hp, 1);
     expect(player.baseStats.armor, 0);
 
@@ -689,7 +689,7 @@ void main() {
 
   test('Fortified Gauntlet', () {
     final item = itemCatalog['Fortified Gauntlet'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -699,7 +699,7 @@ void main() {
     expect(result.first.hp, 5);
     expect(result.first.baseStats.armor, 0);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(armor: 1),
       items: [item],
     );
@@ -718,7 +718,7 @@ void main() {
       effect: onTurn((c) => c.gainArmor(1)),
     );
     final gauntlet = itemCatalog['Fortified Gauntlet'];
-    final player = createPlayer(items: [armor, gauntlet]);
+    final player = data.createPlayer(items: [armor, gauntlet]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -729,7 +729,7 @@ void main() {
     expect(result.first.hp, 10);
     expect(result.first.baseStats.armor, 0);
 
-    final player2 = createPlayer(items: [gauntlet, armor]);
+    final player2 = data.createPlayer(items: [gauntlet, armor]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
 
@@ -747,7 +747,7 @@ void main() {
     );
     final item = itemCatalog['Iron Rose'];
     // Order of the items should not matter in this case.
-    final player = createPlayer(items: [item, healOnHit]);
+    final player = data.createPlayer(items: [item, healOnHit]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -762,7 +762,7 @@ void main() {
     expect(result.first.baseStats.armor, 0);
 
     // This time w/o the healOnHit item, the iron rose won't trigger.
-    final player2 = createPlayer(items: [item], hp: 5);
+    final player2 = data.createPlayer(items: [item], hp: 5);
     expect(player2.hp, 5);
     expect(player2.baseStats.armor, 0);
 
@@ -773,7 +773,7 @@ void main() {
 
   test('Featherweight Coat', () {
     final item = itemCatalog['Featherweight Coat'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
     expect(player.baseStats.speed, 0);
@@ -786,7 +786,7 @@ void main() {
     expect(result.first.baseStats.armor, 0);
     expect(result.first.baseStats.speed, 0);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(armor: 1),
       items: [item],
     );
@@ -803,18 +803,18 @@ void main() {
 
   test('Item effects are cumulative', () {
     final item = itemCatalog['Redwood Roast'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 15);
     expect(player.baseStats.maxHp, 15);
 
-    final player2 = createPlayer(items: [item, item]);
+    final player2 = data.createPlayer(items: [item, item]);
     expect(player2.hp, 20);
     expect(player2.baseStats.maxHp, 20);
   });
 
   test('Sticky Web', () {
     final item = itemCatalog['Sticky Web'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.speed, 0);
 
@@ -824,7 +824,7 @@ void main() {
     expect(result.first.hp, 5);
     expect(result.first.baseStats.speed, 0);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(speed: 2),
       items: [item],
     );
@@ -839,7 +839,7 @@ void main() {
 
   test('Impressive Physique', () {
     final item = itemCatalog['Impressive Physique'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -850,7 +850,7 @@ void main() {
     expect(result.first.baseStats.armor, 0);
 
     final player2 =
-        createPlayer(items: [item], intrinsic: const Stats(armor: 1));
+        data.createPlayer(items: [item], intrinsic: const Stats(armor: 1));
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 1);
 
@@ -864,7 +864,7 @@ void main() {
   test('Steelbond Curse', () {
     // Steelbond Curse is not a weapon, so we keep our wooden stick.
     final item = itemCatalog['Steelbond Curse'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
     expect(player.baseStats.attack, 3);
@@ -880,7 +880,7 @@ void main() {
 
   test('Bejeweled Blade', () {
     final item = itemCatalog['Bejeweled Blade'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 0);
 
@@ -896,7 +896,7 @@ void main() {
       kind: ItemKind.jewelry,
       ItemRarity.common,
     );
-    final player2 = createPlayer(items: [item, jewelry]);
+    final player2 = data.createPlayer(items: [item, jewelry]);
     expect(player2.hp, 10);
     // We've implemented Bejeweled Blade onBattle so this is still 0.
     expect(player2.baseStats.attack, 0);
@@ -916,7 +916,7 @@ void main() {
     );
 
     final item = itemCatalog["Woodcutter's Axe"];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 2);
 
@@ -926,7 +926,7 @@ void main() {
 
     // If we fight w/o the axe, the wolf heals 1 hp every turn, taking
     // 5 turns to kill so we take 4 dmg.
-    final player2 = createPlayer(intrinsic: const Stats(attack: 1));
+    final player2 = data.createPlayer(intrinsic: const Stats(attack: 1));
     expect(player2.hp, 10);
     expect(player2.baseStats.attack, 2);
     final result2 = doBattle(first: player2, second: selfHealing);
@@ -941,7 +941,7 @@ void main() {
 
   test('Emerald Ring', () {
     final item = itemCatalog['Emerald Ring'];
-    final player = createPlayer(items: [item], hp: 7);
+    final player = data.createPlayer(items: [item], hp: 7);
     expect(player.hp, 7);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -951,7 +951,7 @@ void main() {
   });
   test('Golden Emerald Ring', () {
     final item = itemCatalog['Golden Emerald Ring'];
-    final player = createPlayer(items: [item], hp: 5);
+    final player = data.createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -960,7 +960,7 @@ void main() {
     expect(result.first.hp, 4);
 
     // Test with full health
-    final player2 = createPlayer(items: [item]);
+    final player2 = data.createPlayer(items: [item]);
     expect(player2.hp, 10);
 
     final result2 = doBattle(first: player2, second: enemy);
@@ -971,7 +971,7 @@ void main() {
 
   test('Ironskin Potion', () {
     final item = itemCatalog['Ironskin Potion'];
-    final player = createPlayer(items: [item], hp: 6);
+    final player = data.createPlayer(items: [item], hp: 6);
     expect(player.hp, 6);
     expect(player.baseStats.armor, 0);
 
@@ -981,7 +981,7 @@ void main() {
     expect(result.first.hp, 5);
     expect(result.first.baseStats.armor, 0);
 
-    final player2 = createPlayer(items: [item], hp: 10);
+    final player2 = data.createPlayer(items: [item], hp: 10);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
     final result2 = doBattle(first: player2, second: enemy);
@@ -992,7 +992,7 @@ void main() {
 
   test('Double-plated Armor', () {
     final item = itemCatalog['Double-plated Armor'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 2);
 
@@ -1006,7 +1006,7 @@ void main() {
 
   test('Sapphire Earing', () {
     final item = itemCatalog['Sapphire Earing'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -1020,7 +1020,7 @@ void main() {
 
   test('Emerald Earing', () {
     final item = itemCatalog['Emerald Earing'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -1033,7 +1033,7 @@ void main() {
 
   test('Emerald Crown', () {
     final item = itemCatalog['Emerald Crown'];
-    final player = createPlayer(items: [item], hp: 7);
+    final player = data.createPlayer(items: [item], hp: 7);
     expect(player.hp, 7);
 
     // Emerald Crown does nothing if we don't have 20 or more max hp.
@@ -1041,7 +1041,7 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 2);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       items: [item],
       intrinsic: const Stats(maxHp: 20),
       hp: 7,
@@ -1051,7 +1051,7 @@ void main() {
     // Emerald Crown heals to full on battle start if we have 20 or more max hp.
     expect(result2.first.hp, 15);
 
-    final player3 = createPlayer(
+    final player3 = data.createPlayer(
       items: [item],
       intrinsic: const Stats(maxHp: 20),
       hp: 20,
@@ -1064,7 +1064,7 @@ void main() {
 
   test('Sapphire Ring', () {
     final item = itemCatalog['Sapphire Ring'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
@@ -1098,7 +1098,7 @@ void main() {
 
   test('Horned Helmet', () {
     final item = itemCatalog['Horned Helmet'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 2);
 
@@ -1113,7 +1113,7 @@ void main() {
 
   test('Golden Horned Helmet', () {
     final item = itemCatalog['Golden Horned Helmet'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 4);
 
@@ -1128,7 +1128,7 @@ void main() {
 
   test('Crimson Cloak', () {
     final item = itemCatalog['Crimson Cloak'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
 
     // Note this wolf is attacking with 2 rather than 1.
@@ -1137,8 +1137,8 @@ void main() {
     // Crimson Cloak heals onTakeDamage, so for every 2 dmg we take, we heal 1.
     expect(result.first.hp, 5);
 
-    final player2 =
-        createPlayer(items: [item], hp: 5, intrinsic: const Stats(armor: 10));
+    final player2 = data
+        .createPlayer(items: [item], hp: 5, intrinsic: const Stats(armor: 10));
     expect(player2.hp, 5);
     final result2 = doBattle(first: player2, second: enemy);
     // Crimson Cloak triggers even if armor blocks the damage?
@@ -1147,7 +1147,7 @@ void main() {
 
   test('Tree Sap', () {
     final item = itemCatalog['Tree Sap'];
-    final player = createPlayer(items: [item], hp: 8);
+    final player = data.createPlayer(items: [item], hp: 8);
     expect(player.baseStats.maxHp, 15);
     expect(player.hp, 8);
 
@@ -1157,7 +1157,7 @@ void main() {
     expect(result.first.hp, 8);
 
     final heals = Item.test(effect: onHeal((c) => c.gainArmor(1)));
-    final player2 = createPlayer(items: [item, heals], hp: 8);
+    final player2 = data.createPlayer(items: [item, heals], hp: 8);
     expect(player2.baseStats.maxHp, 15);
     expect(player2.hp, 8);
     final result2 = doBattle(first: player2, second: enemy);
@@ -1169,7 +1169,7 @@ void main() {
 
   test('Petrifying Flask', () {
     final item = itemCatalog['Petrifying Flask'];
-    final player = createPlayer(items: [item], hp: 5);
+    final player = data.createPlayer(items: [item], hp: 5);
     expect(player.hp, 5);
 
     final enemy = makeEnemy(attack: 1, health: 6);
@@ -1182,7 +1182,7 @@ void main() {
 
   test('Ruby Gemstone', () {
     final item = itemCatalog['Ruby Gemstone'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.attack, 1);
 
@@ -1193,7 +1193,7 @@ void main() {
     expect(result.first.hp, 9);
     expect(result.first.baseStats.attack, 1);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(attack: 1),
       items: [item],
     );
@@ -1207,7 +1207,7 @@ void main() {
 
   test('Bloody Steak', () {
     final item = itemCatalog['Bloody Steak'];
-    final player = createPlayer(items: [item], hp: 6);
+    final player = data.createPlayer(items: [item], hp: 6);
     expect(player.hp, 6);
 
     final enemy = makeEnemy(attack: 2, health: 6);
@@ -1220,7 +1220,7 @@ void main() {
 
   test('Assault Greaves', () {
     final item = itemCatalog['Assault Greaves'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
 
     final enemy = makeEnemy(attack: 1, health: 6, speed: 2);
@@ -1229,7 +1229,7 @@ void main() {
     // Meaning we kill the wolf in 3 turns rather than 5.
     expect(result.first.hp, 7);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(armor: 1),
       items: [item],
     );
@@ -1244,7 +1244,7 @@ void main() {
   test('Thorn Ring', () {
     final item = itemCatalog['Thorn Ring'];
     final player =
-        createPlayer(items: [item], intrinsic: const Stats(armor: 1));
+        data.createPlayer(items: [item], intrinsic: const Stats(armor: 1));
     expect(player.hp, 10);
     expect(player.baseStats.armor, 1);
 
@@ -1259,7 +1259,7 @@ void main() {
   test('Bramble Buckler', () {
     final item = itemCatalog['Bramble Buckler'];
     final player =
-        createPlayer(items: [item], intrinsic: const Stats(armor: 1));
+        data.createPlayer(items: [item], intrinsic: const Stats(armor: 1));
     expect(player.hp, 10);
     expect(player.baseStats.armor, 3);
 
@@ -1274,7 +1274,7 @@ void main() {
 
   test('Stormcloud Spear', () {
     final item = itemCatalog['Stormcloud Spear'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
 
     final enemy = makeEnemy(attack: 1, health: 26);
@@ -1290,7 +1290,7 @@ void main() {
 
   test('Explosive Sword', () {
     final item = itemCatalog['Explosive Sword'];
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     expect(player.hp, 10);
 
     final enemy = makeEnemy(attack: 1, health: 20);
@@ -1300,7 +1300,7 @@ void main() {
     // We kill the wolf in 5 hits, taking 4 dmg.
     expect(result.first.hp, 6);
 
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(armor: 1),
       items: [item],
     );

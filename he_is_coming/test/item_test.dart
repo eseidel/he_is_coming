@@ -23,7 +23,7 @@ void main() {
   test('Unique items can only be equipped once', () {
     final item = Item('Test', ItemRarity.common, isUnique: true);
     expect(
-      () => createPlayer(items: [item, item]),
+      () => data.createPlayer(items: [item, item]),
       throwsA(isA<ItemException>()),
     );
   });

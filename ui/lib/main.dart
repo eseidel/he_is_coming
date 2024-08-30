@@ -237,6 +237,7 @@ class _BattlePageState extends State<BattlePage> {
       items: _endConfig.items.sublist(0, Inventory.itemSlotCount(level)),
       edge: _endConfig.edge,
       oils: _endConfig.oils,
+      setBonuses: widget.data.sets,
     );
   }
 

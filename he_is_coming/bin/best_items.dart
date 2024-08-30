@@ -138,8 +138,15 @@ class BestItemFinder {
       }
       try {
         // Constructor can throw if items break rules (e.g. duplicate unique).
-        children
-            .add(Inventory(level: level, items: items, edge: edge, oils: oils));
+        children.add(
+          Inventory(
+            level: level,
+            items: items,
+            edge: edge,
+            oils: oils,
+            setBonuses: data.sets,
+          ),
+        );
       } on ItemException {
         continue;
       }
@@ -175,6 +182,7 @@ class BestItemFinder {
         items: mutated,
         edge: edge,
         oils: oils,
+        setBonuses: data.sets,
       );
     } on ItemException {
       return inventory;

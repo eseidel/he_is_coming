@@ -55,11 +55,13 @@ class Inventory {
     required List<Item> items,
     required this.edge,
     required this.oils,
+    required SetBonusCatalog setBonuses,
   }) {
     this.items = _enforceItemRules(level, items);
     if (oils.length > 3) {
       throw UnimplementedError('Too many oils');
     }
+    sets = _resolveSetBonuses(this.items, edge, setBonuses);
   }
 
   /// Create a random creature configuration.
@@ -76,6 +78,7 @@ class Inventory {
       items: items,
       edge: edge,
       oils: oils,
+      setBonuses: data.sets,
     );
   }
 
@@ -99,6 +102,7 @@ class Inventory {
       items: items,
       edge: edge,
       oils: oils,
+      setBonuses: data.sets,
     );
   }
 
@@ -107,6 +111,22 @@ class Inventory {
       : edge = null,
         oils = const <Oil>[],
         items = [];
+
+  static List<SetBonus> _resolveSetBonuses(
+    List<Item> items,
+    Edge? edge,
+    SetBonusCatalog setBonuses,
+  ) {
+    // Gather all "names" in the inventory.
+    final names = {
+      for (final item in items) item.name,
+      if (edge != null) edge.name,
+    };
+    // Walk through the set bonuses and see if any of them are satisfied.
+    return setBonuses.items.where((bonus) {
+      return bonus.parts.every(names.contains);
+    }).toList();
+  }
 
   /// Returns number of item slots for the level.
   static int itemSlotCount(Level level) {
@@ -193,6 +213,9 @@ class Inventory {
   /// Items in the inventory.
   late final List<Item> items;
 
+  /// Set bonuses applied to the inventory.
+  late final List<SetBonus> sets;
+
   /// Count of items in the inventory.
   int materialCount(ItemMaterial material) {
     return items.where((item) => item.material == material).length;
@@ -225,26 +248,35 @@ Player playerWithInventory(Level level, Inventory inventory) {
   );
 }
 
-/// Create a player.
-Player createPlayer({
-  Stats intrinsic = const Stats(),
-  List<Item> items = const <Item>[],
-  Edge? edge,
-  List<Oil> oils = const <Oil>[],
-  int? hp,
-  int? gold,
-  Level level = Level.end,
-}) {
-  return Creature(
-    name: _kPlayerName,
-    level: level,
-    // If maxHp wasn't set, default to 10.
-    intrinsic:
-        (intrinsic.maxHp == 0) ? intrinsic.copyWith(maxHp: 10) : intrinsic,
-    gold: gold ?? 0,
-    hp: hp,
-    inventory: Inventory(level: level, edge: edge, oils: oils, items: items),
-  );
+/// Adds a method to create a player from a data object.
+extension CreatePlayer on Data {
+  /// Create a player.
+  Player createPlayer({
+    Stats intrinsic = const Stats(),
+    List<Item> items = const <Item>[],
+    Edge? edge,
+    List<Oil> oils = const <Oil>[],
+    int? hp,
+    int? gold,
+    Level level = Level.end,
+  }) {
+    return Creature(
+      name: _kPlayerName,
+      level: level,
+      // If maxHp wasn't set, default to 10.
+      intrinsic:
+          (intrinsic.maxHp == 0) ? intrinsic.copyWith(maxHp: 10) : intrinsic,
+      gold: gold ?? 0,
+      hp: hp,
+      inventory: Inventory(
+        level: level,
+        edge: edge,
+        oils: oils,
+        items: items,
+        setBonuses: sets,
+      ),
+    );
+  }
 }
 
 /// Create an enemy

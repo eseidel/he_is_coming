@@ -1,6 +1,4 @@
-import 'package:he_is_coming/src/battle.dart';
-import 'package:he_is_coming/src/data.dart';
-import 'package:he_is_coming/src/logger.dart';
+import 'package:he_is_coming/he_is_coming.dart';
 
 export 'package:he_is_coming/src/battle.dart';
 export 'package:he_is_coming/src/data.dart';
@@ -43,14 +41,14 @@ void runSim() {
     'Armor Oil',
     'Speed Oil',
   ];
-  final player = createPlayer(
+  final player = data.createPlayer(
     items: items.map((name) => data.items[name]).toList(),
     edge: data.edges[edge],
     oils: oils.map((name) => data.oils[name]).toList(),
   );
   final enemy = data.creatures['Woodland Abomination'];
 
-  // final player = createPlayer(items: [data.items['Stone Steak']]);
+  // final player = data.createPlayer(items: [data.items['Stone Steak']]);
   // final enemy = data.creatures['Spider Level 1'];
 
   final result = Battle.resolve(first: player, second: enemy, verbose: true);

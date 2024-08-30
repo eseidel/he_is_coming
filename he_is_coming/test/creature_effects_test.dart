@@ -25,7 +25,7 @@ void main() {
   final creatures = data.creatures;
 
   test('Spider Level 1 effect', () {
-    final player = createPlayer();
+    final player = data.createPlayer();
     expect(player.hp, 10);
     final enemy = creatures['Spider Level 1'];
     final result = doBattle(first: player, second: enemy);
@@ -34,7 +34,7 @@ void main() {
     expect(result.first.hp, 5);
     expect(result.winner, result.first);
 
-    final player2 = createPlayer(intrinsic: const Stats(speed: 3));
+    final player2 = data.createPlayer(intrinsic: const Stats(speed: 3));
     final result2 = doBattle(first: player2, second: enemy);
     // We are the same speed as the spider so it doesn't get the bonus damage
     // and only hits once (we kill it before it can hit a second time).
@@ -42,7 +42,7 @@ void main() {
   });
 
   test('Bat Level 1', () {
-    final player = createPlayer();
+    final player = data.createPlayer();
     final enemy = creatures['Bat Level 1'];
     final result = doBattle(first: player, second: enemy);
     // Bat is faster than us so should heal 1 on every other turn.
@@ -52,7 +52,7 @@ void main() {
   });
 
   test('Hedgehog Level 1', () {
-    final player = createPlayer();
+    final player = data.createPlayer();
     final enemy = creatures['Hedgehog Level 1'];
     final result = doBattle(first: player, second: enemy);
     // Hedgehog gains 3 thorns on battle start, dies in two hits (1 armor).
@@ -60,7 +60,7 @@ void main() {
   });
 
   test('Black Knight', () {
-    final player = createPlayer();
+    final player = data.createPlayer();
     final enemy = creatures['Black Knight'];
     final result = doBattle(first: player, second: enemy);
     // Black Knight should gain our attack so do 2 per hit.
@@ -72,7 +72,7 @@ void main() {
     // I need to confirm this in-game, but...
     // Player onBattle happens before enemy onBattle (regardless of speed?)
     // so black knight should get our increased attack from onBattle effects.
-    final player2 = createPlayer(
+    final player2 = data.createPlayer(
       intrinsic: const Stats(maxHp: 20),
       items: [
         Item.test(
@@ -89,7 +89,8 @@ void main() {
   });
 
   test('Ironstone Golem', () {
-    final player = createPlayer(intrinsic: const Stats(attack: 2, maxHp: 20));
+    final player =
+        data.createPlayer(intrinsic: const Stats(attack: 2, maxHp: 20));
     final enemy = creatures['Ironstone Golem'];
     final result = doBattle(first: player, second: enemy);
     // Ironstone hits for 4, killing us in 5 hits (at 20hp)
@@ -100,7 +101,8 @@ void main() {
   });
 
   test('Granite Griffin', () {
-    final player = createPlayer(intrinsic: const Stats(attack: 2, maxHp: 50));
+    final player =
+        data.createPlayer(intrinsic: const Stats(attack: 2, maxHp: 50));
     expect(player.hp, 50);
     expect(player.baseStats.attack, 3);
     final enemy = creatures['Granite Griffin'];

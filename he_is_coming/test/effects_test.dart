@@ -24,7 +24,7 @@ void main() {
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Enemies give gold', () {
-    final player = createPlayer();
+    final player = data.createPlayer();
     expect(player.hp, 10);
     expect(player.gold, 0);
 
@@ -37,7 +37,7 @@ void main() {
   });
 
   test('Check for Death after every trigger', () {
-    final player = createPlayer(
+    final player = data.createPlayer(
       items: [Item.test(effect: onTakeDamage((c) => c.restoreHealth(1)))],
     );
     final enemy = makeEnemy(attack: 10, health: 6);

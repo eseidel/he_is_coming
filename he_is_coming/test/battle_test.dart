@@ -26,7 +26,7 @@ void main() {
   test('Infinite battle', () {
     final healOnHit = onHit((c) => c.restoreHealth(1));
     final item = Item.test(effect: healOnHit);
-    final player = createPlayer(items: [item]);
+    final player = data.createPlayer(items: [item]);
     final enemy = makeEnemy(attack: 1, health: 5, effect: healOnHit);
     final result = doBattle(first: player, second: enemy);
     // Stuck battles result in player wins.

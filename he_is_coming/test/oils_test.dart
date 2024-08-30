@@ -24,20 +24,20 @@ void main() {
 
   test('Attack Oil', () {
     final oil = data.oils['Attack Oil'];
-    final player = createPlayer(oils: [oil]);
+    final player = data.createPlayer(oils: [oil]);
     // One from the oil and one from the Wooden Stick.
     expect(player.baseStats.attack, 2);
   });
 
   test('Armor Oil', () {
     final oil = data.oils['Armor Oil'];
-    final player = createPlayer(oils: [oil]);
+    final player = data.createPlayer(oils: [oil]);
     expect(player.baseStats.armor, 1);
   });
 
   test('Speed Oil', () {
     final oil = data.oils['Speed Oil'];
-    final player = createPlayer(oils: [oil]);
+    final player = data.createPlayer(oils: [oil]);
     expect(player.baseStats.speed, 1);
   });
 }
