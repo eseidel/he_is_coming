@@ -344,9 +344,10 @@ class _BattlePageState extends State<BattlePage> {
                       data: widget.data,
                       setItem: _setItem,
                     ),
-                    ElevatedButton(
+                    ElevatedButton.icon(
                       onPressed: _reroll,
-                      child: const Icon(Icons.casino),
+                      icon: const Icon(Icons.casino),
+                      label: const Text('Reroll'),
                     ),
                   ],
                 ),
@@ -446,7 +447,9 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
         Expanded(
           child: Column(
             children: <Widget>[
-              for (int i = 0; i < Inventory.itemSlotCount(widget.level); i++)
+              itemSlot(0),
+              Text(widget.inventory.edge?.name ?? 'No Edge'),
+              for (int i = 1; i < Inventory.itemSlotCount(widget.level); i++)
                 itemSlot(i),
             ],
           ),
