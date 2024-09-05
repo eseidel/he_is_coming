@@ -70,6 +70,8 @@ class _MyHomePageState extends State<HomePage> {
     loadData().then((value) {
       setState(() {
         data = value;
+        // TODO(eseidel): Remove defaultPlayerWeapon.
+        Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
         isLoading = false;
       });
     });
@@ -241,6 +243,17 @@ class _BattlePageState extends State<BattlePage> {
     );
   }
 
+  void _setItem(int index, Item? item) {
+    setState(() {
+      if (item == null) {
+        _endConfig.items.removeAt(index);
+      } else {
+        _endConfig.items[index] = item;
+      }
+      _updateResults();
+    });
+  }
+
   void _updateResults() {
     // For each enemy, run the battle and gather the results.
     final player = playerWithInventory(level, inventory);
@@ -291,12 +304,13 @@ class _BattlePageState extends State<BattlePage> {
     Row resultLine(BattleResult result) {
       final change = result.firstDelta;
       final survived = result.first.isAlive;
-      final survivedText = survived ? '✅' : '❌';
+      final survivedText = survived ? '✅' : '💀';
       return Row(
         children: [
+          Text(result.second.name),
+          const Spacer(),
           Text(survivedText),
           battleDelta(change),
-          Text(result.second.name),
         ],
       );
     }
@@ -307,26 +321,37 @@ class _BattlePageState extends State<BattlePage> {
       ),
       body: Column(
         children: <Widget>[
+          SizedBox(
+            width: 300,
+            child: NesIterableOptions(
+              values: Level.values,
+              onChange: _setLevel,
+              optionBuilder: (context, level) => Text(
+                level.name,
+                style: TextStyle(color: Palette.white),
+              ),
+              value: level,
+            ),
+          ),
           Row(
             children: <Widget>[
               Expanded(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    NesIterableOptions(
-                      values: Level.values,
-                      onChange: _setLevel,
-                      value: level,
+                  children: [
+                    PlayerBattleView(
+                      inventory: inventory,
+                      level: level,
+                      data: widget.data,
+                      setItem: _setItem,
                     ),
                     ElevatedButton(
                       onPressed: _reroll,
                       child: const Icon(Icons.casino),
                     ),
-                    const Text('Player'),
-                    ...inventory.items.map((item) => Text(item.name)),
                   ],
                 ),
               ),
+              const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,6 +362,206 @@ class _BattlePageState extends State<BattlePage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Displays the inventory for the battle view.
+class PlayerBattleView extends StatefulWidget {
+  /// PlayerBattleView constructor
+  const PlayerBattleView({
+    required this.inventory,
+    required this.level,
+    required this.data,
+    required this.setItem,
+    super.key,
+  });
+
+  /// Inventory
+  final Inventory inventory;
+
+  /// Level
+  final Level level;
+
+  /// Data
+  final Data data;
+
+  /// Callback to set an item in a specific slot.
+  final void Function(int index, Item? item) setItem;
+
+  @override
+  State<PlayerBattleView> createState() => _PlayerBattleViewState();
+}
+
+class _PlayerBattleViewState extends State<PlayerBattleView> {
+  final controller = SearchController();
+  final List<Item> weaponsSearchHistory = [];
+  final List<Item> nonWeaponsSearchHistory = [];
+
+  Widget itemSlot(int index) {
+    final isWeapon = index == 0;
+    final maybeItem = (index < widget.inventory.items.length)
+        ? widget.inventory.items[index]
+        : null;
+    final possibleItems =
+        isWeapon ? widget.data.items.weapons : widget.data.items.nonWeapons;
+    final searchHistory =
+        isWeapon ? weaponsSearchHistory : nonWeaponsSearchHistory;
+    return ItemSlot(
+      item: maybeItem,
+      possibleItems: possibleItems,
+      searchHistory: searchHistory,
+      changeItem: (item) {
+        if (item != null) {
+          searchHistory.insert(0, item);
+          if (searchHistory.length > 5) {
+            searchHistory.removeLast();
+          }
+        }
+        widget.setItem(index, item);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final stats = widget.inventory.statsWithItems(const Stats(maxHp: 10));
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(
+          width: 100,
+          child: Column(
+            children: StatType.values.map((statType) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: StatLine(
+                  stats: stats,
+                  statType: statType,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        Expanded(
+          child: Column(
+            children: <Widget>[
+              for (int i = 0; i < Inventory.itemSlotCount(widget.level); i++)
+                itemSlot(i),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Displays an item slot with a search anchor.
+class ItemSlot extends StatefulWidget {
+  /// ItemSlot constructor
+  const ItemSlot({
+    required this.item,
+    required this.possibleItems,
+    required this.changeItem,
+    super.key,
+    this.searchHistory = const [],
+  });
+
+  /// Item to display
+  final Item? item;
+
+  /// List of all available items for this slot.
+  final List<Item> possibleItems;
+
+  /// List of items that have been searched for.
+  final List<Item> searchHistory;
+
+  /// Callback to change the item.
+  final void Function(Item? item) changeItem;
+
+  @override
+  State<ItemSlot> createState() => _ItemSlotState();
+}
+
+class _ItemSlotState extends State<ItemSlot> {
+  final SearchController controller = SearchController();
+
+  Iterable<Widget> getHistoryList(SearchController controller) {
+    return widget.searchHistory.map(
+      (Item item) => ListTile(
+        leading: const Icon(Icons.history),
+        title: Text(item.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.call_missed),
+          onPressed: () {
+            controller
+              ..text = item.name
+              ..selection =
+                  TextSelection.collapsed(offset: controller.text.length);
+          },
+        ),
+      ),
+    );
+  }
+
+  Iterable<Widget> getSuggestions(SearchController controller) {
+    final input = controller.value.text;
+    return widget.possibleItems
+        .where(
+          (Item item) => item.name.toLowerCase().contains(input.toLowerCase()),
+        )
+        .map(
+          (Item item) => ListTile(
+            leading: CircleAvatar(backgroundColor: item.color),
+            title: Text(item.name),
+            trailing: IconButton(
+              icon: const Icon(Icons.call_missed),
+              onPressed: () {
+                controller
+                  ..text = item.name
+                  ..selection =
+                      TextSelection.collapsed(offset: controller.text.length);
+              },
+            ),
+            onTap: () {
+              controller.closeView(item.name);
+              widget.changeItem(item);
+            },
+          ),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final searchButton = SearchAnchor(
+      searchController: controller,
+      builder: (BuildContext context, SearchController controller) {
+        return IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            controller.openView();
+          },
+        );
+      },
+      suggestionsBuilder: (BuildContext context, SearchController controller) {
+        if (controller.text.isEmpty) {
+          if (widget.searchHistory.isNotEmpty) {
+            return getHistoryList(controller);
+          }
+          return <Widget>[const Center(child: Text('No search history.'))];
+        }
+        return getSuggestions(controller);
+      },
+    );
+    return Row(
+      children: <Widget>[
+        if (widget.item != null) ...[
+          Text(widget.item!.name),
+          const SizedBox(width: 4),
+        ],
+        const Spacer(),
+        searchButton,
+      ],
     );
   }
 }

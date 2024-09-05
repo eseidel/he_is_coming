@@ -4,7 +4,9 @@ import 'package:nes_ui/nes_ui.dart';
 import 'package:ui/src/scrolling_grid.dart';
 import 'package:ui/src/style.dart';
 
-extension on ItemRarity {
+/// Adds a color property to ItemRarity.
+extension ItemRarityColor on ItemRarity {
+  /// Color for this rarity.
   Color get color {
     switch (this) {
       case ItemRarity.common:
@@ -21,7 +23,9 @@ extension on ItemRarity {
   }
 }
 
-extension on Item {
+/// Adds a color property to Item.
+extension ItemColor on Item {
+  /// Color for this item.
   Color get color {
     if (kind == ItemKind.weapon) {
       return Palette.weapon;
@@ -35,6 +39,7 @@ extension on Item {
     return Colors.orange;
   }
 
+  /// Border color for this item.
   Color get borderColor {
     if (kind == ItemKind.weapon) {
       return Palette.weapon;
@@ -42,10 +47,12 @@ extension on Item {
     return Palette.white;
   }
 
+  /// Icon for this item.
   IconData get icon {
     return Icons.help;
   }
 
+  /// Rarity icon for this item.
   Widget get rarityIcon {
     return Icon(
       Icons.circle,
@@ -54,6 +61,7 @@ extension on Item {
     );
   }
 
+  /// Tags for this item.
   List<String> get tags {
     return [
       if (isUnique) 'Unique',
@@ -66,7 +74,9 @@ extension on Item {
   }
 }
 
-extension on StatType {
+/// Adds a color property to StatType.
+extension StatColor on StatType {
+  /// Color for this stat.
   Color get color {
     switch (this) {
       case StatType.attack:
@@ -80,6 +90,7 @@ extension on StatType {
     }
   }
 
+  /// Icon for this stat.
   Widget icon(double size) {
     final nesSize = Size(size, size);
     switch (this) {
