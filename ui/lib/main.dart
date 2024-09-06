@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:nes_ui/nes_ui.dart';
+import 'package:super_tooltip/super_tooltip.dart';
 import 'package:ui/src/compendium.dart';
 import 'package:ui/src/scrolling_grid.dart';
 import 'package:ui/src/style.dart';
@@ -519,16 +520,14 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
   final List<Item> nonWeaponsSearchHistory = [];
 
   Widget itemSlot(int index) {
-    final maybeItem = (index < widget.inventory.items.length)
-        ? widget.inventory.items[index]
-        : null;
-    final slot = ItemSlot(item: maybeItem);
-    if (widget.clearItem == null || maybeItem == null) {
-      return slot;
+    final item = widget.inventory.items[index];
+    final name = ItemName(item: item);
+    if (widget.clearItem == null) {
+      return name;
     }
     return Row(
       children: <Widget>[
-        slot,
+        name,
         const Spacer(),
         IconButton(
           icon: const Icon(Icons.clear),
@@ -566,8 +565,9 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
             children: <Widget>[
               itemSlot(0),
               Text(widget.inventory.edge?.name ?? 'No Edge'),
-              for (int i = 1; i < Inventory.itemSlotCount(widget.level); i++)
-                itemSlot(i),
+              ...widget.inventory.items.skip(1).map((item) {
+                return itemSlot(widget.inventory.items.indexOf(item));
+              }),
             ],
           ),
         ),
@@ -577,25 +577,25 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
 }
 
 /// Displays an item slot
-class ItemSlot extends StatelessWidget {
+class ItemName extends StatelessWidget {
   /// ItemSlot constructor
-  const ItemSlot({
+  const ItemName({
     required this.item,
     super.key,
   });
 
   /// Item to display
-  final Item? item;
+  final Item item;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        if (item != null) ...[
-          Text(item!.name),
-          const SizedBox(width: 4),
-        ],
-      ],
+    return SuperTooltip(
+      content: SizedBox(
+        width: 300,
+        height: 200,
+        child: ItemView(item: item),
+      ),
+      child: Text(item.name),
     );
   }
 }
