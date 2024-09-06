@@ -339,6 +339,9 @@ class _BattlePageState extends State<BattlePage> {
                       data: widget.data,
                       setItem: _setItem,
                     ),
+                    const SizedBox(height: 16),
+                    Text(inventory.toUrlString(widget.data)),
+                    const SizedBox(height: 16),
                     ElevatedButton.icon(
                       onPressed: _reroll,
                       icon: const Icon(Icons.casino),

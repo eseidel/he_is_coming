@@ -69,6 +69,28 @@ class Inventory {
     sets = _resolveSetBonuses(this.items, edge, setBonuses);
   }
 
+  /// Create an inventory from a url string.
+  factory Inventory.fromUrlString(String serialized, Data data) {
+    final parts = serialized.split(',');
+    final edge = parts.firstWhereOrNull((part) => part.startsWith('e'));
+    final oils = parts.where((part) => part.startsWith('o')).map((part) {
+      final id = int.parse(part.substring(1));
+      return data.oils.fromId(id);
+    }).toList();
+    final items = parts.where((part) => part.startsWith('i')).map((part) {
+      final id = int.parse(part.substring(1));
+      return data.items.fromId(id);
+    }).toList();
+    return Inventory(
+      level: Level.one,
+      items: items,
+      edge:
+          edge != null ? data.edges.fromId(int.parse(edge.substring(1))) : null,
+      oils: oils,
+      setBonuses: data.sets,
+    );
+  }
+
   /// Create a random creature configuration.
   factory Inventory.random(Level level, Random random, Data data) {
     final slotCount = itemSlotCount(level);
@@ -251,6 +273,16 @@ class Inventory {
       if (edge != null) 'edge': edge!.name,
       if (oils.isNotEmpty) 'oils': oils.map((oil) => oil.name).toList(),
     };
+  }
+
+  /// Convert to a url string.
+  String toUrlString(Data data) {
+    final parts = [
+      if (edge != null) 'e${data.edges.toId(edge!)}',
+      for (final oil in oils) 'o${data.oils.toId(oil)}',
+      for (final item in items) 'i${data.items.toId(item)}',
+    ];
+    return parts.join(',');
   }
 }
 

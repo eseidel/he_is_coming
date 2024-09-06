@@ -157,6 +157,13 @@ class Catalog<T extends CatalogItem> {
     return item;
   }
 
+  /// Convert an item to an id (for url strings)
+  // Eventually this should be made stable with a version number.
+  int toId(T item) => items.indexOf(item);
+
+  /// Convert an id to an item.
+  T fromId(int id) => items[id];
+
   /// Get a random item.
   T random(Random random) => items[random.nextInt(items.length)];
 
