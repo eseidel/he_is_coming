@@ -275,42 +275,37 @@ class _BattlePageState extends State<BattlePage> {
   Widget build(BuildContext context) {
     String signed(int value) => value >= 0 ? '+$value' : '$value';
 
-    Widget battleDelta(CreatureDelta delta) {
+    List<Widget> battleDelta(CreatureDelta delta) {
       const size = Style.inlineStatIconSize;
-      return SizedBox(
-        width: 150,
-        child: Row(
-          children: <Widget>[
-            if (delta.hp != 0) ...[
-              Text(signed(delta.hp)),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: StatIcon(statType: StatType.health, size: size),
-              ),
-            ],
-            if (delta.gold != 0) ...[
-              Text(signed(delta.gold)),
-              const SizedBox(width: 4),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: GoldIcon(size: size),
-              ),
-            ],
-          ],
-        ),
-      );
+      return <Widget>[
+        if (delta.hp != 0) ...[
+          Text(signed(delta.hp)),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: StatIcon(statType: StatType.health, size: size),
+          ),
+        ],
+        if (delta.gold != 0) ...[
+          Text(signed(delta.gold)),
+          const SizedBox(width: 4),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: GoldIcon(size: size),
+          ),
+        ],
+      ];
     }
 
     Row resultLine(BattleResult result) {
       final change = result.firstDelta;
       final survived = result.first.isAlive;
-      final survivedText = survived ? '✅' : '💀';
+      const diedText = Text('💀');
       return Row(
         children: [
           Text(result.second.name),
           const Spacer(),
-          Text(survivedText),
-          battleDelta(change),
+          if (survived) ...battleDelta(change),
+          if (!survived) diedText,
         ],
       );
     }
@@ -426,7 +421,8 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
 
   @override
   Widget build(BuildContext context) {
-    final stats = widget.inventory.statsWithItems(const Stats(maxHp: 10));
+    // Should this make a Player first?
+    final stats = widget.inventory.statsWithItems(playerIntrinsicStats);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

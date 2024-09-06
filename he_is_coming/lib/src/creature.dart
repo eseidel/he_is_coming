@@ -11,6 +11,12 @@ const _kPlayerName = 'Player';
 /// Alias for Creature.
 typedef Player = Creature;
 
+/// Stats in-built to the player.
+// TODO(eseidel): Move into the creatures.yaml instead.
+const playerIntrinsicStats = Stats(
+  maxHp: 10,
+);
+
 /// Level
 enum Level {
   /// Level 1
@@ -252,7 +258,7 @@ class Inventory {
 Player playerWithInventory(Level level, Inventory inventory) {
   return Creature(
     name: _kPlayerName,
-    intrinsic: const Stats(),
+    intrinsic: playerIntrinsicStats,
     gold: 0,
     level: level,
     inventory: inventory,
@@ -263,10 +269,10 @@ Player playerWithInventory(Level level, Inventory inventory) {
 extension CreatePlayer on Data {
   /// Create a player.
   Player player({
-    int maxHp = 10,
-    int attack = 0,
-    int armor = 0,
-    int speed = 0,
+    int? maxHp,
+    int? attack,
+    int? armor,
+    int? speed,
     List<String> items = const <String>[],
     List<Item> customItems = const <Item>[],
     String? edge,
@@ -276,10 +282,10 @@ extension CreatePlayer on Data {
     Level level = Level.end,
   }) {
     final intrinsic = Stats(
-      maxHp: maxHp,
-      attack: attack,
-      armor: armor,
-      speed: speed,
+      maxHp: maxHp ?? playerIntrinsicStats.maxHp,
+      attack: attack ?? playerIntrinsicStats.attack,
+      armor: armor ?? playerIntrinsicStats.armor,
+      speed: speed ?? playerIntrinsicStats.speed,
     );
     return Creature(
       name: _kPlayerName,
