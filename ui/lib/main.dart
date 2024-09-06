@@ -412,7 +412,7 @@ class _BattlePageState extends State<BattlePage> {
       const diedText = Text('💀');
       return Row(
         children: [
-          Text(result.second.name),
+          CreatureName(creature: result.second),
           const Spacer(),
           if (survived) ...battleDelta(change),
           if (!survived) diedText,
@@ -508,6 +508,7 @@ class PlayerBattleView extends StatefulWidget {
   /// Level
   final Level level;
 
+  /// Callback to clear an item
   final void Function(int)? clearItem;
 
   @override
@@ -543,6 +544,7 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
   Widget build(BuildContext context) {
     // Should this make a Player first?
     final stats = widget.inventory.statsWithItems(playerIntrinsicStats);
+    final edge = widget.inventory.edge;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -564,7 +566,7 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
           child: Column(
             children: <Widget>[
               itemSlot(0),
-              Text(widget.inventory.edge?.name ?? 'No Edge'),
+              if (edge == null) const Text('No Edge') else EdgeName(edge: edge),
               ...widget.inventory.items.skip(1).map((item) {
                 return itemSlot(widget.inventory.items.indexOf(item));
               }),
@@ -578,7 +580,7 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
 
 /// Displays an item slot
 class ItemName extends StatelessWidget {
-  /// ItemSlot constructor
+  /// ItemName constructor
   const ItemName({
     required this.item,
     super.key,
@@ -590,12 +592,72 @@ class ItemName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SuperTooltip(
-      content: SizedBox(
-        width: 300,
-        height: 200,
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 300,
+          minHeight: 200,
+          maxWidth: 300,
+          maxHeight: 300,
+        ),
         child: ItemView(item: item),
       ),
       child: Text(item.name),
+    );
+  }
+}
+
+/// Displays an creature name and tooltip
+class CreatureName extends StatelessWidget {
+  /// CreatureName constructor
+  const CreatureName({
+    required this.creature,
+    super.key,
+  });
+
+  /// Creature to display
+  final Creature creature;
+
+  @override
+  Widget build(BuildContext context) {
+    return SuperTooltip(
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 400,
+          minHeight: 200,
+          maxWidth: 400,
+          maxHeight: 300,
+        ),
+        child: CreatureView(creature: creature),
+      ),
+      child: Text(creature.name),
+    );
+  }
+}
+
+/// Displays an edge name and tooltip
+class EdgeName extends StatelessWidget {
+  /// EdgeName constructor
+  const EdgeName({
+    required this.edge,
+    super.key,
+  });
+
+  /// Creature to display
+  final Edge edge;
+
+  @override
+  Widget build(BuildContext context) {
+    return SuperTooltip(
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 300,
+          minHeight: 200,
+          maxWidth: 300,
+          maxHeight: 300,
+        ),
+        child: EdgeView(edge: edge),
+      ),
+      child: Text(edge.name),
     );
   }
 }
