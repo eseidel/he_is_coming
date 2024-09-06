@@ -208,7 +208,118 @@ class BattlePage extends StatefulWidget {
   State<BattlePage> createState() => _BattlePageState();
 }
 
+/// AddItem widget
+class AddItem extends StatefulWidget {
+  /// AddItem constructor
+  const AddItem({
+    required this.data,
+    required this.addItem,
+    this.enabled = true,
+    super.key,
+  });
+
+  /// Data
+  final Data data;
+
+  /// AddItem callback
+  final void Function(Item item) addItem;
+
+  /// Enabled
+  final bool enabled;
+
+  @override
+  State<AddItem> createState() => _AddItemState();
+}
+
+class _AddItemState extends State<AddItem> {
+  final SearchController controller = SearchController();
+  final List<Item> searchHistory = [];
+
+  Iterable<Widget> getHistoryList(SearchController controller) {
+    return searchHistory.map(
+      (Item item) => ListTile(
+        leading: const Icon(Icons.history),
+        title: Text(item.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.call_missed),
+          onPressed: () {
+            controller
+              ..text = item.name
+              ..selection =
+                  TextSelection.collapsed(offset: controller.text.length);
+          },
+        ),
+      ),
+    );
+  }
+
+  Iterable<Widget> getSuggestions(SearchController controller) {
+    final input = controller.value.text;
+    return widget.data.items.items
+        .where(
+          (Item item) => item.name.toLowerCase().contains(input.toLowerCase()),
+        )
+        .map(
+          (Item item) => ListTile(
+            leading: CircleAvatar(backgroundColor: item.color),
+            title: Text(item.name),
+            trailing: IconButton(
+              icon: const Icon(Icons.call_missed),
+              onPressed: () {
+                controller
+                  ..text = item.name
+                  ..selection =
+                      TextSelection.collapsed(offset: controller.text.length);
+              },
+            ),
+            onTap: () {
+              controller.closeView(item.name);
+              searchHistory.insert(0, item);
+              if (searchHistory.length > 5) {
+                searchHistory.removeLast();
+              }
+              widget.addItem(item);
+            },
+          ),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final anchor = SearchAnchor(
+      searchController: controller,
+      builder: (BuildContext context, SearchController controller) {
+        return ElevatedButton.icon(
+          icon: const Icon(Icons.add),
+          label: const Text('Add Item'),
+          onPressed: () {
+            // This is optional, SearchAnchor also does openView for us.
+            controller.openView();
+          },
+        );
+      },
+      suggestionsBuilder: (BuildContext context, SearchController controller) {
+        if (controller.text.isEmpty) {
+          if (searchHistory.isNotEmpty) {
+            return getHistoryList(controller);
+          }
+          return <Widget>[const Center(child: Text('No search history.'))];
+        }
+        return getSuggestions(controller);
+      },
+    );
+    if (widget.enabled) {
+      return anchor;
+    }
+    return Opacity(opacity: 0.5, child: IgnorePointer(child: anchor));
+  }
+}
+
 class _BattlePageState extends State<BattlePage> {
+  // Saves "offscreen" items, even those not displayed at the current level.
+  // This lets you change the level back and forth and still see the same items.
+  // These "offscreen" items are intentionally removed when an item is cleared
+  // to avoid having them suddenly appear in the inventory.
   late Inventory _endConfig;
   List<BattleResult> results = [];
   Level level = Level.one;
@@ -234,22 +345,20 @@ class _BattlePageState extends State<BattlePage> {
   }
 
   Inventory get inventory {
+    final maxItem =
+        min(_endConfig.items.length, Inventory.itemSlotCount(level));
     return Inventory(
       level: level,
-      items: _endConfig.items.sublist(0, Inventory.itemSlotCount(level)),
+      items: _endConfig.items.sublist(0, maxItem),
       edge: _endConfig.edge,
       oils: _endConfig.oils,
       setBonuses: widget.data.sets,
     );
   }
 
-  void _setItem(int index, Item? item) {
+  void _addItem(Item item) {
     setState(() {
-      if (item == null) {
-        _endConfig.items.removeAt(index);
-      } else {
-        _endConfig.items[index] = item;
-      }
+      _endConfig.items.add(item);
       _updateResults();
     });
   }
@@ -336,17 +445,34 @@ class _BattlePageState extends State<BattlePage> {
                     PlayerBattleView(
                       inventory: inventory,
                       level: level,
-                      data: widget.data,
-                      setItem: _setItem,
+                      clearItem: (index) {
+                        setState(() {
+                          final items = inventory.items.toList()
+                            ..removeAt(index);
+                          // This intentionally removes any "offscreen" items.
+                          _endConfig = inventory.copyWith(
+                            items: items,
+                            level: level,
+                            setBonuses: widget.data.sets,
+                          );
+                          _updateResults();
+                        });
+                      },
                     ),
                     const SizedBox(height: 16),
-                    Text(inventory.toUrlString(widget.data)),
-                    const SizedBox(height: 16),
+                    AddItem(
+                      data: widget.data,
+                      addItem: _addItem,
+                      enabled: inventory.items.length <
+                          Inventory.itemSlotCount(level),
+                    ),
                     ElevatedButton.icon(
                       onPressed: _reroll,
                       icon: const Icon(Icons.casino),
                       label: const Text('Reroll'),
                     ),
+                    Text(inventory.toUrlString(widget.data)),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -371,8 +497,7 @@ class PlayerBattleView extends StatefulWidget {
   const PlayerBattleView({
     required this.inventory,
     required this.level,
-    required this.data,
-    required this.setItem,
+    this.clearItem,
     super.key,
   });
 
@@ -382,11 +507,7 @@ class PlayerBattleView extends StatefulWidget {
   /// Level
   final Level level;
 
-  /// Data
-  final Data data;
-
-  /// Callback to set an item in a specific slot.
-  final void Function(int index, Item? item) setItem;
+  final void Function(int)? clearItem;
 
   @override
   State<PlayerBattleView> createState() => _PlayerBattleViewState();
@@ -398,27 +519,24 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
   final List<Item> nonWeaponsSearchHistory = [];
 
   Widget itemSlot(int index) {
-    final isWeapon = index == 0;
     final maybeItem = (index < widget.inventory.items.length)
         ? widget.inventory.items[index]
         : null;
-    final possibleItems =
-        isWeapon ? widget.data.items.weapons : widget.data.items.nonWeapons;
-    final searchHistory =
-        isWeapon ? weaponsSearchHistory : nonWeaponsSearchHistory;
-    return ItemSlot(
-      item: maybeItem,
-      possibleItems: possibleItems,
-      searchHistory: searchHistory,
-      changeItem: (item) {
-        if (item != null) {
-          searchHistory.insert(0, item);
-          if (searchHistory.length > 5) {
-            searchHistory.removeLast();
-          }
-        }
-        widget.setItem(index, item);
-      },
+    final slot = ItemSlot(item: maybeItem);
+    if (widget.clearItem == null || maybeItem == null) {
+      return slot;
+    }
+    return Row(
+      children: <Widget>[
+        slot,
+        const Spacer(),
+        IconButton(
+          icon: const Icon(Icons.clear),
+          onPressed: () {
+            widget.clearItem!(index);
+          },
+        ),
+      ],
     );
   }
 
@@ -458,111 +576,25 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
   }
 }
 
-/// Displays an item slot with a search anchor.
-class ItemSlot extends StatefulWidget {
+/// Displays an item slot
+class ItemSlot extends StatelessWidget {
   /// ItemSlot constructor
   const ItemSlot({
     required this.item,
-    required this.possibleItems,
-    required this.changeItem,
     super.key,
-    this.searchHistory = const [],
   });
 
   /// Item to display
   final Item? item;
 
-  /// List of all available items for this slot.
-  final List<Item> possibleItems;
-
-  /// List of items that have been searched for.
-  final List<Item> searchHistory;
-
-  /// Callback to change the item.
-  final void Function(Item? item) changeItem;
-
-  @override
-  State<ItemSlot> createState() => _ItemSlotState();
-}
-
-class _ItemSlotState extends State<ItemSlot> {
-  final SearchController controller = SearchController();
-
-  Iterable<Widget> getHistoryList(SearchController controller) {
-    return widget.searchHistory.map(
-      (Item item) => ListTile(
-        leading: const Icon(Icons.history),
-        title: Text(item.name),
-        trailing: IconButton(
-          icon: const Icon(Icons.call_missed),
-          onPressed: () {
-            controller
-              ..text = item.name
-              ..selection =
-                  TextSelection.collapsed(offset: controller.text.length);
-          },
-        ),
-      ),
-    );
-  }
-
-  Iterable<Widget> getSuggestions(SearchController controller) {
-    final input = controller.value.text;
-    return widget.possibleItems
-        .where(
-          (Item item) => item.name.toLowerCase().contains(input.toLowerCase()),
-        )
-        .map(
-          (Item item) => ListTile(
-            leading: CircleAvatar(backgroundColor: item.color),
-            title: Text(item.name),
-            trailing: IconButton(
-              icon: const Icon(Icons.call_missed),
-              onPressed: () {
-                controller
-                  ..text = item.name
-                  ..selection =
-                      TextSelection.collapsed(offset: controller.text.length);
-              },
-            ),
-            onTap: () {
-              controller.closeView(item.name);
-              widget.changeItem(item);
-            },
-          ),
-        );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final searchButton = SearchAnchor(
-      searchController: controller,
-      builder: (BuildContext context, SearchController controller) {
-        return IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-            controller.openView();
-          },
-        );
-      },
-      suggestionsBuilder: (BuildContext context, SearchController controller) {
-        if (controller.text.isEmpty) {
-          if (widget.searchHistory.isNotEmpty) {
-            return getHistoryList(controller);
-          }
-          return <Widget>[const Center(child: Text('No search history.'))];
-        }
-        return getSuggestions(controller);
-      },
-    );
     return Row(
       children: <Widget>[
-        if (widget.item != null) ...[
-          Text(widget.item!.name),
+        if (item != null) ...[
+          Text(item!.name),
           const SizedBox(width: 4),
         ],
-        const Spacer(),
-        searchButton,
       ],
     );
   }

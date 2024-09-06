@@ -284,6 +284,23 @@ class Inventory {
     ];
     return parts.join(',');
   }
+
+  /// Copy with changes.
+  Inventory copyWith({
+    required Level level,
+    required SetBonusCatalog setBonuses,
+    Edge? edge,
+    List<Oil>? oils,
+    List<Item>? items,
+  }) {
+    return Inventory(
+      level: level,
+      edge: edge ?? this.edge,
+      oils: oils ?? this.oils,
+      items: items ?? this.items,
+      setBonuses: setBonuses,
+    );
+  }
 }
 
 /// Create a player from a creature configuration.
