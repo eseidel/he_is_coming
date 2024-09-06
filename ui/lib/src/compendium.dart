@@ -27,7 +27,7 @@ extension ItemRarityColor on ItemRarity {
 extension ItemUI on Item {
   /// Color for this item.
   Color get color {
-    if (kind == ItemKind.weapon) {
+    if (isWeapon) {
       return Palette.weapon;
     }
     if (material == ItemMaterial.stone) {
@@ -41,7 +41,7 @@ extension ItemUI on Item {
 
   /// Border color for this item.
   Color get borderColor {
-    if (kind == ItemKind.weapon) {
+    if (isWeapon) {
       return Palette.weapon;
     }
     return Palette.white;
@@ -122,6 +122,26 @@ extension StatColor on StatType {
         );
     }
   }
+}
+
+/// Adds a color property to Oil.
+extension OilUI on Oil {
+  /// Color for this oil.
+  Color get color {
+    if (name == 'Attack Oil') {
+      return Palette.attack;
+    }
+    if (name == 'Speed Oil') {
+      return Palette.speed;
+    }
+    if (name == 'Armor Oil') {
+      return Palette.armor;
+    }
+    throw UnimplementedError('Unknown oil: $name');
+  }
+
+  /// Icon for this oil.
+  Widget get icon => Icon(Icons.water_drop, color: color);
 }
 
 class _Bordered extends StatelessWidget {
@@ -580,19 +600,6 @@ class OilView extends StatelessWidget {
   /// Oil to display
   final Oil oil;
 
-  Color get _color {
-    if (oil.name == 'Attack Oil') {
-      return Palette.attack;
-    }
-    if (oil.name == 'Speed Oil') {
-      return Palette.speed;
-    }
-    if (oil.name == 'Armor Oil') {
-      return Palette.armor;
-    }
-    return Palette.white;
-  }
-
   @override
   Widget build(BuildContext context) {
     final name = oil.name;
@@ -606,13 +613,59 @@ class OilView extends StatelessWidget {
           OutlinedBox(
             // Oils shouldn't have an outline.
             borderColor: Palette.white,
-            child: Icon(Icons.water_drop, color: _color),
+            child: oil.icon,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(name, style: Theme.of(context).textTheme.labelLarge),
           ),
           if (!stats.isEmpty) StatsRow(stats: stats),
+        ],
+      ),
+    );
+  }
+}
+
+/// Display a set bonus.
+class SetBonusView extends StatelessWidget {
+  /// SetBonusView constructor
+  const SetBonusView({
+    required this.setBonus,
+    super.key,
+  });
+
+  /// Set bonus to display
+  final SetBonus setBonus;
+
+  @override
+  Widget build(BuildContext context) {
+    final name = setBonus.name;
+    final effect = setBonus.effect;
+    final stats = setBonus.stats;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          OutlinedBox(
+            borderColor: Palette.white, // Set bonuses always use white.
+            child: Icon(Icons.bug_report, color: Palette.white),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Text(name, style: Theme.of(context).textTheme.labelLarge),
+          ),
+          if (effect != null)
+            Padding(
+              padding: const EdgeInsets.all(4),
+              child: ColoredEffectText(text: effect.text),
+            ),
+          if (!stats.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 4),
+              child: StatsRow(stats: stats),
+            ),
         ],
       ),
     );

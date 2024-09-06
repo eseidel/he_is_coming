@@ -215,7 +215,6 @@ class AddItem extends StatefulWidget {
   const AddItem({
     required this.data,
     required this.addItem,
-    this.enabled = true,
     super.key,
   });
 
@@ -225,9 +224,6 @@ class AddItem extends StatefulWidget {
   /// AddItem callback
   final void Function(Item item) addItem;
 
-  /// Enabled
-  final bool enabled;
-
   @override
   State<AddItem> createState() => _AddItemState();
 }
@@ -235,6 +231,18 @@ class AddItem extends StatefulWidget {
 class _AddItemState extends State<AddItem> {
   final SearchController controller = SearchController();
   final List<Item> searchHistory = [];
+
+  void _addToSearchHistory(Item item) {
+    if (searchHistory.contains(item)) {
+      return;
+    }
+    setState(() {
+      searchHistory.insert(0, item);
+      if (searchHistory.length > 5) {
+        searchHistory.removeLast();
+      }
+    });
+  }
 
   Iterable<Widget> getHistoryList(SearchController controller) {
     return searchHistory.map(
@@ -275,10 +283,7 @@ class _AddItemState extends State<AddItem> {
             ),
             onTap: () {
               controller.closeView(item.name);
-              searchHistory.insert(0, item);
-              if (searchHistory.length > 5) {
-                searchHistory.removeLast();
-              }
+              _addToSearchHistory(item);
               widget.addItem(item);
             },
           ),
@@ -287,7 +292,7 @@ class _AddItemState extends State<AddItem> {
 
   @override
   Widget build(BuildContext context) {
-    final anchor = SearchAnchor(
+    return SearchAnchor(
       searchController: controller,
       builder: (BuildContext context, SearchController controller) {
         return ElevatedButton.icon(
@@ -309,10 +314,6 @@ class _AddItemState extends State<AddItem> {
         return getSuggestions(controller);
       },
     );
-    if (widget.enabled) {
-      return anchor;
-    }
-    return Opacity(opacity: 0.5, child: IgnorePointer(child: anchor));
   }
 }
 
@@ -359,7 +360,20 @@ class _BattlePageState extends State<BattlePage> {
 
   void _addItem(Item item) {
     setState(() {
-      _endConfig.items.add(item);
+      // If the item is a weapon, replace the first item.
+      // If the inventory is full, replace the last item.
+      if (item.isWeapon ||
+          inventory.items.length >= Inventory.itemSlotCount(level)) {
+        final index = item.isWeapon ? 0 : inventory.items.length - 1;
+        _endConfig.items[index] = item;
+      } else {
+        // Otherwise add the item to the end.
+        _endConfig = inventory.copyWith(
+          items: inventory.items.toList()..add(item),
+          level: level,
+          setBonuses: widget.data.sets,
+        );
+      }
       _updateResults();
     });
   }
@@ -461,19 +475,22 @@ class _BattlePageState extends State<BattlePage> {
                       },
                     ),
                     const SizedBox(height: 16),
-                    AddItem(
-                      data: widget.data,
-                      addItem: _addItem,
-                      enabled: inventory.items.length <
-                          Inventory.itemSlotCount(level),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        AddItem(
+                          data: widget.data,
+                          addItem: _addItem,
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: _reroll,
+                          icon: const Icon(Icons.casino),
+                          label: const Text('Reroll'),
+                        ),
+                      ],
                     ),
-                    ElevatedButton.icon(
-                      onPressed: _reroll,
-                      icon: const Icon(Icons.casino),
-                      label: const Text('Reroll'),
-                    ),
-                    Text(inventory.toUrlString(widget.data)),
                     const SizedBox(height: 16),
+                    Text(inventory.toUrlString(widget.data)),
                   ],
                 ),
               ),
@@ -493,7 +510,7 @@ class _BattlePageState extends State<BattlePage> {
 }
 
 /// Displays the inventory for the battle view.
-class PlayerBattleView extends StatefulWidget {
+class PlayerBattleView extends StatelessWidget {
   /// PlayerBattleView constructor
   const PlayerBattleView({
     required this.inventory,
@@ -511,19 +528,10 @@ class PlayerBattleView extends StatefulWidget {
   /// Callback to clear an item
   final void Function(int)? clearItem;
 
-  @override
-  State<PlayerBattleView> createState() => _PlayerBattleViewState();
-}
-
-class _PlayerBattleViewState extends State<PlayerBattleView> {
-  final controller = SearchController();
-  final List<Item> weaponsSearchHistory = [];
-  final List<Item> nonWeaponsSearchHistory = [];
-
-  Widget itemSlot(int index) {
-    final item = widget.inventory.items[index];
+  Widget _itemSlot(int index) {
+    final item = inventory.items[index];
     final name = ItemName(item: item);
-    if (widget.clearItem == null) {
+    if (clearItem == null) {
       return name;
     }
     return Row(
@@ -533,7 +541,7 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
         IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            widget.clearItem!(index);
+            clearItem!(index);
           },
         ),
       ],
@@ -543,8 +551,8 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
   @override
   Widget build(BuildContext context) {
     // Should this make a Player first?
-    final stats = widget.inventory.statsWithItems(playerIntrinsicStats);
-    final edge = widget.inventory.edge;
+    final stats = inventory.statsWithItems(playerIntrinsicStats);
+    final edge = inventory.edge;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -565,11 +573,23 @@ class _PlayerBattleViewState extends State<PlayerBattleView> {
         Expanded(
           child: Column(
             children: <Widget>[
-              itemSlot(0),
+              _itemSlot(0),
               if (edge == null) const Text('No Edge') else EdgeName(edge: edge),
-              ...widget.inventory.items.skip(1).map((item) {
-                return itemSlot(widget.inventory.items.indexOf(item));
+              if (inventory.oils.isNotEmpty)
+                Row(
+                  children: <Widget>[
+                    ...inventory.oils.map((oil) {
+                      return OilIconWithTooltip(oil: oil);
+                    }),
+                  ],
+                ),
+              ...inventory.items.skip(1).map((item) {
+                return _itemSlot(inventory.items.indexOf(item));
               }),
+              if (inventory.sets.isNotEmpty)
+                ...inventory.sets.map((set) {
+                  return SetBonusName(set: set);
+                }),
             ],
           ),
         ),
@@ -658,6 +678,62 @@ class EdgeName extends StatelessWidget {
         child: EdgeView(edge: edge),
       ),
       child: Text(edge.name),
+    );
+  }
+}
+
+/// Displays an oil icon and tooltip
+class OilIconWithTooltip extends StatelessWidget {
+  /// OilIconWithTooltip constructor
+  const OilIconWithTooltip({
+    required this.oil,
+    super.key,
+  });
+
+  /// Oil to display
+  final Oil oil;
+
+  @override
+  Widget build(BuildContext context) {
+    return SuperTooltip(
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 300,
+          minHeight: 200,
+          maxWidth: 300,
+          maxHeight: 300,
+        ),
+        child: OilView(oil: oil),
+      ),
+      child: oil.icon,
+    );
+  }
+}
+
+/// Displays a set bonus name and tooltip
+class SetBonusName extends StatelessWidget {
+  /// SetBonusName constructor
+  const SetBonusName({
+    required this.set,
+    super.key,
+  });
+
+  /// Set to display
+  final SetBonus set;
+
+  @override
+  Widget build(BuildContext context) {
+    return SuperTooltip(
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 300,
+          minHeight: 200,
+          maxWidth: 300,
+          maxHeight: 300,
+        ),
+        child: SetBonusView(setBonus: set),
+      ),
+      child: Text(set.name),
     );
   }
 }

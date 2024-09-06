@@ -221,12 +221,10 @@ class ItemCatalog extends Catalog<Item> {
   }
 
   /// All the weapons in the catalog.
-  List<Item> get weapons =>
-      items.where((i) => i.kind == ItemKind.weapon).toList();
+  List<Item> get weapons => items.where((i) => i.isWeapon).toList();
 
   /// All the non-weapon items in the catalog.
-  List<Item> get nonWeapons =>
-      items.where((i) => i.kind != ItemKind.weapon).toList();
+  List<Item> get nonWeapons => items.where((i) => !i.isWeapon).toList();
 
   /// Get a random weapon from the catalog.
   Item randomWeapon(Random random) => weapons[random.nextInt(weapons.length)];

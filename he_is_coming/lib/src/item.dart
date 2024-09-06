@@ -146,7 +146,7 @@ class Item extends CatalogItem {
     super.inferred = false,
     this.parts = const [],
   }) : super(name: name) {
-    if (kind == ItemKind.weapon && stats.attack == 0) {
+    if (isWeapon && stats.attack == 0) {
       if (name == 'Bejeweled Blade') {
         // Bejeweled Blade is a special case, it is intentionally 0.
         return;
@@ -208,6 +208,9 @@ class Item extends CatalogItem {
   /// Is the item unique.
   /// Unique items can only be equipped once.
   final bool isUnique;
+
+  /// Returns true if the item is a weapon.
+  bool get isWeapon => kind == ItemKind.weapon;
 
   /// Items combined to make this item.
   final List<String>? parts;

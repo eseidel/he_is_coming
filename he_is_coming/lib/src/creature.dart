@@ -220,14 +220,13 @@ class Inventory {
       }
     }
 
-    final weaponCount =
-        items.where((item) => item.kind == ItemKind.weapon).length;
+    final weaponCount = items.where((item) => item.isWeapon).length;
     if (weaponCount > 1) {
       throw ItemException('Player can only have one weapon.');
     }
 
     // Weapon is always first.
-    items.sortBy<num>((item) => item.kind == ItemKind.weapon ? 0 : 1);
+    items.sortBy<num>((item) => item.isWeapon ? 0 : 1);
     return items;
   }
 
