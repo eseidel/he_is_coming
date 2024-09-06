@@ -232,11 +232,9 @@ class BestItemFinder {
 }
 
 void doMain(List<String> arguments) {
-  final data = Data.load();
+  final data =
+      Data.load().withoutEntriesMissingEffects().withoutInferredItems();
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
-  data
-    ..removeEntriesMissingEffects()
-    ..removeInferredItems();
 
   const filePath = 'results.json';
   final saved = Population.fromFile(filePath, data);

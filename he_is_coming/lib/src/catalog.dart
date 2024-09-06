@@ -88,7 +88,10 @@ abstract class CatalogItem {
   /// The effect of the item.
   final Effect? effect;
 
-  /// If the item was inferred rather than seen in the wild.
+  /// Returns true if the item has been fully implemented.
+  bool get isImplemented => effect == null || !effect!.isEmpty;
+
+  /// If the item was inferred rather  than seen in the wild.
   final bool inferred;
 
   @override
@@ -105,19 +108,6 @@ class Catalog<T extends CatalogItem> {
 
   /// The items in the catalog.
   final List<T> items;
-
-  /// Remove any items that are missing effects.
-  void removeEntriesMissingEffects() {
-    items.removeWhere(
-      (item) =>
-          item.effect != null && item.effect != null && item.effect!.isEmpty,
-    );
-  }
-
-  /// Remove any items that are inferred.
-  void removeInferredItems() {
-    items.removeWhere((item) => item.inferred);
-  }
 
   bool _removeEmptyValues(dynamic json) {
     if (json is Map) {

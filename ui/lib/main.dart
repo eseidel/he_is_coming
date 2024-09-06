@@ -69,7 +69,7 @@ class _MyHomePageState extends State<HomePage> {
     isLoading = true;
     loadData().then((value) {
       setState(() {
-        data = value;
+        data = value.withoutEntriesMissingEffects();
         // TODO(eseidel): Remove defaultPlayerWeapon.
         Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
         isLoading = false;

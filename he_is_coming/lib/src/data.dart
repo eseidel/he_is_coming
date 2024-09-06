@@ -12,6 +12,7 @@ import 'package:he_is_coming/src/set_effects.dart';
 import 'package:path/path.dart' as p;
 import 'package:yaml/yaml.dart';
 
+export 'package:he_is_coming/src/catalog.dart';
 export 'package:he_is_coming/src/creature.dart';
 export 'package:he_is_coming/src/item.dart';
 
@@ -101,21 +102,38 @@ class Data {
   }
 
   /// Remove any items that are missing effects.
-  void removeEntriesMissingEffects() {
-    for (final catalog in _catalogs) {
-      catalog.removeEntriesMissingEffects();
+  Data withoutEntriesMissingEffects() {
+    List<T> onlyImplemented<T extends CatalogItem>(Catalog<T> catalog) {
+      return catalog.items.where((item) => item.isImplemented).toList();
     }
+
+    return Data(
+      creatures: CreatureCatalog(onlyImplemented(creatures)),
+      items: ItemCatalog(onlyImplemented(items)),
+      edges: EdgeCatalog(onlyImplemented(edges)),
+      oils: OilCatalog(onlyImplemented(oils)),
+      sets: SetBonusCatalog(onlyImplemented(sets)),
+      triggers: TriggerCatalog(onlyImplemented(triggers)),
+      challenges: ChallengeCatalog(onlyImplemented(challenges)),
+    );
   }
 
   /// Remove any items that are inferred.
-  void removeInferredItems() {
-    for (final catalog in _catalogs) {
-      catalog.removeInferredItems();
+  Data withoutInferredItems() {
+    List<T> removeInferred<T extends CatalogItem>(Catalog<T> catalog) {
+      return catalog.items.where((item) => !item.inferred).toList();
     }
-  }
 
-  /// Ignoring sets, triggers, and challenges for now.
-  List<Catalog> get _catalogs => [creatures, items, edges, oils];
+    return Data(
+      creatures: CreatureCatalog(removeInferred(creatures)),
+      items: ItemCatalog(removeInferred(items)),
+      edges: EdgeCatalog(removeInferred(edges)),
+      oils: OilCatalog(removeInferred(oils)),
+      sets: SetBonusCatalog(removeInferred(sets)),
+      triggers: TriggerCatalog(removeInferred(triggers)),
+      challenges: ChallengeCatalog(removeInferred(challenges)),
+    );
+  }
 
   /// All known creatures.
   final CreatureCatalog creatures;

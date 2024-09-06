@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';

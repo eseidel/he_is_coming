@@ -24,7 +24,7 @@ extension ItemRarityColor on ItemRarity {
 }
 
 /// Adds a color property to Item.
-extension ItemColor on Item {
+extension ItemUI on Item {
   /// Color for this item.
   Color get color {
     if (kind == ItemKind.weapon) {
