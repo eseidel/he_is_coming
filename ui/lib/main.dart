@@ -509,6 +509,52 @@ class _BattlePageState extends State<BattlePage> {
   }
 }
 
+class ItemSlot extends StatefulWidget {
+  const ItemSlot({
+    required this.item,
+    super.key,
+    this.action,
+  });
+
+  final Item item;
+  final Widget? action;
+
+  @override
+  State<ItemSlot> createState() => _ItemSlotState();
+}
+
+class _ItemSlotState extends State<ItemSlot> {
+  double opacity = 0;
+  // This shouldn't be necessary, but it seems that the AnimatedOpacity
+  // interferes with the automatic SuperTooltipController management, so we
+  // hold onto an explicit controller here.
+  SuperTooltipController controller = SuperTooltipController();
+
+  @override
+  Widget build(BuildContext context) {
+    final name = ItemName(item: widget.item, controller: controller);
+    if (widget.action == null) {
+      return name;
+    }
+    return MouseRegion(
+      onEnter: (_) => setState(() => opacity = 1),
+      onExit: (_) => setState(() => opacity = 0),
+      child: Row(
+        children: <Widget>[
+          name,
+          const Spacer(),
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 200),
+            opacity: opacity,
+            child: widget.action,
+          ),
+          widget.action!,
+        ],
+      ),
+    );
+  }
+}
+
 /// Displays the inventory for the battle view.
 class PlayerBattleView extends StatelessWidget {
   /// PlayerBattleView constructor
@@ -529,22 +575,14 @@ class PlayerBattleView extends StatelessWidget {
   final void Function(int)? clearItem;
 
   Widget _itemSlot(int index) {
-    final item = inventory.items[index];
-    final name = ItemName(item: item);
-    if (clearItem == null) {
-      return name;
-    }
-    return Row(
-      children: <Widget>[
-        name,
-        const Spacer(),
-        IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            clearItem!(index);
-          },
-        ),
-      ],
+    return ItemSlot(
+      item: inventory.items[index],
+      action: (clearItem != null)
+          ? IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () => clearItem!(index),
+            )
+          : null,
     );
   }
 
@@ -603,15 +641,19 @@ class ItemName extends StatelessWidget {
   /// ItemName constructor
   const ItemName({
     required this.item,
+    this.controller,
     super.key,
   });
 
   /// Item to display
   final Item item;
+  final SuperTooltipController? controller;
 
   @override
   Widget build(BuildContext context) {
     return SuperTooltip(
+      controller: controller,
+      showCloseButton: true,
       content: ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: 300,
