@@ -3,3 +3,8 @@
 .dart_tool/
 
 .DS_Store
+# Local reference images.
+imgs/
+
+# local storage for bin/best_items.dart
+he_is_coming/results.json
