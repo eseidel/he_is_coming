@@ -6,6 +6,7 @@ import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/creature_effects.dart';
 import 'package:he_is_coming/src/edge_effects.dart';
 import 'package:he_is_coming/src/effects.dart';
+import 'package:he_is_coming/src/inventory.dart';
 import 'package:he_is_coming/src/item.dart';
 import 'package:he_is_coming/src/item_effects.dart';
 import 'package:he_is_coming/src/set_effects.dart';
@@ -14,6 +15,7 @@ import 'package:yaml/yaml.dart';
 
 export 'package:he_is_coming/src/catalog.dart';
 export 'package:he_is_coming/src/creature.dart';
+export 'package:he_is_coming/src/inventory.dart';
 export 'package:he_is_coming/src/item.dart';
 
 class _Paths {
