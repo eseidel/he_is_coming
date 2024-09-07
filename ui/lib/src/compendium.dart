@@ -840,3 +840,77 @@ class _FilteringHeaderState<T> extends State<FilteringHeader<T>> {
     );
   }
 }
+
+/// CompendiumPage widget
+class CompendiumPage extends StatefulWidget {
+  /// CompendiumPage constructor
+  const CompendiumPage(this.data, {super.key});
+
+  /// Data
+  final Data data;
+
+  @override
+  State<CompendiumPage> createState() => _CompendiumPageState();
+}
+
+class _CompendiumPageState extends State<CompendiumPage>
+    with TickerProviderStateMixin {
+  late final TabController _tabController;
+
+  static const tabNames = <Widget>[
+    Tab(text: 'Items'),
+    Tab(text: 'Creatures'),
+    Tab(text: 'Edges'),
+    Tab(text: 'Oils'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: tabNames.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  Data get data => widget.data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        TabBar.secondary(controller: _tabController, tabs: tabNames),
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              FilteredItems(
+                items: data.items.items,
+              ),
+              FilteredCreatures(
+                creatures: data.creatures.creatures,
+              ),
+              ScrollingGrid(
+                maxCrossAxisExtent: 240,
+                itemCount: data.edges.edges.length,
+                itemBuilder: (context, index) {
+                  return EdgeView(edge: data.edges.edges[index]);
+                },
+              ),
+              ScrollingGrid(
+                maxCrossAxisExtent: 240,
+                itemCount: data.oils.oils.length,
+                itemBuilder: (context, index) {
+                  return OilView(oil: data.oils.oils[index]);
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
