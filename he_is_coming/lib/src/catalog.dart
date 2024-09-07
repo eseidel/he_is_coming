@@ -157,12 +157,38 @@ class Catalog<T extends CatalogItem> {
     return item;
   }
 
+  /// Number of items in the catalog.
+  int get length => items.length;
+
+  static int _bitsNeededFor(int value) {
+    if (value == 0) return 0;
+    return (log(value) / ln2).ceil();
+  }
+
+  /// Number of bits needed to represent the id.
+  int get idBits => _bitsNeededFor(items.length + 1);
+
   /// Convert an item to an id (for url strings)
   // Eventually this should be made stable with a version number.
-  int toId(T item) => items.indexOf(item);
+  int toId(T? item) {
+    if (item == null) {
+      return 0;
+    }
+    final index = items.indexOf(item);
+    if (index == -1) {
+      throw Exception('Missing $item in $T catalog');
+    }
+    // Use 0 to represent null.
+    return index + 1;
+  }
 
-  /// Convert an id to an item.
-  T fromId(int id) => items[id];
+  /// Convert an id to an item.  0 represents null.
+  T? fromId(int id) {
+    if (id == 0) {
+      return null;
+    }
+    return items[id - 1];
+  }
 
   /// Get a random item.
   T random(Random random) => items[random.nextInt(items.length)];
