@@ -1,8 +1,6 @@
 import 'dart:math';
-import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:convert/convert.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:yaml/yaml.dart';
@@ -14,151 +12,6 @@ class ItemException implements Exception {
 
   /// Message
   final String message;
-}
-
-class _BitsBuilder {
-  final BytesBuilder _builder = BytesBuilder();
-  int _currentByte = 0;
-  int _bitsUsed = 0;
-
-  void add(int value, int bits) {
-    var remainingValue = value;
-    var remainingBits = bits;
-    if (bits < 0) {
-      throw ArgumentError.value(bits, 'bits', 'must be non-negative');
-    }
-    if (bits == 0) return;
-    if (bits > 32) {
-      throw ArgumentError.value(bits, 'bits', 'must be <= 32');
-    }
-    if (value < 0) {
-      throw ArgumentError.value(value, 'value', 'must be non-negative');
-    }
-    if (value >= (1 << bits)) {
-      throw ArgumentError.value(value, 'value', 'must fit in $bits bits');
-    }
-
-    while (remainingBits > 0) {
-      final bitsToAdd = min(remainingBits, 8 - _bitsUsed);
-      final bitsToShift = remainingBits - bitsToAdd;
-      final bitsToKeep = bitsToAdd;
-      final bitsToShiftedValue = remainingValue >> bitsToShift;
-      final bitsToMask = (1 << bitsToKeep) - 1;
-      final bitsToShiftedValueMasked = bitsToShiftedValue & bitsToMask;
-      final bitsToShiftedValueMaskedShifted =
-          bitsToShiftedValueMasked << (8 - _bitsUsed - bitsToAdd);
-      _currentByte |= bitsToShiftedValueMaskedShifted;
-      remainingValue &= (1 << bitsToShift) - 1;
-      remainingBits -= bitsToAdd;
-      _bitsUsed += bitsToAdd;
-      if (_bitsUsed == 8) {
-        _builder.addByte(_currentByte);
-        _currentByte = 0;
-        _bitsUsed = 0;
-      }
-    }
-  }
-
-  Uint8List toBytes() {
-    if (_bitsUsed > 0) {
-      _builder.addByte(_currentByte);
-    }
-    return _builder.toBytes();
-  }
-}
-
-class _BitsReader {
-  _BitsReader(this.bytes);
-
-  final Uint8List bytes;
-  int _byteIndex = 0;
-  int _bitIndex = 0;
-
-  int get remainingBits => (bytes.length - _byteIndex) * 8 - _bitIndex;
-
-  int read(int bits) {
-    var value = 0;
-    var remainingBits = bits;
-    while (remainingBits > 0) {
-      if (_byteIndex >= bytes.length) {
-        throw ArgumentError('Not enough bits to read');
-      }
-      final bitsToRead = min(remainingBits, 8 - _bitIndex);
-      final bitsToShift = remainingBits - bitsToRead;
-      final bitsToShiftedValue =
-          bytes[_byteIndex] >> (8 - _bitIndex - bitsToRead);
-      final bitsToMask = (1 << bitsToRead) - 1;
-      final bitsToShiftedValueMasked = bitsToShiftedValue & bitsToMask;
-      final bitsToShiftedValueMaskedShifted =
-          bitsToShiftedValueMasked << bitsToShift;
-      value |= bitsToShiftedValueMaskedShifted;
-      remainingBits -= bitsToRead;
-      _bitIndex += bitsToRead;
-      if (_bitIndex == 8) {
-        _byteIndex++;
-        _bitIndex = 0;
-      }
-    }
-    return value;
-  }
-}
-
-class _InventoryCodec {
-  _InventoryCodec(this.data);
-
-  final Data data;
-
-  /// Number of bits needed to encode an edge.
-  int get edgeBits => data.edges.idBits;
-
-  /// Number of bits needed to encode an item.
-  int get itemBits => data.items.idBits;
-
-  /// Number of bits needed to encode a set bonus.
-  int get setBonusBits => data.sets.idBits;
-
-  String encode(Inventory inventory) {
-    final bits = _BitsBuilder()..add(data.edges.toId(inventory.edge), edgeBits);
-    // Encode oils as a 3-bit bitfield since there are only 3 of them.
-    var bitfield = 0;
-    for (var i = 0; i < data.oils.length; i++) {
-      final oil = data.oils.items[i];
-      if (inventory.oils.contains(oil)) {
-        bitfield |= 1 << i;
-      }
-    }
-    bits.add(bitfield, 3);
-    for (final item in inventory.items) {
-      bits.add(data.items.toId(item), itemBits);
-    }
-    return hex.encode(bits.toBytes());
-  }
-
-  static Inventory decode(String encoded, Data data) {
-    final bytes = Uint8List.fromList(hex.decode(encoded));
-    final bits = _BitsReader(bytes);
-    final edgeId = bits.read(data.edges.idBits);
-    final edge = data.edges.fromId(edgeId);
-    final oils = <Oil>[];
-    final oilBitfield = bits.read(3);
-    for (var i = 0; i < data.oils.length; i++) {
-      if ((oilBitfield & (1 << i)) != 0) {
-        oils.add(data.oils.items[i]);
-      }
-    }
-    final items = <Item>[];
-    while (bits.remainingBits > 0) {
-      final itemId = bits.read(data.items.idBits);
-      items.add(data.items.fromId(itemId)!);
-    }
-    return Inventory(
-      level: Level.one,
-      items: items,
-      edge: edge,
-      oils: oils,
-      setBonuses: data.sets,
-    );
-  }
 }
 
 /// Player's inventory.
@@ -176,11 +29,6 @@ class Inventory {
       throw UnimplementedError('Too many oils');
     }
     sets = _resolveSetBonuses(this.items, edge, setBonuses);
-  }
-
-  /// Create an inventory from a url string.
-  factory Inventory.fromUrlString(String encoded, Data data) {
-    return _InventoryCodec.decode(encoded, data);
   }
 
   /// Create a random creature configuration.
@@ -365,9 +213,6 @@ class Inventory {
       if (oils.isNotEmpty) 'oils': oils.map((oil) => oil.name).toList(),
     };
   }
-
-  /// Convert to a url string.
-  String toUrlString(Data data) => _InventoryCodec(data).encode(this);
 
   /// Copy with changes.
   Inventory copyWith({

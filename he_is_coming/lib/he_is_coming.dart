@@ -1,6 +1,7 @@
 import 'package:he_is_coming/he_is_coming.dart';
 
 export 'package:he_is_coming/src/battle.dart';
+export 'package:he_is_coming/src/build_id.dart';
 export 'package:he_is_coming/src/data.dart';
 export 'package:he_is_coming/src/inventory.dart';
 export 'package:he_is_coming/src/logger.dart';
