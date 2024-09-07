@@ -509,14 +509,19 @@ class _BattlePageState extends State<BattlePage> {
   }
 }
 
+/// Displays a item slot with an optional action.
 class ItemSlot extends StatefulWidget {
+  /// ItemSlot constructor
   const ItemSlot({
     required this.item,
     super.key,
     this.action,
   });
 
+  /// Item to display
   final Item item;
+
+  /// Action to display
   final Widget? action;
 
   @override
@@ -647,6 +652,8 @@ class ItemName extends StatelessWidget {
 
   /// Item to display
   final Item item;
+
+  /// Tooltip controller
   final SuperTooltipController? controller;
 
   @override
