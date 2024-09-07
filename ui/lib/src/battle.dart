@@ -5,6 +5,7 @@ import 'package:he_is_coming/he_is_coming.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:ui/src/compendium.dart';
+import 'package:ui/src/extensions.dart';
 import 'package:ui/src/style.dart';
 
 /// BattlePage widget
