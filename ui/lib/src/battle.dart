@@ -500,15 +500,19 @@ class PlayerBattleView extends StatelessWidget {
           child: Column(
             children: <Widget>[
               _itemSlot(0),
-              if (edge == null) const Text('No Edge') else EdgeName(edge: edge),
-              if (inventory.oils.isNotEmpty)
-                Row(
-                  children: <Widget>[
-                    ...inventory.oils.map((oil) {
-                      return OilIconWithTooltip(oil: oil);
-                    }),
-                  ],
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ...inventory.oils.map((oil) {
+                    return OilIconWithTooltip(oil: oil);
+                  }),
+                  if (edge != null)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: EdgeName(edge: edge),
+                    ),
+                ],
+              ),
               ...inventory.items.skip(1).map((item) {
                 return _itemSlot(inventory.items.indexOf(item));
               }),
