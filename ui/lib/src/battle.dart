@@ -361,11 +361,7 @@ class _BattleStateController {
 
   void setItems(List<Item> items) {
     setInventory(
-      _inventory.copyWith(
-        level: _level,
-        items: items,
-        setBonuses: data.sets,
-      ),
+      _inventory.copyWith(level: _level, items: items, setBonuses: data.sets),
     );
   }
 
