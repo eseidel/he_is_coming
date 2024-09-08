@@ -302,9 +302,6 @@ class _CodeFieldState extends State<CodeField> {
   Widget build(BuildContext context) {
     return Form(
       autovalidateMode: AutovalidateMode.always,
-      onChanged: () {
-        Form.of(primaryFocus!.context!).save();
-      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: TextFormField(
