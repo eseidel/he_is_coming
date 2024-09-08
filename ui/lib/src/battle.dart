@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:super_tooltip/super_tooltip.dart';
@@ -11,10 +12,13 @@ import 'package:ui/src/style.dart';
 /// BattlePage widget
 class BattlePage extends StatefulWidget {
   /// BattlePage constructor
-  const BattlePage({required this.data, super.key});
+  const BattlePage({required this.data, required this.state, super.key});
 
   /// Data
   final Data data;
+
+  /// BuildState
+  final BuildState state;
 
   @override
   State<BattlePage> createState() => _BattlePageState();
@@ -129,13 +133,7 @@ class _AddItemState extends State<AddItem> {
 }
 
 class _BattlePageState extends State<BattlePage> {
-  // Saves "offscreen" items, even those not displayed at the current level.
-  // This lets you change the level back and forth and still see the same items.
-  // These "offscreen" items are intentionally removed when an item is cleared
-  // to avoid having them suddenly appear in the inventory.
-  late Inventory _endConfig;
   List<BattleResult> results = [];
-  Level level = Level.one;
   final random = Random();
 
   late TextEditingController _controller;
@@ -144,7 +142,16 @@ class _BattlePageState extends State<BattlePage> {
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _reroll();
+    // Update the text field with the current build id.
+    _controller.text = BuildIdCodec.encode(widget.state, widget.data);
+
+    // For each enemy, run the battle and gather the results.
+    final player = playerWithInventory(level, inventory);
+    results = enemies
+        .map(
+          (enemy) => Battle.resolve(first: player, second: enemy),
+        )
+        .toList();
   }
 
   @override
@@ -153,11 +160,26 @@ class _BattlePageState extends State<BattlePage> {
     super.dispose();
   }
 
+  Level get level => widget.state.level;
+  Inventory get inventory => widget.state.inventory;
+
+  void setBuildState(BuildContext context, BuildState state) {
+    context.goNamed(
+      'battle',
+      queryParameters: {'s': BuildIdCodec.encode(state, widget.data)},
+    );
+  }
+
+  void setInventory(BuildContext context, Inventory inventory) {
+    setBuildState(context, BuildState(level, inventory));
+  }
+
+  void setLevel(BuildContext context, Level level) {
+    setBuildState(context, BuildState(level, inventory));
+  }
+
   void _reroll() {
-    setState(() {
-      _endConfig = Inventory.random(Level.end, random, widget.data);
-      _updateResults();
-    });
+    setInventory(context, Inventory.random(level, random, widget.data));
   }
 
   List<Creature> get enemies {
@@ -166,59 +188,26 @@ class _BattlePageState extends State<BattlePage> {
         .toList();
   }
 
-  Inventory get inventory {
-    final maxItem =
-        min(_endConfig.items.length, Inventory.itemSlotCount(level));
-    return Inventory(
-      level: level,
-      items: _endConfig.items.sublist(0, maxItem),
-      edge: _endConfig.edge,
-      oils: _endConfig.oils,
-      setBonuses: widget.data.sets,
-    );
-  }
-
   void _addItem(Item item) {
-    setState(() {
-      // If the item is a weapon, replace the first item.
-      // If the inventory is full, replace the last item.
-      if (item.isWeapon ||
-          inventory.items.length >= Inventory.itemSlotCount(level)) {
-        final index = item.isWeapon ? 0 : inventory.items.length - 1;
-        _endConfig.items[index] = item;
-      } else {
-        // Otherwise add the item to the end.
-        _endConfig = inventory.copyWith(
-          items: inventory.items.toList()..add(item),
-          level: level,
-          setBonuses: widget.data.sets,
-        );
-      }
-      _updateResults();
-    });
-  }
-
-  void _updateResults() {
-    // For each enemy, run the battle and gather the results.
-    final player = playerWithInventory(level, inventory);
-    results = enemies
-        .map(
-          (enemy) => Battle.resolve(first: player, second: enemy),
-        )
-        .toList();
-
-    // Update the text field with the current build id.
-    _controller.text = BuildIdCodec.encode(
-      BuildState(level, inventory),
-      widget.data,
+    // If the item is a weapon, replace the first item.
+    // If the inventory is full, replace the last item.
+    final newItems = inventory.items.toList();
+    if (item.isWeapon ||
+        inventory.items.length >= Inventory.itemSlotCount(level)) {
+      final index = item.isWeapon ? 0 : inventory.items.length - 1;
+      newItems[index] = item;
+    } else {
+      // Otherwise add the item to the end.
+      newItems.add(item);
+    }
+    setInventory(
+      context,
+      inventory.copyWith(
+        items: newItems,
+        level: level,
+        setBonuses: widget.data.sets,
+      ),
     );
-  }
-
-  void _setLevel(Level level) {
-    setState(() {
-      this.level = level;
-      _updateResults();
-    });
   }
 
   @override
@@ -270,7 +259,7 @@ class _BattlePageState extends State<BattlePage> {
             width: 300,
             child: NesIterableOptions(
               values: Level.values,
-              onChange: _setLevel,
+              onChange: (value) => setLevel(context, value),
               optionBuilder: (context, level) => Text(
                 level.name,
                 style: TextStyle(color: Palette.white),
@@ -287,17 +276,15 @@ class _BattlePageState extends State<BattlePage> {
                       inventory: inventory,
                       level: level,
                       clearItem: (index) {
-                        setState(() {
-                          final items = inventory.items.toList()
-                            ..removeAt(index);
-                          // This intentionally removes any "offscreen" items.
-                          _endConfig = inventory.copyWith(
-                            items: items,
+                        final items = inventory.items.toList()..removeAt(index);
+                        setInventory(
+                          context,
+                          inventory.copyWith(
                             level: level,
+                            items: items,
                             setBonuses: widget.data.sets,
-                          );
-                          _updateResults();
-                        });
+                          ),
+                        );
                       },
                     ),
                     const SizedBox(height: 16),
@@ -339,11 +326,7 @@ class _BattlePageState extends State<BattlePage> {
                           if (build == null) {
                             return;
                           }
-                          setState(() {
-                            _endConfig = build.inventory;
-                            level = build.level;
-                            _updateResults();
-                          });
+                          setBuildState(context, build);
                         },
                       ),
                     ),

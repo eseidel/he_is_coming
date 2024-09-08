@@ -121,6 +121,11 @@ class BuildState {
   /// Create a new build state.
   const BuildState(this.level, this.inventory);
 
+  /// Create a random build state.
+  factory BuildState.random({required Level level, required Data data}) {
+    return BuildState(level, Inventory.random(level, Random(), data));
+  }
+
   /// Current level.
   final Level level;
 
@@ -159,7 +164,8 @@ class BuildIdCodec {
   }
 
   /// Try to decode the given string into an inventory.
-  static BuildState? tryDecode(String encoded, Data data) {
+  static BuildState? tryDecode(String? encoded, Data data) {
+    if (encoded == null) return null;
     try {
       return decode(encoded, data);
     } catch (e) {
