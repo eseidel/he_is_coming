@@ -603,7 +603,6 @@ class ItemName extends StatelessWidget {
   Widget build(BuildContext context) {
     return SuperTooltip(
       controller: controller,
-      showCloseButton: true,
       content: ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: 300,

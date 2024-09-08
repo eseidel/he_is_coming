@@ -316,6 +316,7 @@ class ItemView extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
@@ -376,6 +377,7 @@ class CreatureView extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Row(
             children: [
@@ -430,6 +432,7 @@ class EdgeView extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           OutlinedBox(
             borderColor: Palette.white, // Edges always use white.
@@ -470,6 +473,7 @@ class OilView extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           OutlinedBox(
             // Oils shouldn't have an outline.
@@ -508,6 +512,7 @@ class SetBonusView extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           OutlinedBox(
             borderColor: Palette.white, // Set bonuses always use white.
