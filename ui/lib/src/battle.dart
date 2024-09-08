@@ -166,7 +166,7 @@ class _BattlePageState extends State<BattlePage> {
   void setBuildState(BuildContext context, BuildState state) {
     context.goNamed(
       'battle',
-      queryParameters: {
+      pathParameters: {
         BuildStateCodec.parameterName:
             BuildStateCodec.encode(state, widget.data),
       },

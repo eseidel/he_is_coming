@@ -141,7 +141,7 @@ class BuildStateCodec {
   }
 
   /// The name of the parameter used to encode the build state.
-  static const String parameterName = 's';
+  static const String parameterName = 'state';
 
   static final int _levelBits = _bitsNeededFor(Level.values.length);
 

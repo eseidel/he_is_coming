@@ -22,10 +22,21 @@ final GoRouter _router = GoRouter(
       routes: [
         GoRoute(
           path: 'battle',
+          name: 'random_battle',
+          builder: (BuildContext context, GoRouterState state) {
+            return UsesData(
+              builder: (context, data) {
+                return RandomBattlePage(data: data);
+              },
+            );
+          },
+        ),
+        GoRoute(
+          path: 'battle/:state',
           name: 'battle',
           builder: (BuildContext context, GoRouterState state) {
             final parameter =
-                state.uri.queryParameters[BuildStateCodec.parameterName];
+                state.pathParameters[BuildStateCodec.parameterName];
             return UsesData(
               builder: (context, data) {
                 return BattlePage(
@@ -55,6 +66,34 @@ final GoRouter _router = GoRouter(
     ),
   ],
 );
+
+/// A page that starts a random battle.
+/// This is needed because Data needs to be loaded before we can generate
+/// BuildState.random.
+class RandomBattlePage extends StatelessWidget {
+  /// Constructs a [RandomBattlePage]
+  const RandomBattlePage({required this.data, super.key});
+
+  /// The data to use for the battle.
+  final Data data;
+
+  @override
+  Widget build(BuildContext context) {
+    // Queue a redirection after the build.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.goNamed(
+        'battle',
+        pathParameters: {
+          BuildStateCodec.parameterName: BuildStateCodec.encode(
+            BuildState.random(level: Level.one, data: data),
+            data,
+          ),
+        },
+      );
+    });
+    return const Center(child: CircularProgressIndicator());
+  }
+}
 
 /// The main application widget.
 class MyApp extends StatelessWidget {
@@ -89,7 +128,7 @@ class TitleScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(
-              onPressed: () => _router.goNamed('battle'),
+              onPressed: () => _router.goNamed('random_battle'),
               child: const Text('Battle'),
             ),
             const SizedBox(height: 16),
