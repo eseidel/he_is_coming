@@ -291,16 +291,19 @@ class _CodeFieldState extends State<CodeField> {
   }
 }
 
-/// BattlePage widget
-class BattlePage extends StatelessWidget {
-  /// BattlePage constructor
-  const BattlePage({required this.data, required this.state, super.key});
+/// Helper for managing the battle state changes.  Lets callers speak in terms
+/// of changes to single items, and turns those into a full state change.
+/// Takes a callback to apply the state change.
+class _BattleStateController {
+  _BattleStateController({
+    required this.data,
+    required this.state,
+    required this.changeState,
+  });
 
-  /// Data
   final Data data;
-
-  /// BuildState
   final BuildState state;
+  final void Function(BuildState) changeState;
 
   /// Level from the build state
   Level get _level => state.level;
@@ -308,22 +311,12 @@ class BattlePage extends StatelessWidget {
   /// Inventory from the build state
   Inventory get _inventory => state.inventory;
 
-  void _setBuildState(BuildContext context, BuildState state) {
-    context.goNamed(
-      'battle',
-      pathParameters: {
-        BuildStateCodec.parameterName: BuildStateCodec.encode(state, data),
-      },
-    );
+  void setInventory(Inventory inventory) {
+    changeState(BuildState(_level, inventory));
   }
 
-  void _setInventory(BuildContext context, Inventory inventory) {
-    _setBuildState(context, BuildState(_level, inventory));
-  }
-
-  void _setItems(BuildContext context, List<Item> items) {
-    _setInventory(
-      context,
+  void setItems(List<Item> items) {
+    setInventory(
       _inventory.copyWith(
         level: _level,
         items: items,
@@ -332,17 +325,15 @@ class BattlePage extends StatelessWidget {
     );
   }
 
-  void _setLevel(BuildContext context, Level level) {
-    _setBuildState(context, BuildState(level, _inventory));
+  void setLevel(Level level) {
+    changeState(BuildState(level, _inventory));
   }
 
-  void _reroll(
-    BuildContext context,
-  ) {
-    _setInventory(context, Inventory.random(_level, Random(), data));
+  void reroll() {
+    setInventory(Inventory.random(_level, Random(), data));
   }
 
-  void _addItem(BuildContext context, Item item) {
+  void addItem(Item item) {
     // If the item is a weapon, replace the first item.
     // If the inventory is full, replace the last item.
     final newItems = _inventory.items.toList();
@@ -354,12 +345,45 @@ class BattlePage extends StatelessWidget {
       // Otherwise add the item to the end.
       newItems.add(item);
     }
-    _setItems(context, newItems);
+    setItems(newItems);
   }
 
-  void _removeItemAtIndex(BuildContext context, int index) {
-    _setItems(context, _inventory.items.toList()..removeAt(index));
+  void removeItemAtIndex(int index) {
+    setItems(_inventory.items.toList()..removeAt(index));
   }
+}
+
+/// BattlePage widget
+class BattlePage extends StatelessWidget {
+  /// BattlePage constructor
+  const BattlePage({required this.data, required this.state, super.key});
+
+  /// Data
+  final Data data;
+
+  /// BuildState
+  final BuildState state;
+
+  _BattleStateController _stateController(BuildContext context) =>
+      _BattleStateController(
+        state: state,
+        data: data,
+        changeState: (state) {
+          context.goNamed(
+            'battle',
+            pathParameters: {
+              BuildStateCodec.parameterName:
+                  BuildStateCodec.encode(state, data),
+            },
+          );
+        },
+      );
+
+  /// Level from the build state
+  Level get _level => state.level;
+
+  /// Inventory from the build state
+  Inventory get _inventory => state.inventory;
 
   @override
   Widget build(BuildContext context) {
@@ -373,7 +397,7 @@ class BattlePage extends StatelessWidget {
             width: 300,
             child: NesIterableOptions<Level>(
               values: Level.values,
-              onChange: (level) => _setLevel(context, level),
+              onChange: _stateController(context).setLevel,
               optionBuilder: (context, level) => Text(
                 level.name,
                 style: TextStyle(color: Palette.white),
@@ -389,7 +413,7 @@ class BattlePage extends StatelessWidget {
                     PlayerBattleView(
                       inventory: _inventory,
                       level: _level,
-                      clearItem: (index) => _removeItemAtIndex(context, index),
+                      clearItem: _stateController(context).removeItemAtIndex,
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -397,10 +421,10 @@ class BattlePage extends StatelessWidget {
                       children: [
                         AddItem(
                           data: data,
-                          addItem: (item) => _addItem(context, item),
+                          addItem: _stateController(context).addItem,
                         ),
                         ElevatedButton.icon(
-                          onPressed: () => _reroll(context),
+                          onPressed: _stateController(context).reroll,
                           icon: const Icon(Icons.casino),
                           label: const Text('Reroll'),
                         ),
@@ -410,7 +434,7 @@ class BattlePage extends StatelessWidget {
                     CodeField(
                       data: data,
                       state: state,
-                      changeState: (state) => _setBuildState(context, state),
+                      changeState: _stateController(context).changeState,
                     ),
                   ],
                 ),
