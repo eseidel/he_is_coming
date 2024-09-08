@@ -138,10 +138,19 @@ class _BattlePageState extends State<BattlePage> {
   Level level = Level.one;
   final random = Random();
 
+  late TextEditingController _controller;
+
   @override
   void initState() {
     super.initState();
+    _controller = TextEditingController();
     _reroll();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   void _reroll() {
@@ -197,6 +206,12 @@ class _BattlePageState extends State<BattlePage> {
           (enemy) => Battle.resolve(first: player, second: enemy),
         )
         .toList();
+
+    // Update the text field with the current build id.
+    _controller.text = BuildIdCodec.encode(
+      BuildState(level, inventory),
+      widget.data,
+    );
   }
 
   void _setLevel(Level level) {
@@ -301,11 +316,17 @@ class _BattlePageState extends State<BattlePage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      BuildIdCodec.encode(
-                        BuildState(level, inventory),
-                        widget.data,
-                      ),
+                    TextField(
+                      controller: _controller,
+                      onSubmitted: (String value) async {
+                        // TODO(eseidel): Handle invalid build ids.
+                        final build = BuildIdCodec.decode(value, widget.data);
+                        setState(() {
+                          _endConfig = build.inventory;
+                          level = build.level;
+                          _updateResults();
+                        });
+                      },
                     ),
                   ],
                 ),
