@@ -205,9 +205,30 @@ class EnemyResults extends StatelessWidget {
   }
 }
 
-class _BattlePageState extends State<BattlePage> {
-  final random = Random();
+/// Text Field for setting the build state from a string.
+class CodeField extends StatefulWidget {
+  /// CodeField constructor
+  const CodeField({
+    required this.data,
+    required this.state,
+    required this.changeState,
+    super.key,
+  });
 
+  /// Data
+  final Data data;
+
+  /// BuildState
+  final BuildState state;
+
+  /// Callback to change the build state
+  final void Function(BuildState) changeState;
+
+  @override
+  State<CodeField> createState() => _CodeFieldState();
+}
+
+class _CodeFieldState extends State<CodeField> {
   late TextEditingController _controller;
   final _focusNode = FocusNode();
 
@@ -224,6 +245,14 @@ class _BattlePageState extends State<BattlePage> {
     _updateFromState(widget.state);
   }
 
+  @override
+  void didUpdateWidget(CodeField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.state != widget.state) {
+      _updateFromState(widget.state);
+    }
+  }
+
   void _updateFromState(BuildState state) {
     setState(() {
       // Update the text field with the current build id.
@@ -237,11 +266,53 @@ class _BattlePageState extends State<BattlePage> {
     super.dispose();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      autovalidateMode: AutovalidateMode.always,
+      onChanged: () {
+        Form.of(primaryFocus!.context!).save();
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: TextFormField(
+          decoration: const InputDecoration(
+            labelText: 'Code',
+          ),
+          controller: _controller,
+          focusNode: _focusNode,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Please enter a value';
+            }
+            try {
+              BuildStateCodec.decode(value, widget.data);
+            } catch (e) {
+              return e.toString();
+            }
+            return null;
+          },
+          onFieldSubmitted: (String value) async {
+            final state = BuildStateCodec.tryDecode(value, widget.data);
+            if (state == null) {
+              return;
+            }
+            _updateFromState(state);
+            widget.changeState(state);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _BattlePageState extends State<BattlePage> {
+  final random = Random();
+
   Level get level => widget.state.level;
   Inventory get inventory => widget.state.inventory;
 
-  void setBuildState(BuildContext context, BuildState state) {
-    _updateFromState(state);
+  void setBuildState(BuildState state) {
     context.goNamed(
       'battle',
       pathParameters: {
@@ -251,16 +322,16 @@ class _BattlePageState extends State<BattlePage> {
     );
   }
 
-  void setInventory(BuildContext context, Inventory inventory) {
-    setBuildState(context, BuildState(level, inventory));
+  void setInventory(Inventory inventory) {
+    setBuildState(BuildState(level, inventory));
   }
 
-  void setLevel(BuildContext context, Level level) {
-    setBuildState(context, BuildState(level, inventory));
+  void setLevel(Level level) {
+    setBuildState(BuildState(level, inventory));
   }
 
   void _reroll() {
-    setInventory(context, Inventory.random(level, random, widget.data));
+    setInventory(Inventory.random(level, random, widget.data));
   }
 
   void _addItem(Item item) {
@@ -276,7 +347,6 @@ class _BattlePageState extends State<BattlePage> {
       newItems.add(item);
     }
     setInventory(
-      context,
       inventory.copyWith(
         items: newItems,
         level: level,
@@ -288,7 +358,6 @@ class _BattlePageState extends State<BattlePage> {
   void _removeItemAtIndex(int index) {
     final items = inventory.items.toList()..removeAt(index);
     setInventory(
-      context,
       inventory.copyWith(
         level: level,
         items: items,
@@ -309,7 +378,7 @@ class _BattlePageState extends State<BattlePage> {
             width: 300,
             child: NesIterableOptions(
               values: Level.values,
-              onChange: (value) => setLevel(context, value),
+              onChange: setLevel,
               optionBuilder: (context, level) => Text(
                 level.name,
                 style: TextStyle(color: Palette.white),
@@ -343,40 +412,10 @@ class _BattlePageState extends State<BattlePage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Form(
-                      autovalidateMode: AutovalidateMode.always,
-                      onChanged: () {
-                        Form.of(primaryFocus!.context!).save();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'Code',
-                          ),
-                          controller: _controller,
-                          focusNode: _focusNode,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'Please enter a value';
-                            }
-                            try {
-                              BuildStateCodec.decode(value, widget.data);
-                            } catch (e) {
-                              return e.toString();
-                            }
-                            return null;
-                          },
-                          onFieldSubmitted: (String value) async {
-                            final build =
-                                BuildStateCodec.tryDecode(value, widget.data);
-                            if (build == null) {
-                              return;
-                            }
-                            setBuildState(context, build);
-                          },
-                        ),
-                      ),
+                    CodeField(
+                      data: widget.data,
+                      state: widget.state,
+                      changeState: setBuildState,
                     ),
                   ],
                 ),
