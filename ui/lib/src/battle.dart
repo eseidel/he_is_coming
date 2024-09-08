@@ -431,7 +431,6 @@ class _ItemSlotState extends State<ItemSlot> {
             opacity: opacity,
             child: widget.action,
           ),
-          widget.action!,
         ],
       ),
     );
