@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:he_is_coming/he_is_coming.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:super_tooltip/super_tooltip.dart';
 import 'package:ui/src/compendium.dart';
@@ -176,13 +177,20 @@ class EnemyResults extends StatelessWidget {
       children: results.map((result) {
         final change = result.firstDelta;
         final survived = result.first.isAlive;
-        const diedText = Text('💀');
+        final diedIcon = Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Icon(
+            Symbols.skull,
+            color: Palette.attack,
+            size: Style.inlineStatIconSize.border,
+          ),
+        );
         return Row(
           children: [
             CreatureName(creature: result.second),
             const Spacer(),
             if (survived) ..._battleDelta(change),
-            if (!survived) diedText,
+            if (!survived) diedIcon,
           ],
         );
       }).toList(),

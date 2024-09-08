@@ -15,6 +15,7 @@ dependencies:
   google_fonts: ^6.2.1
   he_is_coming:
     path: ../he_is_coming
+  material_symbols_icons: ^4.2785.1
   nes_ui: ^0.20.0
   super_tooltip: ^2.0.8
   url_launcher: ^6.3.0
