@@ -170,6 +170,47 @@ class EnemyResults extends StatelessWidget {
         .map((enemy) => Battle.resolve(first: player, second: enemy))
         .toList();
 
+    if (state.level == Level.end) {
+      // End only has one boss which you can never defeat, so instead
+      // show the number of turns it took and how much dmg you did.
+      if (results.length != 1) {
+        throw StateError('Expected exactly one result for the end boss.');
+      }
+      final result = results.single;
+      final turns = result.turns;
+      final damage = -result.secondDelta.hp;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CreatureName(creature: result.second),
+          RichText(
+            text: TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              text: 'Damage Done: ',
+              children: <TextSpan>[
+                TextSpan(
+                  text: '$damage',
+                  style: const TextStyle(color: Palette.attack),
+                ),
+              ],
+            ),
+          ),
+          RichText(
+            text: TextSpan(
+              style: DefaultTextStyle.of(context).style,
+              text: 'Turn Counter: ',
+              children: <TextSpan>[
+                TextSpan(
+                  text: '$turns',
+                  style: const TextStyle(color: Palette.speed),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: results.map((result) {
