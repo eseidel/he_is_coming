@@ -137,21 +137,34 @@ class _BattlePageState extends State<BattlePage> {
   final random = Random();
 
   late TextEditingController _controller;
+  final _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    // Update the text field with the current build id.
-    _controller.text = BuildStateCodec.encode(widget.state, widget.data);
+    _focusNode.addListener(() {
+      if (_focusNode.hasFocus) {
+        _controller.selection =
+            TextSelection(baseOffset: 0, extentOffset: _controller.text.length);
+      }
+    });
+    _updateFromState(widget.state);
+  }
 
-    // For each enemy, run the battle and gather the results.
-    final player = playerWithInventory(level, inventory);
-    results = enemies
-        .map(
-          (enemy) => Battle.resolve(first: player, second: enemy),
-        )
-        .toList();
+  void _updateFromState(BuildState state) {
+    setState(() {
+      // Update the text field with the current build id.
+      _controller.text = BuildStateCodec.encode(state, widget.data);
+      // For each enemy, run the battle and gather the results.
+      final player = playerWithInventory(level, inventory);
+
+      results = enemies
+          .map(
+            (enemy) => Battle.resolve(first: player, second: enemy),
+          )
+          .toList();
+    });
   }
 
   @override
@@ -164,6 +177,7 @@ class _BattlePageState extends State<BattlePage> {
   Inventory get inventory => widget.state.inventory;
 
   void setBuildState(BuildContext context, BuildState state) {
+    _updateFromState(state);
     context.goNamed(
       'battle',
       pathParameters: {
@@ -312,6 +326,8 @@ class _BattlePageState extends State<BattlePage> {
                         Form.of(primaryFocus!.context!).save();
                       },
                       child: TextFormField(
+                        controller: _controller,
+                        focusNode: _focusNode,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter a value';
