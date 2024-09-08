@@ -158,6 +158,15 @@ class BuildIdCodec {
     return hex.encode(bits.takeBytes());
   }
 
+  /// Try to decode the given string into an inventory.
+  static BuildState? tryDecode(String encoded, Data data) {
+    try {
+      return decode(encoded, data);
+    } catch (e) {
+      return null;
+    }
+  }
+
   /// Decode the given string into an inventory.
   static BuildState decode(String encoded, Data data) {
     final bytes = Uint8List.fromList(hex.decode(encoded));

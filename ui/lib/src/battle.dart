@@ -316,17 +316,36 @@ class _BattlePageState extends State<BattlePage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    TextField(
-                      controller: _controller,
-                      onSubmitted: (String value) async {
-                        // TODO(eseidel): Handle invalid build ids.
-                        final build = BuildIdCodec.decode(value, widget.data);
-                        setState(() {
-                          _endConfig = build.inventory;
-                          level = build.level;
-                          _updateResults();
-                        });
+                    Form(
+                      autovalidateMode: AutovalidateMode.always,
+                      onChanged: () {
+                        Form.of(primaryFocus!.context!).save();
                       },
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter a value';
+                          }
+                          try {
+                            BuildIdCodec.decode(value, widget.data);
+                          } catch (e) {
+                            return e.toString();
+                          }
+                          return null;
+                        },
+                        onFieldSubmitted: (String value) async {
+                          final build =
+                              BuildIdCodec.tryDecode(value, widget.data);
+                          if (build == null) {
+                            return;
+                          }
+                          setState(() {
+                            _endConfig = build.inventory;
+                            level = build.level;
+                            _updateResults();
+                          });
+                        },
+                      ),
                     ),
                   ],
                 ),
