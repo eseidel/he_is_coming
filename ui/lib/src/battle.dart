@@ -167,9 +167,7 @@ class EnemyResults extends StatelessWidget {
     // For each enemy, run the battle and gather the results.
     final player = playerWithInventory(state.level, state.inventory);
     final results = _enemies
-        .map(
-          (enemy) => Battle.resolve(first: player, second: enemy),
-        )
+        .map((enemy) => Battle.resolve(first: player, second: enemy))
         .toList();
 
     return Column(
