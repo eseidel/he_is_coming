@@ -301,7 +301,12 @@ class _BattlePageState extends State<BattlePage> {
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text(BuildIdCodec.encode(inventory, widget.data)),
+                    Text(
+                      BuildIdCodec.encode(
+                        BuildState(level, inventory),
+                        widget.data,
+                      ),
+                    ),
                   ],
                 ),
               ),
