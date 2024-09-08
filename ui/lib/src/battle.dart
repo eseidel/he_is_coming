@@ -9,21 +9,6 @@ import 'package:ui/src/compendium.dart';
 import 'package:ui/src/extensions.dart';
 import 'package:ui/src/style.dart';
 
-/// BattlePage widget
-class BattlePage extends StatefulWidget {
-  /// BattlePage constructor
-  const BattlePage({required this.data, required this.state, super.key});
-
-  /// Data
-  final Data data;
-
-  /// BuildState
-  final BuildState state;
-
-  @override
-  State<BattlePage> createState() => _BattlePageState();
-}
-
 /// AddItem widget
 class AddItem extends StatefulWidget {
   /// AddItem constructor
@@ -306,64 +291,74 @@ class _CodeFieldState extends State<CodeField> {
   }
 }
 
-class _BattlePageState extends State<BattlePage> {
-  final random = Random();
+/// BattlePage widget
+class BattlePage extends StatelessWidget {
+  /// BattlePage constructor
+  const BattlePage({required this.data, required this.state, super.key});
 
-  Level get level => widget.state.level;
-  Inventory get inventory => widget.state.inventory;
+  /// Data
+  final Data data;
 
-  void setBuildState(BuildState state) {
+  /// BuildState
+  final BuildState state;
+
+  /// Level from the build state
+  Level get _level => state.level;
+
+  /// Inventory from the build state
+  Inventory get _inventory => state.inventory;
+
+  void _setBuildState(BuildContext context, BuildState state) {
     context.goNamed(
       'battle',
       pathParameters: {
-        BuildStateCodec.parameterName:
-            BuildStateCodec.encode(state, widget.data),
+        BuildStateCodec.parameterName: BuildStateCodec.encode(state, data),
       },
     );
   }
 
-  void setInventory(Inventory inventory) {
-    setBuildState(BuildState(level, inventory));
+  void _setInventory(BuildContext context, Inventory inventory) {
+    _setBuildState(context, BuildState(_level, inventory));
   }
 
-  void setLevel(Level level) {
-    setBuildState(BuildState(level, inventory));
+  void _setItems(BuildContext context, List<Item> items) {
+    _setInventory(
+      context,
+      _inventory.copyWith(
+        level: _level,
+        items: items,
+        setBonuses: data.sets,
+      ),
+    );
   }
 
-  void _reroll() {
-    setInventory(Inventory.random(level, random, widget.data));
+  void _setLevel(BuildContext context, Level level) {
+    _setBuildState(context, BuildState(level, _inventory));
   }
 
-  void _addItem(Item item) {
+  void _reroll(
+    BuildContext context,
+  ) {
+    _setInventory(context, Inventory.random(_level, Random(), data));
+  }
+
+  void _addItem(BuildContext context, Item item) {
     // If the item is a weapon, replace the first item.
     // If the inventory is full, replace the last item.
-    final newItems = inventory.items.toList();
+    final newItems = _inventory.items.toList();
     if (item.isWeapon ||
-        inventory.items.length >= Inventory.itemSlotCount(level)) {
-      final index = item.isWeapon ? 0 : inventory.items.length - 1;
+        _inventory.items.length >= Inventory.itemSlotCount(_level)) {
+      final index = item.isWeapon ? 0 : _inventory.items.length - 1;
       newItems[index] = item;
     } else {
       // Otherwise add the item to the end.
       newItems.add(item);
     }
-    setInventory(
-      inventory.copyWith(
-        items: newItems,
-        level: level,
-        setBonuses: widget.data.sets,
-      ),
-    );
+    _setItems(context, newItems);
   }
 
-  void _removeItemAtIndex(int index) {
-    final items = inventory.items.toList()..removeAt(index);
-    setInventory(
-      inventory.copyWith(
-        level: level,
-        items: items,
-        setBonuses: widget.data.sets,
-      ),
-    );
+  void _removeItemAtIndex(BuildContext context, int index) {
+    _setItems(context, _inventory.items.toList()..removeAt(index));
   }
 
   @override
@@ -376,14 +371,14 @@ class _BattlePageState extends State<BattlePage> {
         children: <Widget>[
           SizedBox(
             width: 300,
-            child: NesIterableOptions(
+            child: NesIterableOptions<Level>(
               values: Level.values,
-              onChange: setLevel,
+              onChange: (level) => _setLevel(context, level),
               optionBuilder: (context, level) => Text(
                 level.name,
                 style: TextStyle(color: Palette.white),
               ),
-              value: level,
+              value: _level,
             ),
           ),
           Row(
@@ -392,20 +387,20 @@ class _BattlePageState extends State<BattlePage> {
                 child: Column(
                   children: [
                     PlayerBattleView(
-                      inventory: inventory,
-                      level: level,
-                      clearItem: _removeItemAtIndex,
+                      inventory: _inventory,
+                      level: _level,
+                      clearItem: (index) => _removeItemAtIndex(context, index),
                     ),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         AddItem(
-                          data: widget.data,
-                          addItem: _addItem,
+                          data: data,
+                          addItem: (item) => _addItem(context, item),
                         ),
                         ElevatedButton.icon(
-                          onPressed: _reroll,
+                          onPressed: () => _reroll(context),
                           icon: const Icon(Icons.casino),
                           label: const Text('Reroll'),
                         ),
@@ -413,17 +408,15 @@ class _BattlePageState extends State<BattlePage> {
                     ),
                     const SizedBox(height: 16),
                     CodeField(
-                      data: widget.data,
-                      state: widget.state,
-                      changeState: setBuildState,
+                      data: data,
+                      state: state,
+                      changeState: (state) => _setBuildState(context, state),
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 16),
-              Expanded(
-                child: EnemyResults(state: widget.state, data: widget.data),
-              ),
+              Expanded(child: EnemyResults(state: state, data: data)),
             ],
           ),
         ],
