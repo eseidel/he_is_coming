@@ -132,8 +132,80 @@ class _AddItemState extends State<AddItem> {
   }
 }
 
+/// EnemyResults widget
+class EnemyResults extends StatelessWidget {
+  /// EnemyResults constructor
+  const EnemyResults({
+    required this.state,
+    required this.data,
+    super.key,
+  });
+
+  /// BuildState
+  final BuildState state;
+
+  /// Data
+  final Data data;
+
+  List<Creature> get _enemies {
+    return data.creatures.creatures
+        .where((c) => c.level == state.level)
+        .toList();
+  }
+
+  String _signed(int value) => value >= 0 ? '+$value' : '$value';
+
+  List<Widget> _battleDelta(CreatureDelta delta) {
+    const size = Style.inlineStatIconSize;
+    return <Widget>[
+      if (delta.hp != 0) ...[
+        Text(_signed(delta.hp)),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4),
+          child: StatIcon(statType: StatType.health, size: size),
+        ),
+      ],
+      if (delta.gold != 0) ...[
+        Text(_signed(delta.gold)),
+        const SizedBox(width: 4),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 4),
+          child: GoldIcon(size: size),
+        ),
+      ],
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // For each enemy, run the battle and gather the results.
+    final player = playerWithInventory(state.level, state.inventory);
+    final results = _enemies
+        .map(
+          (enemy) => Battle.resolve(first: player, second: enemy),
+        )
+        .toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: results.map((result) {
+        final change = result.firstDelta;
+        final survived = result.first.isAlive;
+        const diedText = Text('💀');
+        return Row(
+          children: [
+            CreatureName(creature: result.second),
+            const Spacer(),
+            if (survived) ..._battleDelta(change),
+            if (!survived) diedText,
+          ],
+        );
+      }).toList(),
+    );
+  }
+}
+
 class _BattlePageState extends State<BattlePage> {
-  List<BattleResult> results = [];
   final random = Random();
 
   late TextEditingController _controller;
@@ -156,14 +228,6 @@ class _BattlePageState extends State<BattlePage> {
     setState(() {
       // Update the text field with the current build id.
       _controller.text = BuildStateCodec.encode(state, widget.data);
-      // For each enemy, run the battle and gather the results.
-      final player = playerWithInventory(level, inventory);
-
-      results = enemies
-          .map(
-            (enemy) => Battle.resolve(first: player, second: enemy),
-          )
-          .toList();
     });
   }
 
@@ -199,12 +263,6 @@ class _BattlePageState extends State<BattlePage> {
     setInventory(context, Inventory.random(level, random, widget.data));
   }
 
-  List<Creature> get enemies {
-    return widget.data.creatures.creatures
-        .where((c) => c.level == level)
-        .toList();
-  }
-
   void _addItem(Item item) {
     // If the item is a weapon, replace the first item.
     // If the inventory is full, replace the last item.
@@ -227,45 +285,20 @@ class _BattlePageState extends State<BattlePage> {
     );
   }
 
+  void _removeItemAtIndex(int index) {
+    final items = inventory.items.toList()..removeAt(index);
+    setInventory(
+      context,
+      inventory.copyWith(
+        level: level,
+        items: items,
+        setBonuses: widget.data.sets,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    String signed(int value) => value >= 0 ? '+$value' : '$value';
-
-    List<Widget> battleDelta(CreatureDelta delta) {
-      const size = Style.inlineStatIconSize;
-      return <Widget>[
-        if (delta.hp != 0) ...[
-          Text(signed(delta.hp)),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            child: StatIcon(statType: StatType.health, size: size),
-          ),
-        ],
-        if (delta.gold != 0) ...[
-          Text(signed(delta.gold)),
-          const SizedBox(width: 4),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            child: GoldIcon(size: size),
-          ),
-        ],
-      ];
-    }
-
-    Row resultLine(BattleResult result) {
-      final change = result.firstDelta;
-      final survived = result.first.isAlive;
-      const diedText = Text('💀');
-      return Row(
-        children: [
-          CreatureName(creature: result.second),
-          const Spacer(),
-          if (survived) ...battleDelta(change),
-          if (!survived) diedText,
-        ],
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Battle'),
@@ -292,17 +325,7 @@ class _BattlePageState extends State<BattlePage> {
                     PlayerBattleView(
                       inventory: inventory,
                       level: level,
-                      clearItem: (index) {
-                        final items = inventory.items.toList()..removeAt(index);
-                        setInventory(
-                          context,
-                          inventory.copyWith(
-                            level: level,
-                            items: items,
-                            setBonuses: widget.data.sets,
-                          ),
-                        );
-                      },
+                      clearItem: _removeItemAtIndex,
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -354,10 +377,7 @@ class _BattlePageState extends State<BattlePage> {
               ),
               const SizedBox(width: 16),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: results.map(resultLine).toList(),
-                ),
+                child: EnemyResults(state: widget.state, data: widget.data),
               ),
             ],
           ),
