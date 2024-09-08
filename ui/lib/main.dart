@@ -194,7 +194,14 @@ class TitleScreen extends StatelessWidget {
               child: const Text('Compendium'),
             ),
             const SizedBox(height: 16),
-            _SteamLink(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _SteamLink(),
+                const SizedBox(width: 16),
+                _GitHubLink(),
+              ],
+            ),
           ],
         ),
       ),
@@ -216,6 +223,26 @@ class _SteamLink extends StatelessWidget {
       child: Center(
         child: Image.asset(
           'assets/steam_logo.png',
+          width: 24,
+          height: 24,
+        ),
+      ),
+    );
+  }
+}
+
+class _GitHubLink extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        launchUrl(
+          Uri.parse('https://github.com/eseidel/he_is_coming'),
+        );
+      },
+      child: Center(
+        child: Image.asset(
+          'assets/github-mark-white.png',
           width: 24,
           height: 24,
         ),

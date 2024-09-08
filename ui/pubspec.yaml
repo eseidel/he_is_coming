@@ -35,3 +35,4 @@ flutter:
     - packages/he_is_coming/data/challenges.yaml
     - packages/he_is_coming/data/sets.yaml
     - assets/steam_logo.png
+    - assets/github-mark-white.png
