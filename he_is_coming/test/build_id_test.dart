@@ -31,7 +31,7 @@ void main() {
     expect(reader.read(7), 7);
   });
 
-  test('BuildIdCodec round trip', () {
+  test('BuildStateCodec round trip', () {
     const level = Level.two;
     final inventory = Inventory(
       level: Level.two,
@@ -41,8 +41,8 @@ void main() {
       setBonuses: data.sets,
     );
     final state = BuildState(level, inventory);
-    final encoded = BuildIdCodec.encode(state, data);
-    final decoded = BuildIdCodec.decode(encoded, data);
+    final encoded = BuildStateCodec.encode(state, data);
+    final decoded = BuildStateCodec.decode(encoded, data);
     expect(decoded.level, Level.two);
     expect(decoded.inventory.items, inventory.items);
     expect(decoded.inventory.edge, inventory.edge);

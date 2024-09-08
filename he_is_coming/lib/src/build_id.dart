@@ -134,11 +134,14 @@ class BuildState {
 }
 
 /// Encodes and decodes an inventory into a string.
-class BuildIdCodec {
+class BuildStateCodec {
   static int _bitsNeededFor(int value) {
     if (value == 0) return 0;
     return (log(value) / ln2).ceil();
   }
+
+  /// The name of the parameter used to encode the build state.
+  static const String parameterName = 's';
 
   static final int _levelBits = _bitsNeededFor(Level.values.length);
 

@@ -143,7 +143,7 @@ class _BattlePageState extends State<BattlePage> {
     super.initState();
     _controller = TextEditingController();
     // Update the text field with the current build id.
-    _controller.text = BuildIdCodec.encode(widget.state, widget.data);
+    _controller.text = BuildStateCodec.encode(widget.state, widget.data);
 
     // For each enemy, run the battle and gather the results.
     final player = playerWithInventory(level, inventory);
@@ -166,7 +166,10 @@ class _BattlePageState extends State<BattlePage> {
   void setBuildState(BuildContext context, BuildState state) {
     context.goNamed(
       'battle',
-      queryParameters: {'s': BuildIdCodec.encode(state, widget.data)},
+      queryParameters: {
+        BuildStateCodec.parameterName:
+            BuildStateCodec.encode(state, widget.data),
+      },
     );
   }
 
@@ -314,7 +317,7 @@ class _BattlePageState extends State<BattlePage> {
                             return 'Please enter a value';
                           }
                           try {
-                            BuildIdCodec.decode(value, widget.data);
+                            BuildStateCodec.decode(value, widget.data);
                           } catch (e) {
                             return e.toString();
                           }
@@ -322,7 +325,7 @@ class _BattlePageState extends State<BattlePage> {
                         },
                         onFieldSubmitted: (String value) async {
                           final build =
-                              BuildIdCodec.tryDecode(value, widget.data);
+                              BuildStateCodec.tryDecode(value, widget.data);
                           if (build == null) {
                             return;
                           }

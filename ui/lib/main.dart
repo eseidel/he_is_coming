@@ -1,111 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:go_router/go_router.dart';
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:nes_ui/nes_ui.dart';
 import 'package:ui/src/battle.dart';
 import 'package:ui/src/compendium.dart';
+import 'package:ui/src/data.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runScoped(() => runApp(const MyApp()), values: {loggerRef});
-}
-
-/// Holds the static data for the game.
-class _DataHolder extends StatefulWidget {
-  /// Constructs a [_DataHolder]
-  const _DataHolder({required this.child});
-
-  /// The child widget.
-  final Widget child;
-
-  @override
-  _DataHolderState createState() => _DataHolderState();
-}
-
-class _DataHolderState extends State<_DataHolder> {
-  bool isLoading = true;
-  late final Data data;
-
-  @override
-  void initState() {
-    super.initState();
-    isLoading = true;
-    loadData().then((value) {
-      setState(() {
-        data = value.withoutEntriesMissingEffects();
-        // TODO(eseidel): Remove defaultPlayerWeapon.
-        Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
-        isLoading = false;
-      });
-    });
-  }
-
-  Future<Data> loadData() async {
-    Future<String> load(String name) {
-      return rootBundle.loadString('packages/he_is_coming/data/$name.yaml');
-    }
-
-    return Data.fromStrings(
-      creatures: load('creatures'),
-      edges: load('edges'),
-      items: load('items'),
-      oils: load('blade_oils'),
-      challenges: load('challenges'),
-      triggers: load('triggers'),
-      sets: load('sets'),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InheritedData(
-      data: data,
-      child: widget.child,
-    );
-  }
-}
-
-/// A widget to look up the [Data] from the [InheritedData].
-class InheritedData extends InheritedWidget {
-  /// Constructs an [InheritedData]
-  const InheritedData({
-    required super.child,
-    super.key,
-    this.data,
-  });
-
-  /// The data to inherit.
-  final Data? data;
-
-  /// Look up the [InheritedData] from the [BuildContext].
-  static InheritedData? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<InheritedData>();
-  }
-
-  @override
-  bool updateShouldNotify(InheritedData oldWidget) {
-    return oldWidget.data != data;
-  }
-}
-
-/// A widget that uses the [Data] from the [InheritedData].
-class UsesData extends StatelessWidget {
-  /// Constructs a [UsesData]
-  const UsesData({required this.builder, super.key});
-
-  /// The builder to use with the [Data].
-  final Widget Function(BuildContext context, Data data) builder;
-
-  @override
-  Widget build(BuildContext context) {
-    final data = InheritedData.of(context)!.data;
-    if (data == null) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      return builder(context, data);
-    }
-  }
 }
 
 final GoRouter _router = GoRouter(
@@ -121,12 +24,13 @@ final GoRouter _router = GoRouter(
           path: 'battle',
           name: 'battle',
           builder: (BuildContext context, GoRouterState state) {
-            final parameter = state.uri.queryParameters['c'];
+            final parameter =
+                state.uri.queryParameters[BuildStateCodec.parameterName];
             return UsesData(
               builder: (context, data) {
                 return BattlePage(
                   data: data,
-                  state: BuildIdCodec.tryDecode(
+                  state: BuildStateCodec.tryDecode(
                         parameter,
                         data,
                       ) ??
@@ -159,7 +63,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _DataHolder(
+    return DataHolder(
       child: MaterialApp.router(
         routerConfig: _router,
         title: 'He is Coming',
