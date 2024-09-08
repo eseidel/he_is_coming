@@ -348,28 +348,34 @@ class _BattlePageState extends State<BattlePage> {
                       onChanged: () {
                         Form.of(primaryFocus!.context!).save();
                       },
-                      child: TextFormField(
-                        controller: _controller,
-                        focusNode: _focusNode,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter a value';
-                          }
-                          try {
-                            BuildStateCodec.decode(value, widget.data);
-                          } catch (e) {
-                            return e.toString();
-                          }
-                          return null;
-                        },
-                        onFieldSubmitted: (String value) async {
-                          final build =
-                              BuildStateCodec.tryDecode(value, widget.data);
-                          if (build == null) {
-                            return;
-                          }
-                          setBuildState(context, build);
-                        },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: TextFormField(
+                          decoration: const InputDecoration(
+                            labelText: 'Code',
+                          ),
+                          controller: _controller,
+                          focusNode: _focusNode,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter a value';
+                            }
+                            try {
+                              BuildStateCodec.decode(value, widget.data);
+                            } catch (e) {
+                              return e.toString();
+                            }
+                            return null;
+                          },
+                          onFieldSubmitted: (String value) async {
+                            final build =
+                                BuildStateCodec.tryDecode(value, widget.data);
+                            if (build == null) {
+                              return;
+                            }
+                            setBuildState(context, build);
+                          },
+                        ),
                       ),
                     ),
                   ],
