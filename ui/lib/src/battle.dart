@@ -409,12 +409,10 @@ class BattlePage extends StatelessWidget {
         state: state,
         data: data,
         changeState: (state) {
+          final encoded = BuildStateCodec.encode(state, data);
           context.goNamed(
             'battle',
-            pathParameters: {
-              BuildStateCodec.parameterName:
-                  BuildStateCodec.encode(state, data),
-            },
+            pathParameters: {BuildStateCodec.parameterName: encoded},
           );
         },
       );

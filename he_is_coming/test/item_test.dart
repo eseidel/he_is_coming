@@ -11,17 +11,13 @@ void main() {
 
   test('Weapons require attack', () {
     expect(
-      () => Item(
-        'Test',
-        kind: ItemKind.weapon,
-        ItemRarity.common,
-      ),
+      () => Item.test(kind: ItemKind.weapon),
       throwsA(isA<ArgumentError>()),
     );
   });
 
   test('Unique items can only be equipped once', () {
-    final item = Item('Test', ItemRarity.common, isUnique: true);
+    final item = Item.test(isUnique: true);
     expect(
       () => data.player(customItems: [item, item]),
       throwsA(isA<ItemException>()),

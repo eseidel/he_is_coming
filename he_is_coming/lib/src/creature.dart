@@ -4,6 +4,7 @@ import 'package:meta/meta.dart';
 import 'package:yaml/yaml.dart';
 
 const _kPlayerName = 'Player';
+const _kPlayerId = 0;
 
 /// Alias for Creature.
 typedef Player = Creature;
@@ -47,6 +48,7 @@ Player playerWithInventory(Level level, Inventory inventory) {
     intrinsic: playerIntrinsicStats,
     gold: 0,
     level: level,
+    id: _kPlayerId,
     inventory: inventory,
   );
 }
@@ -79,6 +81,7 @@ extension CreatePlayer on Data {
       intrinsic: intrinsic,
       gold: gold,
       hp: hp,
+      id: _kPlayerId,
       inventory: Inventory(
         level: level,
         edge: edge != null ? edges[edge] : null,
@@ -119,6 +122,7 @@ Creature makeEnemy({
     ),
     gold: 1,
     effect: triggers,
+    id: 0, // Test enemies don't require unique ids.
   );
 }
 
@@ -144,6 +148,7 @@ class Creature extends CatalogItem {
     required this.gold,
     required this.level,
     required this.inventory,
+    required super.id,
     this.type = CreatureType.mob,
     int? hp,
     super.effect,
@@ -163,6 +168,7 @@ class Creature extends CatalogItem {
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
     final effectText = yaml['effect'] as String?;
+    final id = yaml['id'] as int?;
     final effect = lookupEffect(name: name, effectText: effectText);
     final type = yaml['boss'] == true ? CreatureType.boss : CreatureType.mob;
     return Creature(
@@ -178,6 +184,7 @@ class Creature extends CatalogItem {
       gold: 1,
       effect: effect,
       type: type,
+      id: id,
     );
   }
 
@@ -226,7 +233,8 @@ class Creature extends CatalogItem {
   Stats get baseStats => inventory?.statsWithItems(_intrinsic) ?? _intrinsic;
 
   /// Make a copy with a changed hp.
-  Creature copyWith({int? hp, int? gold}) {
+  @override
+  Creature copyWith({int? id, int? hp, int? gold}) {
     return Creature(
       name: name,
       intrinsic: _intrinsic,
@@ -235,6 +243,7 @@ class Creature extends CatalogItem {
       gold: gold ?? this.gold,
       effect: effect,
       level: level,
+      id: id ?? this.id,
     );
   }
 

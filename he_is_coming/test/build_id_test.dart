@@ -48,4 +48,38 @@ void main() {
     expect(decoded.inventory.edge, inventory.edge);
     expect(decoded.inventory.oils, inventory.oils);
   });
+
+  test('Items test', () {
+    // flutter: Encoded BuildState(Level.end, Inventory: Explosive Sword, Lifeblood Burst, Emerald Ring, Emerald Crown, Citrine Ring, Assault Greaves, Ruby Gemstone with Blunt Edge and [Armor Oil, Attack Oil, Speed Oil]) as d726cc80e0e06080
+    final edge = data.edges['Blunt Edge'];
+    final oils = [
+      data.oils['Armor Oil'],
+      data.oils['Attack Oil'],
+      data.oils['Speed Oil'],
+    ];
+    final itemNames = [
+      'Explosive Sword',
+      'Lifeblood Burst',
+      'Emerald Ring',
+      'Emerald Crown',
+      'Citrine Ring',
+      'Assault Greaves',
+    ];
+    final items = itemNames.map((name) => data.items[name]).toList();
+    final inventory = Inventory(
+      level: Level.end,
+      items: items,
+      edge: edge,
+      oils: oils,
+      setBonuses: data.sets,
+    );
+    final state = BuildState(Level.end, inventory);
+    final encoded = BuildStateCodec.encode(state, data);
+    expect(encoded, 'd726cc80e0e06080');
+    final decoded = BuildStateCodec.decode(encoded, data);
+    expect(decoded.level, Level.end);
+    expect(decoded.inventory.items, items);
+    expect(decoded.inventory.edge, data.edges['Cutting Edge']);
+    expect(decoded.inventory.oils, [data.oils['Attack Oil']]);
+  });
 }

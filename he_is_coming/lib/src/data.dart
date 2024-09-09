@@ -264,6 +264,7 @@ class SetBonus extends CatalogItem {
     required this.parts,
     required this.stats,
     required super.effect,
+    required super.id,
   });
 
   /// Create a set bonus from a yaml map.
@@ -273,11 +274,13 @@ class SetBonus extends CatalogItem {
     final stats = Stats.fromYaml(yaml);
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
+    final id = yaml['id'] as int?;
     return SetBonus(
       name: name,
       parts: parts,
       stats: stats,
       effect: effect,
+      id: id,
     );
   }
 
@@ -302,6 +305,17 @@ class SetBonus extends CatalogItem {
         ...stats.toJson(),
         if (effect != null) 'effect': effect.toString(),
       };
+
+  @override
+  SetBonus copyWith({int? id}) {
+    return SetBonus(
+      name: name,
+      parts: parts,
+      stats: stats,
+      effect: effect,
+      id: id ?? this.id,
+    );
+  }
 }
 
 /// Class to hold all known sets.
@@ -331,6 +345,7 @@ class Challenge extends CatalogItem {
     required super.name,
     required this.unlock,
     required this.reward,
+    required super.id,
   });
 
   /// Create a challenge from a yaml map.
@@ -338,15 +353,17 @@ class Challenge extends CatalogItem {
     final name = yaml['name'] as String;
     final unlock = yaml['unlock'] as String;
     final reward = yaml['reward'] as String;
+    final id = yaml['id'] as int?;
     return Challenge(
       name: name,
       unlock: unlock,
       reward: reward,
+      id: id,
     );
   }
 
   /// All the known keys in the challenge yaml, in sorted order.
-  static const List<String> orderedKeys = <String>[
+  static const orderedKeys = <String>[
     'name',
     'unlock',
     'reward',
@@ -367,6 +384,16 @@ class Challenge extends CatalogItem {
         'unlock': unlock,
         'reward': reward,
       };
+
+  @override
+  Challenge copyWith({int? id}) {
+    return Challenge(
+      name: name,
+      unlock: unlock,
+      reward: reward,
+      id: id ?? this.id,
+    );
+  }
 }
 
 /// Class to hold all known challenges.
@@ -395,20 +422,23 @@ class Trigger extends CatalogItem {
   Trigger({
     required super.name,
     required this.detail,
+    required super.id,
   });
 
   /// Create a trigger from a yaml map.
   factory Trigger.fromYaml(YamlMap yaml, LookupEffect _) {
     final name = yaml['name'] as String;
     final detail = yaml['detail'] as String;
+    final id = yaml['id'] as int?;
     return Trigger(
       name: name,
       detail: detail,
+      id: id,
     );
   }
 
   /// All the known keys in the trigger yaml, in sorted order.
-  static const List<String> orderedKeys = <String>[
+  static const orderedKeys = <String>[
     'name',
     'detail',
   ];
@@ -421,6 +451,15 @@ class Trigger extends CatalogItem {
         'name': name,
         'detail': detail,
       };
+
+  @override
+  Trigger copyWith({int? id}) {
+    return Trigger(
+      name: name,
+      detail: detail,
+      id: id ?? this.id,
+    );
+  }
 }
 
 /// Class to hold all known triggers.

@@ -135,9 +135,10 @@ class Stats {
 @immutable
 class Item extends CatalogItem {
   /// Create a new Item
-  Item(
-    String name,
-    this.rarity, {
+  Item({
+    required String name,
+    required this.rarity,
+    required super.id,
     this.kind,
     this.material,
     this.stats = const Stats(),
@@ -157,7 +158,13 @@ class Item extends CatalogItem {
 
   /// Create a test item.
   @visibleForTesting
-  factory Item.test({EffectMap? effect}) {
+  factory Item.test({
+    EffectMap? effect,
+    ItemRarity rarity = ItemRarity.common,
+    ItemMaterial? material,
+    ItemKind? kind,
+    bool isUnique = false,
+  }) {
     Effect? triggers;
     if (effect != null) {
       triggers = Effect(
@@ -165,7 +172,15 @@ class Item extends CatalogItem {
         text: 'test',
       );
     }
-    return Item('test', ItemRarity.common, effect: triggers);
+    return Item(
+      name: 'test',
+      id: 0, // Unique ids are not required for test items.
+      rarity: rarity,
+      effect: triggers,
+      material: material,
+      kind: kind,
+      isUnique: isUnique,
+    );
   }
 
   /// Create an item from a yaml map.
@@ -180,16 +195,18 @@ class Item extends CatalogItem {
     final parts = yaml['parts'] as List?;
     final effect = lookupEffect(name: name, effectText: effectText);
     final inferred = yaml['inferred'] as bool? ?? false;
+    final id = yaml['id'] as int?;
     return Item(
-      name,
+      name: name,
       kind: kind,
-      rarity,
+      rarity: rarity,
       material: material,
       stats: stats,
       effect: effect,
       isUnique: unique,
       parts: parts?.cast<String>(),
       inferred: inferred,
+      id: id,
     );
   }
 
@@ -242,6 +259,33 @@ class Item extends CatalogItem {
       'effect': effect?.toJson(),
       if (inferred) 'inferred': inferred,
     };
+  }
+
+  /// Create a copy of the item with updated values.
+  Item copyWith({
+    String? name,
+    int? id,
+    ItemKind? kind,
+    ItemRarity? rarity,
+    ItemMaterial? material,
+    Stats? stats,
+    bool? isUnique,
+    Effect? effect,
+    bool? inferred,
+    List<String>? parts,
+  }) {
+    return Item(
+      name: name ?? this.name,
+      rarity: rarity ?? this.rarity,
+      kind: kind ?? this.kind,
+      id: id ?? this.id,
+      material: material ?? this.material,
+      stats: stats ?? this.stats,
+      isUnique: isUnique ?? this.isUnique,
+      effect: effect ?? this.effect,
+      inferred: inferred ?? this.inferred,
+      parts: parts ?? this.parts,
+    );
   }
 }
 

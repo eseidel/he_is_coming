@@ -23,14 +23,15 @@ Item inferGoldenItem(Item item) {
         )
       : null;
   final goldenItem = Item(
-    'Golden ${item.name}',
-    ItemRarity.golden,
+    name: 'Golden ${item.name}',
+    rarity: ItemRarity.golden,
     material: item.material,
     isUnique: item.isUnique,
     kind: item.kind,
     effect: effect,
     inferred: true,
     stats: item.stats * 2,
+    id: null, // TODO(eseidel): assign a unique id?
     // Should this have parts of item x 2?
   );
   return goldenItem;

@@ -230,12 +230,17 @@ class Inventory {
       setBonuses: setBonuses,
     );
   }
+
+  @override
+  String toString() {
+    return 'Inventory: ${items.join(', ')} with $edge and $oils';
+  }
 }
 
 /// Oil applied to a weapon.
 class Oil extends CatalogItem {
   /// Create an Oil
-  Oil({required super.name, required this.stats});
+  Oil({required super.name, required this.stats, required super.id});
 
   /// Create an Oil from a yaml map.
   factory Oil.fromYaml(YamlMap yaml, LookupEffect _) {
@@ -243,13 +248,14 @@ class Oil extends CatalogItem {
     final attack = yaml['attack'] as int? ?? 0;
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
+    final id = yaml['id'] as int?;
 
     final stats = Stats(
       attack: attack,
       armor: armor,
       speed: speed,
     );
-    return Oil(name: name, stats: stats);
+    return Oil(name: name, stats: stats, id: id);
   }
 
   /// The stats of the oil.
@@ -272,19 +278,25 @@ class Oil extends CatalogItem {
         'name': name,
         ...stats.toJson(),
       };
+
+  @override
+  Oil copyWith({int? id}) {
+    return Oil(name: name, stats: stats, id: id ?? this.id);
+  }
 }
 
 /// An edge is a special effect that can be applied to a weapon.
 class Edge extends CatalogItem {
   /// Create an Edge
-  Edge({required super.name, required super.effect});
+  Edge({required super.name, required super.effect, required super.id});
 
   /// Create an Edge from a yaml map.
   factory Edge.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     final name = yaml['name'] as String;
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
-    return Edge(name: name, effect: effect);
+    final id = yaml['id'] as int?;
+    return Edge(name: name, effect: effect, id: id);
   }
 
   @override
@@ -296,5 +308,10 @@ class Edge extends CatalogItem {
       'name': name,
       'effect': effect?.toJson(),
     };
+  }
+
+  @override
+  Edge copyWith({int? id}) {
+    return Edge(name: name, effect: effect, id: id ?? this.id);
   }
 }

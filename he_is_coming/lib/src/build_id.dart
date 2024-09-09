@@ -131,6 +131,9 @@ class BuildState {
 
   /// The inventory of the build.
   final Inventory inventory;
+
+  @override
+  String toString() => 'BuildState($level, $inventory)';
 }
 
 /// Encodes and decodes an inventory into a string.
@@ -161,9 +164,11 @@ class BuildStateCodec {
     }
     bits.add(bitfield, 3);
     for (final item in inventory.items) {
-      bits.add(data.items.toId(item), data.items.idBits);
+      final id = data.items.toId(item);
+      bits.add(id, data.items.idBits);
     }
-    return hex.encode(bits.takeBytes());
+    final encoded = hex.encode(bits.takeBytes());
+    return encoded;
   }
 
   /// Try to decode the given string into an inventory.
@@ -171,7 +176,7 @@ class BuildStateCodec {
     if (encoded == null) return null;
     try {
       return decode(encoded, data);
-    } catch (e) {
+    } on Exception catch (e) {
       return null;
     }
   }
@@ -194,13 +199,17 @@ class BuildStateCodec {
     final items = <Item>[];
     while (bits.remainingBits >= data.items.idBits) {
       final itemId = bits.read(data.items.idBits);
-      items.add(data.items.fromId(itemId)!);
+      final item = data.items.fromId(itemId);
+      if (item == null) {
+        throw Exception('Unknown item id: $itemId');
+      }
+      items.add(item);
     }
     final paddingBits = bits.remainingBits;
     if (paddingBits > 0) {
       final padding = bits.read(paddingBits);
       if (padding != 0) {
-        throw ArgumentError('Unexpected padding bits: $padding');
+        throw Exception('Unexpected padding bits: $padding');
       }
     }
     return BuildState(

@@ -78,6 +78,7 @@ abstract class CatalogItem {
   /// Create a catalog item with a name.
   CatalogItem({
     required this.name,
+    required this.id,
     this.effect,
     this.inferred = false,
   });
@@ -87,6 +88,10 @@ abstract class CatalogItem {
 
   /// The effect of the item.
   final Effect? effect;
+
+  /// The id of the item.
+  /// Currently these are only unique within the catalog, not across catalogs.
+  final int? id;
 
   /// Returns true if the item has been fully implemented.
   bool get isImplemented => effect == null || !effect!.isEmpty;
@@ -99,6 +104,9 @@ abstract class CatalogItem {
 
   /// Convert the item to a json map.
   dynamic toJson();
+
+  /// Copy the item with a new id.
+  CatalogItem copyWith({int? id});
 }
 
 /// A catalog of items.
