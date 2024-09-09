@@ -147,6 +147,8 @@ class BuildStateCodec {
   static const String parameterName = 'state';
 
   static final int _levelBits = _bitsNeededFor(Level.values.length);
+  static final int _itemLengthBits =
+      _bitsNeededFor(Inventory.itemSlotCount(Level.end));
 
   /// Encode the given inventory into a string.
   static String encode(BuildState state, Data data) {
@@ -162,7 +164,9 @@ class BuildStateCodec {
         bitfield |= 1 << i;
       }
     }
-    bits.add(bitfield, 3);
+    bits
+      ..add(bitfield, 3)
+      ..add(inventory.items.length, _itemLengthBits);
     for (final item in inventory.items) {
       bits.add(item.id, data.items.idBits);
     }
@@ -195,8 +199,9 @@ class BuildStateCodec {
         oils.add(data.oils.items[i]);
       }
     }
+    final itemLength = bits.read(_itemLengthBits);
     final items = <Item>[];
-    while (bits.remainingBits >= data.items.idBits) {
+    for (var i = 0; i < itemLength; i++) {
       final itemId = bits.read(data.items.idBits);
       final item = data.items.fromId(itemId);
       if (item == null) {

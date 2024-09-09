@@ -74,7 +74,7 @@ void main() {
     );
     final state = BuildState(Level.end, inventory);
     final encoded = BuildStateCodec.encode(state, data);
-    expect(encoded, 'cfa0a274d11020');
+    expect(encoded, 'cfb20a274d1102');
     final decoded = BuildStateCodec.decode(encoded, data);
     expect(decoded.level, Level.end);
     expect(decoded.inventory.items, items);
