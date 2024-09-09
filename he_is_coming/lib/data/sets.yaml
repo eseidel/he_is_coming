@@ -1,9 +1,11 @@
 - name: Briar Greaves
+  id: 1
   parts:
     - Assault Greaves
     - Jagged Edge
   effect: "Whenever you take damage, gain 1 thorn"
 - name: Hero's Return
+  id: 2
   parts:
     - Sword of the Hero
     - Shield of the Hero
@@ -12,6 +14,7 @@
   armor: 1
   speed: 1
 - name: Redwood Crown
+  id: 3
   parts:
     - Redwood Cloak
     - Redwood Rod

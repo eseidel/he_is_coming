@@ -1,108 +1,133 @@
 - name: Assault Greaves
+  id: 1
   rarity: heroic
   effect: "Whenever you take damage, deal 1 damage"
 - name: Battle Axe
+  id: 2
   kind: weapon
   rarity: common
   attack: 2
   effect: Deal double damage to armor
 - name: Bearpelt Plate
+  id: 3
   rarity: common
   armor: 5
   effect: Take 3 additional damage from the enemies first strike
 - name: Bejeweled Blade
+  id: 4
   kind: weapon
   rarity: rare
   effect: Gain 2 attack for each equipped jewelry item
 - name: Blackbriar Blade
+  id: 5
   rarity: rare
   attack: 1
   effect: Gain 2 attack for each thorns
 - name: Blacksmith Bond
+  id: 6
   rarity: rare
   effect: Exposed can trigger one additional time
 - name: Bloody Steak
+  id: 7
   rarity: cauldron
   parts:
     - Stone Steak
     - Vampiric Wine
   effect: "Wounded: Gain armor equal to 50% of max health"
 - name: Bonespine Whip
+  id: 8
   kind: weapon
   rarity: heroic
   attack: 2
   effect: Do two additional strikes that always deal 1 damage
 - name: Boots of the Hero
+  id: 9
   rarity: common
   speed: 2
 - name: Bramble Buckler
+  id: 10
   rarity: rare
   armor: 2
   effect: "Turn Start: Convert 1 armor to 2 thorns"
 - name: Brittlebark Armor
+  id: 11
   rarity: heroic
   material: wood
   health: 10
   effect: "Whenever you take damage, take 1 additional damage"
 - name: Brittlebark Bow
+  id: 12
   kind: weapon
   rarity: common
   material: wood
   attack: 4
   effect: "After 3 strikes, lose 2 attack"
 - name: Brittlebark Club
+  id: 13
   kind: weapon
   rarity: heroic
   attack: 6
   effect: "Exposed & Wounded: Lose 2 attack"
 - name: Chain Mail
+  id: 14
   rarity: rare
   effect: "Wounded: Gain armor equal to your base armor"
 - name: Citrine Crown
+  id: 15
   unique: true
   kind: jewelry
   rarity: rare
   effect: "Battle Start: If your speed is 6 or higher, your strikes deal double damage"
 - name: Citrine Gemstone
+  id: 16
   kind: jewelry
   rarity: heroic
   effect: Your speed stat is inverted
 - name: Citrine Ring
+  id: 17
   unique: true
   kind: jewelry
   rarity: common
   effect: "Battle Start: Deal damage equal to your speed"
 - name: Cracked Bouldershield
+  id: 18
   rarity: common
   material: stone
   effect: "Exposed: Gain 5 armor"
 - name: Cracked Whetstone
+  id: 19
   rarity: common
   material: stone
   effect: "First Turn: Gain 2 attack"
 - name: Crimson Cloak
+  id: 20
   rarity: rare
   effect: "Whenever you take damage, restore 1 health"
 - name: Double-edged Sword
+  id: 21
   kind: weapon
   rarity: rare
   attack: 5
   effect: "On Hit: Take 1 damage"
 - name: Double-plated Armor
+  id: 22
   rarity: common
   armor: 2
   speed: -2
   effect: "Exposed: Gain 3 armor"
 - name: Dueling Gauntlet
+  id: 23
   rarity: rare
   effect: "Wounded: Do an additional strike on your next turn"
 - name: Elderwood Necklace
+  id: 24
   rarity: heroic
   material: wood
   attack: 1
   armor: 1
   speed: 1
 - name: Elderwood Staff
+  id: 25
   kind: weapon
   rarity: common
   material: wood
@@ -110,328 +135,402 @@
   armor: 1
   speed: 1
 - name: Emerald Crown
+  id: 26
   kind: jewelry
   rarity: rare
   effect: "Battle Start: If your max health is 20 or higher restore health to full"
 - name: Emerald Earing
+  id: 27
   rarity: common
   effect: Restore 1 health every other turn
 - name: Emerald Gemstone
+  id: 28
   kind: jewelry
   rarity: heroic
   effect: Overhealing is dealt as damage
 - name: Emerald Ring
+  id: 29
   kind: jewelry
   rarity: common
   effect: "Battle Start: Restore 2 health"
 - name: Emergency Shield
+  id: 30
   rarity: common
   effect: "Battle Start: If you have less speed than the enemy, gain 4 armor"
 - name: Explosive Surprise
+  id: 31
   rarity: rare
   material: bomb
   effect: "Exposed: Deal 5 damage"
 - name: Explosive Sword
+  id: 32
   kind: weapon
   rarity: rare
   material: bomb
   attack: 4
   effect: "Exposed: Deal 6 damage and set attack to 0"
 - name: Featherweight Blade
+  id: 33
   kind: weapon
   rarity: common
   attack: 2
   speed: 2
 - name: Featherweight Coat
+  id: 34
   rarity: rare
   effect: "Battle Start: Convert 1 armor to 3 speed"
 - name: Firecracker Belt
+  id: 35
   rarity: common
   material: bomb
   effect: "Exposed: Deal 1 damage 3 times"
 - name: Fortified Gauntlet
+  id: 36
   rarity: rare
   effect: "Turn Start: If you have armor, gain 1 additional armor"
 - name: Gemstone Scepter
+  id: 37
   rarity: heroic
   attack: 2
   effect: "Draws power from emerald, ruby, sapphire and citrine items"
 - name: Gold Ring
+  id: 38
   kind: jewelry
   rarity: rare
   effect: "Battle Start: Gain 1 gold"
 - name: Golden Bearpelt Plate
+  id: 39
   rarity: golden
   armor: 10
   effect: Take 6 additional damage from the enemies first strike
   inferred: true
 - name: Golden Boots of the Hero
+  id: 40
   rarity: golden
   speed: 4
   inferred: true
 - name: Golden Cracked Bouldershield
+  id: 41
   rarity: golden
   material: stone
   effect: "Exposed: Gain 10 armor"
   inferred: true
 - name: Golden Cracked Whetstone
+  id: 42
   rarity: golden
   material: stone
   effect: "First Turn: Gain 4 attack"
   inferred: true
 - name: Golden Double-plated Armor
+  id: 43
   rarity: golden
   armor: 4
   speed: -4
   effect: "Exposed: Gain 6 armor"
   inferred: true
 - name: Golden Emerald Earing
+  id: 44
   rarity: golden
   effect: Restore 2 health every other turn
   inferred: true
 - name: Golden Emerald Ring
+  id: 45
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Restore 4 health"
 - name: Golden Emergency Shield
+  id: 46
   rarity: golden
   effect: "Battle Start: If you have less speed than the enemy, gain 8 armor"
 - name: Golden Firecracker Belt
+  id: 47
   rarity: golden
   material: bomb
   effect: "Exposed: Deal 1 damage 6 times"
 - name: Golden Granite Gauntlet
+  id: 48
   rarity: golden
   material: stone
   health: -4
   effect: "Battle start: Gain 10 armor"
   inferred: true
 - name: Golden Horned Helmet
+  id: 49
   rarity: golden
   armor: 4
   effect: "Battle Start: Gain 4 thorns"
 - name: Golden Leather Glove
+  id: 50
   rarity: golden
   health: 6
   speed: 2
 - name: Golden Leather Vest
+  id: 51
   rarity: golden
   armor: 4
   speed: 2
   inferred: true
 - name: Golden Petrifying Flask
+  id: 52
   rarity: golden
   material: stone
   effect: "Wounded: Gain 20 armor and stun yourself for 4 turns"
   inferred: true
 - name: Golden Redwood Cloak
+  id: 53
   rarity: golden
   material: wood
   health: 4
   effect: "Battle Start: If your health is not full, restore 2 health"
 - name: Golden Redwood Helmet
+  id: 54
   rarity: golden
   material: wood
   armor: 2
   effect: "Exposed: Restore 6 health"
 - name: Golden Redwood Roast
+  id: 55
   kind: food
   rarity: golden
   material: wood
   health: 10
 - name: Golden Ruby Earing
+  id: 56
   kind: jewelry
   rarity: golden
   effect: Deal 2 damage every other turn
   inferred: true
 - name: Golden Ruby Ring
+  id: 57
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Gain 2 attack and take 4 damage"
 - name: Golden Sapphire Earing
+  id: 58
   rarity: golden
   effect: Gain 2 armor every other turn
   inferred: true
 - name: Golden Sapphire Ring
+  id: 59
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Steal 4 armor from the enemy"
   inferred: true
 - name: Golden Shield of the Hero
+  id: 60
   rarity: golden
   armor: 6
 - name: Golden Stone Steak
+  id: 61
   kind: food
   rarity: golden
   material: stone
   effect: "Battle Start: If your health is full, gain 8 armor"
   inferred: true
 - name: Golden Vampiric Wine
+  id: 62
   kind: food
   rarity: golden
   material: sanguine
   effect: "Wounded: Restore 8 health"
 - name: Golden Weighted Bracelet
+  id: 63
   rarity: golden
   attack: 2
   speed: -2
 - name: Granite Gauntlet
+  id: 64
   rarity: common
   material: stone
   health: -2
   effect: "Battle start: Gain 5 armor"
 - name: Granite Hammer
+  id: 65
   kind: weapon
   rarity: rare
   material: stone
   attack: 2
   effect: "On Hit: Convert 1 armor to 2 attack"
 - name: Grindstone Club
+  id: 66
   kind: weapon
   rarity: heroic
   material: stone
   attack: 1
   effect: The next weapon you equip gains 2 attack
 - name: Haymaker
+  id: 67
   kind: weapon
   rarity: common
   attack: 1
   effect: "Every 3 strikes, deal triple damage"
 - name: Heart Drinker
+  id: 68
   kind: weapon
   rarity: common
   material: sanguine
   attack: 2
   effect: "On Hit: Restore 1 health"
 - name: Hidden Dagger
+  id: 69
   kind: weapon
   rarity: common
   attack: 2
   effect: Gets stronger for every new hidden dagger you find
 - name: Hook Blade
+  id: 70
   kind: weapon
   rarity: rare
   attack: 2
   effect: "Whenever you deal damage to the enemy's armor, gain that much armor"
 - name: Horned Helmet
+  id: 71
   rarity: common
   armor: 2
   effect: "Battle Start: Gain 2 thorns"
 - name: Impressive Physique
+  id: 72
   rarity: rare
   effect: "Exposed: Stun the enemy for 1 turn"
 - name: Iron Rose
+  id: 73
   rarity: rare
   effect: "Whenever you restore health, gain 1 armor"
 - name: Iron Transfusion
+  id: 74
   rarity: heroic
   effect: "Turn Start: Gain 2 armor and lose 1 health"
 - name: Ironskin Potion
+  id: 75
   unique: true
   rarity: heroic
   effect: "Battle Start: Gain armor equal to lost health"
 - name: Ironstone Greatsword
+  id: 76
   kind: weapon
   rarity: common
   material: stone
   attack: 4
   speed: -2
 - name: Ironstone Sandals
+  id: 77
   rarity: rare
   material: stone
   speed: -1
   effect: When you have armor gain 3 attack
 - name: Leather Boots
+  id: 78
   rarity: rare
   effect: "If you have more speed than the enemy, gain 2 attack"
 - name: Leather Glove
+  id: 79
   rarity: common
   health: 3
   speed: 1
 - name: Leather Vest
+  id: 80
   rarity: common
   armor: 2
   speed: 1
 - name: Lifeblood Burst
+  id: 81
   rarity: heroic
   material: sanguine
   effect: "Wounded: Deal damage equal to 50% of your max health"
 - name: Lifethread Pendant
+  id: 82
   rarity: rare
   effect: "Resilience: 50% chance to survive with 1 health"
 - name: Marble Mirror
+  id: 83
   rarity: rare
   material: stone
   effect: "Battle Start: Gain armor equal to the enemy's armor"
 - name: Melting Iceblade
+  id: 84
   kind: weapon
   rarity: heroic
   attack: 7
   effect: "On Hit: Lose 1 attack"
 - name: Mortal Edge
+  id: 85
   kind: weapon
   rarity: rare
   material: sanguine
   attack: 2
   effect: "Wounded: Gain 5 attack and take 2 damage"
 - name: Oak Heart
+  id: 86
   unique: true
   rarity: rare
   material: wood
   effect: Gain 2 health for each equipped wood item
 - name: Ore Heart
+  id: 87
   unique: true
   rarity: rare
   material: stone
   effect: "Battle Start: Gain 2 armor for each equipped stone item"
 - name: Petrifying Flask
+  id: 88
   rarity: common
   material: stone
   effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
 - name: Phantom Armor
+  id: 89
   rarity: rare
   armor: 4
   effect: Enemies first strike ignores armor
 - name: Pinecone Plate
+  id: 90
   rarity: rare
   material: wood
   effect: "Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle"
 - name: Plated Helmet
+  id: 91
   rarity: heroic
   effect: "Turn Start: If you are below 50% health, gain 2 armor"
 - name: Protecting Charm
+  id: 92
   unique: true
   rarity: common
   effect: "The first time the enemy strikes, their damage is halved"
 - name: Razor Scales
+  id: 93
   rarity: heroic
   effect: "Exposed: Armor now deals damage when removed"
 - name: Razorvine Talisman
+  id: 94
   unique: true
   rarity: rare
   effect: "Whenever you gain thorns, gain 1 additional thorn"
 - name: Redwood Cloak
+  id: 95
   rarity: common
   material: wood
   health: 2
   effect: "Battle Start: If your health is not full, restore 1 health"
 - name: Redwood Helmet
+  id: 96
   rarity: common
   material: wood
   armor: 1
   effect: "Exposed: Restore 3 health"
 - name: Redwood Roast
+  id: 97
   kind: food
   rarity: common
   material: wood
   health: 5
 - name: Redwood Rod
+  id: 98
   kind: weapon
   rarity: common
   material: wood
   health: 4
   attack: 2
 - name: Rock Roast
+  id: 99
   rarity: cauldron
   parts:
     - Redwood Roast
@@ -439,86 +538,106 @@
   health: 5
   armor: 5
 - name: Ruby Crown
+  id: 100
   kind: jewelry
   rarity: rare
   effect: "Battle Start: If your attack is 6 or higher, gain 2 attack"
 - name: Ruby Earing
+  id: 101
   kind: jewelry
   rarity: common
   effect: Deal 1 damage every other turn
 - name: Ruby Gemstone
+  id: 102
   unique: true
   kind: jewelry
   rarity: heroic
   effect: "If your attack is exactly 1, deal 4 damage on hit"
 - name: Ruby Ring
+  id: 103
   kind: jewelry
   rarity: common
   effect: "Battle Start: Gain 1 attack and take 2 damage"
 - name: Sanguine Rose
+  id: 104
   unique: true
   rarity: rare
   effect: "Whenever you restore health, restore 1 additional health"
 - name: Sapphire Crown
+  id: 105
   kind: jewelry
   rarity: rare
   effect: "Battle Start: If your armor is 15 or higher, gain 10 armor"
 - name: Sapphire Earing
+  id: 106
   rarity: common
   effect: Gain 1 armor every other turn
 - name: Sapphire Gemstone
+  id: 107
   unique: true
   kind: jewelry
   rarity: heroic
   effect: "Whenever you lose armor, restore that much health"
 - name: Sapphire Ring
+  id: 108
   kind: jewelry
   rarity: common
   effect: "Battle Start: Steal 2 armor from the enemy"
 - name: Shield of the Hero
+  id: 109
   rarity: common
   armor: 3
 - name: Spearshield Lance
+  id: 110
   kind: weapon
   rarity: common
   attack: 1
   armor: 4
 - name: Steelbond Curse
+  id: 111
   rarity: rare
   attack: 2
   effect: "Battle Start: Give 8 armor to the enemy"
 - name: Sticky Web
+  id: 112
   rarity: rare
   effect: "Battle Start: If you have less speed than the enemy, stun the enemy for 1 turn"
 - name: Stone Steak
+  id: 113
   kind: food
   rarity: common
   material: stone
   effect: "Battle Start: If your health is full, gain 4 armor"
 - name: Stoneslab Sword
+  id: 114
   kind: weapon
   rarity: heroic
   material: stone
   attack: 2
   effect: "On Hit: Gain 2 armor"
 - name: Stormcloud Spear
+  id: 115
   kind: weapon
   rarity: common
   attack: 2
   effect: "Every 5 strikes: Stun the enemy for 2 turns"
 - name: Swiftstrike Rapier
+  id: 116
   kind: weapon
   rarity: rare
   attack: 2
   effect: "First Turn: If you have more speed than the enemy, do 2 additional strikes"
 - name: Sword of the Hero
+  id: 117
   kind: weapon
   rarity: common
   attack: 3
 - name: Thorn Ring
+  id: 118
   rarity: heroic
   effect: "Battle Start: Gain 6 thorns and lose 1 health"
 - name: Tree Sap
+  id: 119
   rarity: cauldron
   parts:
     - Redwood Roast
@@ -526,21 +645,25 @@
   health: 5
   effect: "Wounded: Restore 1 health 5 times"
 - name: Vampiric Wine
+  id: 120
   kind: food
   rarity: common
   material: sanguine
   effect: "Wounded: Restore 4 health"
 - name: Weighted Bracelet
+  id: 121
   rarity: common
   attack: 1
   speed: -1
 - name: Woodcutter's Axe
+  id: 122
   kind: weapon
   rarity: common
   material: wood
   attack: 2
   effect: "On Hit: Reduce the enemy's max health by 2"
 - name: Wooden Stick
+  id: 123
   kind: weapon
   rarity: common
   attack: 1

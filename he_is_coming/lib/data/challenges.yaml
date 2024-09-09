@@ -1,51 +1,68 @@
 - name: Barking up the wrong tree
+  id: 1
   unlock: Win against the Brittlebark Beast for the first time
   reward: Brittlebark Armor
 - name: Battle Medic
+  id: 2
   unlock: Restore 15 or more health in a single turn
   reward: Sanguine Rose
 - name: Early Riser
+  id: 3
   unlock: Fight a boss early and win it
   reward: Gold Ring
 - name: Eye of the storm
+  id: 4
   unlock: Win against Storm Druid for the first time
   reward: Razorvine Talisman
 - name: Grave Mistake
+  id: 5
   unlock: Die from your own items
   reward: Thorn Ring
 - name: Hunting Season
+  id: 6
   unlock: Win against Razortusk Hog for the first time
   reward: Swiftstrike Rapier
 - name: It's a secret to everybody
+  id: 7
   unlock: Find a hidden item set
   reward: Bramble Buckler
 - name: Less is More
+  id: 8
   unlock: Defeat the first boss with only common items in your inventory.
   reward: Hidden Dagger
 - name: Nocturnal Predator
+  id: 9
   unlock: Defeat 5 enemies during one night
   reward: Jagged Edge
 - name: Ouch!
+  id: 10
   unlock: Deal 10 or more damage with thorns in a single turn
   reward: Blackbriar Blade
 - name: Rock Solid
+  id: 11
   unlock: Win against the Granite Griffin for the first time
   reward: Petrifying Flask
 - name: Rose and thorn
+  id: 12
   unlock: Win against Gentle Giant for the first time
   reward: Pinecone Plate
 - name: Slowpoke
+  id: 13
   unlock: Start a battle with -5 base speed
   reward: Ironstone Sandals
 - name: Smoked
+  id: 14
   unlock: Win against Fen Fire for the first time
   reward: Sticky Web
 - name: Stop hitting yourself
+  id: 15
   unlock: Strike an enemy 2 times before their turn
   reward: Agile Edge
 - name: The Collector
+  id: 16
   unlock: Equip 3 copies of the same item
   reward: Gemstone Scepter
 - name: Welcome Back
+  id: 17
   unlock: Equip the same weapon you discarded earlier in the same run.
   reward: Explosive Sword

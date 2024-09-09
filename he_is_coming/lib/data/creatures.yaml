@@ -1,28 +1,33 @@
 - name: Bat Level 1
+  id: 1
   level: 1
   health: 4
   attack: 1
   speed: 2
   effect: "Every other strike: Gain 1 health on hit"
 - name: Bat Level 2
+  id: 2
   level: 2
   health: 6
   attack: 2
   speed: 3
   effect: "Every other strike: Gain 2 health on hit"
 - name: Bat Level 2
+  id: 3
   level: 2
   health: 8
   attack: 3
   speed: 4
   effect: "Every other strike: Gain 3 health on hit"
 - name: Bear Level 1
+  id: 4
   level: 1
   health: 3
   attack: 1
   armor: 2
   effect: Bear deals 3 additional damage while you have armor
 - name: Bear Level 2
+  id: 5
   level: 2
   health: 5
   attack: 2
@@ -30,6 +35,7 @@
   speed: 1
   effect: Bear deals 5 additional damage while you have armor
 - name: Bear Level 3
+  id: 6
   level: 3
   health: 7
   attack: 3
@@ -37,6 +43,7 @@
   speed: 2
   effect: Bear deals 7 additional damage while you have armor
 - name: Bearserker
+  id: 7
   boss: true
   level: 2
   health: 20
@@ -45,6 +52,7 @@
   speed: 2
   effect: Ignores armor
 - name: Black Knight
+  id: 8
   boss: true
   level: 1
   health: 10
@@ -52,6 +60,7 @@
   armor: 5
   effect: "Battle Start: Black Knight gains attack equal to the players attack"
 - name: Brittlebark Beast
+  id: 9
   boss: true
   level: 1
   health: 40
@@ -59,11 +68,13 @@
   speed: 2
   effect: "Whenever Brittlebark Beast takes damage, he takes 2 additional damage"
 - name: Gentle Giant
+  id: 10
   boss: true
   level: 2
   health: 40
   effect: "Whenever Gentle Giant takes damage he gains 2 thorns.  Wounded: Gain 4 thorns instead"
 - name: Granite Griffin
+  id: 11
   boss: true
   level: 2
   health: 10
@@ -71,12 +82,14 @@
   armor: 10
   effect: "Wounded: Granite Griffin gains 30 armor and gets stunned for 2 turns"
 - name: Hedgehog Level 1
+  id: 12
   level: 1
   health: 1
   attack: 1
   armor: 1
   effect: "Battle Start: Hedgehog gains 3 thorns"
 - name: Hothead
+  id: 13
   boss: true
   level: 1
   health: 5
@@ -84,6 +97,7 @@
   speed: 4
   effect: "If Hothead has more speed than you, his first strike deals 10 additional damage"
 - name: Ironstone Golem
+  id: 14
   boss: true
   level: 1
   health: 5
@@ -91,12 +105,14 @@
   armor: 15
   effect: "Exposed: Ironstone loses 3 attack"
 - name: Leshen
+  id: 15
   boss: true
   level: 3
   health: 60
   attack: 7
   speed: 3
 - name: Mountain Troll
+  id: 16
   boss: true
   level: 2
   health: 20
@@ -104,12 +120,14 @@
   armor: 10
   effect: Mountain Troll only strikes every other turn
 - name: Raven Level 2
+  id: 17
   level: 2
   health: 5
   attack: 2
   speed: 3
   effect: Strikes steal gold instead of dealing damage
 - name: Razortusk Hog
+  id: 18
   boss: true
   level: 2
   health: 20
@@ -117,6 +135,7 @@
   speed: 4
   effect: "Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle"
 - name: Redwood Treant
+  id: 19
   boss: true
   level: 2
   health: 25
@@ -124,24 +143,28 @@
   armor: 15
   effect: Redwood Treant's attack is halved against armor
 - name: Spider Level 1
+  id: 20
   level: 1
   health: 2
   attack: 1
   speed: 2
   effect: "Battle Start: If Spider has more speed than you, it deals 3 damage"
 - name: Spider Level 2
+  id: 21
   level: 2
   health: 3
   attack: 1
   speed: 3
   effect: "Battle Start: If Spider has more speed than you, it deals 4 damage"
 - name: Spider Level 3
+  id: 22
   level: 3
   health: 4
   attack: 1
   speed: 4
   effect: "Battle Start: If Spider has more speed than you, it deals 5 damage"
 - name: Stormcloud Druid
+  id: 23
   boss: true
   level: 1
   health: 20
@@ -149,23 +172,27 @@
   speed: 2
   effect: "If Stormcloud Druid takes damage more than once per turn, stun the player for 1 turn"
 - name: Wolf Level 1
+  id: 24
   level: 1
   health: 3
   attack: 1
   effect: "If player has 5 or less health, wolf gains 2 attack"
 - name: Wolf Level 2
+  id: 25
   level: 2
   health: 6
   attack: 2
   speed: 1
   effect: "If player has 5 or less health, wolf gains 3 attack"
 - name: Wolf Level 3
+  id: 26
   level: 3
   health: 9
   attack: 3
   speed: 2
   effect: "If player has 5 or less health, wolf gains 4 attack"
 - name: Woodland Abomination
+  id: 27
   boss: true
   level: 4
   health: 1000

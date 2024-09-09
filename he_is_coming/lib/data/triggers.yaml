@@ -1,12 +1,18 @@
 - name: Exposed
+  id: 1
   detail: Triggers when you lose all your armor for the first time
 - name: First Turn
+  id: 2
   detail: Gain a temporary effect at the start of your first turn
 - name: Resilience
+  id: 3
   detail: Triggers when you take lethal damage for the first time.
 - name: Stun
+  id: 4
   detail: When stunned you skip your strike than remove one stun.
 - name: Thorns
+  id: 5
   detail: "Deals damage equal to your thorns when struck, then remove all thorns."
 - name: Wounded
+  id: 6
   detail: Triggers when you go below 50% health for the first time.

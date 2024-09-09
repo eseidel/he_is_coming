@@ -8,7 +8,7 @@ void assignIds<T extends CatalogItem>(Catalog<T> catalog) {
   for (var i = 0; i < catalog.length; i++) {
     final item = catalog.items[i];
     if (item.id == null) {
-      catalog.items[i] = item.copyWith(id: highestId) as T;
+      catalog.items[i] = item.copyWith(id: highestId + 1) as T;
       highestId++;
     }
   }

@@ -1,6 +1,9 @@
 - name: Armor Oil
+  id: 1
   armor: 1
 - name: Attack Oil
+  id: 2
   attack: 1
 - name: Speed Oil
+  id: 3
   speed: 1

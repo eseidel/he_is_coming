@@ -1,16 +1,24 @@
 - name: Agile Edge
+  id: 1
   effect: Do an additional strike on your first turn
 - name: Bleeding Edge
+  id: 2
   effect: "On Hit: Restore 1 health"
 - name: Blunt Edge
+  id: 3
   effect: "On Hit: Gain 1 armor"
 - name: Cutting Edge
+  id: 4
   effect: "On Hit: Deal 1 damage"
 - name: Jagged Edge
+  id: 5
   effect: "On Hit: Gain 2 thorns and take 1 damage"
 - name: Lightning Edge
+  id: 6
   effect: "Battle Start: Stun the enemy for 1 turn"
 - name: Thieving Edge
+  id: 7
   effect: "On Hit: If you have less than 10 gold, gain 1 gold"
 - name: Titan's Edge
+  id: 8
   effect: "Only strike every other turn, but deal double damage"
