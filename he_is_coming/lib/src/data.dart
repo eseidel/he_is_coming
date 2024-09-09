@@ -198,6 +198,7 @@ class EdgeCatalog extends Catalog<Edge> {
   /// All the known keys in the enemies yaml, in sorted order.
   static const List<String> orderedKeys = <String>[
     'name',
+    'id',
     'unlock', // ignored for now
     'effect',
   ];
@@ -287,6 +288,7 @@ class SetBonus extends CatalogItem {
   /// All the known keys in the set bonus yaml, in sorted order.
   static const List<String> orderedKeys = <String>[
     'name',
+    'id',
     'parts',
     ...Stats.orderedKeys,
     'effect',
@@ -301,6 +303,7 @@ class SetBonus extends CatalogItem {
   @override
   dynamic toJson() => {
         'name': name,
+        if (id != null) 'id': id,
         'parts': parts,
         ...stats.toJson(),
         if (effect != null) 'effect': effect.toString(),
@@ -365,6 +368,7 @@ class Challenge extends CatalogItem {
   /// All the known keys in the challenge yaml, in sorted order.
   static const orderedKeys = <String>[
     'name',
+    'id',
     'unlock',
     'reward',
   ];
@@ -381,6 +385,7 @@ class Challenge extends CatalogItem {
   @override
   dynamic toJson() => {
         'name': name,
+        if (id != null) 'id': id,
         'unlock': unlock,
         'reward': reward,
       };
@@ -440,6 +445,7 @@ class Trigger extends CatalogItem {
   /// All the known keys in the trigger yaml, in sorted order.
   static const orderedKeys = <String>[
     'name',
+    'id',
     'detail',
   ];
 
@@ -449,6 +455,7 @@ class Trigger extends CatalogItem {
   @override
   dynamic toJson() => {
         'name': name,
+        if (id != null) 'id': id,
         'detail': detail,
       };
 

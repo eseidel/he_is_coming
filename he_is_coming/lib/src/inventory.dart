@@ -267,6 +267,7 @@ class Oil extends CatalogItem {
   /// All the known keys in the oils yaml, in sorted order.
   static const List<String> orderedKeys = <String>[
     'name',
+    'id',
     'attack',
     'armor',
     'speed',
@@ -276,6 +277,7 @@ class Oil extends CatalogItem {
   @override
   dynamic toJson() => <String, dynamic>{
         'name': name,
+        if (id != null) 'id': id,
         ...stats.toJson(),
       };
 
@@ -306,6 +308,7 @@ class Edge extends CatalogItem {
   dynamic toJson() {
     return {
       'name': name,
+      if (id != null) 'id': id,
       'effect': effect?.toJson(),
     };
   }

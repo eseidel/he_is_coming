@@ -244,12 +244,14 @@ class Creature extends CatalogItem {
       effect: effect,
       level: level,
       id: id ?? this.id,
+      type: type,
     );
   }
 
   /// All the known keys in the creatures yaml, in sorted order.
   static List<String> orderedKeys = <String>[
     'name',
+    'id',
     'level',
     'boss',
     'attack',
@@ -268,6 +270,7 @@ class Creature extends CatalogItem {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      if (id != null) 'id': id,
       // We don't currently serialize the player type.
       if (type == CreatureType.boss) 'boss': true,
       'level': level.toJson(),

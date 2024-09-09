@@ -235,6 +235,7 @@ class Item extends CatalogItem {
   /// All the known keys in the item yaml, in sorted order.
   static const List<String> orderedKeys = <String>[
     'name',
+    'id',
     'unique',
     'kind',
     'rarity',
@@ -250,6 +251,7 @@ class Item extends CatalogItem {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      if (id != null) 'id': id,
       if (isUnique) 'unique': isUnique,
       'kind': kind?.toJson(),
       'rarity': rarity.toJson(),

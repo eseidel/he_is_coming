@@ -5,7 +5,7 @@ import 'package:scoped_deps/scoped_deps.dart';
 void assignIds<T extends CatalogItem>(Catalog<T> catalog) {
   var highestId =
       catalog.items.map((e) => e.id ?? 0).reduce((a, b) => a > b ? a : b);
-  for (var i = 0; i <= catalog.length; i++) {
+  for (var i = 0; i < catalog.length; i++) {
     final item = catalog.items[i];
     if (item.id == null) {
       catalog.items[i] = item.copyWith(id: highestId) as T;
