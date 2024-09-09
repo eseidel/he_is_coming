@@ -195,7 +195,7 @@ class Item extends CatalogItem {
     final parts = yaml['parts'] as List?;
     final effect = lookupEffect(name: name, effectText: effectText);
     final inferred = yaml['inferred'] as bool? ?? false;
-    final id = yaml['id'] as int?;
+    final id = yaml['id'] as int;
     return Item(
       name: name,
       kind: kind,
@@ -251,7 +251,7 @@ class Item extends CatalogItem {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      if (id != null) 'id': id,
+      'id': id,
       if (isUnique) 'unique': isUnique,
       'kind': kind?.toJson(),
       'rarity': rarity.toJson(),

@@ -275,7 +275,7 @@ class SetBonus extends CatalogItem {
     final stats = Stats.fromYaml(yaml);
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
-    final id = yaml['id'] as int?;
+    final id = yaml['id'] as int;
     return SetBonus(
       name: name,
       parts: parts,
@@ -303,7 +303,7 @@ class SetBonus extends CatalogItem {
   @override
   dynamic toJson() => {
         'name': name,
-        if (id != null) 'id': id,
+        'id': id,
         'parts': parts,
         ...stats.toJson(),
         if (effect != null) 'effect': effect.toString(),
@@ -356,7 +356,7 @@ class Challenge extends CatalogItem {
     final name = yaml['name'] as String;
     final unlock = yaml['unlock'] as String;
     final reward = yaml['reward'] as String;
-    final id = yaml['id'] as int?;
+    final id = yaml['id'] as int;
     return Challenge(
       name: name,
       unlock: unlock,
@@ -385,7 +385,7 @@ class Challenge extends CatalogItem {
   @override
   dynamic toJson() => {
         'name': name,
-        if (id != null) 'id': id,
+        'id': id,
         'unlock': unlock,
         'reward': reward,
       };
@@ -434,7 +434,7 @@ class Trigger extends CatalogItem {
   factory Trigger.fromYaml(YamlMap yaml, LookupEffect _) {
     final name = yaml['name'] as String;
     final detail = yaml['detail'] as String;
-    final id = yaml['id'] as int?;
+    final id = yaml['id'] as int;
     return Trigger(
       name: name,
       detail: detail,
@@ -455,7 +455,7 @@ class Trigger extends CatalogItem {
   @override
   dynamic toJson() => {
         'name': name,
-        if (id != null) 'id': id,
+        'id': id,
         'detail': detail,
       };
 

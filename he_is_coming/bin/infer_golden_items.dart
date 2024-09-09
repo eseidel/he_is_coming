@@ -31,7 +31,7 @@ Item inferGoldenItem(Item item) {
     effect: effect,
     inferred: true,
     stats: item.stats * 2,
-    id: null, // TODO(eseidel): assign a unique id?
+    id: 0, // TODO(eseidel): assign a unique id?
     // Should this have parts of item x 2?
   );
   return goldenItem;

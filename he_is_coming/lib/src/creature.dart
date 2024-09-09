@@ -168,7 +168,7 @@ class Creature extends CatalogItem {
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
     final effectText = yaml['effect'] as String?;
-    final id = yaml['id'] as int?;
+    final id = yaml['id'] as int;
     final effect = lookupEffect(name: name, effectText: effectText);
     final type = yaml['boss'] == true ? CreatureType.boss : CreatureType.mob;
     return Creature(
@@ -270,7 +270,7 @@ class Creature extends CatalogItem {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      if (id != null) 'id': id,
+      'id': id,
       // We don't currently serialize the player type.
       if (type == CreatureType.boss) 'boss': true,
       'level': level.toJson(),

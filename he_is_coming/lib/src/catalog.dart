@@ -91,7 +91,7 @@ abstract class CatalogItem {
 
   /// The id of the item.
   /// Currently these are only unique within the catalog, not across catalogs.
-  final int? id;
+  final int id;
 
   /// Returns true if the item has been fully implemented.
   bool get isImplemented => effect == null || !effect!.isEmpty;

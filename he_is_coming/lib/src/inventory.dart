@@ -248,7 +248,7 @@ class Oil extends CatalogItem {
     final attack = yaml['attack'] as int? ?? 0;
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
-    final id = yaml['id'] as int?;
+    final id = yaml['id'] as int;
 
     final stats = Stats(
       attack: attack,
@@ -277,7 +277,7 @@ class Oil extends CatalogItem {
   @override
   dynamic toJson() => <String, dynamic>{
         'name': name,
-        if (id != null) 'id': id,
+        'id': id,
         ...stats.toJson(),
       };
 
@@ -297,7 +297,7 @@ class Edge extends CatalogItem {
     final name = yaml['name'] as String;
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
-    final id = yaml['id'] as int?;
+    final id = yaml['id'] as int;
     return Edge(name: name, effect: effect, id: id);
   }
 
@@ -308,7 +308,7 @@ class Edge extends CatalogItem {
   dynamic toJson() {
     return {
       'name': name,
-      if (id != null) 'id': id,
+      'id': id,
       'effect': effect?.toJson(),
     };
   }
