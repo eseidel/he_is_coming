@@ -715,7 +715,7 @@ class CompendiumPage extends StatelessWidget {
   /// Data
   final Data data;
 
-  static const tabNames = <Widget>[
+  static const _tabNames = <Widget>[
     Tab(text: 'Items'),
     Tab(text: 'Creatures'),
     Tab(text: 'Edges'),
@@ -725,13 +725,13 @@ class CompendiumPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: tabNames.length,
+      length: _tabNames.length,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text('He is Coming'),
           bottom: const TabBar(
-            tabs: tabNames,
+            tabs: _tabNames,
           ),
         ),
         body: TabBarView(

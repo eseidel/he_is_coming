@@ -50,7 +50,6 @@ void main() {
   });
 
   test('Items test', () {
-    // flutter: Encoded BuildState(Level.end, Inventory: Explosive Sword, Lifeblood Burst, Emerald Ring, Emerald Crown, Citrine Ring, Assault Greaves, Ruby Gemstone with Blunt Edge and [Armor Oil, Attack Oil, Speed Oil]) as d726cc80e0e06080
     final edge = data.edges['Blunt Edge'];
     final oils = [
       data.oils['Armor Oil'],

@@ -262,6 +262,7 @@ class Item extends CatalogItem {
   }
 
   /// Create a copy of the item with updated values.
+  @override
   Item copyWith({
     String? name,
     int? id,

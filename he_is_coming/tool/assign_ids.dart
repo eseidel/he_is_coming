@@ -20,6 +20,10 @@ void doMain(List<String> args) {
   assignIds(data.items);
   assignIds(data.oils);
   assignIds(data.edges);
+  assignIds(data.creatures);
+  assignIds(data.sets);
+  assignIds(data.triggers);
+  assignIds(data.challenges);
 
   data.save();
 }

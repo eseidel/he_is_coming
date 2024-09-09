@@ -176,7 +176,7 @@ class BuildStateCodec {
     if (encoded == null) return null;
     try {
       return decode(encoded, data);
-    } on Exception catch (e) {
+    } on Exception {
       return null;
     }
   }
