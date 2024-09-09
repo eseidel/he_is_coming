@@ -153,7 +153,7 @@ class BuildStateCodec {
     final inventory = state.inventory;
     final bits = BitsBuilder()
       ..add(state.level.index, _levelBits)
-      ..add(data.edges.toId(inventory.edge), data.edges.idBits);
+      ..add(inventory.edge?.id ?? 0, data.edges.idBits);
     // Encode oils as a 3-bit bitfield since there are only 3 of them.
     var bitfield = 0;
     for (var i = 0; i < data.oils.length; i++) {
@@ -164,8 +164,7 @@ class BuildStateCodec {
     }
     bits.add(bitfield, 3);
     for (final item in inventory.items) {
-      final id = data.items.toId(item);
-      bits.add(id, data.items.idBits);
+      bits.add(item.id, data.items.idBits);
     }
     final encoded = hex.encode(bits.takeBytes());
     return encoded;

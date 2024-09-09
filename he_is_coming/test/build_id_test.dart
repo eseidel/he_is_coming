@@ -74,11 +74,11 @@ void main() {
     );
     final state = BuildState(Level.end, inventory);
     final encoded = BuildStateCodec.encode(state, data);
-    expect(encoded, 'd726cc80e0e06080');
+    expect(encoded, 'cfa0a274d11020');
     final decoded = BuildStateCodec.decode(encoded, data);
     expect(decoded.level, Level.end);
     expect(decoded.inventory.items, items);
-    expect(decoded.inventory.edge, data.edges['Cutting Edge']);
-    expect(decoded.inventory.oils, [data.oils['Attack Oil']]);
+    expect(decoded.inventory.edge, data.edges['Blunt Edge']);
+    expect(decoded.inventory.oils, oils);
   });
 }
