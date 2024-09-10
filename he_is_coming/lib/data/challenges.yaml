@@ -66,3 +66,7 @@
   id: 17
   unlock: Equip the same weapon you discarded earlier in the same run.
   reward: Explosive Sword
+- name: Emerald Green
+  id: 18
+  unlock: Start a battle with 30+ max health
+  reward: Iron Rose

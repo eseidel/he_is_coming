@@ -115,7 +115,7 @@
   armor: 2
   speed: -2
   effect: "Exposed: Gain 3 armor"
-- name: Dueling Gauntlet
+- name: Swiftstrike Gauntlet
   id: 23
   rarity: rare
   effect: "Wounded: Do an additional strike on your next turn"
@@ -156,7 +156,7 @@
 - name: Emergency Shield
   id: 30
   rarity: common
-  effect: "Battle Start: If you have less speed than the enemy, gain 4 armor"
+  effect: "Initiative: If you have less speed than the enemy, gain 4 armor"
 - name: Explosive Surprise
   id: 31
   rarity: rare
@@ -184,6 +184,7 @@
   rarity: common
   material: bomb
   effect: "Exposed: Deal 1 damage 3 times"
+  version: 0.3.5
 - name: Fortified Gauntlet
   id: 36
   rarity: rare
@@ -396,6 +397,8 @@
   id: 73
   rarity: rare
   effect: "Whenever you restore health, gain 1 armor"
+  unique: true
+  version: 0.3.5
 - name: Iron Transfusion
   id: 74
   rarity: heroic
@@ -540,8 +543,9 @@
 - name: Ruby Crown
   id: 100
   kind: jewelry
-  rarity: rare
-  effect: "Battle Start: If your attack is 6 or higher, gain 2 attack"
+  rarity: common
+  attack: 1
+  speed: -1
 - name: Ruby Earing
   id: 101
   kind: jewelry
@@ -566,8 +570,9 @@
 - name: Sapphire Crown
   id: 105
   kind: jewelry
-  rarity: rare
-  effect: "Battle Start: If your armor is 15 or higher, gain 10 armor"
+  rarity: common
+  health: -2
+  armor: 5
 - name: Sapphire Earing
   id: 106
   rarity: common
@@ -601,7 +606,8 @@
 - name: Sticky Web
   id: 112
   rarity: rare
-  effect: "Battle Start: If you have less speed than the enemy, stun the enemy for 1 turn"
+  effect: "Initiative: If you have less speed than the enemy, stun the enemy for 1 turn"
+  version: 0.3.5
 - name: Stone Steak
   id: 113
   kind: food
@@ -660,10 +666,34 @@
   kind: weapon
   rarity: common
   material: wood
-  attack: 2
-  effect: "On Hit: Reduce the enemy's max health by 2"
+  attack: 0
+  effect: "Gain 2 attack for each empty equipment slot"
+  version: 0.3.5
 - name: Wooden Stick
   id: 123
   kind: weapon
   rarity: common
   attack: 1
+- name: Saffron Feather
+  id: 124
+  rarity: common
+  effect: "Turn Start: Convert 1 speed to 1 health"
+  speed: 1
+- name: Cherry Bomb
+  id: 125
+  kind: food
+  material: bomb
+  rarity: common
+  effect: "Battle Start: Deal 2 damage"
+  version: 0.3.5
+- name: Citrine Ring
+  id: 126
+  kind: jewelry
+  rarity: common
+  effect: "Gain 1 speed every other turn"
+  version: 0.3.5
+- name: Heart-shaped Potion
+  id: 127
+  rarity: rare
+  effect: "When you are reduced to exactly 1 health for the first time, restore health to full"
+  version: 0.3.5
