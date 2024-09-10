@@ -10,6 +10,9 @@ typedef EffectMap = Map<Trigger, EffectFn>;
 /// Creates an [Effect] with an onBattle callback.
 EffectMap onBattle(EffectFn fn) => {Trigger.onBattle: fn};
 
+/// Creates an [Effect] with an onInitiative callback.
+EffectMap onInitiative(EffectFn fn) => {Trigger.onInitiative: fn};
+
 /// Creates an [Effect] with an onTurn callback.
 EffectMap onTurn(EffectFn fn) => {Trigger.onTurn: fn};
 
@@ -32,6 +35,9 @@ EffectMap onHeal(EffectFn fn) => {Trigger.onHeal: fn};
 enum Trigger {
   /// Called on battle start.
   onBattle,
+
+  /// Called just after battle start.
+  onInitiative,
 
   /// Called at the start of each turn.
   onTurn,
