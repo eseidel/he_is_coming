@@ -137,6 +137,17 @@ class Data {
     );
   }
 
+  /// All known items.
+  List<CatalogItem> get allItems => [
+        ...creatures.items,
+        ...items.items,
+        ...edges.items,
+        ...oils.items,
+        ...sets.items,
+        ...triggers.items,
+        ...challenges.items,
+      ];
+
   /// All known creatures.
   final CreatureCatalog creatures;
 
@@ -430,9 +441,9 @@ class ChallengeCatalog extends Catalog<Challenge> {
 }
 
 /// Class to hold a trigger.
-class Trigger extends CatalogItem {
+class TriggerItem extends CatalogItem {
   /// Create a new trigger.
-  Trigger({
+  TriggerItem({
     required super.name,
     required this.detail,
     required super.id,
@@ -440,12 +451,12 @@ class Trigger extends CatalogItem {
   });
 
   /// Create a trigger from a yaml map.
-  factory Trigger.fromYaml(YamlMap yaml, LookupEffect _) {
+  factory TriggerItem.fromYaml(YamlMap yaml, LookupEffect _) {
     final name = yaml['name'] as String;
     final detail = yaml['detail'] as String;
     final id = yaml['id'] as int;
     final version = yaml['version'] as String?;
-    return Trigger(
+    return TriggerItem(
       name: name,
       detail: detail,
       id: id,
@@ -472,8 +483,8 @@ class Trigger extends CatalogItem {
       };
 
   @override
-  Trigger copyWith({int? id}) {
-    return Trigger(
+  TriggerItem copyWith({int? id}) {
+    return TriggerItem(
       name: name,
       detail: detail,
       id: id ?? this.id,
@@ -483,7 +494,7 @@ class Trigger extends CatalogItem {
 }
 
 /// Class to hold all known triggers.
-class TriggerCatalog extends Catalog<Trigger> {
+class TriggerCatalog extends Catalog<TriggerItem> {
   /// Create an TriggerCatalog
   TriggerCatalog(super.triggers);
 
@@ -491,13 +502,13 @@ class TriggerCatalog extends Catalog<Trigger> {
   factory TriggerCatalog.fromYaml(YamlList yaml) {
     final triggers = CatalogReader.parseYaml(
       yaml,
-      Trigger.fromYaml,
-      Trigger.orderedKeys.toSet(),
+      TriggerItem.fromYaml,
+      TriggerItem.orderedKeys.toSet(),
       EffectCatalog({}), // No triggers have effects in the game yet.
     );
     return TriggerCatalog(triggers);
   }
 
   /// The triggers in this catalog.
-  List<Trigger> get triggers => items;
+  List<TriggerItem> get triggers => items;
 }
