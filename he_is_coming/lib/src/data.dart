@@ -266,6 +266,7 @@ class SetBonus extends CatalogItem {
     required this.stats,
     required super.effect,
     required super.id,
+    required super.version,
   });
 
   /// Create a set bonus from a yaml map.
@@ -276,12 +277,14 @@ class SetBonus extends CatalogItem {
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
     final id = yaml['id'] as int;
+    final version = yaml['version'] as String?;
     return SetBonus(
       name: name,
       parts: parts,
       stats: stats,
       effect: effect,
       id: id,
+      version: version,
     );
   }
 
@@ -317,6 +320,7 @@ class SetBonus extends CatalogItem {
       stats: stats,
       effect: effect,
       id: id ?? this.id,
+      version: version,
     );
   }
 }
@@ -349,6 +353,7 @@ class Challenge extends CatalogItem {
     required this.unlock,
     required this.reward,
     required super.id,
+    required super.version,
   });
 
   /// Create a challenge from a yaml map.
@@ -357,11 +362,13 @@ class Challenge extends CatalogItem {
     final unlock = yaml['unlock'] as String;
     final reward = yaml['reward'] as String;
     final id = yaml['id'] as int;
+    final version = yaml['version'] as String?;
     return Challenge(
       name: name,
       unlock: unlock,
       reward: reward,
       id: id,
+      version: version,
     );
   }
 
@@ -397,6 +404,7 @@ class Challenge extends CatalogItem {
       unlock: unlock,
       reward: reward,
       id: id ?? this.id,
+      version: version,
     );
   }
 }
@@ -428,6 +436,7 @@ class Trigger extends CatalogItem {
     required super.name,
     required this.detail,
     required super.id,
+    required super.version,
   });
 
   /// Create a trigger from a yaml map.
@@ -435,10 +444,12 @@ class Trigger extends CatalogItem {
     final name = yaml['name'] as String;
     final detail = yaml['detail'] as String;
     final id = yaml['id'] as int;
+    final version = yaml['version'] as String?;
     return Trigger(
       name: name,
       detail: detail,
       id: id,
+      version: version,
     );
   }
 
@@ -457,6 +468,7 @@ class Trigger extends CatalogItem {
         'name': name,
         'id': id,
         'detail': detail,
+        if (version != null) 'version': version,
       };
 
   @override
@@ -465,6 +477,7 @@ class Trigger extends CatalogItem {
       name: name,
       detail: detail,
       id: id ?? this.id,
+      version: version,
     );
   }
 }

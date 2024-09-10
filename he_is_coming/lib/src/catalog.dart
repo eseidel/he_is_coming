@@ -52,7 +52,7 @@ class CatalogReader {
     for (final key in unexpected) {
       logger.err('Unexpected key: $key in $yaml allowed: $expectedKeys');
     }
-    throw StateError('Unexpected keys');
+    throw StateError('Unexpected keys: $unexpected in $yaml');
   }
 
   /// Read a yaml file and return a list of items.
@@ -79,12 +79,16 @@ abstract class CatalogItem {
   CatalogItem({
     required this.name,
     required this.id,
+    required this.version,
     this.effect,
     this.inferred = false,
   });
 
   /// The name of the item.
   final String name;
+
+  /// The version the item was last validated in.
+  final String? version;
 
   /// The effect of the item.
   final Effect? effect;
