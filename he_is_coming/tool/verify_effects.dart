@@ -6,7 +6,7 @@ import 'package:scoped_deps/scoped_deps.dart';
 // get all the first and last words in item names.
 // Look for repeats.
 
-String? expectedPrefix(CatalogItem item) {
+String? implementedTrigger(CatalogItem item) {
   final effect = item.effect;
   if (effect == null) {
     return null;
@@ -41,23 +41,29 @@ String? expectedPrefix(CatalogItem item) {
   }
 }
 
+String? writtenTrigger(CatalogItem item) {
+  final effect = item.effect;
+  if (effect == null) {
+    return null;
+  }
+  final words = effect.text.split(':');
+  if (words.length != 2) {
+    return null;
+  }
+  return words.first.trim();
+}
+
 void doMain(List<String> arguments) {
   final data = Data.load();
 
   for (final item in data.allItems) {
-    final effect = item.effect;
-    if (effect == null) {
+    if (!item.isImplemented) {
       continue;
     }
-    final words = effect.text.split(':');
-    if (words.length != 2) {
-      // Effects without trigger words hit this case.
-      continue;
-    }
-    final actual = words.first.trim();
-    final expected = expectedPrefix(item);
-    if (actual != expected) {
-      logger.warn('${item.name} Expected: $expected, Actual: $actual');
+    final written = writtenTrigger(item);
+    final implemented = implementedTrigger(item);
+    if (written != implemented) {
+      logger.warn('${item.name} Implemented: $implemented, Written: $written');
     }
   }
 }

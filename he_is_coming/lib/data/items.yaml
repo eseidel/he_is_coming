@@ -253,7 +253,7 @@
   rarity: golden
   material: stone
   health: -4
-  effect: "Battle start: Gain 10 armor"
+  effect: "Battle Start: Gain 10 armor"
   inferred: true
 - name: Golden Horned Helmet
   id: 49
@@ -344,7 +344,7 @@
   rarity: common
   material: stone
   health: -2
-  effect: "Battle start: Gain 5 armor"
+  effect: "Battle Start: Gain 5 armor"
 - name: Granite Hammer
   id: 65
   kind: weapon
