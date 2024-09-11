@@ -815,3 +815,16 @@
   effect: "Initiative: If you have more speed than the enemy, lose 2 speed and trigger Initiative"
   unique: true
   version: 0.3.5
+- name: Honeycomb
+  id: 145
+  rarity: heroic
+  kind: food
+  version: 0.3.5
+- name: "Honey Ham"
+  id: 146
+  rarity: cauldron
+  effect: "Double your max health"
+  parts:
+    - Honeycomb
+    - Redwood Roast
+  version: 0.3.5
