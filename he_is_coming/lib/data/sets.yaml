@@ -13,6 +13,14 @@
   attack: 1
   armor: 1
   speed: 1
+- name: Raw Hide
+  id: 4
+  parts:
+    - Leather Armor
+    - Leather Boots
+    - Leather Gloves
+  effect: Gain 1 attack every other turn
+  version: 0.3.5
 - name: Redwood Crown
   id: 3
   parts:
@@ -20,14 +28,6 @@
     - Redwood Rod
     - Redwood Helmet
   effect: "Wounded: Restore health to full"
-- name: Raw Hide
-  id: 4
-  parts:
-    - Leather Armor
-    - Leather Boots
-    - Leather Gloves
-  effect: "Gain 1 attack every other turn"
-  version: 0.3.5
 - name: Stone Scales
   id: 5
   parts:

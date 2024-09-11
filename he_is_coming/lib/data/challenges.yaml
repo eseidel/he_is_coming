@@ -1,3 +1,15 @@
+- name: A Murder
+  id: 19
+  unlock: Defeat 4 crows in a run
+  reward: Briar Rose
+  version: 0.3.5
+- name: All that glitters
+  id: 22
+  unlock: Have 3 golden items in your inventory
+  reward: Energy Crystal
+  x: 3
+  y: 2
+  version: 0.3.5
 - name: Barking up the wrong tree
   id: 1
   unlock: Win against the Brittlebark Beast for the first time
@@ -6,10 +18,28 @@
   id: 2
   unlock: Restore 15 or more health in a single turn
   reward: Sanguine Rose
+- name: Bombastic
+  id: 26
+  unlock: Trigger 3 bomb items at the same time on Exposed
+  reward: Unimplemented
+  x: 5
+  y: 4
+  version: 0.3.5
+- name: Citrine Yellow
+  id: 28
+  unlock: Start a battle with 8 base speed"
+  reward: Unimplemented
+  x: 8
+  y: 4
+  version: 0.3.5
 - name: Early Riser
   id: 3
   unlock: Fight a boss early and win it
   reward: Gold Ring
+- name: Emerald Green
+  id: 18
+  unlock: Start a battle with 30+ max health
+  reward: Iron Rose
 - name: Eye of the storm
   id: 4
   unlock: Win against Storm Druid for the first time
@@ -24,6 +54,18 @@
   id: 6
   unlock: Win against Razortusk Hog for the first time
   reward: Swiftstrike Rapier
+- name: Impenetrable Defense
+  id: 21
+  unlock: Gain a combined total of 100 armor in a single battle
+  reward: Shield Talisman
+  version: 0.3.5
+- name: Infinity Rings
+  id: 25
+  unlock: Have 3 rings equipped
+  reward: Unimplemented
+  x: 2
+  y: 4
+  version: 0.3.5
 - name: It's a secret to everybody
   id: 7
   unlock: Find a hidden item set
@@ -32,6 +74,27 @@
   id: 8
   unlock: Defeat the first boss with only common items in your inventory.
   reward: Hidden Dagger
+- name: Lifeblood Overflow
+  id: 24
+  unlock: Overheal 80+ health in a battle
+  reward: Unimplemented
+  x: 1
+  y: 3
+  version: 0.3.5
+- name: Lord of Blood
+  id: 32
+  unlock: Restore 50+ health in a single battle
+  reward: Unimplemented
+  x: 12
+  y: 2
+  version: 0.3.5
+- name: My job is done
+  id: 30
+  unlock: Defeat a boss without striking
+  reward: Unimplemented
+  x: 11
+  y: 4
+  version: 0.3.5
 - name: Nocturnal Predator
   id: 9
   unlock: Defeat 5 enemies during one night
@@ -48,6 +111,20 @@
   id: 12
   unlock: Win against Gentle Giant for the first time
   reward: Pinecone Plate
+- name: Ruby Red
+  id: 29
+  unlock: Start a battle with 8 base attack
+  reward: Unimplemented
+  x: 9
+  y: 4
+  version: 0.3.5
+- name: Sapphire Blue
+  id: 27
+  unlock: Start a battle with 20 base armor
+  reward: Unimplemented
+  x: 6
+  y: 4
+  version: 0.3.5
 - name: Slowpoke
   id: 13
   unlock: Start a battle with -5 base speed
@@ -60,110 +137,32 @@
   id: 15
   unlock: Strike an enemy 2 times before their turn
   reward: Agile Edge
-- name: The Collector
-  id: 16
-  unlock: Equip 3 copies of the same item
-  reward: Gemstone Scepter
-- name: Welcome Back
-  id: 17
-  unlock: Equip the same weapon you discarded earlier in the same run.
-  reward: Explosive Sword
-- name: Emerald Green
-  id: 18
-  unlock: Start a battle with 30+ max health
-  reward: Iron Rose
-- name: A Murder
-  id: 19
-  unlock: Defeat 4 crows in a run
-  reward: Briar Rose
-  version: 0.3.5
-- name: Where wolf?
-  id: 20
-  unlock: Win against Bloodmoon Werewolf for the first time
-  reward: Bloodmoon Ritual
-  version: 0.3.5
-  x: 1
-  y: 1
-- name: Impenetrable Defense
-  id: 21
-  unlock: Gain a combined total of 100 armor in a single battle
-  reward: Shield Talisman
-  version: 0.3.5
-- name: All that glitters
-  id: 22
-  unlock: Have 3 golden items in your inventory
-  reward: Energy Crystal
-  x: 3
-  y: 2
-  version: 0.3.5
 - name: Stunlock
   id: 23
-  unlock: "Stun an enemy 5 times in a battle"
+  unlock: Stun an enemy 5 times in a battle
   reward: Unimplemented
   x: 4
   y: 4
   version: 0.3.5
-- name: "Lifeblood Overflow"
-  id: 24
-  unlock: "Overheal 80+ health in a battle"
-  reward: Unimplemented
-  x: 1
-  y: 3
-  version: 0.3.5
-- name: "Infinity Rings"
-  id: 25
-  unlock: "Have 3 rings equipped"
-  reward: Unimplemented
-  x: 2
-  y: 4
-  version: 0.3.5
-- name: Bombastic
-  id: 26
-  unlock: "Trigger 3 bomb items at the same time on Exposed"
-  reward: Unimplemented
-  x: 5
-  y: 4
-  version: 0.3.5
-- name: Sapphire Blue
-  id: 27
-  unlock: "Start a battle with 20 base armor"
-  reward: Unimplemented
-  x: 6
-  y: 4
-  version: 0.3.5
-- name: "Citrine Yellow"
-  id: 28
-  unlock: Start a battle with 8 base speed"
-  reward: Unimplemented
-  x: 8
-  y: 4
-  version: 0.3.5
-- name: "Ruby Red"
-  id: 29
-  unlock: "Start a battle with 8 base attack"
-  reward: Unimplemented
-  x: 9
-  y: 4
-  version: 0.3.5
-- name: "My job is done"
-  id: 30
-  unlock: "Defeat a boss without striking"
-  reward: Unimplemented
-  x: 11
-  y: 4
-  version: 0.3.5
-- name: "Unbearable"
+- name: The Collector
+  id: 16
+  unlock: Equip 3 copies of the same item
+  reward: Gemstone Scepter
+- name: Unbearable
   id: 31
-  unlock: "Win against Bearserker for the first time"
+  unlock: Win against Bearserker for the first time
   reward: Unimplemented
   x: 13
   y: 1
   version: 0.3.5
-- name: "Lord of Blood"
-  id: 32
-  
-  unlock: "Restore 50+ health in a single battle"
-  reward: Unimplemented
-  x: 12
-  y: 2
+- name: Welcome Back
+  id: 17
+  unlock: Equip the same weapon you discarded earlier in the same run.
+  reward: Explosive Sword
+- name: Where wolf?
+  id: 20
+  unlock: Win against Bloodmoon Werewolf for the first time
+  reward: Bloodmoon Ritual
+  x: 1
+  y: 1
   version: 0.3.5

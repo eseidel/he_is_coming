@@ -11,6 +11,10 @@
 - name: Cutting Edge
   id: 4
   effect: "On Hit: Deal 1 damage"
+- name: Featherweight Edge
+  id: 9
+  effect: "On Hit: Convert 1 speed to 1 attack"
+  version: 0.3.5
 - name: Jagged Edge
   id: 5
   effect: "On Hit: Gain 2 thorns and take 1 damage"
@@ -25,7 +29,3 @@
 - name: Titan's Edge
   id: 8
   effect: "Only strike every other turn, but deal double damage"
-- name: Featherweight Edge
-  id: 9
-  effect: "On Hit: Convert 1 speed to 1 attack"
-  version: 0.3.5

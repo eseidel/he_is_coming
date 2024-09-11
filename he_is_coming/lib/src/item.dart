@@ -269,6 +269,7 @@ class Item extends CatalogItem {
       ...stats.toJson(),
       'effect': effect?.toJson(),
       if (inferred) 'inferred': inferred,
+      if (version != null) 'version': version,
     };
   }
 

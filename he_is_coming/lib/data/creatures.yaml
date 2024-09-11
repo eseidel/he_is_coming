@@ -60,6 +60,14 @@
   attack: 1
   armor: 5
   effect: "Battle Start: Black Knight gains attack equal to the players attack"
+- name: Bloodmoon Werewolf
+  id: 28
+  level: 1
+  health: 15
+  attack: 3
+  speed: 1
+  effect: "Turn Start: If the player is below 50% health, execute the player"
+  version: 0.3.5
 - name: Brittlebark Beast
   id: 9
   boss: true
@@ -112,8 +120,8 @@
   boss: true
   level: 3
   health: 40
-  armor: 10
   attack: 7
+  armor: 10
   speed: 3
   version: 0.3.5
 - name: Mountain Troll
@@ -208,11 +216,3 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
-- name: Bloodmoon Werewolf
-  id: 28
-  level: 1
-  health: 15
-  attack: 3
-  speed: 1
-  effect: "Turn Start: If the player is below 50% health, execute the player"
-  version: 0.3.5
