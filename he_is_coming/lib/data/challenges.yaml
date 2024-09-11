@@ -66,3 +66,29 @@
   id: 17
   unlock: Equip the same weapon you discarded earlier in the same run.
   reward: Explosive Sword
+- name: Emerald Green
+  id: 18
+  unlock: Start a battle with 30+ max health
+  reward: Iron Rose
+- name: A Murder
+  id: 19
+  unlock: Defeat 4 crows in a run
+  reward: Briar Rose
+  version: 0.3.5
+- name: Where wolf?
+  id: 20
+  unlock: Win against Bloodmoon Werewolf for the first time
+  reward: Bloodmoon Ritual
+  version: 0.3.5
+- name: Impenetrable Defense
+  id: 21
+  unlock: Gain a combined total of 100 armor in a single battle
+  reward: Shield Talisman
+  version: 0.3.5
+- name: All that glitters
+  id: 22
+  unlock: Have 3 golden items in your inventory
+  reward: Energy Crystal
+  x: 3
+  y: 2
+  version: 0.3.5

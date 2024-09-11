@@ -51,6 +51,7 @@
   armor: 10
   speed: 2
   effect: Ignores armor
+  version: 0.3.5
 - name: Black Knight
   id: 8
   boss: true
@@ -63,10 +64,11 @@
   id: 9
   boss: true
   level: 1
-  health: 40
+  health: 50
   attack: 3
   speed: 2
-  effect: "Whenever Brittlebark Beast takes damage, he takes 2 additional damage"
+  effect: "Whenever Brittlebark Beast takes damage, he takes 3 additional damage"
+  version: 0.3.5
 - name: Gentle Giant
   id: 10
   boss: true
@@ -96,6 +98,7 @@
   attack: 4
   speed: 4
   effect: "If Hothead has more speed than you, his first strike deals 10 additional damage"
+  version: 0.3.5
 - name: Ironstone Golem
   id: 14
   boss: true
@@ -108,9 +111,11 @@
   id: 15
   boss: true
   level: 3
-  health: 60
+  health: 40
+  armor: 10
   attack: 7
   speed: 3
+  version: 0.3.5
 - name: Mountain Troll
   id: 16
   boss: true
@@ -142,6 +147,7 @@
   attack: 6
   armor: 15
   effect: Redwood Treant's attack is halved against armor
+  version: 0.3.5
 - name: Spider Level 1
   id: 20
   level: 1
@@ -176,21 +182,25 @@
   level: 1
   health: 3
   attack: 1
+  speed: 1
   effect: "If player has 5 or less health, wolf gains 2 attack"
+  version: 0.3.5
 - name: Wolf Level 2
   id: 25
   level: 2
   health: 6
   attack: 2
-  speed: 1
+  speed: 2
   effect: "If player has 5 or less health, wolf gains 3 attack"
+  version: 0.3.5
 - name: Wolf Level 3
   id: 26
   level: 3
   health: 9
   attack: 3
-  speed: 2
+  speed: 3
   effect: "If player has 5 or less health, wolf gains 4 attack"
+  version: 0.3.5
 - name: Woodland Abomination
   id: 27
   boss: true
@@ -198,3 +208,11 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
+- name: Bloodmoon Werewolf
+  id: 28
+  level: 1
+  health: 15
+  attack: 3
+  speed: 1
+  effect: "Turn Start: If the player is below 50% health, execute the player"
+  version: 0.3.5

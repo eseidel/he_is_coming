@@ -50,6 +50,7 @@ Player playerWithInventory(Level level, Inventory inventory) {
     level: level,
     id: _kPlayerId,
     inventory: inventory,
+    version: null,
   );
 }
 
@@ -82,6 +83,7 @@ extension CreatePlayer on Data {
       gold: gold,
       hp: hp,
       id: _kPlayerId,
+      version: null,
       inventory: Inventory(
         level: level,
         edge: edge != null ? edges[edge] : null,
@@ -122,6 +124,7 @@ Creature makeEnemy({
     ),
     gold: 1,
     effect: triggers,
+    version: null,
     id: 0, // Test enemies don't require unique ids.
   );
 }
@@ -149,6 +152,7 @@ class Creature extends CatalogItem {
     required this.level,
     required this.inventory,
     required super.id,
+    required super.version,
     this.type = CreatureType.mob,
     int? hp,
     super.effect,
@@ -171,6 +175,7 @@ class Creature extends CatalogItem {
     final id = yaml['id'] as int;
     final effect = lookupEffect(name: name, effectText: effectText);
     final type = yaml['boss'] == true ? CreatureType.boss : CreatureType.mob;
+    final version = yaml['version'] as String?;
     return Creature(
       name: name,
       level: level,
@@ -185,6 +190,7 @@ class Creature extends CatalogItem {
       effect: effect,
       type: type,
       id: id,
+      version: version,
     );
   }
 
@@ -245,6 +251,7 @@ class Creature extends CatalogItem {
       level: level,
       id: id ?? this.id,
       type: type,
+      version: version,
     );
   }
 
@@ -264,6 +271,7 @@ class Creature extends CatalogItem {
     'edge',
     'oils',
     'unlock',
+    'version',
   ];
 
   @override
@@ -279,6 +287,7 @@ class Creature extends CatalogItem {
       if (inventory != null) ...?inventory?.toJson(),
       // Not including hp for now.
       'effect': effect?.toJson(),
+      if (version != null) 'version': version,
     };
   }
 }

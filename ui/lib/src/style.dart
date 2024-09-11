@@ -96,6 +96,9 @@ class Palette {
   /// Gold (money) color.
   static final Color gold = Colors.amber[400]!;
 
+  /// Thorns color.
+  static final Color thorns = Colors.green[900]!;
+
   /// Creature color.
   static const Color creature = Colors.red;
 }

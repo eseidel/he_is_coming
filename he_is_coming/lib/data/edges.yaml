@@ -22,3 +22,6 @@
 - name: Titan's Edge
   id: 8
   effect: "Only strike every other turn, but deal double damage"
+- name: Featherweight Edge
+  id: 9
+  inferred: true

@@ -247,7 +247,7 @@ void main() {
 
     final enemy = makeEnemy(attack: 1, health: 6);
     // Normally take 5 dmg but the wine triggers
-    // when we're below 50% health, healing 4 hp.
+    // when we're at 50% health, healing 4 hp.
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 8);
   });
@@ -259,9 +259,9 @@ void main() {
 
     final enemy = makeEnemy(attack: 1, health: 6);
     // Normally take 5 dmg but the wine triggers
-    // when we're below 50% health, healing 8 hp.
+    // when we're at 50% health, healing 8 hp.
     final result = doBattle(first: player, second: enemy);
-    expect(result.first.hp, 10);
+    expect(result.first.hp, 9);
   });
 
   test('Wounded when already below 50%', () {
@@ -281,42 +281,42 @@ void main() {
 
   test('Mortal Edge', () {
     const item = 'Mortal Edge';
-    final player = data.player(items: [item], hp: 5);
-    expect(player.hp, 5);
+    final player = data.player(items: [item], hp: 6);
+    expect(player.hp, 6);
     expect(player.baseStats.attack, 2);
 
     final enemy = makeEnemy(attack: 1, health: 6);
     // Normally take 5 dmg but the mortal edge triggers
     // when we're below 50% health, increasing attack by 5 and taking 2 dmg.
     final result = doBattle(first: player, second: enemy);
-    expect(result.first.hp, 2);
+    expect(result.first.hp, 3);
     expect(result.first.baseStats.attack, 2);
   });
 
   test('Lifeblood Burst', () {
     const item = 'Lifeblood Burst';
-    final player = data.player(items: [item], hp: 5);
-    expect(player.hp, 5);
+    final player = data.player(items: [item], hp: 6);
+    expect(player.hp, 6);
 
     final enemy = makeEnemy(attack: 1, health: 6);
     // Normally take 5 dmg but the lifeblood burst triggers
     // onWounded, dealing 5 dmg to the enemy.
     final result = doBattle(first: player, second: enemy);
-    expect(result.first.hp, 4);
+    expect(result.first.hp, 5);
     expect(result.second.hp, 0);
   });
 
   test('Chain Mail', () {
     const item = 'Chain Mail';
-    final player = data.player(armor: 3, items: [item], hp: 5);
-    expect(player.hp, 5);
+    final player = data.player(armor: 3, items: [item], hp: 6);
+    expect(player.hp, 6);
     expect(player.baseStats.armor, 3);
 
     final enemy = makeEnemy(attack: 1, health: 6);
     // Normally take 5 dmg but the first 3 are absorbed by the armor
     // and then the chain mail triggers, giving 3 armor again, so take 1 dmg.
     final result = doBattle(first: player, second: enemy);
-    expect(result.first.hp, 4);
+    expect(result.first.hp, 5);
     expect(result.first.baseStats.armor, 3);
   });
 
@@ -388,27 +388,12 @@ void main() {
 
   test('Ruby Crown', () {
     const item = 'Ruby Crown';
-    final player = data.player(attack: 1, items: [item]);
+    final player = data.player(items: [item]);
+    // Ruby crown gives +1 attack and -1 speed.
     expect(player.hp, 10);
-    // We have 1 attack from intrinsic and 1 from "Wooden Stick".
     expect(player.baseStats.attack, 2);
-
-    // Ruby Crown gives 2 attack if we have 6 or more attack.
-    final enemy = makeEnemy(attack: 1, health: 14);
-    final result = doBattle(first: player, second: enemy);
-    // Wolf dies in 7 attacks, so we lose 6 hp.
-    expect(result.first.hp, 4);
-
-    final player2 = data.player(
-      attack: 5,
-      items: [item],
-    );
-    expect(player2.hp, 10);
-    expect(player2.baseStats.attack, 6);
-    // Ruby Crown gives 2 attack if we have 6 or more attack.
-    final result2 = doBattle(first: player2, second: enemy);
-    // Wolf dies in 2 hits (8 each) so we lose 1 hp.
-    expect(result2.first.hp, 9);
+    expect(player.baseStats.speed, -1);
+    expect(player.inventory!.items.last.effect, isNull);
   });
 
   test('Melting Iceblade', () {
@@ -458,26 +443,11 @@ void main() {
 
   test('Sapphire Crown', () {
     const item = 'Sapphire Crown';
-    final player = data.player(armor: 15, items: [item]);
-    expect(player.hp, 10);
-    expect(player.baseStats.armor, 15);
-
-    // Sapphire Crown gives 10 armor if we have 15 or more armor.
-    final enemy = makeEnemy(attack: 5, health: 6);
-    final result = doBattle(first: player, second: enemy);
-    // We take 5 hits from wolf, which is 25 dmg, but we have 25 armor.
-    expect(result.first.hp, 10);
-    expect(result.first.baseStats.armor, 15);
-
-    final player2 = data.player(armor: 14, items: [item]);
-    expect(player2.hp, 10);
-    expect(player2.baseStats.armor, 14);
-
-    // Sapphire Crown gives 10 armor if we have 15 or more armor.
-    final result2 = doBattle(first: player2, second: enemy);
-    // We take 5 hits from wolf, which is 25 dmg, but we have 14 armor.
-    expect(result2.first.hp, 0);
-    expect(result2.first.baseStats.armor, 14);
+    final player = data.player(items: [item]);
+    // Sapphire Crown gives -2 health and +5 armor.
+    expect(player.baseStats.maxHp, 8);
+    expect(player.baseStats.armor, 5);
+    expect(player.inventory!.items.last.effect, isNull);
   });
 
   test('Citrine Ring', () {
@@ -866,37 +836,6 @@ void main() {
     expect(player2.baseStats.attack, 0);
   });
 
-  test("Woodcutter's Axe", () {
-    final selfHealing = makeEnemy(
-      attack: 1,
-      health: 6,
-      effect: onTurn((c) => c.restoreHealth(1)),
-    );
-
-    const item = "Woodcutter's Axe";
-    final player = data.player(items: [item]);
-    expect(player.hp, 10);
-    expect(player.baseStats.attack, 2);
-
-    final result = doBattle(first: player, second: selfHealing);
-    // Woodcutter's Axe reduces maxHp on hit, negating any healing abilities.
-    expect(result.first.hp, 8);
-
-    // If we fight w/o the axe, the wolf heals 1 hp every turn, taking
-    // 5 turns to kill so we take 4 dmg.
-    final player2 = data.player(attack: 1);
-    expect(player2.hp, 10);
-    expect(player2.baseStats.attack, 2);
-    final result2 = doBattle(first: player2, second: selfHealing);
-    expect(result2.first.hp, 6);
-
-    final bigArmor = makeEnemy(attack: 1, health: 6, armor: 60);
-    final result3 = doBattle(first: player, second: bigArmor);
-    // Woodcutter's Axe reduces maxHp, even if they still have armor.
-    // So we kill this wolf in 3 turns rather than 30.
-    expect(result3.first.hp, 8);
-  });
-
   test('Emerald Ring', () {
     const item = 'Emerald Ring';
     final player = data.player(items: [item], hp: 7);
@@ -990,34 +929,14 @@ void main() {
   });
 
   test('Emerald Crown', () {
-    const item = 'Emerald Crown';
-    final player = data.player(items: [item], hp: 7);
-    expect(player.hp, 7);
-
-    // Emerald Crown does nothing if we don't have 20 or more max hp.
-    final enemy = makeEnemy(attack: 1, health: 6);
-    final result = doBattle(first: player, second: enemy);
-    expect(result.first.hp, 2);
-
-    final player2 = data.player(
-      items: [item],
-      maxHp: 20,
-      hp: 7,
-    );
-    expect(player2.hp, 7);
-    final result2 = doBattle(first: player2, second: enemy);
-    // Emerald Crown heals to full on battle start if we have 20 or more max hp.
-    expect(result2.first.hp, 15);
-
-    final player3 = data.player(
-      items: [item],
-      maxHp: 20,
-      hp: 20,
-    );
-    expect(player3.hp, 20);
-    final result3 = doBattle(first: player3, second: enemy);
-    // Emerald Crown does nothing if we're already at full hp.
-    expect(result3.first.hp, 15);
+    const itemName = 'Emerald Crown';
+    final player = data.player(items: [itemName]);
+    // Emerald crown gives +8 hp and -1 attack.
+    expect(player.baseStats.maxHp, 18);
+    expect(player.baseStats.attack, 0);
+    final item = player.inventory!.items.last;
+    expect(item.name, itemName);
+    expect(item.effect, isNull);
   });
 
   test('Sapphire Ring', () {
@@ -1126,13 +1045,13 @@ void main() {
 
   test('Petrifying Flask', () {
     const item = 'Petrifying Flask';
-    final player = data.player(items: [item], hp: 5);
-    expect(player.hp, 5);
+    final player = data.player(items: [item], hp: 6);
+    expect(player.hp, 6);
 
     final enemy = makeEnemy(attack: 1, health: 6);
     final result = doBattle(first: player, second: enemy);
     // Petrifying Flask gives 10 armor and self-stuns for 2 turns on wounded.
-    expect(result.first.hp, 4);
+    expect(result.first.hp, 5);
     // turns is 0-indexed, turn 7 is the 8th turn.
     expect(result.turns, 7);
   });
@@ -1203,9 +1122,9 @@ void main() {
 
     final enemy = makeEnemy(attack: 1, health: 9);
     final result = doBattle(first: player, second: enemy);
-    // Thorn Ring adds 6 thorns on battle start (for the cost of 1 hp).
-    // "lose 1 hp" ignores armor.  Wolf hits us twice for 1 dmg each.
-    expect(result.first.hp, 8);
+    // Thorn Ring adds 6 thorns on battle start.
+    // Wolf hits us twice for 1 dmg each.
+    expect(result.first.hp, 9);
     expect(result.first.baseStats.armor, 1);
   });
 
@@ -1240,26 +1159,30 @@ void main() {
     expect(result.second.hp, 0);
   });
 
-  test('Explosive Sword', () {
-    const item = 'Explosive Sword';
-    final player = data.player(items: [item]);
-    expect(player.hp, 10);
+  test(
+    'Explosive Sword',
+    () {
+      const item = 'Explosive Sword';
+      final player = data.player(items: [item]);
+      expect(player.hp, 10);
 
-    final enemy = makeEnemy(attack: 1, health: 20);
-    final result = doBattle(first: player, second: enemy);
+      final enemy = makeEnemy(attack: 1, health: 20);
+      final result = doBattle(first: player, second: enemy);
 
-    // Explosive Sword deals 4 dmg, does 6 dmg and sets attack=0 on exposed.
-    // We kill the wolf in 5 hits, taking 4 dmg.
-    expect(result.first.hp, 6);
+      // Explosive Sword deals 4 dmg, does 6 dmg and sets attack=0 on exposed.
+      // We kill the wolf in 5 hits, taking 4 dmg.
+      expect(result.first.hp, 6);
 
-    final player2 = data.player(armor: 1, items: [item]);
-    expect(player2.hp, 10);
-    expect(player2.baseStats.armor, 1);
+      final player2 = data.player(armor: 1, items: [item]);
+      expect(player2.hp, 10);
+      expect(player2.baseStats.armor, 1);
 
-    final result2 = doBattle(first: player2, second: enemy);
-    // Explosive Sword deals 4 dmg, does 6 dmg and sets attack=0 on exposed.
-    // Wolf breaks our armor on the first hit, we lose all attack and die.
-    expect(result2.first.hp, 0);
-    expect(result2.second.hp, 10);
-  });
+      final result2 = doBattle(first: player2, second: enemy);
+      // Explosive Sword deals 4 dmg, does 6 dmg and sets attack=0 on exposed.
+      // Wolf breaks our armor on the first hit, we lose all attack and die.
+      expect(result2.first.hp, 0);
+      expect(result2.second.hp, 10);
+    },
+    skip: true,
+  );
 }

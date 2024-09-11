@@ -16,3 +16,6 @@
 - name: Wounded
   id: 6
   detail: Triggers when you go below 50% health for the first time.
+- name: Initiative
+  id: 7
+  detail: Triggers after Battle Start

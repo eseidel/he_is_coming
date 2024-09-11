@@ -240,7 +240,12 @@ class Inventory {
 /// Oil applied to a weapon.
 class Oil extends CatalogItem {
   /// Create an Oil
-  Oil({required super.name, required this.stats, required super.id});
+  Oil({
+    required super.name,
+    required this.stats,
+    required super.id,
+    required super.version,
+  });
 
   /// Create an Oil from a yaml map.
   factory Oil.fromYaml(YamlMap yaml, LookupEffect _) {
@@ -249,13 +254,14 @@ class Oil extends CatalogItem {
     final armor = yaml['armor'] as int? ?? 0;
     final speed = yaml['speed'] as int? ?? 0;
     final id = yaml['id'] as int;
+    final version = yaml['version'] as String?;
 
     final stats = Stats(
       attack: attack,
       armor: armor,
       speed: speed,
     );
-    return Oil(name: name, stats: stats, id: id);
+    return Oil(name: name, stats: stats, id: id, version: version);
   }
 
   /// The stats of the oil.
@@ -271,6 +277,7 @@ class Oil extends CatalogItem {
     'attack',
     'armor',
     'speed',
+    'version',
   ];
 
   /// Convert to json.
@@ -283,14 +290,20 @@ class Oil extends CatalogItem {
 
   @override
   Oil copyWith({int? id}) {
-    return Oil(name: name, stats: stats, id: id ?? this.id);
+    return Oil(name: name, stats: stats, id: id ?? this.id, version: version);
   }
 }
 
 /// An edge is a special effect that can be applied to a weapon.
 class Edge extends CatalogItem {
   /// Create an Edge
-  Edge({required super.name, required super.effect, required super.id});
+  Edge({
+    required super.name,
+    required super.effect,
+    required super.id,
+    required super.version,
+    required super.inferred,
+  });
 
   /// Create an Edge from a yaml map.
   factory Edge.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
@@ -298,7 +311,15 @@ class Edge extends CatalogItem {
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
     final id = yaml['id'] as int;
-    return Edge(name: name, effect: effect, id: id);
+    final version = yaml['version'] as String?;
+    final inferred = yaml['inferred'] as bool? ?? false;
+    return Edge(
+      name: name,
+      effect: effect,
+      id: id,
+      version: version,
+      inferred: inferred,
+    );
   }
 
   @override
@@ -310,11 +331,18 @@ class Edge extends CatalogItem {
       'name': name,
       'id': id,
       'effect': effect?.toJson(),
+      if (version != null) 'version': version,
     };
   }
 
   @override
   Edge copyWith({int? id}) {
-    return Edge(name: name, effect: effect, id: id ?? this.id);
+    return Edge(
+      name: name,
+      effect: effect,
+      id: id ?? this.id,
+      version: version,
+      inferred: inferred,
+    );
   }
 }

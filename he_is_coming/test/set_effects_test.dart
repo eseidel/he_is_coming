@@ -62,8 +62,8 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     // Wolf does 14 dmg over 7 hits, 1 is absorbed by armor.
     // Helmet restores 3 on exposed, player is only down 1 hp at that time.
-    // Crown restores all health on wounded (after the 6th hit).
-    expect(result.first.hp, 14);
+    // Crown restores all health on wounded (after the 5th hit).
+    expect(result.first.hp, 12);
   });
 
   // Sets work, even when the items are golden.
@@ -82,8 +82,8 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     // Wolf does 14 dmg over 7 hits, 2 is absorbed by armor.
     // Helmet restores 6 on exposed, player is at full health at that time.
-    // Crown restores all health on wounded (after the 6th hit).
-    expect(result.first.hp, 14);
+    // Crown restores all health on wounded (after the 5th hit).
+    expect(result.first.hp, 12);
   });
 
   test("Hero's Return", () {

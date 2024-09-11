@@ -139,6 +139,7 @@ class Item extends CatalogItem {
     required String name,
     required this.rarity,
     required super.id,
+    required super.version,
     this.kind,
     this.material,
     this.stats = const Stats(),
@@ -148,8 +149,7 @@ class Item extends CatalogItem {
     this.parts = const [],
   }) : super(name: name) {
     if (isWeapon && stats.attack == 0) {
-      if (name == 'Bejeweled Blade') {
-        // Bejeweled Blade is a special case, it is intentionally 0.
+      if (_intentionallyZeroAttackItems.contains(name)) {
         return;
       }
       throw ArgumentError('Weapon $name must have attack');
@@ -180,6 +180,7 @@ class Item extends CatalogItem {
       material: material,
       kind: kind,
       isUnique: isUnique,
+      version: null,
     );
   }
 
@@ -196,6 +197,7 @@ class Item extends CatalogItem {
     final effect = lookupEffect(name: name, effectText: effectText);
     final inferred = yaml['inferred'] as bool? ?? false;
     final id = yaml['id'] as int;
+    final version = yaml['version'] as String?;
     return Item(
       name: name,
       kind: kind,
@@ -207,8 +209,14 @@ class Item extends CatalogItem {
       parts: parts?.cast<String>(),
       inferred: inferred,
       id: id,
+      version: version,
     );
   }
+  static const _intentionallyZeroAttackItems = {
+    'Bejeweled Blade',
+    "Woodcutter's Axe",
+    'Tempest Blade',
+  };
 
   /// Kind of the item.
   final ItemKind? kind;
@@ -245,6 +253,7 @@ class Item extends CatalogItem {
     ...Stats.orderedKeys,
     'effect',
     'inferred',
+    'version',
   ];
 
   @override
@@ -288,6 +297,7 @@ class Item extends CatalogItem {
       effect: effect ?? this.effect,
       inferred: inferred ?? this.inferred,
       parts: parts ?? this.parts,
+      version: version,
     );
   }
 }

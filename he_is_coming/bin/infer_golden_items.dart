@@ -32,6 +32,7 @@ Item inferGoldenItem(Item item) {
     inferred: true,
     stats: item.stats * 2,
     id: 0, // TODO(eseidel): assign a unique id?
+    version: null,
     // Should this have parts of item x 2?
   );
   return goldenItem;

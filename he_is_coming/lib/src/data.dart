@@ -137,6 +137,17 @@ class Data {
     );
   }
 
+  /// All known items.
+  List<CatalogItem> get allItems => [
+        ...creatures.items,
+        ...items.items,
+        ...edges.items,
+        ...oils.items,
+        ...sets.items,
+        ...triggers.items,
+        ...challenges.items,
+      ];
+
   /// All known creatures.
   final CreatureCatalog creatures;
 
@@ -201,6 +212,7 @@ class EdgeCatalog extends Catalog<Edge> {
     'id',
     'unlock', // ignored for now
     'effect',
+    'inferred',
   ];
 
   /// The edges in this catalog.
@@ -266,6 +278,7 @@ class SetBonus extends CatalogItem {
     required this.stats,
     required super.effect,
     required super.id,
+    required super.version,
   });
 
   /// Create a set bonus from a yaml map.
@@ -276,12 +289,14 @@ class SetBonus extends CatalogItem {
     final effectText = yaml['effect'] as String?;
     final effect = lookupEffect(name: name, effectText: effectText);
     final id = yaml['id'] as int;
+    final version = yaml['version'] as String?;
     return SetBonus(
       name: name,
       parts: parts,
       stats: stats,
       effect: effect,
       id: id,
+      version: version,
     );
   }
 
@@ -292,6 +307,7 @@ class SetBonus extends CatalogItem {
     'parts',
     ...Stats.orderedKeys,
     'effect',
+    'version',
   ];
 
   /// The parts required to get the bonus.
@@ -307,6 +323,7 @@ class SetBonus extends CatalogItem {
         'parts': parts,
         ...stats.toJson(),
         if (effect != null) 'effect': effect.toString(),
+        if (version != null) 'version': version,
       };
 
   @override
@@ -317,6 +334,7 @@ class SetBonus extends CatalogItem {
       stats: stats,
       effect: effect,
       id: id ?? this.id,
+      version: version,
     );
   }
 }
@@ -341,6 +359,18 @@ class SetBonusCatalog extends Catalog<SetBonus> {
   List<SetBonus> get sets => items;
 }
 
+/// Class to hold a position.
+class Position {
+  /// Create a new position.
+  const Position(this.x, this.y);
+
+  /// The x value.
+  final int x;
+
+  /// The y value.
+  final int y;
+}
+
 /// Class to hold a challenge.
 class Challenge extends CatalogItem {
   /// Create a new challenge.
@@ -349,6 +379,8 @@ class Challenge extends CatalogItem {
     required this.unlock,
     required this.reward,
     required super.id,
+    required super.version,
+    this.position,
   });
 
   /// Create a challenge from a yaml map.
@@ -357,11 +389,17 @@ class Challenge extends CatalogItem {
     final unlock = yaml['unlock'] as String;
     final reward = yaml['reward'] as String;
     final id = yaml['id'] as int;
+    final version = yaml['version'] as String?;
+    final x = yaml['x'] as int?;
+    final y = yaml['y'] as int?;
+    final position = x != null && y != null ? Position(x, y) : null;
     return Challenge(
       name: name,
       unlock: unlock,
       reward: reward,
       id: id,
+      version: version,
+      position: position,
     );
   }
 
@@ -371,6 +409,9 @@ class Challenge extends CatalogItem {
     'id',
     'unlock',
     'reward',
+    'x',
+    'y',
+    'version',
   ];
 
   /// The reward for completing the challenge.
@@ -379,8 +420,9 @@ class Challenge extends CatalogItem {
   /// Requirements to meet this challenge.
   final String unlock;
 
-  // We're not currently recording the position in the challenge map,
-  // or what page its on, or what other challenges this unlocks.
+  // We have only recorded the position in the challenge map for a few.
+  /// The position of the challenge in the challenge map.
+  final Position? position;
 
   @override
   dynamic toJson() => {
@@ -388,6 +430,9 @@ class Challenge extends CatalogItem {
         'id': id,
         'unlock': unlock,
         'reward': reward,
+        if (position != null) 'x': position!.x,
+        if (position != null) 'y': position!.y,
+        if (version != null) 'version': version,
       };
 
   @override
@@ -397,6 +442,8 @@ class Challenge extends CatalogItem {
       unlock: unlock,
       reward: reward,
       id: id ?? this.id,
+      version: version,
+      position: position,
     );
   }
 }
@@ -422,23 +469,26 @@ class ChallengeCatalog extends Catalog<Challenge> {
 }
 
 /// Class to hold a trigger.
-class Trigger extends CatalogItem {
+class TriggerItem extends CatalogItem {
   /// Create a new trigger.
-  Trigger({
+  TriggerItem({
     required super.name,
     required this.detail,
     required super.id,
+    required super.version,
   });
 
   /// Create a trigger from a yaml map.
-  factory Trigger.fromYaml(YamlMap yaml, LookupEffect _) {
+  factory TriggerItem.fromYaml(YamlMap yaml, LookupEffect _) {
     final name = yaml['name'] as String;
     final detail = yaml['detail'] as String;
     final id = yaml['id'] as int;
-    return Trigger(
+    final version = yaml['version'] as String?;
+    return TriggerItem(
       name: name,
       detail: detail,
       id: id,
+      version: version,
     );
   }
 
@@ -457,20 +507,22 @@ class Trigger extends CatalogItem {
         'name': name,
         'id': id,
         'detail': detail,
+        if (version != null) 'version': version,
       };
 
   @override
-  Trigger copyWith({int? id}) {
-    return Trigger(
+  TriggerItem copyWith({int? id}) {
+    return TriggerItem(
       name: name,
       detail: detail,
       id: id ?? this.id,
+      version: version,
     );
   }
 }
 
 /// Class to hold all known triggers.
-class TriggerCatalog extends Catalog<Trigger> {
+class TriggerCatalog extends Catalog<TriggerItem> {
   /// Create an TriggerCatalog
   TriggerCatalog(super.triggers);
 
@@ -478,13 +530,13 @@ class TriggerCatalog extends Catalog<Trigger> {
   factory TriggerCatalog.fromYaml(YamlList yaml) {
     final triggers = CatalogReader.parseYaml(
       yaml,
-      Trigger.fromYaml,
-      Trigger.orderedKeys.toSet(),
+      TriggerItem.fromYaml,
+      TriggerItem.orderedKeys.toSet(),
       EffectCatalog({}), // No triggers have effects in the game yet.
     );
     return TriggerCatalog(triggers);
   }
 
   /// The triggers in this catalog.
-  List<Trigger> get triggers => items;
+  List<TriggerItem> get triggers => items;
 }

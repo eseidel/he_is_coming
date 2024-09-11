@@ -53,9 +53,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Ruby Crown': onBattle((c) => _if(c.my.attack >= 6, () => c.gainAttack(2))),
   'Melting Iceblade': onHit((c) => c.loseAttack(1)),
   'Double-edged Sword': onHit((c) => c.takeDamage(1)),
-  'Sapphire Crown': onBattle(
-    (c) => _if(c.my.armor >= 15, () => c.gainArmor(10)),
-  ),
   'Citrine Ring': onBattle(
     (c) => _if(c.my.speed > 0, () => c.dealDamage(c.my.speed)),
   ),
@@ -67,7 +64,8 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Leather Boots': onBattle(
     (c) => _if(c.my.speed > c.enemy.speed, () => c.gainAttack(2)),
   ),
-  'Plated Helmet': onTurn((c) => _if(c.my.belowHalfHp, () => c.gainArmor(2))),
+  'Plated Helmet':
+      onTurn((c) => _if(c.my.belowHalfHealth, () => c.gainArmor(2))),
   'Ore Heart': onBattle(
     (c) => c.gainArmor(c.materialCount(ItemMaterial.stone) * 2),
   ),
@@ -107,7 +105,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
       () => c.gainAttack(c.kindCount(ItemKind.jewelry) * 2),
     ),
   ),
-  "Woodcutter's Axe": onHit((c) => c.reduceEnemyMaxHp(2)),
   'Emerald Ring': onBattle((c) => c.restoreHealth(2)),
   'Golden Emerald Ring': onBattle((c) => c.restoreHealth(4)),
   'Ironskin Potion': onBattle(
@@ -140,11 +137,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Bloody Steak': onWounded((c) => c.gainArmor(c.my.maxHp ~/ 2)),
   'Assault Greaves': onTakeDamage((c) => c.dealDamage(1)),
-  'Thorn Ring': onBattle(
-    (c) => c
-      ..gainThorns(6)
-      ..loseHealth(1),
-  ),
+  'Thorn Ring': onBattle((c) => c..gainThorns(6)),
   'Bramble Buckler': onTurn(
     (c) => _if(
       c.my.armor > 0,
@@ -155,9 +148,4 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Stormcloud Spear':
       onTurn((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
-  'Explosive Sword': onExposed(
-    (c) => c
-      ..dealDamage(6)
-      ..loseAttack(c.my.attack),
-  ),
 });
