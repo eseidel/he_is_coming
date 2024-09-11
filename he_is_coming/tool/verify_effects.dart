@@ -31,13 +31,13 @@ String? implementedTrigger(CatalogItem item) {
     case Trigger.onHit:
       return 'On Hit';
     case Trigger.onTakeDamage:
-      return 'On Damage';
+      return 'Whenever you take damage';
     case Trigger.onExposed:
       return 'Exposed';
     case Trigger.onWounded:
       return 'Wounded';
     case Trigger.onHeal:
-      return 'On Heal';
+      return 'Whenever you restore health';
   }
 }
 
@@ -46,11 +46,14 @@ String? writtenTrigger(CatalogItem item) {
   if (effect == null) {
     return null;
   }
-  final words = effect.text.split(':');
-  if (words.length != 2) {
-    return null;
+  var parts = effect.text.split(':');
+  if (parts.length != 2) {
+    parts = effect.text.split(',');
+    if (parts.length != 2) {
+      return null;
+    }
   }
-  return words.first.trim();
+  return parts.first.trim();
 }
 
 void doMain(List<String> arguments) {

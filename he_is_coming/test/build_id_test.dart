@@ -72,9 +72,12 @@ void main() {
       oils: oils,
       setBonuses: data.sets,
     );
+    expect(data.edges.idBits, 4);
+    expect(data.items.idBits, 8);
+
     final state = BuildState(Level.end, inventory);
     final encoded = BuildStateCodec.encode(state, data);
-    expect(encoded, 'cfb20a274d1102');
+    expect(encoded, 'cfb10288e8d08808');
     final decoded = BuildStateCodec.decode(encoded, data);
     expect(decoded.level, Level.end);
     expect(decoded.inventory.items, items);

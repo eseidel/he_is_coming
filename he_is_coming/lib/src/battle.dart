@@ -265,8 +265,11 @@ class CreatureStats {
   /// Returns true if health is currently full.
   bool get isHealthFull => hp == maxHp;
 
-  /// Returns true if health is below half.
+  /// Returns true if health is below half.  Used for wounded.
   bool get atOrBelowHalfHealth => hp <= maxHp / 2;
+
+  /// Returns true if health is below half.
+  bool get belowHalfHealth => hp < maxHp / 2;
 
   /// Returns the amount of health lost.
   int get lostHp => maxHp - hp;
