@@ -272,6 +272,7 @@ class ColoredEffectText extends StatelessWidget {
       'attack': Palette.attack,
       'armor': Palette.armor,
       'speed': Palette.speed,
+      'thorns': Palette.thorns,
     };
 
     final words = text.split(' ');
