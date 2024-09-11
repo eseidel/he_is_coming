@@ -1,6 +1,7 @@
 - name: Agile Edge
   id: 1
   effect: Do an additional strike on your first turn
+  version: 0.3.5
 - name: Bleeding Edge
   id: 2
   effect: "On Hit: Restore 1 health"
@@ -16,12 +17,15 @@
 - name: Lightning Edge
   id: 6
   effect: "Battle Start: Stun the enemy for 1 turn"
+  version: 0.3.5
 - name: Thieving Edge
   id: 7
   effect: "On Hit: If you have less than 10 gold, gain 1 gold"
+  version: 0.3.5
 - name: Titan's Edge
   id: 8
   effect: "Only strike every other turn, but deal double damage"
 - name: Featherweight Edge
   id: 9
-  inferred: true
+  effect: "On Hit: Convert 1 speed to 1 attack"
+  version: 0.3.5

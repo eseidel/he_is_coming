@@ -23,7 +23,9 @@
 - name: Blacksmith Bond
   id: 6
   rarity: rare
-  effect: Exposed can trigger one additional time
+  effect: Exposed can trigger 1 additional time
+  unique: true
+  version: 0.3.5
 - name: Bloody Steak
   id: 7
   rarity: cauldron
@@ -54,6 +56,7 @@
   material: wood
   health: 10
   effect: "Whenever you take damage, take 1 additional damage"
+  version: 0.3.5
 - name: Brittlebark Bow
   id: 12
   kind: weapon
@@ -202,11 +205,13 @@
   rarity: heroic
   attack: 2
   effect: "Draws power from emerald, ruby, sapphire and citrine items"
+  version: 0.3.5
 - name: Gold Ring
   id: 38
   kind: jewelry
   rarity: rare
   effect: "Battle Start: Gain 1 gold"
+  version: 0.3.5
 - name: Golden Boots of the Hero
   id: 40
   rarity: golden
@@ -347,6 +352,7 @@
   material: stone
   attack: 2
   effect: "On Hit: Convert 1 armor to 2 attack"
+  version: 0.3.5
 - name: Grindstone Club
   id: 66
   kind: weapon
@@ -386,6 +392,7 @@
   rarity: common
   armor: 2
   effect: "Battle Start: Gain 2 thorns"
+  version: 0.3.5
 - name: Impressive Physique
   id: 72
   rarity: rare
@@ -401,6 +408,7 @@
   id: 74
   rarity: heroic
   effect: "Turn Start: Gain 2 armor and lose 1 health"
+  version: 0.3.5
 - name: Ironskin Potion
   id: 75
   unique: true
@@ -414,6 +422,7 @@
   material: stone
   attack: 4
   speed: -2
+  version: 0.3.5
 - name: Ironstone Sandals
   id: 77
   rarity: rare
@@ -570,6 +579,7 @@
   unique: true
   rarity: rare
   effect: "Whenever you restore health, restore 1 additional health"
+  version: 0.3.5
 - name: Sapphire Crown
   id: 105
   kind: jewelry
@@ -704,6 +714,7 @@
   version: 0.3.5
 - name: Heart-shaped Potion
   id: 127
+  material: sanguine
   rarity: rare
   effect: "When you are reduced to exactly 1 health for the first time, restore health to full"
   version: 0.3.5

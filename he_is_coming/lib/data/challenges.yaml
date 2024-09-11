@@ -14,6 +14,8 @@
   id: 4
   unlock: Win against Storm Druid for the first time
   reward: Razorvine Talisman
+  x: 1
+  y: 2
 - name: Grave Mistake
   id: 5
   unlock: Die from your own items
@@ -80,6 +82,8 @@
   unlock: Win against Bloodmoon Werewolf for the first time
   reward: Bloodmoon Ritual
   version: 0.3.5
+  x: 1
+  y: 1
 - name: Impenetrable Defense
   id: 21
   unlock: Gain a combined total of 100 armor in a single battle
@@ -90,5 +94,76 @@
   unlock: Have 3 golden items in your inventory
   reward: Energy Crystal
   x: 3
+  y: 2
+  version: 0.3.5
+- name: Stunlock
+  id: 23
+  unlock: "Stun an enemy 5 times in a battle"
+  reward: Unimplemented
+  x: 4
+  y: 4
+  version: 0.3.5
+- name: "Lifeblood Overflow"
+  id: 24
+  unlock: "Overheal 80+ health in a battle"
+  reward: Unimplemented
+  x: 1
+  y: 3
+  version: 0.3.5
+- name: "Infinity Rings"
+  id: 25
+  unlock: "Have 3 rings equipped"
+  reward: Unimplemented
+  x: 2
+  y: 4
+  version: 0.3.5
+- name: Bombastic
+  id: 26
+  unlock: "Trigger 3 bomb items at the same time on Exposed"
+  reward: Unimplemented
+  x: 5
+  y: 4
+  version: 0.3.5
+- name: Sapphire Blue
+  id: 27
+  unlock: "Start a battle with 20 base armor"
+  reward: Unimplemented
+  x: 6
+  y: 4
+  version: 0.3.5
+- name: "Citrine Yellow"
+  id: 28
+  unlock: Start a battle with 8 base speed"
+  reward: Unimplemented
+  x: 8
+  y: 4
+  version: 0.3.5
+- name: "Ruby Red"
+  id: 29
+  unlock: "Start a battle with 8 base attack"
+  reward: Unimplemented
+  x: 9
+  y: 4
+  version: 0.3.5
+- name: "My job is done"
+  id: 30
+  unlock: "Defeat a boss without striking"
+  reward: Unimplemented
+  x: 11
+  y: 4
+  version: 0.3.5
+- name: "Unbearable"
+  id: 31
+  unlock: "Win against Bearserker for the first time"
+  reward: Unimplemented
+  x: 13
+  y: 1
+  version: 0.3.5
+- name: "Lord of Blood"
+  id: 32
+  
+  unlock: "Restore 50+ health in a single battle"
+  reward: Unimplemented
+  x: 12
   y: 2
   version: 0.3.5

@@ -325,6 +325,15 @@ class Edge extends CatalogItem {
   @override
   String toString() => name;
 
+  /// All the known keys in the edges.yaml, in sorted order.
+  static const List<String> orderedKeys = <String>[
+    'name',
+    'id',
+    'effect',
+    'inferred',
+    'version',
+  ];
+
   @override
   dynamic toJson() {
     return {

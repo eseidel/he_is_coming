@@ -200,20 +200,11 @@ class EdgeCatalog extends Catalog<Edge> {
     final edges = CatalogReader.parseYaml(
       yaml,
       Edge.fromYaml,
-      orderedKeys.toSet(),
+      Edge.orderedKeys.toSet(),
       edgeEffects,
     );
     return EdgeCatalog(edges);
   }
-
-  /// All the known keys in the enemies yaml, in sorted order.
-  static const List<String> orderedKeys = <String>[
-    'name',
-    'id',
-    'unlock', // ignored for now
-    'effect',
-    'inferred',
-  ];
 
   /// The edges in this catalog.
   List<Edge> get edges => items;
