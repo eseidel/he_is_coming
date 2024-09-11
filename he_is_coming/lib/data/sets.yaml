@@ -28,3 +28,9 @@
     - Leather Gloves
   effect: "Gain 1 attack every other turn"
   version: 0.3.5
+- name: Stone Scales
+  id: 5
+  parts:
+    - Petrifying Flask
+    - Razor Scales
+  effect: "Wounded: Gain 10 armor"
