@@ -215,6 +215,7 @@ class Item extends CatalogItem {
   static const _intentionallyZeroAttackItems = {
     'Bejeweled Blade',
     "Woodcutter's Axe",
+    'Tempest Blade',
   };
 
   /// Kind of the item.

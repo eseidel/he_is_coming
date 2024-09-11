@@ -70,3 +70,8 @@
   id: 18
   unlock: Start a battle with 30+ max health
   reward: Iron Rose
+- name: A Murder
+  id: 19
+  unlock: Defeat 4 crows in a run
+  reward: Briar Rose
+  version: 0.3.5

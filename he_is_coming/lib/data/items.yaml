@@ -19,6 +19,7 @@
   rarity: rare
   attack: 1
   effect: Gain 2 attack for each thorns
+  version: 0.3.5
 - name: Blacksmith Bond
   id: 6
   rarity: rare
@@ -40,11 +41,13 @@
   id: 9
   rarity: common
   speed: 2
+  version: 0.3.5
 - name: Bramble Buckler
   id: 10
   rarity: rare
   armor: 2
   effect: "Turn Start: Convert 1 armor to 2 thorns"
+  version: 0.3.5
 - name: Brittlebark Armor
   id: 11
   rarity: heroic
@@ -58,6 +61,7 @@
   material: wood
   attack: 4
   effect: "After 3 strikes, lose 2 attack"
+  version: 0.3.5
 - name: Brittlebark Club
   id: 13
   kind: weapon
@@ -68,6 +72,7 @@
   id: 14
   rarity: rare
   effect: "Wounded: Gain armor equal to your base armor"
+  version: 0.3.5
 - name: Citrine Gemstone
   id: 16
   kind: jewelry
@@ -121,6 +126,7 @@
   attack: 1
   armor: 1
   speed: 1
+  version: 0.3.5
 - name: Elderwood Staff
   id: 25
   kind: weapon
@@ -360,6 +366,7 @@
   material: sanguine
   attack: 2
   effect: "On Hit: Restore 1 health"
+  version: 0.3.5
 - name: Hidden Dagger
   id: 69
   kind: weapon
@@ -381,6 +388,7 @@
   id: 72
   rarity: rare
   effect: "Exposed: Stun the enemy for 1 turn"
+  version: 0.3.5
 - name: Iron Rose
   id: 73
   rarity: rare
@@ -410,6 +418,7 @@
   material: stone
   speed: -1
   effect: When you have armor gain 3 attack
+  version: 0.3.5
 - name: Leather Boots
   id: 78
   rarity: rare
@@ -419,16 +428,19 @@
   rarity: common
   health: 3
   speed: 1
+  version: 0.3.5
 - name: Leather Vest
   id: 80
   rarity: common
   armor: 2
   speed: 1
+  version: 0.3.5
 - name: Lifeblood Burst
   id: 81
   rarity: heroic
   material: sanguine
   effect: "Wounded: Deal damage equal to 50% of your max health"
+  version: 0.3.5
 - name: Lifethread Pendant
   id: 82
   rarity: rare
@@ -451,6 +463,7 @@
   material: sanguine
   attack: 2
   effect: "Wounded: Gain 5 attack and take 2 damage"
+  version: 0.3.5
 - name: Oak Heart
   id: 86
   unique: true
@@ -463,6 +476,7 @@
   rarity: rare
   material: stone
   effect: "Battle Start: Gain 2 armor for each equipped stone item"
+  version: 0.3.5
 - name: Petrifying Flask
   id: 88
   rarity: common
@@ -482,6 +496,7 @@
   unique: true
   rarity: common
   effect: "The first time the enemy strikes, their damage is halved"
+  version: 0.3.5
 - name: Razor Scales
   id: 93
   rarity: heroic
@@ -577,6 +592,7 @@
   id: 109
   rarity: common
   armor: 3
+  version: 0.3.5
 - name: Spearshield Lance
   id: 110
   kind: weapon
@@ -598,7 +614,8 @@
   kind: food
   rarity: rare
   material: stone
-  effect: "Battle Start: If your health is full, gain 4 armor"
+  effect: "Battle Start: If your health is full, gain 5 armor"
+  version: 0.3.5
 - name: Stoneslab Sword
   id: 114
   kind: weapon
@@ -606,6 +623,7 @@
   material: stone
   attack: 2
   effect: "On Hit: Gain 2 armor"
+  version: 0.3.5
 - name: Stormcloud Spear
   id: 115
   kind: weapon
@@ -617,12 +635,14 @@
   kind: weapon
   rarity: rare
   attack: 2
-  effect: "First Turn: If you have more speed than the enemy, do 2 additional strikes"
+  effect: "Initiative: If you have more speed than the enemy, do 2 additional strikes"
+  version: 0.3.5
 - name: Sword of the Hero
   id: 117
   kind: weapon
   rarity: common
   attack: 3
+  version: 0.3.5
 - name: Thorn Ring
   id: 118
   rarity: heroic
@@ -728,16 +748,31 @@
   version: 0.3.5
 - name: Briar rose
   id: 136
-  rarity: common
-  inferred: true
+  rarity: rare
+  effect: "Whenever you restore health, gain 2 thorns"
+  unique: true
   version: 0.3.5
 - name: Tempest Blade
   id: 137
   rarity: heroic
-  inferred: true
+  kind: weapon
+  effect: "Attack is always equal to speed"
   version: 0.3.5
 - name: Plated Greaves
   id: 138
   rarity: rare
   effect: "Exposed: Convert 3 speed to 9 armor"
+  version: 0.3.5
+- name: Brittlebark Buckler
+  id: 139
+  rarity: heroic
+  material: wood
+  armor: 10
+  effect: "Lose all your armor after your opponent's first strike"
+  version: 0.3.5
+- name: Tempest Plate
+  id: 140
+  rarity: rare
+  effect: "Exposed: Gain speed equal to base armor"
+  armor: 2
   version: 0.3.5

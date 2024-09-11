@@ -307,6 +307,7 @@ class SetBonus extends CatalogItem {
     'parts',
     ...Stats.orderedKeys,
     'effect',
+    'version',
   ];
 
   /// The parts required to get the bonus.
@@ -322,6 +323,7 @@ class SetBonus extends CatalogItem {
         'parts': parts,
         ...stats.toJson(),
         if (effect != null) 'effect': effect.toString(),
+        if (version != null) 'version': version,
       };
 
   @override
@@ -390,6 +392,7 @@ class Challenge extends CatalogItem {
     'id',
     'unlock',
     'reward',
+    'version',
   ];
 
   /// The reward for completing the challenge.
@@ -407,6 +410,7 @@ class Challenge extends CatalogItem {
         'id': id,
         'unlock': unlock,
         'reward': reward,
+        if (version != null) 'version': version,
       };
 
   @override

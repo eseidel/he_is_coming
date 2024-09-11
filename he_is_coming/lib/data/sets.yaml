@@ -20,3 +20,11 @@
     - Redwood Rod
     - Redwood Helmet
   effect: "Wounded: Restore health to full"
+- name: Raw Hide
+  id: 4
+  parts:
+    - Leather Armor
+    - Leather Boots
+    - Leather Gloves
+  effect: "Gain 1 attack every other turn"
+  version: 0.3.5

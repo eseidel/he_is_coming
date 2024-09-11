@@ -64,10 +64,11 @@
   id: 9
   boss: true
   level: 1
-  health: 40
+  health: 50
   attack: 3
   speed: 2
-  effect: "Whenever Brittlebark Beast takes damage, he takes 2 additional damage"
+  effect: "Whenever Brittlebark Beast takes damage, he takes 3 additional damage"
+  version: 0.3.5
 - name: Gentle Giant
   id: 10
   boss: true

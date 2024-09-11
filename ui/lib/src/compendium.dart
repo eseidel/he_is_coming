@@ -273,6 +273,7 @@ class ColoredEffectText extends StatelessWidget {
       'armor': Palette.armor,
       'speed': Palette.speed,
       'thorns': Palette.thorns,
+      'stun': Palette.speed,
     };
 
     final words = text.split(' ');
@@ -285,7 +286,7 @@ class ColoredEffectText extends StatelessWidget {
             TextSpan(
               text: '$word ',
               style: TextStyle(
-                color: specialWords[word] ?? Palette.white,
+                color: specialWords[word.toLowerCase()] ?? Palette.white,
               ),
             ),
         ],
