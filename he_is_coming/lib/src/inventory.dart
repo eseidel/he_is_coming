@@ -302,6 +302,7 @@ class Edge extends CatalogItem {
     required super.effect,
     required super.id,
     required super.version,
+    required super.inferred,
   });
 
   /// Create an Edge from a yaml map.
@@ -311,7 +312,14 @@ class Edge extends CatalogItem {
     final effect = lookupEffect(name: name, effectText: effectText);
     final id = yaml['id'] as int;
     final version = yaml['version'] as String?;
-    return Edge(name: name, effect: effect, id: id, version: version);
+    final inferred = yaml['inferred'] as bool? ?? false;
+    return Edge(
+      name: name,
+      effect: effect,
+      id: id,
+      version: version,
+      inferred: inferred,
+    );
   }
 
   @override
@@ -334,6 +342,7 @@ class Edge extends CatalogItem {
       effect: effect,
       id: id ?? this.id,
       version: version,
+      inferred: inferred,
     );
   }
 }

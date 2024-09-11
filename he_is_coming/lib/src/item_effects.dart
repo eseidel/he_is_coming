@@ -67,7 +67,8 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Leather Boots': onBattle(
     (c) => _if(c.my.speed > c.enemy.speed, () => c.gainAttack(2)),
   ),
-  'Plated Helmet': onTurn((c) => _if(c.my.belowHalfHp, () => c.gainArmor(2))),
+  'Plated Helmet':
+      onTurn((c) => _if(c.my.atOrBelowHalfHealth, () => c.gainArmor(2))),
   'Ore Heart': onBattle(
     (c) => c.gainArmor(c.materialCount(ItemMaterial.stone) * 2),
   ),
@@ -140,11 +141,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Bloody Steak': onWounded((c) => c.gainArmor(c.my.maxHp ~/ 2)),
   'Assault Greaves': onTakeDamage((c) => c.dealDamage(1)),
-  'Thorn Ring': onBattle(
-    (c) => c
-      ..gainThorns(6)
-      ..loseHealth(1),
-  ),
+  'Thorn Ring': onBattle((c) => c..gainThorns(6)),
   'Bramble Buckler': onTurn(
     (c) => _if(
       c.my.armor > 0,
@@ -155,9 +152,4 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Stormcloud Spear':
       onTurn((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
-  'Explosive Sword': onExposed(
-    (c) => c
-      ..dealDamage(6)
-      ..loseAttack(c.my.attack),
-  ),
 });

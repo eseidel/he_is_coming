@@ -212,6 +212,7 @@ class EdgeCatalog extends Catalog<Edge> {
     'id',
     'unlock', // ignored for now
     'effect',
+    'inferred',
   ];
 
   /// The edges in this catalog.

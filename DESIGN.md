@@ -66,17 +66,8 @@ Fortified Gauntlet
   Deal double damage to armor for Battle Axe
 - onModifyDamageThem(c.multiplyArmorDamage(2))
 
-  Take 3 additional damage from the enemies first strike for Bearpelt Plate
-- onModifyDamageMe((c) => _if(c.them.isFirstStrike, c.addDamage(3))
-
   Whenever you take damage, take 1 additional damage for Brittlebark Armor
 - onModifyDamageMe((c) => c.addDamage(1))
-
-  Battle Start: If your speed is 6 or higher, your strikes deal double damage for Citrine Crown
-- onBattle(_if(c.me.speed >= 6))
-
-  Enemies first strike ignores armor for Phantom Armor
-- onModifyDamageMe(_if(c.them.isFirstStrike, c.ignoreArmor))
 
   The first time the enemy strikes, their damage is halved for Protecting Charm
 - onModifyDamageMe(_if(c.them.isFirstStrike, c.multiplyDamage(.5)))

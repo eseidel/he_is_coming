@@ -8,11 +8,6 @@
   rarity: common
   attack: 2
   effect: Deal double damage to armor
-- name: Bearpelt Plate
-  id: 3
-  rarity: common
-  armor: 5
-  effect: Take 3 additional damage from the enemies first strike
 - name: Bejeweled Blade
   id: 4
   kind: weapon
@@ -72,12 +67,6 @@
   id: 14
   rarity: rare
   effect: "Wounded: Gain armor equal to your base armor"
-- name: Citrine Crown
-  id: 15
-  unique: true
-  kind: jewelry
-  rarity: rare
-  effect: "Battle Start: If your speed is 6 or higher, your strikes deal double damage"
 - name: Citrine Gemstone
   id: 16
   kind: jewelry
@@ -168,7 +157,7 @@
   rarity: rare
   material: bomb
   attack: 4
-  effect: "Exposed: Deal 6 damage and set attack to 0"
+  effect: "Exposed & Wounded: Deal 3 damage"
 - name: Featherweight Blade
   id: 33
   kind: weapon
@@ -199,12 +188,6 @@
   kind: jewelry
   rarity: rare
   effect: "Battle Start: Gain 1 gold"
-- name: Golden Bearpelt Plate
-  id: 39
-  rarity: golden
-  armor: 10
-  effect: Take 6 additional damage from the enemies first strike
-  inferred: true
 - name: Golden Boots of the Hero
   id: 40
   rarity: golden
@@ -321,13 +304,6 @@
   id: 60
   rarity: golden
   armor: 6
-- name: Golden Stone Steak
-  id: 61
-  kind: food
-  rarity: golden
-  material: stone
-  effect: "Battle Start: If your health is full, gain 8 armor"
-  inferred: true
 - name: Golden Vampiric Wine
   id: 62
   kind: food
@@ -479,11 +455,6 @@
   rarity: common
   material: stone
   effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
-- name: Phantom Armor
-  id: 89
-  rarity: rare
-  armor: 4
-  effect: Enemies first strike ignores armor
 - name: Pinecone Plate
   id: 90
   rarity: rare
@@ -611,7 +582,7 @@
 - name: Stone Steak
   id: 113
   kind: food
-  rarity: common
+  rarity: rare
   material: stone
   effect: "Battle Start: If your health is full, gain 4 armor"
 - name: Stoneslab Sword
@@ -641,7 +612,7 @@
 - name: Thorn Ring
   id: 118
   rarity: heroic
-  effect: "Battle Start: Gain 6 thorns and lose 1 health"
+  effect: "Battle Start: Gain 6 thorns"
 - name: Tree Sap
   id: 119
   rarity: cauldron
@@ -696,4 +667,62 @@
   id: 127
   rarity: rare
   effect: "When you are reduced to exactly 1 health for the first time, restore health to full"
+  version: 0.3.5
+- name: Honey
+  id: 128
+  rarity: common
+  kind: food
+  inferred: true
+  version: 0.3.5
+- name: Boss Contract
+  id: 129
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Citrine Earring
+  id: 130
+  rarity: common
+  kind: jewelry
+  inferred: true
+  version: 0.3.5
+- name: Rabbit Doll
+  id: 131
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Energy Crystal
+  id: 132
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Swiftstrike Cloak
+  id: 133
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Bloodthief Needle
+  id: 134
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Heart-shaped Acorn
+  id: 135
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Briar rose
+  id: 136
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Tempest Blade
+  id: 137
+  rarity: heroic
+  inferred: true
+  version: 0.3.5
+- name: Plated Greaves
+  id: 138
+  rarity: common
+  inferred: true
+  effect: "Exposed: Convert 3 speed to 9 armor"
   version: 0.3.5
