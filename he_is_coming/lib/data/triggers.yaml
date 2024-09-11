@@ -4,6 +4,9 @@
 - name: First Turn
   id: 2
   detail: Gain a temporary effect at the start of your first turn
+- name: Initiative
+  id: 7
+  detail: Triggers after Battle Start
 - name: Resilience
   id: 3
   detail: Triggers when you take lethal damage for the first time.
@@ -16,6 +19,3 @@
 - name: Wounded
   id: 6
   detail: Triggers when you go below 50% health for the first time.
-- name: Initiative
-  id: 7
-  detail: Triggers after Battle Start

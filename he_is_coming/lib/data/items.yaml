@@ -22,8 +22,27 @@
   version: 0.3.5
 - name: Blacksmith Bond
   id: 6
+  unique: true
   rarity: rare
-  effect: Exposed can trigger one additional time
+  effect: Exposed can trigger 1 additional time
+  version: 0.3.5
+- name: Blood Bond
+  id: 143
+  unique: true
+  rarity: heroic
+  effect: "When the enemy has lost 50% health, trigger all of your wounded items"
+  version: 0.3.5
+- name: Bloodmoon Ritual
+  id: 141
+  rarity: rare
+  material: sanguine
+  effect: "Wounded: Gain 10 thorns and take 2 damage"
+  version: 0.3.5
+- name: Bloodthief Needle
+  id: 134
+  rarity: common
+  inferred: true
+  version: 0.3.5
 - name: Bloody Steak
   id: 7
   rarity: cauldron
@@ -42,11 +61,22 @@
   rarity: common
   speed: 2
   version: 0.3.5
+- name: Boss Contract
+  id: 129
+  rarity: rare
+  effect: Gain 15 gold after a boss is defeated
+  version: 0.3.5
 - name: Bramble Buckler
   id: 10
   rarity: rare
   armor: 2
   effect: "Turn Start: Convert 1 armor to 2 thorns"
+  version: 0.3.5
+- name: Briar rose
+  id: 136
+  unique: true
+  rarity: rare
+  effect: "Whenever you restore health, gain 2 thorns"
   version: 0.3.5
 - name: Brittlebark Armor
   id: 11
@@ -54,6 +84,7 @@
   material: wood
   health: 10
   effect: "Whenever you take damage, take 1 additional damage"
+  version: 0.3.5
 - name: Brittlebark Bow
   id: 12
   kind: weapon
@@ -61,6 +92,13 @@
   material: wood
   attack: 4
   effect: "After 3 strikes, lose 2 attack"
+  version: 0.3.5
+- name: Brittlebark Buckler
+  id: 139
+  rarity: heroic
+  material: wood
+  armor: 10
+  effect: Lose all your armor after your opponent's first strike
   version: 0.3.5
 - name: Brittlebark Club
   id: 13
@@ -73,6 +111,19 @@
   rarity: rare
   effect: "Wounded: Gain armor equal to your base armor"
   version: 0.3.5
+- name: Cherry Bomb
+  id: 125
+  kind: food
+  rarity: common
+  material: bomb
+  effect: "Battle Start: Deal 2 damage"
+  version: 0.3.5
+- name: Citrine Earring
+  id: 130
+  kind: jewelry
+  rarity: common
+  effect: Gain 1 speed every other turn
+  version: 0.3.5
 - name: Citrine Gemstone
   id: 16
   kind: jewelry
@@ -84,6 +135,13 @@
   kind: jewelry
   rarity: common
   effect: "Battle Start: Deal damage equal to your speed"
+- name: Citrine Ring
+  id: 126
+  unique: true
+  kind: jewelry
+  rarity: common
+  effect: "Battle Start: Deal damage equal to your speed"
+  version: 0.3.5
 - name: Cracked Bouldershield
   id: 18
   rarity: common
@@ -114,11 +172,6 @@
   armor: 2
   speed: -2
   effect: "Exposed: Gain 3 armor"
-  version: 0.3.5
-- name: Swiftstrike Gauntlet
-  id: 23
-  rarity: rare
-  effect: "Wounded: Do an additional strike on your next turn"
   version: 0.3.5
 - name: Elderwood Necklace
   id: 24
@@ -163,6 +216,17 @@
   rarity: common
   effect: "Initiative: If you have less speed than the enemy, gain 4 armor"
   version: 0.3.5
+- name: Energy Crystal
+  id: 132
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Energy Crystal
+  id: 144
+  unique: true
+  rarity: rare
+  effect: "Initiative: If you have more speed than the enemy, lose 2 speed and trigger Initiative"
+  version: 0.3.5
 - name: Explosive Surprise
   id: 31
   rarity: rare
@@ -202,11 +266,13 @@
   rarity: heroic
   attack: 2
   effect: "Draws power from emerald, ruby, sapphire and citrine items"
+  version: 0.3.5
 - name: Gold Ring
   id: 38
   kind: jewelry
   rarity: rare
   effect: "Battle Start: Gain 1 gold"
+  version: 0.3.5
 - name: Golden Boots of the Hero
   id: 40
   rarity: golden
@@ -347,6 +413,7 @@
   material: stone
   attack: 2
   effect: "On Hit: Convert 1 armor to 2 attack"
+  version: 0.3.5
 - name: Grindstone Club
   id: 66
   kind: weapon
@@ -369,12 +436,43 @@
   attack: 2
   effect: "On Hit: Restore 1 health"
   version: 0.3.5
+- name: Heart-shaped Acorn
+  id: 135
+  rarity: rare
+  material: wood
+  effect: "Battle Start: If you have 0 base armor, restore health to full"
+  version: 0.3.5
+- name: Heart-shaped Potion
+  id: 127
+  rarity: rare
+  material: sanguine
+  effect: "When you are reduced to exactly 1 health for the first time, restore health to full"
+  version: 0.3.5
 - name: Hidden Dagger
   id: 69
   kind: weapon
   rarity: common
   attack: 2
   effect: Gets stronger for every new hidden dagger you find
+- name: Honey
+  id: 128
+  kind: food
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Honey Ham
+  id: 146
+  rarity: cauldron
+  parts:
+    - Honeycomb
+    - Redwood Roast
+  effect: Double your max health
+  version: 0.3.5
+- name: Honeycomb
+  id: 145
+  kind: food
+  rarity: heroic
+  version: 0.3.5
 - name: Hook Blade
   id: 70
   kind: weapon
@@ -386,6 +484,7 @@
   rarity: common
   armor: 2
   effect: "Battle Start: Gain 2 thorns"
+  version: 0.3.5
 - name: Impressive Physique
   id: 72
   rarity: rare
@@ -393,14 +492,15 @@
   version: 0.3.5
 - name: Iron Rose
   id: 73
+  unique: true
   rarity: rare
   effect: "Whenever you restore health, gain 1 armor"
-  unique: true
   version: 0.3.5
 - name: Iron Transfusion
   id: 74
   rarity: heroic
   effect: "Turn Start: Gain 2 armor and lose 1 health"
+  version: 0.3.5
 - name: Ironskin Potion
   id: 75
   unique: true
@@ -414,6 +514,7 @@
   material: stone
   attack: 4
   speed: -2
+  version: 0.3.5
 - name: Ironstone Sandals
   id: 77
   rarity: rare
@@ -490,6 +591,11 @@
   material: wood
   effect: "Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle"
   version: 0.3.5
+- name: Plated Greaves
+  id: 138
+  rarity: rare
+  effect: "Exposed: Convert 3 speed to 9 armor"
+  version: 0.3.5
 - name: Plated Helmet
   id: 91
   rarity: heroic
@@ -499,6 +605,11 @@
   unique: true
   rarity: common
   effect: "The first time the enemy strikes, their damage is halved"
+  version: 0.3.5
+- name: Rabbit Doll
+  id: 131
+  rarity: common
+  inferred: true
   version: 0.3.5
 - name: Razor Scales
   id: 93
@@ -565,11 +676,17 @@
   kind: jewelry
   rarity: common
   effect: "Battle Start: Gain 1 attack and take 2 damage"
+- name: Saffron Feather
+  id: 124
+  rarity: common
+  speed: 1
+  effect: "Turn Start: Convert 1 speed to 1 health"
 - name: Sanguine Rose
   id: 104
   unique: true
   rarity: rare
   effect: "Whenever you restore health, restore 1 additional health"
+  version: 0.3.5
 - name: Sapphire Crown
   id: 105
   kind: jewelry
@@ -591,6 +708,12 @@
   kind: jewelry
   rarity: common
   effect: "Battle Start: Steal 2 armor from the enemy"
+- name: Shield Talisman
+  id: 142
+  unique: true
+  rarity: heroic
+  effect: "Whenever you gain armor, gain 1 additional armor"
+  version: 0.3.5
 - name: Shield of the Hero
   id: 109
   rarity: common
@@ -633,6 +756,16 @@
   rarity: common
   attack: 2
   effect: "Every 5 strikes: Stun the enemy for 2 turns"
+- name: Swiftstrike Cloak
+  id: 133
+  rarity: common
+  inferred: true
+  version: 0.3.5
+- name: Swiftstrike Gauntlet
+  id: 23
+  rarity: rare
+  effect: "Wounded: Do an additional strike on your next turn"
+  version: 0.3.5
 - name: Swiftstrike Rapier
   id: 116
   kind: weapon
@@ -645,6 +778,18 @@
   kind: weapon
   rarity: common
   attack: 3
+  version: 0.3.5
+- name: Tempest Blade
+  id: 137
+  kind: weapon
+  rarity: heroic
+  effect: Attack is always equal to speed
+  version: 0.3.5
+- name: Tempest Plate
+  id: 140
+  rarity: rare
+  armor: 2
+  effect: "Exposed: Gain speed equal to base armor"
   version: 0.3.5
 - name: Thorn Ring
   id: 118
@@ -675,132 +820,10 @@
   kind: weapon
   rarity: common
   material: wood
-  attack: 0
-  effect: "Gain 2 attack for each empty equipment slot"
+  effect: Gain 2 attack for each empty equipment slot
   version: 0.3.5
 - name: Wooden Stick
   id: 123
   kind: weapon
   rarity: common
   attack: 1
-- name: Saffron Feather
-  id: 124
-  rarity: common
-  effect: "Turn Start: Convert 1 speed to 1 health"
-  speed: 1
-- name: Cherry Bomb
-  id: 125
-  kind: food
-  material: bomb
-  rarity: common
-  effect: "Battle Start: Deal 2 damage"
-  version: 0.3.5
-- name: Citrine Ring
-  id: 126
-  kind: jewelry
-  rarity: common
-  effect: "Battle Start: Deal damage equal to your speed"
-  unique: true
-  version: 0.3.5
-- name: Heart-shaped Potion
-  id: 127
-  rarity: rare
-  effect: "When you are reduced to exactly 1 health for the first time, restore health to full"
-  version: 0.3.5
-- name: Honey
-  id: 128
-  rarity: common
-  kind: food
-  inferred: true
-  version: 0.3.5
-- name: Boss Contract
-  id: 129
-  rarity: rare
-  effect: "Gain 15 gold after a boss is defeated"
-  version: 0.3.5
-- name: Citrine Earring
-  id: 130
-  rarity: common
-  kind: jewelry
-  effect: "Gain 1 speed every other turn"
-  version: 0.3.5
-- name: Rabbit Doll
-  id: 131
-  rarity: common
-  inferred: true
-  version: 0.3.5
-- name: Energy Crystal
-  id: 132
-  rarity: common
-  inferred: true
-  version: 0.3.5
-- name: Swiftstrike Cloak
-  id: 133
-  rarity: common
-  inferred: true
-  version: 0.3.5
-- name: Bloodthief Needle
-  id: 134
-  rarity: common
-  inferred: true
-  version: 0.3.5
-- name: Heart-shaped Acorn
-  id: 135
-  rarity: rare
-  material: wood
-  effect: "Battle Start: If you have 0 base armor, restore health to full"
-  version: 0.3.5
-- name: Briar rose
-  id: 136
-  rarity: rare
-  effect: "Whenever you restore health, gain 2 thorns"
-  unique: true
-  version: 0.3.5
-- name: Tempest Blade
-  id: 137
-  rarity: heroic
-  kind: weapon
-  effect: "Attack is always equal to speed"
-  version: 0.3.5
-- name: Plated Greaves
-  id: 138
-  rarity: rare
-  effect: "Exposed: Convert 3 speed to 9 armor"
-  version: 0.3.5
-- name: Brittlebark Buckler
-  id: 139
-  rarity: heroic
-  material: wood
-  armor: 10
-  effect: "Lose all your armor after your opponent's first strike"
-  version: 0.3.5
-- name: Tempest Plate
-  id: 140
-  rarity: rare
-  effect: "Exposed: Gain speed equal to base armor"
-  armor: 2
-  version: 0.3.5
-- name: Bloodmoon Ritual
-  id: 141
-  rarity: rare
-  material: sanguine
-  effect: "Wounded: Gain 10 thorns and take 2 damage"
-  version: 0.3.5
-- name: Shield Talisman
-  id: 142
-  rarity: heroic
-  effect: "Whenever you gain armor, gain 1 additional armor"
-  unique: true
-  version: 0.3.5
-- name: Blood Bond
-  id: 143
-  rarity: heroic
-  effect: "When the enemy has lost 50% health, trigger all of your wounded items"
-  unique: true
-  version: 0.3.5
-- name: Energy Crystal
-  id: 144
-  rarity: rare
-  effect: "Initiative: If you have more speed than the enemy, lose 2 speed and trigger Initiative"
-  unique: true
-  version: 0.3.5
