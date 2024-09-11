@@ -13,6 +13,7 @@
   kind: weapon
   rarity: rare
   effect: Gain 2 attack for each equipped jewelry item
+  version: 0.3.5
 - name: Blackbriar Blade
   id: 5
   rarity: rare
@@ -88,10 +89,13 @@
   rarity: common
   material: stone
   effect: "First Turn: Gain 2 attack"
+  version: 0.3.5
 - name: Crimson Cloak
   id: 20
-  rarity: rare
+  rarity: heroic
+  material: sanguine
   effect: "Whenever you take damage, restore 1 health"
+  version: 0.3.5
 - name: Double-edged Sword
   id: 21
   kind: weapon
@@ -104,10 +108,12 @@
   armor: 2
   speed: -2
   effect: "Exposed: Gain 3 armor"
+  version: 0.3.5
 - name: Swiftstrike Gauntlet
   id: 23
   rarity: rare
   effect: "Wounded: Do an additional strike on your next turn"
+  version: 0.3.5
 - name: Elderwood Necklace
   id: 24
   rarity: heroic
@@ -123,11 +129,14 @@
   attack: 1
   armor: 1
   speed: 1
+  version: 0.3.5
 - name: Emerald Crown
   id: 26
   kind: jewelry
-  rarity: rare
-  effect: "Battle Start: If your max health is 20 or higher restore health to full"
+  rarity: common
+  health: 8
+  attack: -1
+  version: 0.3.5
 - name: Emerald Earing
   id: 27
   rarity: common
@@ -146,18 +155,21 @@
   id: 30
   rarity: common
   effect: "Initiative: If you have less speed than the enemy, gain 4 armor"
+  version: 0.3.5
 - name: Explosive Surprise
   id: 31
   rarity: rare
   material: bomb
   effect: "Exposed: Deal 5 damage"
+  version: 0.3.5
 - name: Explosive Sword
   id: 32
   kind: weapon
   rarity: rare
   material: bomb
-  attack: 4
+  attack: 2
   effect: "Exposed & Wounded: Deal 3 damage"
+  version: 0.3.5
 - name: Featherweight Blade
   id: 33
   kind: weapon
@@ -384,6 +396,7 @@
   unique: true
   rarity: heroic
   effect: "Battle Start: Gain armor equal to lost health"
+  version: 0.3.5
 - name: Ironstone Greatsword
   id: 76
   kind: weapon
@@ -478,6 +491,7 @@
   unique: true
   rarity: rare
   effect: "Whenever you gain thorns, gain 1 additional thorn"
+  version: 0.3.5
 - name: Redwood Cloak
   id: 95
   rarity: common
@@ -661,7 +675,8 @@
   id: 126
   kind: jewelry
   rarity: common
-  effect: "Gain 1 speed every other turn"
+  effect: "Battle Start: Deal damage equal to your speed"
+  unique: true
   version: 0.3.5
 - name: Heart-shaped Potion
   id: 127
@@ -676,14 +691,14 @@
   version: 0.3.5
 - name: Boss Contract
   id: 129
-  rarity: common
-  inferred: true
+  rarity: rare
+  effect: "Gain 15 gold after a boss is defeated"
   version: 0.3.5
 - name: Citrine Earring
   id: 130
   rarity: common
   kind: jewelry
-  inferred: true
+  effect: "Gain 1 speed every other turn"
   version: 0.3.5
 - name: Rabbit Doll
   id: 131
@@ -707,8 +722,9 @@
   version: 0.3.5
 - name: Heart-shaped Acorn
   id: 135
-  rarity: common
-  inferred: true
+  rarity: rare
+  material: wood
+  effect: "Battle Start: If you have 0 base armor, restore health to full"
   version: 0.3.5
 - name: Briar rose
   id: 136
@@ -722,7 +738,6 @@
   version: 0.3.5
 - name: Plated Greaves
   id: 138
-  rarity: common
-  inferred: true
+  rarity: rare
   effect: "Exposed: Convert 3 speed to 9 armor"
   version: 0.3.5
