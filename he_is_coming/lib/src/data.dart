@@ -359,6 +359,18 @@ class SetBonusCatalog extends Catalog<SetBonus> {
   List<SetBonus> get sets => items;
 }
 
+/// Class to hold a position.
+class Position {
+  /// Create a new position.
+  const Position(this.x, this.y);
+
+  /// The x value.
+  final int x;
+
+  /// The y value.
+  final int y;
+}
+
 /// Class to hold a challenge.
 class Challenge extends CatalogItem {
   /// Create a new challenge.
@@ -368,6 +380,7 @@ class Challenge extends CatalogItem {
     required this.reward,
     required super.id,
     required super.version,
+    this.position,
   });
 
   /// Create a challenge from a yaml map.
@@ -377,12 +390,16 @@ class Challenge extends CatalogItem {
     final reward = yaml['reward'] as String;
     final id = yaml['id'] as int;
     final version = yaml['version'] as String?;
+    final x = yaml['x'] as int?;
+    final y = yaml['y'] as int?;
+    final position = x != null && y != null ? Position(x, y) : null;
     return Challenge(
       name: name,
       unlock: unlock,
       reward: reward,
       id: id,
       version: version,
+      position: position,
     );
   }
 
@@ -392,6 +409,8 @@ class Challenge extends CatalogItem {
     'id',
     'unlock',
     'reward',
+    'x',
+    'y',
     'version',
   ];
 
@@ -401,8 +420,9 @@ class Challenge extends CatalogItem {
   /// Requirements to meet this challenge.
   final String unlock;
 
-  // We're not currently recording the position in the challenge map,
-  // or what page its on, or what other challenges this unlocks.
+  // We have only recorded the position in the challenge map for a few.
+  /// The position of the challenge in the challenge map.
+  final Position? position;
 
   @override
   dynamic toJson() => {
@@ -410,6 +430,8 @@ class Challenge extends CatalogItem {
         'id': id,
         'unlock': unlock,
         'reward': reward,
+        if (position != null) 'x': position!.x,
+        if (position != null) 'y': position!.y,
         if (version != null) 'version': version,
       };
 
@@ -421,6 +443,7 @@ class Challenge extends CatalogItem {
       reward: reward,
       id: id ?? this.id,
       version: version,
+      position: position,
     );
   }
 }

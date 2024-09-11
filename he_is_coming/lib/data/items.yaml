@@ -107,6 +107,7 @@
   rarity: rare
   attack: 5
   effect: "On Hit: Take 1 damage"
+  version: 0.3.5
 - name: Double-plated Armor
   id: 22
   rarity: common
@@ -353,6 +354,7 @@
   material: stone
   attack: 1
   effect: The next weapon you equip gains 2 attack
+  version: 0.3.5
 - name: Haymaker
   id: 67
   kind: weapon
@@ -487,6 +489,7 @@
   rarity: rare
   material: wood
   effect: "Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle"
+  version: 0.3.5
 - name: Plated Helmet
   id: 91
   rarity: heroic
@@ -647,6 +650,7 @@
   id: 118
   rarity: heroic
   effect: "Battle Start: Gain 6 thorns"
+  version: 0.3.5
 - name: Tree Sap
   id: 119
   rarity: cauldron
@@ -775,4 +779,28 @@
   rarity: rare
   effect: "Exposed: Gain speed equal to base armor"
   armor: 2
+  version: 0.3.5
+- name: Bloodmoon Ritual
+  id: 141
+  rarity: rare
+  material: sanguine
+  effect: "Wounded: Gain 10 thorns and take 2 damage"
+  version: 0.3.5
+- name: Shield Talisman
+  id: 142
+  rarity: heroic
+  effect: "Whenever you gain armor, gain 1 additional armor"
+  unique: true
+  version: 0.3.5
+- name: Blood Bond
+  id: 143
+  rarity: heroic
+  effect: "When the enemy has lost 50% health, trigger all of your wounded items"
+  unique: true
+  version: 0.3.5
+- name: Energy Crystal
+  id: 144
+  rarity: rare
+  effect: "Initiative: If you have more speed than the enemy, lose 2 speed and trigger Initiative"
+  unique: true
   version: 0.3.5
