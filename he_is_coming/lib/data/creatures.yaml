@@ -60,6 +60,7 @@
   attack: 1
   armor: 5
   effect: "Battle Start: Black Knight gains attack equal to the players attack"
+  version: 0.3.5
 - name: Bloodmoon Werewolf
   id: 28
   level: 1
