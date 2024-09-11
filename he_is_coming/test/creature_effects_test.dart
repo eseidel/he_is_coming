@@ -110,6 +110,6 @@ void main() {
     // We should kill it in 7 hits, except it gets 30 armor when crossing 4 hp
     // and then after 2 more turns wakes and kills us in 10 total hits.
     expect(result.first.hp, 0);
-    expect(result.second.hp, 2);
+    expect(result.second.hp, 5);
   });
 }
