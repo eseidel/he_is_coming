@@ -22,19 +22,22 @@ class ScrollingGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Card(
-        elevation: 8,
-        child: GridView.builder(
-          padding: const EdgeInsets.all(12),
-          gridDelegate: _CustomGridDelegate(
-            dimension: maxCrossAxisExtent,
-          ),
-          itemCount: itemCount,
-          itemBuilder: itemBuilder,
-        ),
+    return GridView.builder(
+      padding: const EdgeInsets.all(12),
+      gridDelegate: _CustomGridDelegate(
+        dimension: maxCrossAxisExtent,
       ),
+      itemCount: itemCount,
+      itemBuilder: (context, index) {
+        return Card(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: itemBuilder(context, index),
+            ),
+          ),
+        );
+      },
     );
   }
 }
