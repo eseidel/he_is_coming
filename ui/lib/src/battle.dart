@@ -515,6 +515,7 @@ class _ItemSlotState extends State<ItemSlot> {
 
   @override
   Widget build(BuildContext context) {
+    final rarityIcon = widget.item.rarityIcon;
     final name = ItemName(item: widget.item, controller: controller);
     if (widget.action == null) {
       return name;
@@ -524,6 +525,8 @@ class _ItemSlotState extends State<ItemSlot> {
       onExit: (_) => setState(() => opacity = 0),
       child: Row(
         children: <Widget>[
+          rarityIcon,
+          const SizedBox(width: 6),
           name,
           const Spacer(),
           AnimatedOpacity(
