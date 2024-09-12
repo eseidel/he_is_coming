@@ -125,7 +125,7 @@ void main() {
   });
 
   test('Ruby Earning', () {
-    const item = 'Ruby Earing';
+    const item = 'Ruby Earring';
     final player = data.player(items: [item]);
     expect(player.hp, 10);
 
@@ -901,28 +901,28 @@ void main() {
     expect(result.first.baseStats.armor, 2);
   });
 
-  test('Sapphire Earing', () {
-    const item = 'Sapphire Earing';
+  test('Sapphire Earring', () {
+    const item = 'Sapphire Earring';
     final player = data.player(items: [item]);
     expect(player.hp, 10);
     expect(player.baseStats.armor, 0);
 
     final enemy = makeEnemy(attack: 1, health: 6);
     final result = doBattle(first: player, second: enemy);
-    // Sapphire Earing gains 1 armor every other turn starting the first.
+    // Sapphire Earring gains 1 armor every other turn starting the first.
     // We would take 5 dmg from the wolf, but the earning negates 3 of that.
     expect(result.first.hp, 8);
     expect(result.first.baseStats.armor, 0);
   });
 
-  test('Emerald Earing', () {
-    const item = 'Emerald Earing';
+  test('Emerald Earring', () {
+    const item = 'Emerald Earring';
     final player = data.player(items: [item]);
     expect(player.hp, 10);
 
     final enemy = makeEnemy(attack: 1, health: 6);
     final result = doBattle(first: player, second: enemy);
-    // Emerald Earing gains 1 hp every other turn starting the first.
+    // Emerald Earring gains 1 hp every other turn starting the first.
     // We would take 5 dmg from the wolf, but the earning negates 2 of that
     // since the first heal happens while we're at full hp.
     expect(result.first.hp, 7);

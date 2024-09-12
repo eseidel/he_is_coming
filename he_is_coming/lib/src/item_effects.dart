@@ -20,7 +20,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(8)),
   ),
   'Granite Gauntlet': onBattle((c) => c.gainArmor(5)),
-  'Ruby Earing': onTurn((c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1))),
+  'Ruby Earring': onTurn((c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1))),
   'Firecracker Belt': onExposed((c) => [1, 1, 1].forEach(c.dealDamage)),
   'Golden Firecracker Belt':
       onExposed((c) => [1, 1, 1, 1, 1, 1].forEach(c.dealDamage)),
@@ -111,10 +111,15 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     (c) => _if(c.my.lostHp > 0, () => c.gainArmor(c.my.lostHp)),
   ),
   'Double-plated Armor': onExposed((c) => c.gainArmor(3)),
-  'Sapphire Earing':
+  'Sapphire Earring':
       onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainArmor(1))),
-  'Emerald Earing': onTurn(
+  'Golden Sapphire Earring':
+      onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainArmor(2))),
+  'Emerald Earring': onTurn(
     (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(1)),
+  ),
+  'Golden Emerald Earring': onTurn(
+    (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(2)),
   ),
   'Emerald Crown': onBattle(
     (c) => _if(

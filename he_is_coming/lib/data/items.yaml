@@ -197,7 +197,7 @@
   health: 8
   attack: -1
   version: 0.3.5
-- name: Emerald Earing
+- name: Emerald Earring
   id: 27
   rarity: common
   effect: Restore 1 health every other turn
@@ -297,7 +297,7 @@
   speed: -4
   effect: "Exposed: Gain 6 armor"
   inferred: true
-- name: Golden Emerald Earing
+- name: Golden Emerald Earring
   id: 44
   rarity: golden
   effect: Restore 2 health every other turn
@@ -363,7 +363,7 @@
   rarity: golden
   material: wood
   health: 10
-- name: Golden Ruby Earing
+- name: Golden Ruby Earring
   id: 56
   kind: jewelry
   rarity: golden
@@ -374,11 +374,11 @@
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Gain 2 attack and take 4 damage"
-- name: Golden Sapphire Earing
+- name: Golden Sapphire Earring
   id: 58
   rarity: golden
   effect: Gain 2 armor every other turn
-  inferred: true
+  version: 0.3.5
 - name: Golden Sapphire Ring
   id: 59
   kind: jewelry
@@ -660,7 +660,7 @@
   rarity: common
   attack: 1
   speed: -1
-- name: Ruby Earing
+- name: Ruby Earring
   id: 101
   kind: jewelry
   rarity: common
@@ -693,7 +693,7 @@
   rarity: common
   health: -2
   armor: 5
-- name: Sapphire Earing
+- name: Sapphire Earring
   id: 106
   rarity: common
   effect: Gain 1 armor every other turn

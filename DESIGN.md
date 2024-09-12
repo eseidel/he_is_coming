@@ -35,8 +35,8 @@ Crimson Cloak
 Impressive Physique
 Iron Transfusion
 Tree Sap
-Sapphire Earing
-Emerald Earing
+Sapphire Earring
+Emerald Earring
 
 58 dmg, 15 turns.
 
@@ -53,7 +53,7 @@ Iron Rose
 Iron Rose
 Sanguine Rose
 Crimson Cloak
-Golden Sapphire Earing
+Golden Sapphire Earring
 Fortified Gauntlet
 Fortified Gauntlet
 
