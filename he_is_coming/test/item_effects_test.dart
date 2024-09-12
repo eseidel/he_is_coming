@@ -1185,4 +1185,24 @@ void main() {
     },
     skip: true,
   );
+
+  test('Pinecone Plate', () {
+    const item = 'Pinecone Plate';
+    final player = data.player(items: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Pinecone Plate gives 1 thorns every turn if we started with full health.
+    // Enemy dies after 3 dmg from our strikes and 3 from thorns.
+    expect(result.first.hp, 7);
+
+    final player2 = data.player(items: [item], hp: 9);
+    expect(player2.hp, 9);
+
+    final result2 = doBattle(first: player2, second: enemy);
+    // Since we didn't start with full health, pinecone plate does nothing.
+    // Enemy hits us 5 times before dying.
+    expect(result2.first.hp, 4);
+  });
 }

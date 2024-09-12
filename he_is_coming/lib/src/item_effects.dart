@@ -153,4 +153,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Stormcloud Spear':
       onTurn((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
+  'Pinecone Plate': onTurn(
+    (c) => _if(c.myHealthWasFullAtBattleStart, () => c.gainThorns(1)),
+  ),
 });

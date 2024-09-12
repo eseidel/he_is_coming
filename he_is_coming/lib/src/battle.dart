@@ -54,6 +54,11 @@ class EffectContext {
   /// Returns true if this is the nth strike for this creature.
   bool everyNStrikes(int n) => strikeCount % n == n - 1;
 
+  /// true if this creature's health was full at the start of the battle.
+  bool get myHealthWasFullAtBattleStart {
+    return _battle.initialCreatures[_index].healthFull;
+  }
+
   /// Add gold.
   void gainGold(int gold) {
     _expectPositive(gold, 'gold');

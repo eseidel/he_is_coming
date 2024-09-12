@@ -235,6 +235,9 @@ class Creature extends CatalogItem {
   /// Returns true if the creature is still alive.
   bool get isAlive => hp > 0;
 
+  /// Returns true if the creature is at full health.
+  bool get healthFull => _lostHp == 0;
+
   /// Stats as they would be in the over-world or at fight start.
   Stats get baseStats => inventory?.statsWithItems(_intrinsic) ?? _intrinsic;
 

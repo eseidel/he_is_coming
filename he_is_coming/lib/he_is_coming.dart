@@ -7,7 +7,7 @@ export 'package:he_is_coming/src/inventory.dart';
 export 'package:he_is_coming/src/logger.dart';
 export 'package:scoped_deps/scoped_deps.dart';
 
-void logMissingEffects(Inventory inventory) {
+void _logMissingEffects(Inventory inventory) {
   void logMissing(List<CatalogItem> items) {
     final missingEffects = items.where((item) => !item.isImplemented).toList();
     for (final item in missingEffects) {
@@ -46,7 +46,7 @@ void runSim() {
     'Armor Oil',
   ];
   final player = data.player(items: items, edge: edge, oils: oils);
-  logMissingEffects(player.inventory!);
+  _logMissingEffects(player.inventory!);
   final enemy = data.creatures['Woodland Abomination'];
 
   final result = Battle.resolve(first: player, second: enemy, verbose: true);
