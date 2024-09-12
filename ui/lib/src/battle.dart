@@ -625,6 +625,35 @@ class PlayerBattleView extends StatelessWidget {
   }
 }
 
+class CatalogTooltip extends StatelessWidget {
+  const CatalogTooltip({
+    required this.maxWidth,
+    required this.child,
+    required this.tooltipChild,
+    this.controller,
+    super.key,
+  });
+
+  final double maxWidth;
+  final Widget child;
+  final Widget tooltipChild;
+
+  /// Tooltip controller
+  final SuperTooltipController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SuperTooltip(
+      controller: controller,
+      content: SizedBox(
+        width: maxWidth,
+        child: tooltipChild,
+      ),
+      child: child,
+    );
+  }
+}
+
 /// Displays an item slot
 class ItemName extends StatelessWidget {
   /// ItemName constructor
@@ -642,17 +671,10 @@ class ItemName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperTooltip(
+    return CatalogTooltip(
+      maxWidth: 300,
+      tooltipChild: ItemView(item: item),
       controller: controller,
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: 300,
-          minHeight: 200,
-          maxWidth: 300,
-          maxHeight: 300,
-        ),
-        child: ItemView(item: item),
-      ),
       child: Text(item.name),
     );
   }
@@ -671,16 +693,9 @@ class CreatureName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperTooltip(
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: 400,
-          minHeight: 200,
-          maxWidth: 400,
-          maxHeight: 300,
-        ),
-        child: CreatureView(creature: creature),
-      ),
+    return CatalogTooltip(
+      maxWidth: 400,
+      tooltipChild: CreatureView(creature: creature),
       child: Text(creature.name),
     );
   }
@@ -699,16 +714,9 @@ class EdgeName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperTooltip(
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: 300,
-          minHeight: 200,
-          maxWidth: 300,
-          maxHeight: 300,
-        ),
-        child: EdgeView(edge: edge),
-      ),
+    return CatalogTooltip(
+      maxWidth: 300,
+      tooltipChild: EdgeView(edge: edge),
       child: Text(edge.name),
     );
   }
@@ -727,16 +735,9 @@ class OilIconWithTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperTooltip(
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: 300,
-          minHeight: 200,
-          maxWidth: 300,
-          maxHeight: 300,
-        ),
-        child: OilView(oil: oil),
-      ),
+    return CatalogTooltip(
+      maxWidth: 200,
+      tooltipChild: OilView(oil: oil),
       child: oil.icon,
     );
   }
@@ -755,16 +756,9 @@ class SetBonusName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SuperTooltip(
-      content: ConstrainedBox(
-        constraints: const BoxConstraints(
-          minWidth: 300,
-          minHeight: 200,
-          maxWidth: 300,
-          maxHeight: 300,
-        ),
-        child: SetBonusView(setBonus: set),
-      ),
+    return CatalogTooltip(
+      maxWidth: 300,
+      tooltipChild: SetBonusView(setBonus: set),
       child: Text(set.name),
     );
   }
