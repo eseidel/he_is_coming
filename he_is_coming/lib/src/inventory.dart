@@ -134,14 +134,15 @@ class Inventory {
   }
 
   static List<Item> _enforceItemRules(Level level, List<Item> unenforced) {
-    if (unenforced.length > itemSlotCount(level)) {
-      throw ItemException('Too many items for level $level.');
-    }
-
     // Player must always have a weapon.
     final items = [...unenforced];
     if (items.every((item) => item.kind != ItemKind.weapon)) {
       items.add(Creature.defaultPlayerWeapon);
+    }
+
+    // Check number of items after possibly adding the weapon.
+    if (items.length > itemSlotCount(level)) {
+      throw ItemException('Too many items for level $level.');
     }
 
     final itemCounts = items.fold<Map<String, int>>(
@@ -203,6 +204,9 @@ class Inventory {
   int kindCount(ItemKind kind) {
     return items.where((item) => item.kind == kind).length;
   }
+
+  /// Count of items with a specific gem.
+  int gemCount(Gem gem) => items.where((item) => item.hasGem(gem)).length;
 
   /// Convert to json.
   Map<String, dynamic> toJson() {

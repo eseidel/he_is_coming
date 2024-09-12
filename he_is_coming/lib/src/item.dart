@@ -159,6 +159,7 @@ class Item extends CatalogItem {
   /// Create a test item.
   @visibleForTesting
   factory Item.test({
+    String? name,
     EffectMap? effect,
     ItemRarity rarity = ItemRarity.common,
     ItemMaterial? material,
@@ -173,7 +174,7 @@ class Item extends CatalogItem {
       );
     }
     return Item(
-      name: 'test',
+      name: name ?? 'test',
       id: 0, // Unique ids are not required for test items.
       rarity: rarity,
       effect: triggers,
@@ -239,6 +240,20 @@ class Item extends CatalogItem {
 
   /// Items combined to make this item.
   final List<String>? parts;
+
+  /// The gem type of the item.
+  Gem? get gem {
+    final nameParts = name.split(' ').map((s) => s.toLowerCase()).toSet();
+    for (final gem in Gem.values) {
+      if (nameParts.contains(gem.name)) {
+        return gem;
+      }
+    }
+    return null;
+  }
+
+  /// Returns true if the item has a gem of the given type.
+  bool hasGem(Gem gem) => this.gem == gem;
 
   /// All the known keys in the item yaml, in sorted order.
   static const List<String> orderedKeys = <String>[
@@ -325,6 +340,21 @@ enum ItemKind {
 
   /// Convert the kind to a json string.
   String toJson() => name;
+}
+
+/// The types of gem sets.
+enum Gem {
+  /// Ruby (attack / damage) set.
+  ruby,
+
+  /// Sapphire (armor) set.
+  sapphire,
+
+  /// Emerald (health) set.
+  emerald,
+
+  /// Citrine (speed) set.
+  citrine,
 }
 
 /// Rarity class of an item.

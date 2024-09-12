@@ -49,7 +49,7 @@ class EffectContext {
   bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
 
   /// Returns the number of strikes the attacker has made this battle.
-  int get strikeCount => _battle.stats[_index].strikeCount;
+  int get strikeCount => _battle.stats[_index].strikesMade;
 
   /// Returns true if this is the nth strike for this creature.
   bool everyNStrikes(int n) => strikeCount % n == n - 1;
@@ -57,6 +57,15 @@ class EffectContext {
   /// true if this creature's health was full at the start of the battle.
   bool get myHealthWasFullAtBattleStart {
     return _battle.initialCreatures[_index].healthFull;
+  }
+
+  /// Add extra strikes for the attacker on next attack.
+  void queueExtraStrike([int? damage]) {
+    final extraStrike = ExtraStrike(source: _sourceName, damage: damage);
+    _stats = _stats.copyWith(extraStrikes: _stats.extraStrikes + [extraStrike]);
+    _battle.log(
+      '$_playerName queued extra strike (damage: $damage) from $_sourceName',
+    );
   }
 
   /// Add gold.
@@ -194,11 +203,30 @@ class EffectContext {
     final inventory = _battle.creatures[_index].inventory;
     return inventory == null ? 0 : inventory.kindCount(kind);
   }
+
+  /// Returns the number of items with a given gem.
+  int gemCount(Gem gem) {
+    final inventory = _battle.creatures[_index].inventory;
+    return inventory == null ? 0 : inventory.gemCount(gem);
+  }
 }
 
 String? _diffString(String name, int before, int after) {
   final diff = after - before;
   return diff != 0 ? '$name: ${_signed(diff)}' : null;
+}
+
+/// Extra strike for a creature.
+class ExtraStrike {
+  /// Create an ExtraStrike.
+  ExtraStrike({required this.source, this.damage});
+
+  /// Source of the extra strike.
+  final String source;
+
+  /// Damage of the extra strike, defaults to the attacker's attack
+  /// if not provided.
+  final int? damage;
 }
 
 /// Holds stats for a creature during battle.
@@ -217,7 +245,8 @@ class CreatureStats {
     this.hasBeenWounded = false,
     this.stunCount = 0,
     this.thorns = 0,
-    this.strikeCount = 0,
+    this.strikesMade = 0,
+    this.extraStrikes = const [],
   });
 
   /// Create a CreatureStats from a Creature.
@@ -261,7 +290,11 @@ class CreatureStats {
   final int stunCount;
 
   /// Number of strikes this creature has made this battle.
-  final int strikeCount;
+  final int strikesMade;
+
+  /// Extra strikes this creature gets on next attack.
+  /// Resets after attacking.
+  final List<ExtraStrike> extraStrikes;
 
   /// Damage returned to the attacker when attacking this creature.
   /// Thorns are cleared after each attack.
@@ -291,7 +324,8 @@ class CreatureStats {
     bool? hasBeenWounded,
     int? stunCount,
     int? thorns,
-    int? strikeCount,
+    List<ExtraStrike>? extraStrikes,
+    int? strikesMade,
   }) {
     final newMaxHp = maxHp ?? this.maxHp;
     final newHp = hp ?? this.hp;
@@ -310,7 +344,8 @@ class CreatureStats {
       hasBeenWounded: hasBeenWounded ?? this.hasBeenWounded,
       stunCount: stunCount ?? this.stunCount,
       thorns: thorns ?? this.thorns,
-      strikeCount: strikeCount ?? this.strikeCount,
+      extraStrikes: extraStrikes ?? this.extraStrikes,
+      strikesMade: strikesMade ?? this.strikesMade,
     );
   }
 
@@ -326,7 +361,7 @@ class CreatureStats {
       _diffString('gold', gold, other.gold),
       _diffString('stun', stunCount, other.stunCount),
       _diffString('thorns', thorns, other.thorns),
-      _diffString('strikeCount', strikeCount, other.strikeCount),
+      _diffString('strikeCount', strikesMade, other.strikesMade),
     ].nonNulls;
     if (diffStrings.isNotEmpty) {
       return diffStrings.join(' ');
@@ -538,8 +573,19 @@ class BattleContext {
 
     setStats(
       attackerIndex,
-      attacker.copyWith(strikeCount: attacker.strikeCount + 1),
+      attacker.copyWith(strikesMade: attacker.strikesMade + 1),
     );
+  }
+
+  void _handleExtraStrikes() {
+    final extraStrikes = attacker.extraStrikes;
+    for (final extraStrike in extraStrikes) {
+      _strike(extraStrike.damage);
+    }
+    if (attacker.extraStrikes.length != extraStrikes.length) {
+      throw StateError('extraStrikes were added or removed during handling');
+    }
+    setStats(attackerIndex, attacker.copyWith(extraStrikes: []));
   }
 
   /// Probably this only needs to happen within the takeDamage effect?
@@ -715,6 +761,7 @@ class BattleContext {
         log('$attackerName turn $turnNumber');
         _triggerOnTurn();
         _strike();
+        _handleExtraStrikes();
         // Might advance multiple turns if both creatures are stunned.
         _nextAttacker();
         if (_attackerIndex == 1 && turnNumber > 100) {

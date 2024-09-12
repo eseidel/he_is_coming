@@ -156,4 +156,30 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Pinecone Plate': onTurn(
     (c) => _if(c.myHealthWasFullAtBattleStart, () => c.gainThorns(1)),
   ),
+  'Gemstone Scepter': {
+    Trigger.onHit: (c) {
+      // "Draws power from emerald, ruby, sapphire and citrine items"
+      final emeraldPower = c.gemCount(Gem.emerald);
+      // These are supposedly one at a time rather than in bulk.
+      // https://discord.com/channels/1041414829606449283/1209488593219756063/1283601378953924650
+      for (var i = 0; i < emeraldPower; i++) {
+        c.restoreHealth(1);
+      }
+      final rubyPower = c.gemCount(Gem.ruby);
+      for (var i = 0; i < rubyPower; i++) {
+        c.dealDamage(1);
+      }
+      final sapphirePower = c.gemCount(Gem.sapphire);
+      for (var i = 0; i < sapphirePower; i++) {
+        c.gainArmor(1);
+      }
+    },
+    Trigger.onBattle: (c) {
+      // Citrine means extra strikes on the first turn:
+      // https://discord.com/channels/1041414829606449283/1209488302269534209/1278082886892781619
+      for (var i = 0; i < c.gemCount(Gem.citrine); i++) {
+        c.queueExtraStrike();
+      }
+    },
+  },
 });

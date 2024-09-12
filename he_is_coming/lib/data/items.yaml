@@ -135,12 +135,6 @@
   kind: jewelry
   rarity: common
   effect: "Battle Start: Deal damage equal to your speed"
-- name: Citrine Ring
-  id: 126
-  unique: true
-  kind: jewelry
-  rarity: common
-  effect: "Battle Start: Deal damage equal to your speed"
   version: 0.3.5
 - name: Cracked Bouldershield
   id: 18
@@ -264,6 +258,7 @@
 - name: Gemstone Scepter
   id: 37
   rarity: heroic
+  kind: weapon
   attack: 2
   effect: "Draws power from emerald, ruby, sapphire and citrine items"
   version: 0.3.5
