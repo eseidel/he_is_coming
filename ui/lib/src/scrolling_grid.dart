@@ -30,11 +30,9 @@ class ScrollingGrid extends StatelessWidget {
       itemCount: itemCount,
       itemBuilder: (context, index) {
         return Card(
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: itemBuilder(context, index),
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: itemBuilder(context, index),
           ),
         );
       },

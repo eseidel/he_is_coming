@@ -44,6 +44,10 @@ class Style {
     color: Palette.black,
   );
 
+  /// Name Text Style
+  static final TextStyle name =
+      Style.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold);
+
   /// Effect Text Style
   static final TextStyle effect = Style.textTheme.labelSmall!;
 

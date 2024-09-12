@@ -280,7 +280,7 @@ class ColoredEffectText extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: Style.effect.copyWith(height: 1.5),
+        style: Style.effect.copyWith(height: 1.5, fontStyle: FontStyle.italic),
         children: [
           for (final word in words)
             TextSpan(
@@ -327,7 +327,7 @@ class ItemView extends StatelessWidget {
                 Expanded(
                   child: Text(
                     name,
-                    style: Theme.of(context).textTheme.labelLarge,
+                    style: Style.name,
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -392,7 +392,7 @@ class CreatureView extends StatelessWidget {
               Expanded(
                 child: Text(
                   name,
-                  style: Theme.of(context).textTheme.labelLarge,
+                  style: Style.name,
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -442,7 +442,7 @@ class EdgeView extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Text(name, style: Theme.of(context).textTheme.labelLarge),
+            child: Text(name, style: Style.name),
           ),
           if (effect != null)
             Padding(
@@ -522,7 +522,7 @@ class SetBonusView extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
-            child: Text(name, style: Theme.of(context).textTheme.labelLarge),
+            child: Text(name, style: Style.name),
           ),
           if (effect != null)
             Padding(
@@ -590,7 +590,7 @@ class FilteredItems extends StatelessWidget {
       items: items,
       tagsForItem: _tagsForItem,
       builder: (context, items) => ScrollingGrid(
-        maxCrossAxisExtent: 240,
+        maxCrossAxisExtent: 300,
         itemCount: items.length,
         itemBuilder: (context, index) {
           return ItemView(item: items[index]);
@@ -625,7 +625,7 @@ class FilteredCreatures extends StatelessWidget {
       items: creatures,
       tagsForItem: _tagsForCreature,
       builder: (context, items) => ScrollingGrid(
-        maxCrossAxisExtent: 240,
+        maxCrossAxisExtent: 300,
         itemCount: items.length,
         itemBuilder: (context, index) {
           return CreatureView(creature: items[index]);
@@ -767,7 +767,7 @@ class CompendiumPage extends StatelessWidget {
               },
             ),
             ScrollingGrid(
-              maxCrossAxisExtent: 240,
+              maxCrossAxisExtent: 260,
               itemCount: data.sets.items.length,
               itemBuilder: (context, index) {
                 return SetBonusView(
