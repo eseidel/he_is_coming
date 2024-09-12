@@ -335,12 +335,12 @@ class ItemView extends StatelessWidget {
             ),
             if (effect != null)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: ColoredEffectText(text: effect.text),
               ),
             if (!stats.isEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 child: StatsRow(stats: stats),
               ),
             TagsRow(tags: item.tags),
