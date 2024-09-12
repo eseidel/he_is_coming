@@ -232,8 +232,7 @@ class BestItemFinder {
 }
 
 void doMain(List<String> arguments) {
-  final data =
-      Data.load().withoutEntriesMissingEffects().withoutInferredItems();
+  final data = Data.load().withoutMissingEffects().withoutInferredItems();
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   const filePath = 'results.json';

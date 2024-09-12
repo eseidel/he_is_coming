@@ -25,7 +25,7 @@ class DataHolderState extends State<DataHolder> {
     _isLoading = true;
     _loadData().then((value) {
       setState(() {
-        _data = value.withoutEntriesMissingEffects();
+        _data = value;
         // TODO(eseidel): Remove defaultPlayerWeapon.
         Creature.defaultPlayerWeapon = _data.items['Wooden Stick'];
         _isLoading = false;

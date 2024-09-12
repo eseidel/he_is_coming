@@ -183,6 +183,7 @@ class EnemyResults extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CreatureName(creature: result.second),
+          const SizedBox(height: 8),
           RichText(
             text: TextSpan(
               style: DefaultTextStyle.of(context).style,
@@ -195,6 +196,7 @@ class EnemyResults extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(height: 8),
           RichText(
             text: TextSpan(
               style: DefaultTextStyle.of(context).style,
@@ -652,10 +654,7 @@ class CatalogTooltip extends StatelessWidget {
   Widget build(BuildContext context) {
     return SuperTooltip(
       controller: controller,
-      content: SizedBox(
-        width: maxWidth,
-        child: tooltipChild,
-      ),
+      content: SizedBox(width: maxWidth, child: tooltipChild),
       child: child,
     );
   }

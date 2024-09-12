@@ -26,7 +26,9 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             return UsesData(
               builder: (context, data) {
-                return RandomBattlePage(data: data);
+                return RandomBattlePage(
+                  data: data.withoutMissingEffects(),
+                );
               },
             );
           },
@@ -38,7 +40,8 @@ final GoRouter _router = GoRouter(
             final parameter =
                 state.pathParameters[BuildStateCodec.parameterName];
             return UsesData(
-              builder: (context, data) {
+              builder: (context, allData) {
+                final data = allData.withoutMissingEffects();
                 return BattlePage(
                   data: data,
                   state: BuildStateCodec.tryDecode(

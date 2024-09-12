@@ -534,6 +534,13 @@ class SetBonusView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 4),
               child: StatsRow(stats: stats),
             ),
+          const SizedBox(height: 4),
+          ...setBonus.parts.map((part) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Text(part, style: Theme.of(context).textTheme.labelSmall),
+            );
+          }),
         ],
       ),
     );
@@ -722,6 +729,7 @@ class CompendiumPage extends StatelessWidget {
     Tab(text: 'Creatures'),
     Tab(text: 'Edges'),
     Tab(text: 'Oils'),
+    Tab(text: 'Sets'),
   ];
 
   @override
@@ -756,6 +764,15 @@ class CompendiumPage extends StatelessWidget {
               itemCount: data.oils.oils.length,
               itemBuilder: (context, index) {
                 return OilView(oil: data.oils.oils[index]);
+              },
+            ),
+            ScrollingGrid(
+              maxCrossAxisExtent: 240,
+              itemCount: data.sets.items.length,
+              itemBuilder: (context, index) {
+                return SetBonusView(
+                  setBonus: data.sets.items[index],
+                );
               },
             ),
           ],

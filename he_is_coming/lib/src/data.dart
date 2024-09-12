@@ -104,7 +104,7 @@ class Data {
   }
 
   /// Remove any items that are missing effects.
-  Data withoutEntriesMissingEffects() {
+  Data withoutMissingEffects() {
     Catalog<T> onlyImplemented<T extends CatalogItem>(Catalog<T> catalog) {
       return catalog.copyWith(
         items: catalog.items.where((item) => item.isImplemented).toList(),
