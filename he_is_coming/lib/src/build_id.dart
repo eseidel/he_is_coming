@@ -119,11 +119,14 @@ class BitsReader {
 @immutable
 class BuildState {
   /// Create a new build state.
-  const BuildState(this.level, this.inventory);
+  const BuildState({required this.level, required this.inventory});
 
   /// Create a random build state.
   factory BuildState.random({required Level level, required Data data}) {
-    return BuildState(level, Inventory.random(level, Random(), data));
+    return BuildState(
+      level: level,
+      inventory: Inventory.random(level, Random(), data),
+    );
   }
 
   /// Current level.
@@ -217,8 +220,8 @@ class BuildStateCodec {
       }
     }
     return BuildState(
-      level,
-      Inventory(
+      level: level,
+      inventory: Inventory(
         level: level,
         items: items,
         edge: edge,

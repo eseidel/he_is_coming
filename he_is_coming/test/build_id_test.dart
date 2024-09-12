@@ -40,7 +40,7 @@ void main() {
       oils: [data.oils['Attack Oil']],
       setBonuses: data.sets,
     );
-    final state = BuildState(level, inventory);
+    final state = BuildState(level: level, inventory: inventory);
     final encoded = BuildStateCodec.encode(state, data);
     final decoded = BuildStateCodec.decode(encoded, data);
     expect(decoded.level, Level.two);
@@ -75,7 +75,7 @@ void main() {
     expect(data.edges.idBits, 4);
     expect(data.items.idBits, 8);
 
-    final state = BuildState(Level.end, inventory);
+    final state = BuildState(level: Level.end, inventory: inventory);
     final encoded = BuildStateCodec.encode(state, data);
     expect(encoded, 'cfb10288e8d08808');
     final decoded = BuildStateCodec.decode(encoded, data);

@@ -54,4 +54,9 @@ void runSim() {
   final damageTaken = winner.baseStats.maxHp - winner.hp;
   logger.info('${result.winner.name} wins in ${result.turns} turns with '
       '$damageTaken damage taken.');
+  final state = BuildState(level: player.level, inventory: player.inventory!);
+  final encoded = BuildStateCodec.encode(state, data);
+  logger.info('Build Id: $encoded');
+  final decoded = BuildStateCodec.tryDecode(encoded, data);
+  logger.info('Decoded: $decoded');
 }

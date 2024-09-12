@@ -356,7 +356,7 @@ class _BattleStateController {
   Inventory get _inventory => state.inventory;
 
   void setInventory(Inventory inventory) {
-    changeState(BuildState(_level, inventory));
+    changeState(BuildState(level: _level, inventory: inventory));
   }
 
   void setItems(List<Item> items) {
@@ -366,7 +366,7 @@ class _BattleStateController {
   }
 
   void setLevel(Level level) {
-    changeState(BuildState(level, _inventory));
+    changeState(BuildState(level: level, inventory: _inventory));
   }
 
   void reroll() {

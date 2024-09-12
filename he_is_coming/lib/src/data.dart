@@ -105,35 +105,39 @@ class Data {
 
   /// Remove any items that are missing effects.
   Data withoutEntriesMissingEffects() {
-    List<T> onlyImplemented<T extends CatalogItem>(Catalog<T> catalog) {
-      return catalog.items.where((item) => item.isImplemented).toList();
+    Catalog<T> onlyImplemented<T extends CatalogItem>(Catalog<T> catalog) {
+      return catalog.copyWith(
+        items: catalog.items.where((item) => item.isImplemented).toList(),
+      ) as Catalog<T>;
     }
 
     return Data(
-      creatures: CreatureCatalog(onlyImplemented(creatures)),
-      items: ItemCatalog(onlyImplemented(items)),
-      edges: EdgeCatalog(onlyImplemented(edges)),
-      oils: OilCatalog(onlyImplemented(oils)),
-      sets: SetBonusCatalog(onlyImplemented(sets)),
-      triggers: TriggerCatalog(onlyImplemented(triggers)),
-      challenges: ChallengeCatalog(onlyImplemented(challenges)),
+      creatures: onlyImplemented(creatures) as CreatureCatalog,
+      items: onlyImplemented(items) as ItemCatalog,
+      edges: onlyImplemented(edges) as EdgeCatalog,
+      oils: onlyImplemented(oils) as OilCatalog,
+      sets: onlyImplemented(sets) as SetBonusCatalog,
+      triggers: onlyImplemented(triggers) as TriggerCatalog,
+      challenges: onlyImplemented(challenges) as ChallengeCatalog,
     );
   }
 
   /// Remove any items that are inferred.
   Data withoutInferredItems() {
-    List<T> removeInferred<T extends CatalogItem>(Catalog<T> catalog) {
-      return catalog.items.where((item) => !item.inferred).toList();
+    Catalog<T> removeInferred<T extends CatalogItem>(Catalog<T> catalog) {
+      return catalog.copyWith(
+        items: catalog.items.where((item) => !item.inferred).toList(),
+      ) as Catalog<T>;
     }
 
     return Data(
-      creatures: CreatureCatalog(removeInferred(creatures)),
-      items: ItemCatalog(removeInferred(items)),
-      edges: EdgeCatalog(removeInferred(edges)),
-      oils: OilCatalog(removeInferred(oils)),
-      sets: SetBonusCatalog(removeInferred(sets)),
-      triggers: TriggerCatalog(removeInferred(triggers)),
-      challenges: ChallengeCatalog(removeInferred(challenges)),
+      creatures: removeInferred(creatures) as CreatureCatalog,
+      items: removeInferred(items) as ItemCatalog,
+      edges: removeInferred(edges) as EdgeCatalog,
+      oils: removeInferred(oils) as OilCatalog,
+      sets: removeInferred(sets) as SetBonusCatalog,
+      triggers: removeInferred(triggers) as TriggerCatalog,
+      challenges: removeInferred(challenges) as ChallengeCatalog,
     );
   }
 
@@ -173,7 +177,7 @@ class Data {
 /// Class to hold all known creatures.
 class CreatureCatalog extends Catalog<Creature> {
   /// Create an CreatureCatalog
-  CreatureCatalog(super.creatures);
+  CreatureCatalog(super.creatures, {required super.idBits});
 
   /// Create an CreatureCatalog from a yaml file.
   factory CreatureCatalog.fromYaml(YamlList yaml) {
@@ -183,7 +187,12 @@ class CreatureCatalog extends Catalog<Creature> {
       Creature.orderedKeys.toSet(),
       creatureEffects,
     );
-    return CreatureCatalog(creatures);
+    return CreatureCatalog(creatures, idBits: null);
+  }
+
+  @override
+  CreatureCatalog copyWith({List<Creature>? items}) {
+    return CreatureCatalog(items ?? creatures, idBits: idBits);
   }
 
   /// The creatures in this catalog.
@@ -193,7 +202,10 @@ class CreatureCatalog extends Catalog<Creature> {
 /// Class to hold all known edges.
 class EdgeCatalog extends Catalog<Edge> {
   /// Create an EdgeCatalog
-  EdgeCatalog(super.edges);
+  EdgeCatalog._(super.edges, {required super.idBits});
+
+  /// Create an EdgeCatalog from a list of edges.
+  EdgeCatalog.fromItems(super.items) : super(idBits: null);
 
   /// Create an EdgeCatalog from a yaml file.
   factory EdgeCatalog.fromYaml(YamlList yaml) {
@@ -203,7 +215,12 @@ class EdgeCatalog extends Catalog<Edge> {
       Edge.orderedKeys.toSet(),
       edgeEffects,
     );
-    return EdgeCatalog(edges);
+    return EdgeCatalog.fromItems(edges);
+  }
+
+  @override
+  EdgeCatalog copyWith({List<Edge>? items}) {
+    return EdgeCatalog._(items ?? edges, idBits: idBits);
   }
 
   /// The edges in this catalog.
@@ -213,7 +230,9 @@ class EdgeCatalog extends Catalog<Edge> {
 /// Class to hold all known items.
 class ItemCatalog extends Catalog<Item> {
   /// Create an ItemCatalog
-  ItemCatalog(super.items);
+  ItemCatalog.fromItems(super.items) : super(idBits: null);
+
+  ItemCatalog._(super.items, {required super.idBits});
 
   /// Create an ItemCatalog from a yaml file.
   factory ItemCatalog.fromYaml(YamlList yaml) {
@@ -223,7 +242,12 @@ class ItemCatalog extends Catalog<Item> {
       Item.orderedKeys.toSet(),
       itemEffects,
     );
-    return ItemCatalog(items);
+    return ItemCatalog.fromItems(items);
+  }
+
+  @override
+  ItemCatalog copyWith({List<Item>? items}) {
+    return ItemCatalog._(items ?? this.items, idBits: idBits);
   }
 
   /// All the weapons in the catalog.
@@ -242,9 +266,6 @@ class ItemCatalog extends Catalog<Item> {
 
 /// Class to hold all known Oils.
 class OilCatalog extends Catalog<Oil> {
-  /// Create an OilCatalog
-  OilCatalog(super.oils);
-
   /// Create an EdgeCatalog from a yaml file.
   factory OilCatalog.fromYaml(YamlList yaml) {
     final oils = CatalogReader.parseYaml(
@@ -253,7 +274,18 @@ class OilCatalog extends Catalog<Oil> {
       Oil.orderedKeys.toSet(),
       EffectCatalog({}), // No oils have effects in the game yet.
     );
-    return OilCatalog(oils);
+    return OilCatalog.fromItems(oils);
+  }
+
+  /// Create an OilCatalog
+  OilCatalog.fromItems(super.oils) : super(idBits: null);
+
+  /// Create an OilCatalog
+  OilCatalog._(super.oils, {required super.idBits});
+
+  @override
+  OilCatalog copyWith({List<Oil>? items}) {
+    return OilCatalog._(items ?? oils, idBits: idBits);
   }
 
   /// The oils in this catalog.
@@ -333,7 +365,9 @@ class SetBonus extends CatalogItem {
 /// Class to hold all known sets.
 class SetBonusCatalog extends Catalog<SetBonus> {
   /// Create an SetBonusCatalog
-  SetBonusCatalog(super.sets);
+  SetBonusCatalog.fromItems(super.sets) : super(idBits: null);
+
+  SetBonusCatalog._(super.sets, {required super.idBits});
 
   /// Create an SetBonusCatalog from a yaml file.
   factory SetBonusCatalog.fromYaml(YamlList yaml) {
@@ -343,7 +377,12 @@ class SetBonusCatalog extends Catalog<SetBonus> {
       SetBonus.orderedKeys.toSet(),
       setEffects,
     );
-    return SetBonusCatalog(sets);
+    return SetBonusCatalog.fromItems(sets);
+  }
+
+  @override
+  SetBonusCatalog copyWith({List<SetBonus>? items}) {
+    return SetBonusCatalog._(items ?? sets, idBits: idBits);
   }
 
   /// The sets in this catalog.
@@ -442,7 +481,9 @@ class Challenge extends CatalogItem {
 /// Class to hold all known challenges.
 class ChallengeCatalog extends Catalog<Challenge> {
   /// Create an ChallengeCatalog
-  ChallengeCatalog(super.challenges);
+  ChallengeCatalog.fromItems(super.challenges) : super(idBits: null);
+
+  ChallengeCatalog._(super.challenges, {required super.idBits});
 
   /// Create an ChallengeCatalog from a yaml file.
   factory ChallengeCatalog.fromYaml(YamlList yaml) {
@@ -452,7 +493,12 @@ class ChallengeCatalog extends Catalog<Challenge> {
       Challenge.orderedKeys.toSet(),
       EffectCatalog({}), // No challenges have effects in the game yet.
     );
-    return ChallengeCatalog(challenges);
+    return ChallengeCatalog.fromItems(challenges);
+  }
+
+  @override
+  ChallengeCatalog copyWith({List<Challenge>? items}) {
+    return ChallengeCatalog._(items ?? challenges, idBits: idBits);
   }
 
   /// The challenges in this catalog.
@@ -515,7 +561,9 @@ class TriggerItem extends CatalogItem {
 /// Class to hold all known triggers.
 class TriggerCatalog extends Catalog<TriggerItem> {
   /// Create an TriggerCatalog
-  TriggerCatalog(super.triggers);
+  TriggerCatalog.fromItems(super.triggers) : super(idBits: null);
+
+  TriggerCatalog._(super.triggers, {required super.idBits});
 
   /// Create an TriggerCatalog from a yaml file.
   factory TriggerCatalog.fromYaml(YamlList yaml) {
@@ -525,7 +573,12 @@ class TriggerCatalog extends Catalog<TriggerItem> {
       TriggerItem.orderedKeys.toSet(),
       EffectCatalog({}), // No triggers have effects in the game yet.
     );
-    return TriggerCatalog(triggers);
+    return TriggerCatalog.fromItems(triggers);
+  }
+
+  @override
+  TriggerCatalog copyWith({List<TriggerItem>? items}) {
+    return TriggerCatalog._(items ?? triggers, idBits: idBits);
   }
 
   /// The triggers in this catalog.

@@ -114,12 +114,23 @@ abstract class CatalogItem {
 }
 
 /// A catalog of items.
-class Catalog<T extends CatalogItem> {
+abstract class Catalog<T extends CatalogItem> {
   /// Create a catalog from a list of items.
-  Catalog(this.items);
+  Catalog(this.items, {required int? idBits})
+      : idBits = idBits ?? _bitsNeededFor(items.length) {
+    if (this.idBits < _bitsNeededFor(items.length)) {
+      throw ArgumentError('Not enough bits for ${items.length} items');
+    }
+  }
+
+  /// Create a catalog from a list of items.
+  Catalog copyWith({List<T>? items});
 
   /// The items in the catalog.
   final List<T> items;
+
+  /// Number of bits needed to represent the id.
+  final int idBits;
 
   bool _removeEmptyValues(dynamic json) {
     if (json is Map) {
@@ -176,9 +187,6 @@ class Catalog<T extends CatalogItem> {
     if (value == 0) return 0;
     return (log(value) / ln2).ceil();
   }
-
-  /// Number of bits needed to represent the id.
-  int get idBits => _bitsNeededFor(items.length + 1);
 
   /// Convert an id to an item.  0 represents null.
   T? fromId(int id) {
