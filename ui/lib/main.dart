@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:he_is_coming/he_is_coming.dart';
-import 'package:nes_ui/nes_ui.dart';
 import 'package:ui/src/battle.dart';
 import 'package:ui/src/compendium.dart';
 import 'package:ui/src/data.dart';
+import 'package:ui/src/style.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void main() {
@@ -106,7 +106,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         routerConfig: _router,
         title: 'He is Coming',
-        theme: flutterNesTheme(brightness: Brightness.dark),
+        theme: Style.theme,
       ),
     );
   }

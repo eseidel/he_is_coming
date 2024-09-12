@@ -438,7 +438,7 @@ class BattlePage extends StatelessWidget {
               onChange: _stateController(context).setLevel,
               optionBuilder: (context, level) => Text(
                 level.name,
-                style: TextStyle(color: Palette.white),
+                style: const TextStyle(color: Palette.white),
               ),
               value: _level,
             ),
@@ -584,7 +584,7 @@ class PlayerBattleView extends StatelessWidget {
           child: Column(
             children: StatType.values.map((statType) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
+                padding: const EdgeInsets.all(4),
                 child: StatLine(
                   stats: stats,
                   statType: statType,
@@ -625,7 +625,9 @@ class PlayerBattleView extends StatelessWidget {
   }
 }
 
+/// Wraps a widget with a gesture detector that shows a tooltip.
 class CatalogTooltip extends StatelessWidget {
+  /// CatalogTooltip constructor
   const CatalogTooltip({
     required this.maxWidth,
     required this.child,
@@ -634,8 +636,13 @@ class CatalogTooltip extends StatelessWidget {
     super.key,
   });
 
+  /// Maximum width of the tooltip
   final double maxWidth;
+
+  /// Child widget
   final Widget child;
+
+  /// Tooltip child widget
   final Widget tooltipChild;
 
   /// Tooltip controller

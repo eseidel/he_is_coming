@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nes_ui/nes_ui.dart';
 
 /// Icon size configuration
 @immutable
@@ -23,7 +24,17 @@ class Style {
   static final TextTheme textTheme = GoogleFonts.pressStart2pTextTheme().apply(
     bodyColor: Palette.text,
     displayColor: Palette.text,
+    decorationColor: Palette.text,
   );
+
+  /// App Theme
+  static ThemeData get theme {
+    final baseTheme = flutterNesTheme(brightness: Brightness.dark);
+    return baseTheme.copyWith(
+      textTheme: Style.textTheme,
+      buttonTheme: baseTheme.buttonTheme.copyWith(buttonColor: Palette.white),
+    );
+  }
 
   /// Stats Text Style
   static final TextStyle stats = Style.textTheme.labelMedium!.apply();
@@ -46,34 +57,31 @@ class Style {
 /// Color palette
 class Palette {
   /// White, used for all UI and text.
-  static final Color white = Colors.brown[100]!;
+  static const Color white = Color.fromARGB(255, 226, 219, 196);
 
   /// Black, used for all UI and text.
   static final Color black = Colors.brown[900]!;
 
   /// Text color.
-  static final Color text = Palette.white;
+  static const Color text = Palette.white;
 
   /// Weapon Items color.
   static const Color weapon = Palette.attack;
 
   /// Sanguine Items color.
-  static final Color sanguine = Colors.red[900]!;
-
-  /// Food Items color.
-  static final Color food = Colors.green[800]!;
+  static const Color sanguine = Color.fromARGB(255, 194, 51, 74);
 
   /// Stone Items color.
-  static final Color stone = Colors.grey[800]!;
+  static const Color stone = Color.fromARGB(255, 150, 132, 113);
 
   /// Heroic Rarity color.
-  static const Color heroic = Colors.teal;
+  static const Color heroic = Color.fromARGB(255, 166, 110, 187);
 
   /// Rare Rarity color.
-  static const Color rare = Colors.blue;
+  static const Color rare = Color.fromARGB(255, 113, 168, 210);
 
   /// Common Rarity color.
-  static const Color common = Colors.green;
+  static const Color common = Color.fromARGB(255, 156, 195, 67);
 
   /// Golden Rarity color.
   static const Color golden = Colors.yellow;
@@ -82,23 +90,23 @@ class Palette {
   static const Color cauldron = Colors.orange;
 
   /// Health stat color.
-  static const Color health = Colors.green;
+  static const Color health = Color.fromARGB(255, 156, 195, 67);
 
   /// Attack stat color.
-  static const Color attack = Colors.red;
+  static const Color attack = Color.fromARGB(255, 217, 83, 73);
 
   /// Armor stat color.
-  static final Color armor = Colors.blueGrey[400]!;
+  static const Color armor = Color.fromARGB(255, 113, 168, 210);
 
   /// Speed stat color.
-  static const Color speed = Colors.yellow;
+  static const Color speed = Color.fromARGB(255, 249, 212, 108);
 
   /// Gold (money) color.
-  static final Color gold = Colors.amber[400]!;
+  static const Color gold = Color.fromARGB(255, 198, 135, 40);
 
   /// Thorns color.
-  static final Color thorns = Colors.green[900]!;
+  static const Color thorns = Color.fromARGB(255, 138, 148, 36);
 
   /// Creature color.
-  static const Color creature = Colors.red;
+  static const Color creature = Palette.attack;
 }

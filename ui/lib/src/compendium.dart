@@ -436,7 +436,7 @@ class EdgeView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          OutlinedBox(
+          const OutlinedBox(
             borderColor: Palette.white, // Edges always use white.
             child: Icon(Icons.bug_report, color: Palette.white),
           ),
@@ -516,7 +516,7 @@ class SetBonusView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          OutlinedBox(
+          const OutlinedBox(
             borderColor: Palette.white, // Set bonuses always use white.
             child: Icon(Icons.bug_report, color: Palette.white),
           ),
