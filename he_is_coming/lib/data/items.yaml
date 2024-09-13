@@ -794,11 +794,13 @@
 - name: Tree Sap
   id: 119
   rarity: cauldron
+  material: wood
   parts:
     - Redwood Roast
     - Vampiric Wine
   health: 5
-  effect: "Wounded: Restore 1 health 5 times"
+  effect: "Wounded: Restore 1 health 6 times"
+  version: 0.3.5
 - name: Vampiric Wine
   id: 120
   kind: food

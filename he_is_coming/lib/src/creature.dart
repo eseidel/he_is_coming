@@ -157,7 +157,7 @@ class Creature extends CatalogItem {
     int? hp,
     super.effect,
   })  : _intrinsic = intrinsic,
-        _lostHp = _computeLostHp(intrinsic, inventory, hp);
+        lostHp = _computeLostHp(intrinsic, inventory, hp);
 
   /// Create a creature from a yaml map.
   factory Creature.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
@@ -214,7 +214,7 @@ class Creature extends CatalogItem {
   final Inventory? inventory;
 
   /// How much hp has been lost.
-  final int _lostHp;
+  final int lostHp;
 
   /// How much gold is on this creature or player.
   final int gold;
@@ -230,13 +230,13 @@ class Creature extends CatalogItem {
 
   /// Current health of the creature.
   /// Combat can't change maxHp, so we can compute it from baseStats.
-  int get hp => baseStats.maxHp - _lostHp;
+  int get hp => baseStats.maxHp - lostHp;
 
   /// Returns true if the creature is still alive.
   bool get isAlive => hp > 0;
 
   /// Returns true if the creature is at full health.
-  bool get healthFull => _lostHp == 0;
+  bool get healthFull => lostHp == 0;
 
   /// Stats as they would be in the over-world or at fight start.
   Stats get baseStats => inventory?.statsWithItems(_intrinsic) ?? _intrinsic;

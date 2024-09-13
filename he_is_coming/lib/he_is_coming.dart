@@ -46,10 +46,10 @@ void runSim() {
     'Armor Oil',
   ];
   final player = data.player(items: items, edge: edge, oils: oils);
-  _logMissingEffects(player.inventory!);
   final enemy = data.creatures['Woodland Abomination'];
 
   final result = Battle.resolve(first: player, second: enemy, verbose: true);
+  _logMissingEffects(result.first.inventory!);
   final winner = result.winner;
   final damageTaken = winner.baseStats.maxHp - winner.hp;
   logger.info('${result.winner.name} wins in ${result.turns} turns with '

@@ -186,6 +186,7 @@
   attack: 3
   speed: 2
   effect: "If Stormcloud Druid takes damage more than once per turn, stun the player for 1 turn"
+  version: 0.3.5
 - name: Wolf Level 1
   id: 24
   level: 1
@@ -217,3 +218,12 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
+- name: Crazed Honeybear Level 3
+  id: 29
+  level: 3
+  health: 14
+  attack: 6
+  armor: 8
+  speed: 4
+  effect: "Bear deals 5 additional damage while you have armor"
+  version: 0.3.5

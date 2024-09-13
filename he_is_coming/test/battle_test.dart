@@ -19,6 +19,21 @@ BattleResult doBattle({
   );
 }
 
+void endFight({
+  required Data data,
+  required List<String> items,
+  required String? edge,
+  required List<String> oils,
+  required int turns,
+  required int damage,
+}) {
+  final player = data.player(items: items, edge: edge, oils: oils);
+  final enemy = data.creatures['Woodland Abomination'];
+  final result = doBattle(first: player, second: enemy);
+  expect(result.turns, turns);
+  expect(result.second.lostHp, damage);
+}
+
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
@@ -32,5 +47,33 @@ void main() {
     // Stuck battles result in player wins.
     expect(result.first.hp, 10);
     expect(result.second.hp, 0);
+  });
+
+  test('Gemstone Scepter build', () {
+    // https://discord.com/channels/1041414829606449283/1209488593219756063/1283570085268688989
+    final items = [
+      'Gemstone Scepter',
+      'Horned Helmet',
+      'Golden Sapphire Earring',
+      'Boots of the Hero',
+      'Golden Leather Glove',
+      'Golden Emerald Earring',
+      'Emerald Earring',
+      'Pinecone Plate',
+      'Sapphire Ring',
+    ];
+    const edge = 'Bleeding Edge';
+    final oils = [
+      'Attack Oil',
+      'Armor Oil',
+    ];
+    endFight(
+      data: data,
+      items: items,
+      edge: edge,
+      oils: oils,
+      turns: 12, // should be 13
+      damage: 53, // should be 54
+    );
   });
 }
