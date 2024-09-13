@@ -64,7 +64,9 @@ void doMain(List<String> arguments) {
         (item) =>
             item.rarity == ItemRarity.common &&
             item.kind != ItemKind.weapon &&
-            item.isUnique == false,
+            item.isUnique == false &&
+            item.inferred ==
+                false, // Don't infer golden items from inferred items.
       )
       .toList();
   final golden =

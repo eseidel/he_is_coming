@@ -211,11 +211,6 @@
   effect: "Initiative: If you have less speed than the enemy, gain 4 armor"
   version: 0.3.5
 - name: Energy Crystal
-  id: 132
-  rarity: common
-  inferred: true
-  version: 0.3.5
-- name: Energy Crystal
   id: 144
   unique: true
   rarity: rare
@@ -449,12 +444,6 @@
   rarity: common
   attack: 2
   effect: Gets stronger for every new hidden dagger you find
-- name: Honey
-  id: 128
-  kind: food
-  rarity: common
-  inferred: true
-  version: 0.3.5
 - name: Honey Ham
   id: 146
   rarity: cauldron
