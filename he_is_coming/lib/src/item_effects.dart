@@ -195,4 +195,5 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
         ..queueExtraStrike(),
     ),
   ),
+  'Swiftstrike Gauntlet': onWounded((c) => c.queueExtraStrike()),
 });

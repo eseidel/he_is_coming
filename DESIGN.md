@@ -72,7 +72,6 @@ for onTurn and onHit for example).
 - Do an additional strike on your first turn for Agile Edge
 - Do two additional strikes that always deal 1 damage for Bonespine Whip
 - Wounded: Do an additional strike on your next turn for Dueling Gauntlet
-- First Turn: If you have more speed than the enemy, do 2 additional strikes for Swiftstrike Rapier
 - Exposed & Wounded: Lose 2 attack for Brittlebark Club
   wasExposed/wasWounded?
 

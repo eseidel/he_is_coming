@@ -1378,4 +1378,16 @@ void main() {
     expect(result2.first.hp, 9);
     expect(result2.first.baseStats.attack, 2);
   });
+
+  test('Swiftstrike Gauntlet', () {
+    const item = 'Swiftstrike Gauntlet';
+    final player = data.player(items: [item], hp: 6);
+    expect(player.hp, 6);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Dueling Gauntlet gives one extra attack for the next turn on wounded.
+    // So we kill the enemy in 5 turns rather than 6, taking 4 dmg.
+    expect(result.first.hp, 2);
+  });
 }
