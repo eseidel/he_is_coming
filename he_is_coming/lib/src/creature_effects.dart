@@ -23,6 +23,13 @@ EffectMap _batEffect({required int hp}) {
 EffectMap _hedgehogEffect({required int thorns}) =>
     onBattle((c) => c.gainThorns(thorns));
 
+// Dart doesn't have if-expressions, so made a helper function.
+void _if(bool condition, void Function() fn) {
+  if (condition) {
+    fn();
+  }
+}
+
 /// Effects that can be triggered by creatures.
 final creatureEffects = EffectCatalog(<String, EffectMap>{
   'Spider Level 1': _spiderEffect(damage: 3),
@@ -47,4 +54,6 @@ final creatureEffects = EffectCatalog(<String, EffectMap>{
       ..gainArmor(30)
       ..stunSelf(2),
   ),
+  'Razortusk Hog':
+      onTurn((c) => _if(c.hadMoreSpeedAtStart, () => c.queueExtraStrike())),
 });

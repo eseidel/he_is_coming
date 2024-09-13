@@ -87,6 +87,12 @@ class EffectContext {
     return _battle.initialCreatures[_meIndex].healthFull;
   }
 
+  /// true if this creature had more speed than enemy at the start of the battle.
+  bool get hadMoreSpeedAtStart {
+    final initialStats = _battle.initialCreatures[_meIndex].baseStats;
+    return initialStats.speed > _battle.stats[_enemyIndex].speed;
+  }
+
   /// Add an extra exposed trigger.
   void addExtraExposed(int count) {
     final exposedLimit = _myStats.exposedLimit + count;

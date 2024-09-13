@@ -112,4 +112,27 @@ void main() {
     expect(result.first.hp, 0);
     expect(result.second.hp, 5);
   });
+
+  test('Razortusk Hog', () {
+    final player = data.player(attack: 3, maxHp: 20);
+    expect(player.hp, 20);
+    expect(player.baseStats.attack, 4);
+    expect(player.baseStats.speed, 0);
+    final enemy = creatures['Razortusk Hog'];
+    final result = doBattle(first: player, second: enemy);
+    // Razortusk Hog gets an extra strike every turn if it had more speed
+    // at the start of the battle.
+    // It kills us in 5 hits, which is on its 3rd turn.
+    expect(result.first.hp, 0);
+    expect(result.second.hp, 12);
+
+    // If we have the same speed, we go first, and it doesn't strike twice.
+    final player2 = data.player(attack: 3, maxHp: 20, speed: 4);
+    expect(player2.hp, 20);
+    expect(player2.baseStats.attack, 4);
+    expect(player2.baseStats.speed, 4);
+    final result2 = doBattle(first: player2, second: enemy);
+    expect(result2.first.hp, 4);
+    expect(result2.second.hp, 0);
+  });
 }
