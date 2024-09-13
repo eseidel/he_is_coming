@@ -59,6 +59,14 @@ class EffectContext {
     return _battle.initialCreatures[_index].healthFull;
   }
 
+  /// Add an extra exposed trigger.
+  void addExtraExposed(int count) {
+    final exposedLimit = _stats.exposedLimit + count;
+    _stats = _stats.copyWith(exposedLimit: exposedLimit);
+    _battle
+        .log('$_playerName can now trigger exposed $exposedLimit extra times');
+  }
+
   /// Add extra strikes for the attacker on next attack.
   void queueExtraStrike([int? damage]) {
     final extraStrike = ExtraStrike(source: _sourceName, damage: damage);
@@ -241,7 +249,8 @@ class CreatureStats {
     required this.speed,
     required this.attack,
     required this.gold,
-    this.hasBeenExposed = false,
+    this.exposedCount = 0,
+    this.exposedLimit = 1,
     this.hasBeenWounded = false,
     this.stunCount = 0,
     this.thorns = 0,
@@ -280,8 +289,14 @@ class CreatureStats {
   /// Value if the creature is defeated.
   final int gold;
 
-  /// true if the creature has already sent onExposed this battle.
-  final bool hasBeenExposed;
+  /// How many times exposed has triggered.
+  final int exposedCount;
+
+  /// How many times exposed can trigger.
+  final int exposedLimit;
+
+  /// true if the creature can still be exposed this battle.
+  bool get canBeExposed => exposedCount < exposedLimit;
 
   /// true if the creature has already sent onWounded this battle.
   final bool hasBeenWounded;
@@ -320,7 +335,8 @@ class CreatureStats {
     int? attack,
     int? speed,
     int? gold,
-    bool? hasBeenExposed,
+    int? exposedCount,
+    int? exposedLimit,
     bool? hasBeenWounded,
     int? stunCount,
     int? thorns,
@@ -340,7 +356,8 @@ class CreatureStats {
       // Attack needs to be clamped to 1?
       attack: attack ?? this.attack,
       gold: gold ?? this.gold,
-      hasBeenExposed: hasBeenExposed ?? this.hasBeenExposed,
+      exposedCount: exposedCount ?? this.exposedCount,
+      exposedLimit: exposedLimit ?? this.exposedLimit,
       hasBeenWounded: hasBeenWounded ?? this.hasBeenWounded,
       stunCount: stunCount ?? this.stunCount,
       thorns: thorns ?? this.thorns,
@@ -528,9 +545,12 @@ class BattleContext {
       final newStats = stats[targetIndex];
       // If previously target had armor but now it doesn't
       final armorWasBroken = armorBefore > 0 && newArmor == 0;
-      if (armorWasBroken && !newStats.hasBeenExposed) {
+      if (armorWasBroken && newStats.canBeExposed) {
         // Set "exposed" flag first to avoid infinite loops.
-        setStats(targetIndex, newStats.copyWith(hasBeenExposed: true));
+        setStats(
+          targetIndex,
+          newStats.copyWith(exposedCount: newStats.exposedCount + 1),
+        );
         _trigger(targetIndex, Trigger.onExposed);
       }
     }

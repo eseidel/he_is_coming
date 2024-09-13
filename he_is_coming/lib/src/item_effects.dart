@@ -182,4 +182,5 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
       }
     },
   },
+  'Blacksmith Bond': onBattle((c) => c.addExtraExposed(1)),
 });

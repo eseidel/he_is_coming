@@ -1302,4 +1302,42 @@ void main() {
     // So we kill the enemy in 3 turns.
     expect(result2.first.hp, 8);
   });
+
+  test('Blacksmith Bond', () {
+    const item = 'Blacksmith Bond';
+    final player = data.player(items: [item]);
+    expect(player.hp, 10);
+
+    // Blacksmith's bond allows an extra exposed trigger, which does
+    // nothing by itself.
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 5);
+
+    final healOnExposed =
+        Item.test(effect: onExposed((c) => c.restoreHealth(1)));
+    final player2 = data.player(items: [item], customItems: [healOnExposed]);
+    final result2 = doBattle(first: player2, second: enemy);
+    // Does nothing without armor to trigger exposed.
+    expect(result2.first.hp, 5);
+
+    final player3 =
+        data.player(armor: 1, items: [item], customItems: [healOnExposed]);
+    final result3 = doBattle(first: player3, second: enemy);
+    // Only triggers once since we only expose once.
+    // 5 dmg from wolf - 1 armor = 4 dmg.
+    expect(result3.first.hp, 6);
+
+    final armorOnExposed = Item.test(effect: onExposed((c) => c.gainArmor(1)));
+    final player4 = data.player(
+      armor: 1,
+      items: [item],
+      customItems: [armorOnExposed, healOnExposed],
+    );
+    final result4 = doBattle(first: player4, second: enemy);
+    // We gain 1 armor and 1 hp on exposed, then we gain hp again due to
+    // Blacksmith Bond allowing a second exposed trigger.
+    // 5 dmg from wolf - 1 armor - 1 hp (overheal) - 1 armor - 1 hp = 1 dmg.
+    expect(result4.first.hp, 8);
+  });
 }
