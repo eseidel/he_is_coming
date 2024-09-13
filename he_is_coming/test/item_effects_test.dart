@@ -1390,4 +1390,16 @@ void main() {
     // So we kill the enemy in 5 turns rather than 6, taking 4 dmg.
     expect(result.first.hp, 2);
   });
+  test('Bonespine Whip', () {
+    const item = 'Bonespine Whip';
+    final player = data.player(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 2);
+
+    final enemy = makeEnemy(attack: 1, health: 20);
+    final result = doBattle(first: player, second: enemy);
+    // Bonespine Whip adds two extra strikes which do 1 dmg each.
+    // Thus we do 4 dmg per turn, killing the enemy in 5 turns.
+    expect(result.first.hp, 6);
+  });
 }

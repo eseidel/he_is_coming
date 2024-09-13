@@ -196,4 +196,9 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     ),
   ),
   'Swiftstrike Gauntlet': onWounded((c) => c.queueExtraStrike()),
+  'Bonespine Whip': onTurn(
+    (c) => c
+      ..queueExtraStrike(damage: 1)
+      ..queueExtraStrike(damage: 1),
+  ),
 });
