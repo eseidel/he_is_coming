@@ -1,31 +1,48 @@
+import 'package:he_is_coming/src/creature_effects.dart';
 import 'package:he_is_coming/src/data.dart';
+import 'package:he_is_coming/src/edge_effects.dart';
+import 'package:he_is_coming/src/item_effects.dart';
 import 'package:he_is_coming/src/logger.dart';
+import 'package:he_is_coming/src/set_effects.dart';
 import 'package:scoped_deps/scoped_deps.dart';
 
-void logMissingEffects(Catalog catalog) {
-  final items = catalog.items;
-  final typeName = items.first.runtimeType;
-  final missingEffects = items.where((item) => !item.isImplemented).toList();
-  if (missingEffects.isEmpty) {
-    logger.info('All $typeName effects found.');
-  } else {
-    logger.warn(
-      '${missingEffects.length} ${typeName}s with missing effects found:',
-    );
-    for (final item in missingEffects) {
-      final effect = item.effect;
-      logger.info('  $effect for ${item.name}');
-    }
+Set<String> findImplementedEffects() {
+  final implementedEffectNames = <String>[
+    ...creatureEffects.catalog.keys,
+    ...itemEffects.catalog.keys,
+    ...edgeEffects.catalog.keys,
+    ...setEffects.catalog.keys,
+  ];
+  final implementedEffects = implementedEffectNames.toSet();
+  if (implementedEffects.length != implementedEffectNames.length) {
+    throw StateError('Duplicate effect names found.');
   }
+  return implementedEffects;
 }
 
 void doMain(List<String> arguments) {
-  final data = Data.load().withoutInferredItems();
-  logMissingEffects(data.items);
-  logMissingEffects(data.creatures);
-  logMissingEffects(data.oils);
-  logMissingEffects(data.edges);
-  logMissingEffects(data.sets);
+  final data = Data.load();
+  final missingEffects = data
+      .withoutInferredItems()
+      .allItems
+      .where((item) => !item.isImplemented)
+      .toList();
+  final sortedMissing = missingEffects.toList()
+    ..sort((a, b) => a.effect!.text.compareTo(b.effect!.text));
+  for (final item in sortedMissing) {
+    logger.info('${item.effect!.text} for ${item.name}');
+  }
+
+  final allItemsMap = {
+    for (final item in data.allItems) item.name: item,
+  };
+  final implementedEffects = findImplementedEffects();
+  for (final name in implementedEffects) {
+    final item = allItemsMap[name];
+    if (item == null || item.effect == null || item.effect!.isEmpty) {
+      logger.warn('Effect $name is implemented but not found in data');
+    }
+  }
 }
 
 void main(List<String> args) {

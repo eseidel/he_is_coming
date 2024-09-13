@@ -50,7 +50,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
       ..gainAttack(2)
       ..takeDamage(4),
   ),
-  'Ruby Crown': onBattle((c) => _if(c.my.attack >= 6, () => c.gainAttack(2))),
   'Melting Iceblade': onHit((c) => c.loseAttack(1)),
   'Double-edged Sword': onHit((c) => c.takeDamage(1)),
   'Citrine Ring': onBattle(
@@ -120,12 +119,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Golden Emerald Earring': onTurn(
     (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(2)),
-  ),
-  'Emerald Crown': onBattle(
-    (c) => _if(
-      c.my.maxHp >= 20 && c.my.lostHp > 0,
-      () => c.restoreHealth(c.my.lostHp),
-    ),
   ),
   'Sapphire Ring': onBattle((c) => c.stealArmor(2)),
   'Horned Helmet': onBattle((c) => c.gainThorns(2)),
