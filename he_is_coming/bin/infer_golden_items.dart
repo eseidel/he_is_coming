@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/data.dart';
@@ -39,9 +40,17 @@ Item inferGoldenItem(Item item) {
 }
 
 DiffNode diffWithGolden(Item item, Item golden) {
-  final actualString = jsonEncode(item);
-  final goldenJson = golden.toJson()..remove('inferred');
-  final expectedString = jsonEncode(goldenJson);
+  final unstableKeys = <String>{'id', 'inferred'};
+  String encodeStableJson(Item item) {
+    final json = item.toJson();
+    for (final key in unstableKeys) {
+      json.remove(key);
+    }
+    return jsonEncode(json);
+  }
+
+  final actualString = encodeStableJson(item);
+  final expectedString = encodeStableJson(golden);
   final differ = JsonDiffer(actualString, expectedString);
   return differ.diff();
 }
@@ -49,6 +58,7 @@ DiffNode diffWithGolden(Item item, Item golden) {
 void doMain(List<String> arguments) {
   final data = Data.load();
   final items = data.items.items;
+  var nextId = items.map((item) => item.id).reduce(max) + 1;
   final combinable = items
       .where(
         (item) =>
@@ -87,7 +97,8 @@ void doMain(List<String> arguments) {
     final actual = golden.firstWhereOrNull((i) => i.name == inferred.name);
     if (actual == null) {
       logger.info('Adding: ${inferred.name}');
-      data.items.items.add(inferred);
+      final toAdd = inferred.copyWith(id: nextId++);
+      data.items.items.add(toAdd);
       continue;
     }
     // Otherwise check that the golden item matches the inferred item.
