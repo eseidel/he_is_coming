@@ -19,4 +19,5 @@ final edgeEffects = EffectCatalog(<String, EffectMap>{
       ..takeDamage(1),
   ),
   'Cutting Edge': onHit((c) => c.dealDamage(1)),
+  'Agile Edge': onBattle((c) => c.queueExtraStrike()),
 });

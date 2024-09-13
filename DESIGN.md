@@ -68,7 +68,6 @@ for onTurn and onHit for example).
   Temporary Stat modifiers or onTurnEnd?
 
 ### Possible Today
-- Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle for Razortusk Hog
 - Do an additional strike on your first turn for Agile Edge
 - Do two additional strikes that always deal 1 damage for Bonespine Whip
 - Wounded: Do an additional strike on your next turn for Dueling Gauntlet

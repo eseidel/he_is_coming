@@ -82,12 +82,12 @@ class EffectContext {
   /// Returns true if this is the nth strike for this creature.
   bool everyNStrikes(int n) => strikeCount % n == n - 1;
 
-  /// true if this creature's health was full at the start of the battle.
+  /// true if creature's health was full at the start of the battle.
   bool get myHealthWasFullAtBattleStart {
     return _battle.initialCreatures[_meIndex].healthFull;
   }
 
-  /// true if this creature had more speed than enemy at the start of the battle.
+  /// true if creature had more speed than enemy at the start of the battle.
   bool get hadMoreSpeedAtStart {
     final initialStats = _battle.initialCreatures[_meIndex].baseStats;
     return initialStats.speed > _battle.stats[_enemyIndex].speed;
@@ -102,7 +102,7 @@ class EffectContext {
   }
 
   /// Add extra strikes for the attacker on next attack.
-  void queueExtraStrike([int? damage]) {
+  void queueExtraStrike({int? damage}) {
     final extraStrike = ExtraStrike(source: _sourceName, damage: damage);
     _myStats =
         _myStats.copyWith(extraStrikes: _myStats.extraStrikes + [extraStrike]);
