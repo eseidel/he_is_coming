@@ -76,4 +76,12 @@ void main() {
     // "dealDamage" does not trigger thorns, nor is it a strike, but would
     // trigger onTakeDamage, etc.  We could test for that.
   });
+
+  test('Agile Edge', () {
+    final player = data.player(edge: 'Agile Edge');
+    final enemy = makeEnemy(health: 6, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // Agile edge queues an extra strike for the first turn.
+    expect(result.first.hp, 6);
+  });
 }
