@@ -187,4 +187,12 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Brittlebark Bow':
       // There are exactly 2 previous strikes during the 3rd strike.
       onHit((c) => _if(c.my.strikesMade == 2, () => c.loseAttack(2))),
+  'Swiftstrike Rapier': onInitiative(
+    (c) => _if(
+      c.my.speed > c.enemy.speed,
+      () => c
+        ..queueExtraStrike()
+        ..queueExtraStrike(),
+    ),
+  ),
 });

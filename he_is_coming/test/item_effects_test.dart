@@ -1356,4 +1356,26 @@ void main() {
     // Attack changes are only during battle.
     expect(result.first.baseStats.attack, 4);
   });
+
+  test('Swiftstrike Rapier', () {
+    // If more speed than the enemy on the first turn strike 2x extra times.
+    const item = 'Swiftstrike Rapier';
+    final player = data.player(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 2);
+
+    final enemy = makeEnemy(attack: 1, health: 8);
+    final result = doBattle(first: player, second: enemy);
+    // No speed advantage, so we hit the wolf 4 times for 2 dmg each.
+    expect(result.first.hp, 7);
+
+    final player2 = data.player(speed: 2, items: [item]);
+    expect(player2.hp, 10);
+    expect(player2.baseStats.attack, 2);
+    final result2 = doBattle(first: player2, second: enemy);
+    // Speed advantage means we hit 2x extra times on first turn.
+    // 2 turns to kill enemy, we take 1 dmg.
+    expect(result2.first.hp, 9);
+    expect(result2.first.baseStats.attack, 2);
+  });
 }

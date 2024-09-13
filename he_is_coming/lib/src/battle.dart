@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/creature.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/item.dart';
@@ -23,23 +24,50 @@ void _expectNonNegative(int value, String valueName) {
 /// Passed to all Effect callbacks.
 class EffectContext {
   /// Create an EffectContext
-  EffectContext(this._battle, this._index, this._sourceName);
+  EffectContext({
+    required BattleContext battle,
+    required int meIndex,
+    required int? attackerIndex,
+    required String sourceName,
+  })  : _battle = battle,
+        _meIndex = meIndex,
+        _attackerIndex = attackerIndex,
+        _sourceName = sourceName;
 
   final BattleContext _battle;
-  final int _index;
+  final int _meIndex;
+  final int? _attackerIndex;
   final String _sourceName;
 
-  /// Stats for the creature with this effect.
-  CreatureStats get my => _battle.stats[_index];
-
-  int get _enemyIndex => _index.isEven ? 1 : 0;
+  /// Stats for the creature causing the effect.
+  CreatureStats get my => _battle.stats[_meIndex];
 
   /// Stats for the enemy creature.
   CreatureStats get enemy => _battle.stats[_enemyIndex];
 
-  CreatureStats get _stats => _battle.stats[_index];
-  set _stats(CreatureStats stats) => _battle.setStats(_index, stats);
-  String get _playerName => _battle.creatures[_index].name;
+  /// Stats for the current attacker.
+  CreatureStats get attacker {
+    final attackerIndex = _attackerIndex;
+    if (attackerIndex == null) {
+      throw StateError('No current attacker.');
+    }
+    return _battle.stats[attackerIndex];
+  }
+
+  /// Stats for the current defender.
+  CreatureStats get defender {
+    final attackerIndex = _attackerIndex;
+    if (attackerIndex == null) {
+      throw StateError('No current defender.');
+    }
+    return _battle.stats[attackerIndex.isEven ? 1 : 0];
+  }
+
+  int get _enemyIndex => _meIndex.isEven ? 1 : 0;
+
+  CreatureStats get _myStats => _battle.stats[_meIndex];
+  set _myStats(CreatureStats stats) => _battle.setStats(_meIndex, stats);
+  String get _playerName => _battle.creatures[_meIndex].name;
 
   /// Returns true if this this creatures's first turn of the battle.
   bool get isFirstTurn => _battle.turnNumber == 1;
@@ -48,21 +76,21 @@ class EffectContext {
   // I tested with Emerald Earning and it was first turn, then every other turn.
   bool get isEveryOtherTurn => _battle.turnNumber.isOdd;
 
-  /// Returns the number of strikes the attacker has made this battle.
-  int get strikeCount => _battle.stats[_index].strikesMade;
+  /// Returns the number of strikes I have made this battle.
+  int get strikeCount => _battle.stats[_meIndex].strikesMade;
 
   /// Returns true if this is the nth strike for this creature.
   bool everyNStrikes(int n) => strikeCount % n == n - 1;
 
   /// true if this creature's health was full at the start of the battle.
   bool get myHealthWasFullAtBattleStart {
-    return _battle.initialCreatures[_index].healthFull;
+    return _battle.initialCreatures[_meIndex].healthFull;
   }
 
   /// Add an extra exposed trigger.
   void addExtraExposed(int count) {
-    final exposedLimit = _stats.exposedLimit + count;
-    _stats = _stats.copyWith(exposedLimit: exposedLimit);
+    final exposedLimit = _myStats.exposedLimit + count;
+    _myStats = _myStats.copyWith(exposedLimit: exposedLimit);
     _battle
         .log('$_playerName can now trigger exposed $exposedLimit extra times');
   }
@@ -70,7 +98,8 @@ class EffectContext {
   /// Add extra strikes for the attacker on next attack.
   void queueExtraStrike([int? damage]) {
     final extraStrike = ExtraStrike(source: _sourceName, damage: damage);
-    _stats = _stats.copyWith(extraStrikes: _stats.extraStrikes + [extraStrike]);
+    _myStats =
+        _myStats.copyWith(extraStrikes: _myStats.extraStrikes + [extraStrike]);
     _battle.log(
       '$_playerName queued extra strike (damage: $damage) from $_sourceName',
     );
@@ -79,46 +108,50 @@ class EffectContext {
   /// Add gold.
   void gainGold(int gold) {
     _expectPositive(gold, 'gold');
-    _stats = _stats.copyWith(gold: _stats.gold + gold);
+    _myStats = _myStats.copyWith(gold: _myStats.gold + gold);
     _battle.log('$_playerName gold ${_signed(gold)} from $_sourceName');
   }
 
   /// Add armor.
   void gainArmor(int armor) {
     _expectPositive(armor, 'armor');
-    _battle._adjustArmor(index: _index, armor: armor, source: _sourceName);
+    _battle._adjustArmor(index: _meIndex, armor: armor, source: _sourceName);
   }
 
   /// Remove armor.
   void loseArmor(int armor) {
     _expectPositive(armor, 'armor');
-    _battle._adjustArmor(index: _index, armor: -armor, source: _sourceName);
+    _battle._adjustArmor(index: _meIndex, armor: -armor, source: _sourceName);
   }
 
   /// Add speed.
   void gainSpeed(int speed) {
     _expectPositive(speed, 'speed');
-    _stats = _stats.copyWith(speed: _stats.speed + speed);
+    _myStats = _myStats.copyWith(speed: _myStats.speed + speed);
     _battle.log('$_playerName speed ${_signed(speed)} from $_sourceName');
   }
 
   /// Add attack.
   void gainAttack(int attack) {
     _expectPositive(attack, 'speed');
-    _battle._adjustAttack(attack: attack, index: _index, source: _sourceName);
+    _battle._adjustAttack(attack: attack, index: _meIndex, source: _sourceName);
   }
 
   /// Add thorns.
   void gainThorns(int thorns) {
     _expectPositive(thorns, 'thorns');
-    _stats = _stats.copyWith(thorns: _stats.thorns + thorns);
+    _myStats = _myStats.copyWith(thorns: _myStats.thorns + thorns);
     _battle.log('$_playerName thorns ${_signed(thorns)} from $_sourceName');
   }
 
   /// Adjust by a negative attack.
   void loseAttack(int attack) {
     _expectPositive(attack, 'attack');
-    _battle._adjustAttack(attack: -attack, index: _index, source: _sourceName);
+    _battle._adjustAttack(
+      attack: -attack,
+      index: _meIndex,
+      source: _sourceName,
+    );
   }
 
   /// Stun the enemy for a number of turns.
@@ -130,7 +163,7 @@ class EffectContext {
   /// Stun self for a number of turns.
   void stunSelf(int turns) {
     _expectPositive(turns, 'turns');
-    _battle._adjustStun(turns: turns, index: _index, source: _sourceName);
+    _battle._adjustStun(turns: turns, index: _meIndex, source: _sourceName);
   }
 
   /// Give armor to the enemy.
@@ -154,7 +187,7 @@ class EffectContext {
         source: _sourceName,
       )
       .._adjustArmor(
-        index: _index,
+        index: _meIndex,
         armor: stolen,
         source: _sourceName,
       );
@@ -163,7 +196,7 @@ class EffectContext {
   /// Restore health.
   void restoreHealth(int hp) => _battle._restoreHealth(
         hp: hp,
-        targetIndex: _index,
+        targetIndex: _meIndex,
         source: _sourceName,
       );
 
@@ -174,8 +207,8 @@ class EffectContext {
     // Don't clamp hp here, let it go below zero and then when copied
     // back into the stats it will be clamped to 0.
     final delta = -hp;
-    final newHp = min(_stats.hp + delta, _stats.maxHp);
-    _stats = _stats.copyWith(hp: newHp);
+    final newHp = min(_myStats.hp + delta, _myStats.maxHp);
+    _myStats = _myStats.copyWith(hp: newHp);
     _battle.log('$_playerName hp $delta from $_sourceName');
   }
 
@@ -196,25 +229,25 @@ class EffectContext {
   /// Take damage (from an item), will trigger onTakeDamage, hits armor first.
   void takeDamage(int damage) => _battle.dealDamage(
         damage: damage,
-        targetIndex: _index,
+        targetIndex: _meIndex,
         source: _sourceName,
       );
 
   /// Returns the number of items of a given material.
   int materialCount(ItemMaterial material) {
-    final inventory = _battle.creatures[_index].inventory;
+    final inventory = _battle.creatures[_meIndex].inventory;
     return inventory == null ? 0 : inventory.materialCount(material);
   }
 
   /// Returns the number of items of a given kind.
   int kindCount(ItemKind kind) {
-    final inventory = _battle.creatures[_index].inventory;
+    final inventory = _battle.creatures[_meIndex].inventory;
     return inventory == null ? 0 : inventory.kindCount(kind);
   }
 
   /// Returns the number of items with a given gem.
   int gemCount(Gem gem) {
-    final inventory = _battle.creatures[_index].inventory;
+    final inventory = _battle.creatures[_meIndex].inventory;
     return inventory == null ? 0 : inventory.gemCount(gem);
   }
 }
@@ -508,7 +541,11 @@ class BattleContext {
 
     // If we successfully restored health, trigger onHeal.
     if (restored > 0) {
-      _trigger(targetIndex, Trigger.onHeal);
+      _trigger(
+        Trigger.onHeal,
+        meIndex: targetIndex,
+        attackerIndex: _attackerIndex,
+      );
     }
   }
 
@@ -538,7 +575,11 @@ class BattleContext {
     }
 
     // Does it count as damage if it's absorbed by armor?
-    _trigger(targetIndex, Trigger.onTakeDamage);
+    _trigger(
+      Trigger.onTakeDamage,
+      meIndex: targetIndex,
+      attackerIndex: _attackerIndex,
+    );
 
     // newStats is not valid after setStats (which can happen inside a trigger)
     {
@@ -551,7 +592,11 @@ class BattleContext {
           targetIndex,
           newStats.copyWith(exposedCount: newStats.exposedCount + 1),
         );
-        _trigger(targetIndex, Trigger.onExposed);
+        _trigger(
+          Trigger.onExposed,
+          meIndex: targetIndex,
+          attackerIndex: _attackerIndex,
+        );
       }
     }
 
@@ -564,7 +609,11 @@ class BattleContext {
         !newStats.hasBeenWounded) {
       // Set "wounded" flag first to avoid infinite loops.
       setStats(targetIndex, newStats.copyWith(hasBeenWounded: true));
-      _trigger(targetIndex, Trigger.onWounded);
+      _trigger(
+        Trigger.onWounded,
+        meIndex: targetIndex,
+        attackerIndex: _attackerIndex,
+      );
     }
   }
 
@@ -579,7 +628,11 @@ class BattleContext {
       source: '$attackerName strike',
     );
     // OnHit only triggers on strikes.
-    _trigger(attackerIndex, Trigger.onHit);
+    _trigger(
+      Trigger.onHit,
+      meIndex: attackerIndex,
+      attackerIndex: defenderIndex,
+    );
 
     // Thorns only trigger on strikes.
     if (defender.thorns > 0) {
@@ -618,13 +671,22 @@ class BattleContext {
     }
   }
 
-  void _trigger(int index, Trigger trigger) {
-    final creature = creatures[index];
-    final beforeStats = stats[index];
-    if (creature.effect != null) {
-      final effectCxt = EffectContext(this, index, creature.name);
-      creature.effect?[trigger]?.call(effectCxt);
+  void _trigger(Trigger trigger, {required int meIndex, int? attackerIndex}) {
+    void callTrigger(CatalogItem item) {
+      final effectCxt = EffectContext(
+        battle: this,
+        meIndex: meIndex,
+        attackerIndex: attackerIndex,
+        sourceName: item.name,
+      );
+      item.effect?[trigger]?.call(effectCxt);
       _checkForDeath();
+    }
+
+    final creature = creatures[meIndex];
+    final beforeStats = stats[meIndex];
+    if (creature.effect != null) {
+      callTrigger(creature);
     }
 
     final inventory = creature.inventory;
@@ -632,26 +694,14 @@ class BattleContext {
       // Slightly odd to have the edge trigger before the weapon.
       final edge = inventory.edge;
       if (edge != null) {
-        final effectCxt = EffectContext(this, index, edge.name);
-        edge.effect?[trigger]?.call(effectCxt);
-        _checkForDeath();
+        callTrigger(edge);
       }
 
-      for (final item in inventory.items) {
-        final effectCxt = EffectContext(this, index, item.name);
-        item.effect?[trigger]?.call(effectCxt);
-        _checkForDeath();
-      }
-
-      final sets = inventory.sets;
-      for (final set in sets) {
-        final effectCxt = EffectContext(this, index, set.name);
-        set.effect?[trigger]?.call(effectCxt);
-        _checkForDeath();
-      }
+      inventory.items.forEach(callTrigger);
+      inventory.sets.forEach(callTrigger);
     }
 
-    final afterStats = stats[index];
+    final afterStats = stats[meIndex];
     final diffString = beforeStats.diffString(afterStats);
     // TODO(eseidel):  This can show diffs twice for nested effects.
     // e.g. if onHit triggers a heal and then onHeal does +1 armor, we'll
@@ -662,16 +712,26 @@ class BattleContext {
   }
 
   void _triggerOnBattleStart() {
+    // OnBattleStart happens before we decide who the attacker is.
+    // So intentionally do not pass an attackerIndex here.
     for (var index = 0; index < creatures.length; index++) {
-      // OnBattleStart happens before we decide who the attacker is.
-      // Pretend whoever is being triggered is the attacker to allow
-      // effects that depend on attacker/defender to work.
-      _attackerIndex = index;
-      _trigger(index, Trigger.onBattle);
+      _trigger(Trigger.onBattle, meIndex: index);
     }
   }
 
-  void _triggerOnTurn() => _trigger(attackerIndex, Trigger.onTurn);
+  void _triggerInitiative() {
+    // Initiative triggers after battle start so we know who the attacker is
+    // but we're still not passing an attackerIndex here.
+    for (var index = 0; index < creatures.length; index++) {
+      _trigger(Trigger.onInitiative, meIndex: index);
+    }
+  }
+
+  void _triggerOnTurn() => _trigger(
+        Trigger.onTurn,
+        meIndex: attackerIndex,
+        attackerIndex: attackerIndex,
+      );
 
   /// Initial list of creatures in this battle.
   final List<Creature> initialCreatures;
@@ -682,7 +742,7 @@ class BattleContext {
   /// Current stats for the battling creatures.
   final List<CreatureStats> stats;
 
-  late int _attackerIndex;
+  int? _attackerIndex;
 
   /// If true, log more detailed information.
   final bool verbose;
@@ -695,10 +755,15 @@ class BattleContext {
   int get turnNumber => (_turnsTaken ~/ 2) + 1;
 
   /// Index of the current attacker.
-  int get attackerIndex => _attackerIndex;
+  int get attackerIndex {
+    if (_attackerIndex == null) {
+      throw StateError('No current attacker.');
+    }
+    return _attackerIndex!;
+  }
 
   /// Index of the current defender.
-  int get defenderIndex => _attackerIndex.isEven ? 1 : 0;
+  int get defenderIndex => attackerIndex.isEven ? 1 : 0;
 
   /// Stats for the current attacker.
   CreatureStats get attacker => stats[attackerIndex];
@@ -774,6 +839,7 @@ class BattleContext {
   BattleResult run() {
     try {
       _triggerOnBattleStart();
+      _triggerInitiative();
       _decideFirstAttacker();
       log('${creatures[0].name}: ${stats[0]}');
       log('${creatures[1].name}: ${stats[1]}');
@@ -784,11 +850,11 @@ class BattleContext {
         _handleExtraStrikes();
         // Might advance multiple turns if both creatures are stunned.
         _nextAttacker();
-        if (_attackerIndex == 1 && turnNumber > 100) {
+        if (attackerIndex == 1 && turnNumber > 100) {
           // https://discord.com/channels/1041414829606449283/1209488593219756063/1276997595071512596
           dealDamage(
             damage: 10,
-            targetIndex: _attackerIndex,
+            targetIndex: attackerIndex,
             source: 'Time Limit',
           );
         }
