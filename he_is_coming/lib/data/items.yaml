@@ -268,6 +268,19 @@
   rarity: golden
   speed: 4
   inferred: true
+- name: Golden Cherry Bomb
+  id: 147
+  kind: food
+  rarity: golden
+  material: bomb
+  effect: "Battle Start: Deal 4 damage"
+  inferred: true
+- name: Golden Citrine Earring
+  id: 148
+  kind: jewelry
+  rarity: golden
+  effect: Gain 2 speed every other turn
+  inferred: true
 - name: Golden Cracked Bouldershield
   id: 41
   rarity: golden
@@ -287,6 +300,13 @@
   speed: -4
   effect: "Exposed: Gain 6 armor"
   inferred: true
+- name: Golden Emerald Crown
+  id: 149
+  kind: jewelry
+  rarity: golden
+  health: 16
+  attack: -2
+  inferred: true
 - name: Golden Emerald Earring
   id: 44
   rarity: golden
@@ -300,7 +320,7 @@
 - name: Golden Emergency Shield
   id: 46
   rarity: golden
-  effect: "Battle Start: If you have less speed than the enemy, gain 8 armor"
+  effect: "Initiative: If you have less speed than the enemy, gain 8 armor"
 - name: Golden Firecracker Belt
   id: 47
   rarity: golden
@@ -353,6 +373,13 @@
   rarity: golden
   material: wood
   health: 10
+- name: Golden Ruby Crown
+  id: 150
+  kind: jewelry
+  rarity: golden
+  attack: 2
+  speed: -2
+  inferred: true
 - name: Golden Ruby Earring
   id: 56
   kind: jewelry
@@ -364,6 +391,19 @@
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Gain 2 attack and take 4 damage"
+- name: Golden Saffron Feather
+  id: 151
+  rarity: golden
+  speed: 2
+  effect: "Turn Start: Convert 2 speed to 2 health"
+  inferred: true
+- name: Golden Sapphire Crown
+  id: 152
+  kind: jewelry
+  rarity: golden
+  health: -4
+  armor: 10
+  inferred: true
 - name: Golden Sapphire Earring
   id: 58
   rarity: golden

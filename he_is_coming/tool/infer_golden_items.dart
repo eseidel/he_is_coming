@@ -40,7 +40,7 @@ Item inferGoldenItem(Item item) {
 }
 
 DiffNode diffWithGolden(Item item, Item golden) {
-  final unstableKeys = <String>{'id', 'inferred'};
+  final unstableKeys = <String>{'id', 'inferred', 'version'};
   String encodeStableJson(Item item) {
     final json = item.toJson();
     for (final key in unstableKeys) {
