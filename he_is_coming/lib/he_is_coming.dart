@@ -29,21 +29,23 @@ void runSim() {
   final data = Data.load();
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
+  // https://discord.com/channels/1041414829606449283/1209488593219756063/1283944376069787710
   final items = [
-    'Gemstone Scepter',
-    'Horned Helmet',
-    'Golden Sapphire Earring',
-    'Boots of the Hero',
-    'Golden Leather Glove',
-    'Golden Emerald Earring',
-    'Emerald Earring',
-    'Pinecone Plate',
-    'Sapphire Ring',
+    'Haymaker',
+    'Blacksmith Bond',
+    'Cracked Whetstone',
+    'Explosive Surprise',
+    'Golden Leather Armor',
+    'Leather Glove',
+    'Leather Boots',
+    'Golden Ruby Ring',
+    'Cracked Bouldershield',
   ];
-  const edge = 'Bleeding Edge';
+  const edge = 'Lightning Edge';
   final oils = [
     'Attack Oil',
     'Armor Oil',
+    'Speed Oil',
   ];
   final player = data.player(items: items, edge: edge, oils: oils);
   final enemy = data.creatures['Woodland Abomination'];
