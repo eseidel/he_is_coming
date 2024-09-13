@@ -257,8 +257,8 @@
   effect: "Turn Start: If you have armor, gain 1 additional armor"
 - name: Gemstone Scepter
   id: 37
-  rarity: heroic
   kind: weapon
+  rarity: heroic
   attack: 2
   effect: "Draws power from emerald, ruby, sapphire and citrine items"
   version: 0.3.5
@@ -794,10 +794,10 @@
 - name: Tree Sap
   id: 119
   rarity: cauldron
-  material: wood
   parts:
     - Redwood Roast
     - Vampiric Wine
+  material: wood
   health: 5
   effect: "Wounded: Restore 1 health 6 times"
   version: 0.3.5

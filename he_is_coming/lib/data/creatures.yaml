@@ -78,6 +78,15 @@
   speed: 2
   effect: "Whenever Brittlebark Beast takes damage, he takes 3 additional damage"
   version: 0.3.5
+- name: Crazed Honeybear Level 3
+  id: 29
+  level: 3
+  health: 14
+  attack: 6
+  armor: 8
+  speed: 4
+  effect: Bear deals 5 additional damage while you have armor
+  version: 0.3.5
 - name: Gentle Giant
   id: 10
   boss: true
@@ -218,12 +227,3 @@
   health: 1000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"
-- name: Crazed Honeybear Level 3
-  id: 29
-  level: 3
-  health: 14
-  attack: 6
-  armor: 8
-  speed: 4
-  effect: "Bear deals 5 additional damage while you have armor"
-  version: 0.3.5
