@@ -1340,4 +1340,20 @@ void main() {
     // 5 dmg from wolf - 1 armor - 1 hp (overheal) - 1 armor - 1 hp = 1 dmg.
     expect(result4.first.hp, 8);
   });
+
+  test('Brittlebark Bow', () {
+    const item = 'Brittlebark Bow';
+    final player = data.player(items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 4);
+
+    final enemy = makeEnemy(attack: 1, health: 20);
+    final result = doBattle(first: player, second: enemy);
+    // Brittlebark Bow loses 2 attack after 3 strikes.
+    // First 3 strikes are 4 dmg each, then 2 dmg each after that.
+    // Enemy dies in 7 hits we take 6 dmg.
+    expect(result.first.hp, 4);
+    // Attack changes are only during battle.
+    expect(result.first.baseStats.attack, 4);
+  });
 }

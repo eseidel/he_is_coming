@@ -75,10 +75,6 @@ for onTurn and onHit for example).
 - First Turn: If you have more speed than the enemy, do 2 additional strikes for Swiftstrike Rapier
 - Exposed & Wounded: Lose 2 attack for Brittlebark Club
   wasExposed/wasWounded?
-- After 3 strikes, lose 2 attack for Brittlebark Bow
-  onAfterStrike?  onHit?
-- Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle for Pinecone Plate
-  Per-effect state?
 
 ### Other stuff
 

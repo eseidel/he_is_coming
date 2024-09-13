@@ -183,4 +183,8 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     },
   },
   'Blacksmith Bond': onBattle((c) => c.addExtraExposed(1)),
+  // This could also be done using computed stats once we have that.
+  'Brittlebark Bow':
+      // There are exactly 2 previous strikes during the 3rd strike.
+      onHit((c) => _if(c.my.strikesMade == 2, () => c.loseAttack(2))),
 });
