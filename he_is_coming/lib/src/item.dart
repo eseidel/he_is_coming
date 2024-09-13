@@ -165,6 +165,10 @@ class Item extends CatalogItem {
     ItemMaterial? material,
     ItemKind? kind,
     bool isUnique = false,
+    int? attack,
+    int? armor,
+    int? speed,
+    int? health,
   }) {
     Effect? triggers;
     if (effect != null) {
@@ -173,10 +177,17 @@ class Item extends CatalogItem {
         text: 'test',
       );
     }
+    final stats = Stats(
+      attack: attack ?? 0,
+      armor: armor ?? 0,
+      speed: speed ?? 0,
+      maxHp: health ?? 0,
+    );
     return Item(
       name: name ?? 'test',
       id: 0, // Unique ids are not required for test items.
       rarity: rarity,
+      stats: stats,
       effect: triggers,
       material: material,
       kind: kind,

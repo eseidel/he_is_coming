@@ -68,7 +68,6 @@ for onTurn and onHit for example).
   Temporary Stat modifiers or onTurnEnd?
 
 ### Possible Today
-- Do two additional strikes that always deal 1 damage for Bonespine Whip
 - Exposed & Wounded: Lose 2 attack for Brittlebark Club
   wasExposed/wasWounded?
 

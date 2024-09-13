@@ -197,7 +197,17 @@ class BestItemFinder {
 
     RunResult doBattle(Inventory inventory) {
       final player = playerWithInventory(level, inventory);
-      final result = Battle.resolve(first: player, second: enemy);
+
+      final BattleResult result;
+      try {
+        result = Battle.resolve(first: player, second: enemy);
+      } on Exception catch (e, stackTrace) {
+        logger
+          ..err('Failed to resolve battle: $e')
+          ..info('$stackTrace')
+          ..info('Inventory: $inventory');
+        exit(1);
+      }
       return RunResult(
         turns: result.turns,
         damage: -result.secondDelta.hp,

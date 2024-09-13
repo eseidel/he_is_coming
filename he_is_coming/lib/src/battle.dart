@@ -11,13 +11,13 @@ String _signed(int value) => value >= 0 ? '+$value' : '$value';
 
 void _expectPositive(int value, String valueName) {
   if (value <= 0) {
-    throw ArgumentError('$valueName ($value) must be positive');
+    throw Exception('$valueName ($value) must be positive');
   }
 }
 
 void _expectNonNegative(int value, String valueName) {
   if (value < 0) {
-    throw ArgumentError('$valueName ($value) must be non-negative');
+    throw Exception('$valueName ($value) must be non-negative');
   }
 }
 
@@ -628,8 +628,10 @@ class BattleContext {
     if (damage != null && damage <= 0) {
       throw ArgumentError('explicit strike damage should be positive');
     }
+    // Some items provide negative attack, so clamp to 0.
+    final clampedAttack = max(attacker.attack, 0);
     dealDamage(
-      damage: damage ?? attacker.attack,
+      damage: damage ?? clampedAttack,
       targetIndex: defenderIndex,
       source: '$attackerName strike',
     );
@@ -658,13 +660,12 @@ class BattleContext {
 
   void _handleExtraStrikes() {
     final extraStrikes = attacker.extraStrikes;
+    // Clear the extra strikes before handling them.  Any new extra strikes
+    // added during handling will be handled on the next turn.
+    setStats(attackerIndex, attacker.copyWith(extraStrikes: []));
     for (final extraStrike in extraStrikes) {
       _strike(extraStrike.damage);
     }
-    if (attacker.extraStrikes.length != extraStrikes.length) {
-      throw StateError('extraStrikes were added or removed during handling');
-    }
-    setStats(attackerIndex, attacker.copyWith(extraStrikes: []));
   }
 
   /// Probably this only needs to happen within the takeDamage effect?
