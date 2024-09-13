@@ -35,7 +35,7 @@ void runSim() {
     'Blacksmith Bond',
     'Cracked Whetstone',
     'Explosive Surprise',
-    'Golden Leather Armor',
+    'Golden Leather Vest',
     'Leather Glove',
     'Leather Boots',
     'Golden Ruby Ring',
