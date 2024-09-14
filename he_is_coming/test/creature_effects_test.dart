@@ -135,4 +135,19 @@ void main() {
     expect(result2.first.hp, 4);
     expect(result2.second.hp, 0);
   });
+
+  test('Gentle Giant', () {
+    final player = data.player(attack: 3, maxHp: 29);
+    expect(player.hp, 29);
+    expect(player.baseStats.attack, 4);
+    final enemy = creatures['Gentle Giant'];
+    final result = doBattle(first: player, second: enemy, verbose: true);
+    // Gentle Giant has 40hp, 0 armor, and 0 attack.
+    // Gentle Giant gains 2 thorns when taking damage, 4 if wounded.
+    // We kill the giant in 10 hits.  It has no thorns on the first hit
+    // but we take 2 dmg for the next 4, plus 4 dmg for the next 5
+    // for a total of 28
+    // TODO(eseidel): Apply thorn dmg on the killing blow.
+    expect(result.first.hp, 5);
+  });
 }

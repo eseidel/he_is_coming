@@ -628,6 +628,11 @@ class BattleContext {
     if (damage != null && damage <= 0) {
       throw ArgumentError('explicit strike damage should be positive');
     }
+    // Collect and clear thorns before takeDamage and onHit triggers.
+    final thorns = defender.thorns;
+    if (thorns > 0) {
+      setStats(defenderIndex, defender.copyWith(thorns: 0));
+    }
     // Some items provide negative attack, so clamp to 0.
     final clampedAttack = max(attacker.attack, 0);
     dealDamage(
@@ -643,13 +648,12 @@ class BattleContext {
     );
 
     // Thorns only trigger on strikes.
-    if (defender.thorns > 0) {
+    if (thorns > 0) {
       dealDamage(
-        damage: defender.thorns,
+        damage: thorns,
         targetIndex: attackerIndex,
         source: '$defenderName thorns',
       );
-      setStats(defenderIndex, defender.copyWith(thorns: 0));
     }
 
     setStats(

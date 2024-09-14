@@ -56,4 +56,6 @@ final creatureEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Razortusk Hog':
       onTurn((c) => _if(c.hadMoreSpeedAtStart, () => c.queueExtraStrike())),
+  'Gentle Giant':
+      onTakeDamage((c) => c.gainThorns(c.my.atOrBelowHalfHealth ? 4 : 2)),
 });
