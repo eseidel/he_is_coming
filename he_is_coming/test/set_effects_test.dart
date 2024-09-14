@@ -119,4 +119,21 @@ void main() {
     // And kill the enemy in 5 hits, taking 4 damage 2 blocked by armor.
     expect(result.first.hp, 11);
   });
+
+  test('Briar Greaves', () {
+    // Briar Greaves gives +1 thorns on take damage.
+    final player = playerWithSet('Briar Greaves');
+    // Assault Greaves gives "Whenever you take damage, deal 1 damage"
+    // Jagged Edge gives On Hit: Gain 2 thorns and take 1 damage
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 1);
+
+    final enemy = makeEnemy(health: 16, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // Each hit does 1 dmg, deals 1 dmg to us, and +1 dmg to the enemy
+    // generates 3 thorns (1 from greaves, 2 from edge)
+    // Each time we attack we deal 2 dmg, take 1 dmg and get 3 thorns.
+    // Each time they attack, we lose 1 hp, deal 1 dmg and get 1 thorns.
+    expect(result.first.hp, 4);
+  });
 }

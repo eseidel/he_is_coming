@@ -11,4 +11,5 @@ void _if(bool condition, void Function() fn) {
 final setEffects = EffectCatalog(<String, EffectMap>{
   'Redwood Crown': onWounded((c) => c.healToFull()),
   'Raw Hide': onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainAttack(1))),
+  'Briar Greaves': onTakeDamage((c) => c.gainThorns(1)),
 });
