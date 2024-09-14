@@ -340,48 +340,59 @@ class _CodeFieldState extends State<CodeField> {
 /// Helper for managing the battle state changes.  Lets callers speak in terms
 /// of changes to single items, and turns those into a full state change.
 /// Takes a callback to apply the state change.
-class _BattleStateController {
-  _BattleStateController({
+class BattleStateController {
+  /// Creates a new BattleStateController
+  BattleStateController({
     required this.data,
     required this.state,
     required this.changeState,
   });
 
+  /// Data
   final Data data;
+
+  /// BuildState
   final BuildState state;
+
+  /// Callback to apply the state change
   final void Function(BuildState) changeState;
 
   /// Level from the build state
-  Level get _level => state.level;
+  Level get level => state.level;
 
   /// Inventory from the build state
-  Inventory get _inventory => state.inventory;
+  Inventory get inventory => state.inventory;
 
+  /// Set the inventory
   void setInventory(Inventory inventory) {
-    changeState(BuildState(level: _level, inventory: inventory));
+    changeState(BuildState(level: level, inventory: inventory));
   }
 
+  /// Set the items
   void setItems(List<Item> items) {
     setInventory(
-      _inventory.copyWith(level: _level, items: items, setBonuses: data.sets),
+      inventory.copyWith(level: level, items: items, setBonuses: data.sets),
     );
   }
 
+  /// Set the level
   void setLevel(Level level) {
-    changeState(BuildState(level: level, inventory: _inventory));
+    changeState(BuildState(level: level, inventory: inventory));
   }
 
+  /// Re-roll the inventory
   void reroll() {
-    setInventory(Inventory.random(_level, Random(), data));
+    setInventory(Inventory.random(level, Random(), data));
   }
 
+  /// Add an item to the inventory
   void addItem(Item item) {
     // If the item is a weapon, replace the first item.
     // If the inventory is full, replace the last item.
-    final newItems = _inventory.items.toList();
+    final newItems = inventory.items.toList();
     if (item.isWeapon ||
-        _inventory.items.length >= Inventory.itemSlotCount(_level)) {
-      final index = item.isWeapon ? 0 : _inventory.items.length - 1;
+        inventory.items.length >= Inventory.itemSlotCount(level)) {
+      final index = item.isWeapon ? 0 : inventory.items.length - 1;
       newItems[index] = item;
     } else {
       // Otherwise add the item to the end.
@@ -390,8 +401,89 @@ class _BattleStateController {
     setItems(newItems);
   }
 
+  /// Remove an item from the inventory
   void removeItemAtIndex(int index) {
-    setItems(_inventory.items.toList()..removeAt(index));
+    setItems(inventory.items.toList()..removeAt(index));
+  }
+}
+
+/// Displays a control to switch between levels.
+class LevelSwitcher extends StatelessWidget {
+  /// LevelSwitcher constructor
+  const LevelSwitcher({
+    required this.level,
+    required this.setLevel,
+    super.key,
+  });
+
+  /// Level
+  final Level level;
+
+  /// Callback to set the level
+  final void Function(Level) setLevel;
+
+  @override
+  Widget build(BuildContext context) {
+    return NesIterableOptions<Level>(
+      values: Level.values,
+      onChange: setLevel,
+      optionBuilder: (context, level) => Text(
+        level.name,
+        style: const TextStyle(color: Palette.white),
+      ),
+      value: level,
+    );
+  }
+}
+
+/// Widget for editing the player's inventory.
+class PlayerEditor extends StatelessWidget {
+  /// PlayerEditor constructor
+  const PlayerEditor({
+    required this.controller,
+    super.key,
+  });
+
+  /// BattleStateController passed in by the parent.
+  final BattleStateController controller;
+
+  Data get _data => controller.data;
+  BuildState get _state => controller.state;
+  Inventory get _inventory => controller.inventory;
+  Level get _level => controller.level;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        PlayerBattleView(
+          inventory: _inventory,
+          level: _level,
+          clearItem: controller.removeItemAtIndex,
+        ),
+        const SizedBox(height: 16),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            AddItem(
+              data: _data,
+              addItem: controller.addItem,
+            ),
+            ElevatedButton.icon(
+              onPressed: controller.reroll,
+              icon: const Icon(Icons.casino),
+              label: const Text('Reroll'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        CodeField(
+          data: _data,
+          state: _state,
+          changeState: controller.changeState,
+        ),
+      ],
+    );
   }
 }
 
@@ -406,8 +498,8 @@ class BattlePage extends StatelessWidget {
   /// BuildState
   final BuildState state;
 
-  _BattleStateController _stateController(BuildContext context) =>
-      _BattleStateController(
+  BattleStateController _stateController(BuildContext context) =>
+      BattleStateController(
         state: state,
         data: data,
         changeState: (state) {
@@ -422,68 +514,39 @@ class BattlePage extends StatelessWidget {
   /// Level from the build state
   Level get _level => state.level;
 
-  /// Inventory from the build state
-  Inventory get _inventory => state.inventory;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Battle'),
       ),
-      body: Column(
-        children: <Widget>[
-          SizedBox(
-            width: 300,
-            child: NesIterableOptions<Level>(
-              values: Level.values,
-              onChange: _stateController(context).setLevel,
-              optionBuilder: (context, level) => Text(
-                level.name,
-                style: const TextStyle(color: Palette.white),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              width: 300,
+              child: LevelSwitcher(
+                level: _level,
+                setLevel: _stateController(context).setLevel,
               ),
-              value: _level,
             ),
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Column(
-                  children: [
-                    PlayerBattleView(
-                      inventory: _inventory,
-                      level: _level,
-                      clearItem: _stateController(context).removeItemAtIndex,
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        AddItem(
-                          data: data,
-                          addItem: _stateController(context).addItem,
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: _stateController(context).reroll,
-                          icon: const Icon(Icons.casino),
-                          label: const Text('Reroll'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    CodeField(
-                      data: data,
-                      state: state,
-                      changeState: _stateController(context).changeState,
-                    ),
-                  ],
+            Wrap(
+              children: <Widget>[
+                ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxWidth: 500, minWidth: 400),
+                  child: PlayerEditor(controller: _stateController(context)),
                 ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(child: EnemyResults(state: state, data: data)),
-            ],
-          ),
-        ],
+                const SizedBox(width: 16),
+                ConstrainedBox(
+                  constraints:
+                      const BoxConstraints(maxWidth: 500, minWidth: 400),
+                  child: EnemyResults(state: state, data: data),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

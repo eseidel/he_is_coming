@@ -42,7 +42,7 @@ class Style {
     fontWeight: FontWeight.bold,
     fontSize: 36,
     // Attempt to turn on small-caps, but our current font doesn't support it.
-    fontFeatures: [const FontFeature.enable('smcp')],
+    fontFeatures: [const FontFeature.enable('smcp')], // cspell:words: smcp
   );
 
   /// Stats Text Style
