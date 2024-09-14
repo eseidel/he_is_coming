@@ -1414,4 +1414,16 @@ void main() {
     // 5 dmg from the enemy.
     expect(result.first.hp, 15);
   });
+
+  test('Cherry Bomb', () {
+    const item = 'Cherry Bomb';
+    final player = data.player(items: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Cherry Bomb deals 2 dmg to the enemy on battle start
+    // So we kill it in 4 turns rather than 6, taking 3 dmg.
+    expect(result.first.hp, 7);
+  });
 }

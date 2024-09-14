@@ -196,4 +196,5 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Heart-shaped Acorn':
       onBattle((c) => _if(c.my.baseArmor == 0, () => c.healToFull())),
+  'Cherry Bomb': onBattle((c) => c.dealDamage(2)),
 });
