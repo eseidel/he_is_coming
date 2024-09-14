@@ -213,4 +213,9 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
         ..restoreHealth(1),
     ),
   ),
+  'Bloodmoon Ritual': onWounded(
+    (c) => c
+      ..gainThorns(10)
+      ..takeDamage(2),
+  ),
 });

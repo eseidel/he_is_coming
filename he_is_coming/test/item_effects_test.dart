@@ -1461,4 +1461,18 @@ void main() {
     expect(result.first.hp, 8);
     expect(result.first.baseStats.speed, 4);
   });
+
+  test('Bloodmoon Ritual', () {
+    const item = 'Bloodmoon Ritual';
+    final player = data.player(items: [item], hp: 6);
+    expect(player.hp, 6);
+
+    final enemy = makeEnemy(attack: 1, health: 12);
+    final result = doBattle(first: player, second: enemy);
+    // Bloodmoon Ritual gains 10 thorns on wounded and deals 2 dmg to self.
+    // We strike for 1, then enemy strikes for 1 and we're wounded
+    // and take 2 dmg but gain 10 thorns.
+    // Next strike we deal 1.  Enemy strikes for 1 and takes 10 thorns.
+    expect(result.first.hp, 2);
+  });
 }
