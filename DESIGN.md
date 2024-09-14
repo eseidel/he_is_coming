@@ -22,6 +22,15 @@ Add a trigger for death, rather than checking once a turn.  Otherwise it's
 possible to go negative and heal up in the same turn (with separate triggers
 for onTurn and onHit for example).
 
+### Questions
+
+Can attack go negative (e.g. multiple emerald crowns).  And if when attack is 0 does onHit fire?
+
+Do negative onHit effects apply during the killing blow?
+Positive onHit effects (like healing) resolve on the killing blow, so I suspect thorns do too?
+
+Does a heal of 0 counts as triggering "whenever you restore health"?
+
 ## Missing Effects
 
 ### Damage Modifiers:
