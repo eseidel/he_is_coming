@@ -796,7 +796,7 @@
   kind: weapon
   rarity: rare
   attack: 2
-  effect: "Initiative: If you have more speed than the enemy, do 2 additional strikes"
+  effect: "Initiative: If you have more speed than the enemy, do 2 additional strikes on your next turn"
   version: 0.3.5
 - name: Sword of the Hero
   id: 117
@@ -854,3 +854,9 @@
   kind: weapon
   rarity: common
   attack: 1
+- name: Sword Talisman
+  id: 126
+  unique: true
+  rarity: heroic
+  effect: "Whenever you deal non-weapon damage to the enemy, deal 1 additional damage"
+  version: 0.3.5

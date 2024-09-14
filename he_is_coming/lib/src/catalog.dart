@@ -121,6 +121,20 @@ abstract class Catalog<T extends CatalogItem> {
     if (this.idBits < _bitsNeededFor(items.length)) {
       throw ArgumentError('Not enough bits for ${items.length} items');
     }
+    final seenIds = <int>{};
+    for (final item in items) {
+      if (seenIds.contains(item.id)) {
+        throw ArgumentError('Duplicate id: ${item.id} in $T catalog');
+      }
+      seenIds.add(item.id);
+    }
+    final seenNames = <String>{};
+    for (final item in items) {
+      if (seenNames.contains(item.name)) {
+        throw ArgumentError('Duplicate name: ${item.name} in $T catalog');
+      }
+      seenNames.add(item.name);
+    }
   }
 
   /// Create a catalog from a list of items.

@@ -166,3 +166,10 @@
   x: 1
   y: 1
   version: 0.3.5
+- name: "So I started blasting"
+  id: 33
+  unlock: Deal 10+ non-weapon damage on your turn
+  reward: Sword Talisman
+  x: 12
+  y: 3
+  version: 0.3.5

@@ -12,7 +12,7 @@
   attack: 2
   speed: 3
   effect: "Every other strike: Gain 2 health on hit"
-- name: Bat Level 2
+- name: Bat Level 3
   id: 3
   level: 2
   health: 8
