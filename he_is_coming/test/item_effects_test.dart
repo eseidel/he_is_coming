@@ -1447,4 +1447,18 @@ void main() {
     final result2 = doBattle(first: player2, second: enemy);
     expect(result2.first.hp, 0);
   });
+
+  test('Saffron Feather', () {
+    const item = 'Saffron Feather';
+    final player = data.player(speed: 3, items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.speed, 4);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Saffron Feather converts 1 speed to 1 hp on each turn.
+    // We heal 4 times (first is overheal) and take 5 dmg from the enemy.
+    expect(result.first.hp, 8);
+    expect(result.first.baseStats.speed, 4);
+  });
 }

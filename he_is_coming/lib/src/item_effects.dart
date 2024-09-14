@@ -205,4 +205,12 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
         ..gainArmor(9),
     ),
   ),
+  'Saffron Feather': onTurn(
+    (c) => _if(
+      c.my.speed > 0,
+      () => c
+        ..loseSpeed(1)
+        ..restoreHealth(1),
+    ),
+  ),
 });
