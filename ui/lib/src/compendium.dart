@@ -724,25 +724,35 @@ class CompendiumPage extends StatelessWidget {
   /// Data
   final Data data;
 
-  static const _tabNames = <Widget>[
-    Tab(text: 'Items'),
-    Tab(text: 'Creatures'),
-    Tab(text: 'Edges'),
-    Tab(text: 'Oils'),
-    Tab(text: 'Sets'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+
+    const nameTabs = <Widget>[
+      Tab(text: 'Items'),
+      Tab(text: 'Creatures'),
+      Tab(text: 'Edges'),
+      Tab(text: 'Oils'),
+      Tab(text: 'Sets'),
+    ];
+
+    const iconTabs = <Widget>[
+      Tab(icon: Icon(Icons.shield)),
+      Tab(icon: Icon(Icons.pets)),
+      Tab(icon: Icon(Icons.carpenter)),
+      Tab(icon: Icon(Icons.water_drop)),
+      Tab(icon: Icon(Icons.workspaces)),
+    ];
+
+    final tabs = size.width > 600 ? nameTabs : iconTabs;
+
     return DefaultTabController(
-      length: _tabNames.length,
+      length: tabs.length,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: const Text('He is Coming'),
-          bottom: const TabBar(
-            tabs: _tabNames,
-          ),
+          bottom: TabBar(tabs: tabs),
         ),
         body: TabBarView(
           children: <Widget>[

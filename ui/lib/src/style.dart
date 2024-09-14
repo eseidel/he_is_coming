@@ -36,6 +36,15 @@ class Style {
     );
   }
 
+  /// Title Text Style
+  static final TextStyle title = Style.textTheme.titleLarge!.copyWith(
+    color: Palette.attack,
+    fontWeight: FontWeight.bold,
+    fontSize: 36,
+    // Attempt to turn on small-caps, but our current font doesn't support it.
+    fontFeatures: [const FontFeature.enable('smcp')],
+  );
+
   /// Stats Text Style
   static final TextStyle stats = Style.textTheme.labelMedium!.apply();
 

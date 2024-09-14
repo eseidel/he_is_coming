@@ -123,13 +123,19 @@ class TitleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('He is Coming'),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const Spacer(),
+            Expanded(
+              flex: 2,
+              child: Text(
+                'He Is\nComing',
+                style: Style.title,
+              ),
+            ),
+            const Spacer(),
             ElevatedButton(
               onPressed: () => _router.goNamed('random_battle'),
               child: const Text('Battle'),
@@ -148,6 +154,7 @@ class TitleScreen extends StatelessWidget {
                 _GitHubLink(),
               ],
             ),
+            const Spacer(),
           ],
         ),
       ),
