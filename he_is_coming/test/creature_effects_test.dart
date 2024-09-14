@@ -150,4 +150,19 @@ void main() {
     // TODO(eseidel): Apply thorn dmg on the killing blow.
     expect(result.first.hp, 5);
   });
+
+  test('Featherweight Edge', () {
+    const edge = 'Featherweight Edge';
+    final player = data.player(speed: 2, maxHp: 10, edge: edge);
+    expect(player.hp, 10);
+    expect(player.baseStats.attack, 1);
+    expect(player.baseStats.speed, 2);
+    final enemy = makeEnemy(health: 12, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // On the first and second turns we convert 1 speed to 1 attack.
+    // So we hit for 1, 2, 3, 3, 3 and kill in 5 hits. We take 4 dmg.
+    expect(result.first.hp, 6);
+    expect(player.baseStats.attack, 1);
+    expect(player.baseStats.speed, 2);
+  });
 }

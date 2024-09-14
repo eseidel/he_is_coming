@@ -133,8 +133,13 @@ class EffectContext {
   /// Add speed.
   void gainSpeed(int speed) {
     _expectPositive(speed, 'speed');
-    _myStats = _myStats.copyWith(speed: _myStats.speed + speed);
-    _battle.log('$_playerName speed ${_signed(speed)} from $_sourceName');
+    _battle._adjustSpeed(speed: speed, index: _meIndex, source: _sourceName);
+  }
+
+  /// Remove speed.
+  void loseSpeed(int speed) {
+    _expectPositive(speed, 'speed');
+    _battle._adjustSpeed(speed: -speed, index: _meIndex, source: _sourceName);
   }
 
   /// Add attack.
@@ -487,6 +492,16 @@ class BattleContext {
   /// Decide who goes first.
   void _decideFirstAttacker() {
     _attackerIndex = _firstAttackerIndex(stats);
+  }
+
+  void _adjustSpeed({
+    required int speed,
+    required int index,
+    required String source,
+  }) {
+    final target = stats[index];
+    setStats(index, target.copyWith(speed: target.speed + speed));
+    log('${creatures[index].name} speed ${_signed(speed)} from $source');
   }
 
   void _adjustAttack({

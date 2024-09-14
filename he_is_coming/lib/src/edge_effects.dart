@@ -20,4 +20,12 @@ final edgeEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Cutting Edge': onHit((c) => c.dealDamage(1)),
   'Agile Edge': onBattle((c) => c.queueExtraStrike()),
+  'Featherweight Edge': onHit(
+    (c) => _if(
+      c.my.speed > 0,
+      () => c
+        ..loseSpeed(1)
+        ..gainAttack(1),
+    ),
+  ),
 });
