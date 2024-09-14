@@ -194,4 +194,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
       ..queueExtraStrike(damage: 1)
       ..queueExtraStrike(damage: 1),
   ),
+  'Heart-shaped Acorn':
+      onBattle((c) => _if(c.my.baseArmor == 0, () => c.healToFull())),
 });

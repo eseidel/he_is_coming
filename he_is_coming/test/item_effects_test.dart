@@ -1402,4 +1402,16 @@ void main() {
     // Thus we do 4 dmg per turn, killing the enemy in 5 turns.
     expect(result.first.hp, 6);
   });
+
+  test('Heart-shaped Acorn', () {
+    const item = 'Heart-shaped Acorn';
+    final player = data.player(items: [item], maxHp: 20, hp: 10);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Heart-shaped Acorn heals to full if base armor is 0, then we take
+    // 5 dmg from the enemy.
+    expect(result.first.hp, 15);
+  });
 }

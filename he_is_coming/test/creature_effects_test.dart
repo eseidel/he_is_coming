@@ -141,7 +141,7 @@ void main() {
     expect(player.hp, 29);
     expect(player.baseStats.attack, 4);
     final enemy = creatures['Gentle Giant'];
-    final result = doBattle(first: player, second: enemy, verbose: true);
+    final result = doBattle(first: player, second: enemy);
     // Gentle Giant has 40hp, 0 armor, and 0 attack.
     // Gentle Giant gains 2 thorns when taking damage, 4 if wounded.
     // We kill the giant in 10 hits.  It has no thorns on the first hit

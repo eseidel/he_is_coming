@@ -206,6 +206,13 @@ class EffectContext {
         source: _sourceName,
       );
 
+  /// Restore health to full.
+  void healToFull() {
+    if (!_myStats.isHealthFull) {
+      restoreHealth(_myStats.lostHp);
+    }
+  }
+
   /// Lose health.  Careful this is not the same as taking damage!
   /// This bypasses armor and is for special effects.
   void loseHealth(int hp) {
@@ -216,12 +223,6 @@ class EffectContext {
     final newHp = min(_myStats.hp + delta, _myStats.maxHp);
     _myStats = _myStats.copyWith(hp: newHp);
     _battle.log('$_playerName hp $delta from $_sourceName');
-  }
-
-  /// Reduce the enemy's max hp by a given amount.
-  void reduceEnemyMaxHp(int hp) {
-    _expectPositive(hp, 'hp');
-    _battle._adjustMaxHp(delta: -hp, index: _enemyIndex, source: _sourceName);
   }
 
   /// Deal damage to the enemy.
@@ -282,7 +283,7 @@ class ExtraStrike {
 class CreatureStats {
   /// Create a CreatureStats.
   const CreatureStats({
-    required this.maxHp,
+    required this.baseStats,
     required this.hp,
     required this.armor,
     required this.speed,
@@ -301,7 +302,7 @@ class CreatureStats {
   factory CreatureStats.fromCreature(Creature creature) {
     final stats = creature.baseStats;
     return CreatureStats(
-      maxHp: stats.maxHp,
+      baseStats: stats,
       hp: creature.hp,
       armor: stats.armor,
       speed: stats.speed,
@@ -310,8 +311,14 @@ class CreatureStats {
     );
   }
 
-  /// Max health.  Does not change during battle.
-  final int maxHp;
+  /// Base stats for the creature.  Does not change during battle.
+  final Stats baseStats;
+
+  /// Maximum health.
+  int get maxHp => baseStats.maxHp;
+
+  /// Base armor.
+  int get baseArmor => baseStats.armor;
 
   /// Current health.
   final int hp;
@@ -368,7 +375,7 @@ class CreatureStats {
 
   /// Create a copy of this with some fields updated.
   CreatureStats copyWith({
-    int? maxHp,
+    Stats? baseStats,
     int? hp,
     int? armor,
     int? attack,
@@ -382,13 +389,13 @@ class CreatureStats {
     List<ExtraStrike>? extraStrikes,
     int? strikesMade,
   }) {
-    final newMaxHp = maxHp ?? this.maxHp;
+    final newMaxHp = baseStats != null ? baseStats.maxHp : maxHp;
     final newHp = hp ?? this.hp;
     if (newHp > newMaxHp) {
       throw ArgumentError('hp cannot be greater than maxHp');
     }
     return CreatureStats(
-      maxHp: newMaxHp,
+      baseStats: baseStats ?? this.baseStats,
       hp: newHp,
       armor: armor ?? this.armor,
       speed: speed ?? this.speed,
@@ -491,23 +498,6 @@ class BattleContext {
     // Unclear if attack is clamped?  Probably strike values are just clamped?
     setStats(index, target.copyWith(attack: max(target.attack + attack, 0)));
     log('${creatures[index].name} attack ${_signed(attack)} from $source');
-  }
-
-  void _adjustMaxHp({
-    required int delta,
-    required int index,
-    required String source,
-  }) {
-    final target = stats[index];
-    final newMaxHp = target.maxHp + delta;
-    if (delta < 0 && target.hp > newMaxHp) {
-      // If we're reducing maxHp, we need to reduce hp as well.
-      setStats(index, target.copyWith(maxHp: newMaxHp, hp: newMaxHp));
-    } else {
-      // Increasing maxHp doesn't change current hp.
-      setStats(index, target.copyWith(maxHp: newMaxHp));
-    }
-    log('${creatures[index].name} maxHp ${_signed(delta)} from $source');
   }
 
   void _adjustStun({
