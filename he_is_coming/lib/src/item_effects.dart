@@ -197,4 +197,12 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Heart-shaped Acorn':
       onBattle((c) => _if(c.my.baseArmor == 0, () => c.healToFull())),
   'Cherry Bomb': onBattle((c) => c.dealDamage(2)),
+  'Plated Greaves': onExposed(
+    (c) => _if(
+      c.my.speed >= 3,
+      () => c
+        ..loseSpeed(3)
+        ..gainArmor(9),
+    ),
+  ),
 });

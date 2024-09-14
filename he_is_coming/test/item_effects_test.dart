@@ -1426,4 +1426,25 @@ void main() {
     // So we kill it in 4 turns rather than 6, taking 3 dmg.
     expect(result.first.hp, 7);
   });
+
+  test('Plated Greaves', () {
+    const item = 'Plated Greaves';
+    final player = data.player(armor: 1, speed: 3, items: [item]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 1);
+    expect(player.baseStats.speed, 3);
+
+    final enemy = makeEnemy(attack: 1, health: 12);
+    final result = doBattle(first: player, second: enemy);
+    // Plated Greaves converts 3 speed into 9 armor on exposed.
+    // Wolf does 11 dmg, we have 10 armor total, so we take 1.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.armor, 1);
+    expect(player.baseStats.speed, 3);
+
+    final player2 = data.player(armor: 1, speed: 2, items: [item]);
+    // Item does nothing if we don't have 3 speed to convert.
+    final result2 = doBattle(first: player2, second: enemy);
+    expect(result2.first.hp, 0);
+  });
 }
