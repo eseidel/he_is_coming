@@ -16,9 +16,9 @@
 - name: Raw Hide
   id: 4
   parts:
-    - Leather Armor
+    - Leather Vest
     - Leather Boots
-    - Leather Gloves
+    - Leather Glove
   effect: Gain 1 attack every other turn
   version: 0.3.5
 - name: Redwood Crown

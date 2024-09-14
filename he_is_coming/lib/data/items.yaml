@@ -550,6 +550,7 @@
   id: 78
   rarity: rare
   effect: "If you have more speed than the enemy, gain 2 attack"
+  version: 0.3.5
 - name: Leather Glove
   id: 79
   rarity: common

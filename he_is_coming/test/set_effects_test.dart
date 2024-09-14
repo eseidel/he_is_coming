@@ -32,8 +32,12 @@ _Needed _lookupSet(String name, Data data) {
       needed.items.add(item.name);
       continue;
     }
+    final edge = data.edges.get(part);
+    if (edge == null) {
+      throw ArgumentError('Unknown item or edge: $part');
+    }
     if (needed.edge != null) {
-      throw Exception('Multiple edges in set $name');
+      throw Exception('Multiple edges in set $name (${needed.edge}, $part)');
     }
     needed.edge = part;
   }
@@ -93,5 +97,26 @@ void main() {
     expect(player.baseStats.armor, 4);
     expect(player.baseStats.attack, 4);
     expect(player.baseStats.speed, 3);
+  });
+
+  test('Raw Hide', () {
+    // Raw Hide gives +1 attack every other turn.
+    // Leather items give
+    // - Boots: "If you have more speed than the enemy, gain 2 attack"
+    // - Glove: +3 health, +1 speed
+    // - Vest: +2 armor, +1 speed
+    final player = playerWithSet('Raw Hide');
+    expect(player.hp, 13);
+    expect(player.baseStats.armor, 2);
+    // This is 1 now, but will turn into 3 after onBattle.
+    // If we had computed stats we could show this as 3 now.
+    expect(player.baseStats.attack, 1);
+
+    final enemy = makeEnemy(health: 19, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // We attack with 3, +1 on turn 1 and +1 on turn 3.
+    // So we hit with 3, 3, 4, 4, 5
+    // And kill the enemy in 5 hits, taking 4 damage 2 blocked by armor.
+    expect(result.first.hp, 11);
   });
 }
