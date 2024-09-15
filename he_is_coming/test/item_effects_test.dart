@@ -1575,4 +1575,17 @@ void main() {
     // We kill it in 4 turns, having taken 5 dmg.
     expect(result.first.hp, 5);
   });
+
+  test('Razorvine Talisman', () {
+    const item = 'Razorvine Talisman';
+    final thornsEveryTurn = Item.test(effect: onTurn((c) => c.gainThorns(1)));
+    final player = data.player(items: [item], customItems: [thornsEveryTurn]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Razorvine Talisman gives 1 thorns every time we gain thorns.
+    // So we gain 2 thorns every turn and kill the wolf in 2 turns taking 2 dmg
+    expect(result.first.hp, 8);
+  });
 }

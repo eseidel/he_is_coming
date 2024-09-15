@@ -159,8 +159,11 @@ class EffectContext {
   /// Add thorns.
   void gainThorns(int thorns) {
     _expectPositive(thorns, 'thorns');
-    _myStats = _myStats.copyWith(thorns: _myStats.thorns + thorns);
-    _battle.log('$_playerName thorns ${_signed(thorns)} from $_sourceName');
+    _battle._adjustThorns(
+      thorns: thorns,
+      targetIndex: _meIndex,
+      source: _sourceName,
+    );
   }
 
   /// Adjust by a negative attack.
@@ -542,13 +545,35 @@ class BattleContext {
     required String source,
   }) {
     final target = stats[targetIndex];
+    final targetName = creatures[targetIndex].name;
     setStats(targetIndex, target.copyWith(armor: target.armor + armor));
-    log('${creatures[targetIndex].name} armor ${_signed(armor)} from $source');
+    log('$targetName armor ${_signed(armor)} from $source');
 
     // If we successfully gained armor, trigger onGainArmor.
     if (armor > 0) {
       _trigger(
         Trigger.onGainArmor,
+        meIndex: targetIndex,
+        attackerIndex: _attackerIndex,
+        parentSource: source,
+      );
+    }
+  }
+
+  void _adjustThorns({
+    required int thorns,
+    required int targetIndex,
+    required String source,
+  }) {
+    final target = stats[targetIndex];
+    final targetName = creatures[targetIndex].name;
+    setStats(targetIndex, target.copyWith(thorns: target.thorns + thorns));
+    log('$targetName thorns ${_signed(thorns)} from $source');
+
+    // If we successfully gained thorns, trigger onGainThorns.
+    if (thorns > 0) {
+      _trigger(
+        Trigger.onGainThorns,
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,
@@ -564,11 +589,12 @@ class BattleContext {
   }) {
     _expectPositive(hp, 'hp');
     final target = stats[targetIndex];
+    final targetName = creatures[targetIndex].name;
     final newHp = min(target.hp + hp, target.maxHp);
     final newStats = target.copyWith(hp: newHp);
     setStats(targetIndex, newStats);
     final restored = newHp - target.hp;
-    log('$source restored $restored hp to ${creatures[targetIndex].name}');
+    log('$source restored $restored hp to $targetName');
 
     // If we successfully restored health, trigger onRestoreHealth.
     if (restored > 0) {

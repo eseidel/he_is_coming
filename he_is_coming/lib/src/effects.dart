@@ -44,6 +44,9 @@ EffectMap onRestoreHealth(EffectFn fn) => {Trigger.onRestoreHealth: fn};
 /// Creates an [Effect] with an onGainArmor callback.
 EffectMap onGainArmor(EffectFn fn) => {Trigger.onGainArmor: fn};
 
+/// Creates an [Effect] with an onGainThorns callback.
+EffectMap onGainThorns(EffectFn fn) => {Trigger.onGainThorns: fn};
+
 /// Enum representing the different effects that can be triggered.
 enum Trigger {
   /// Called on battle start.
@@ -74,6 +77,9 @@ enum Trigger {
 
   /// Called when any armor is gained.
   onGainArmor,
+
+  /// Called when any thorns are gained.
+  onGainThorns,
 }
 
 /// Container for callbacks for items.
