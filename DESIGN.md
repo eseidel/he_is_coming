@@ -76,10 +76,6 @@ Does a heal of 0 counts as triggering "whenever you restore health"?
 - First Turn: Gain 2 attack for Cracked Whetstone
   Temporary Stat modifiers or onTurnEnd?
 
-### Possible Today
-- Exposed & Wounded: Lose 2 attack for Brittlebark Club
-  wasExposed/wasWounded?
-
 ### Other stuff
 
 - Overhealing is dealt as damage for Emerald Gemstone

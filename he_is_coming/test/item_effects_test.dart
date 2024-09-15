@@ -1489,4 +1489,18 @@ void main() {
     // us, triggering a second heal and second 3 dmg, leaving us at 8.
     expect(result.first.hp, 8);
   });
+
+  test('Explosive Sword', () {
+    const item = 'Explosive Sword';
+    final player = data.player(armor: 1, items: [item], hp: 6);
+    expect(player.hp, 6);
+
+    final enemy = makeEnemy(attack: 1, health: 10);
+    // Explosive sword deals 3 dmg on exposed and again on wounded.
+    // Thus we kill the enemy on its second turn.
+    // 2 dmg from strike, 3 dmg from exposed
+    // 2 dmg from strike, 3 dmg from wounded
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 5);
+  });
 }

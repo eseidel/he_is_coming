@@ -218,12 +218,11 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
       ..gainThorns(10)
       ..takeDamage(2),
   ),
-  'Cherry Cocktail': {
-    Trigger.onBattle: (c) => c
+  'Cherry Cocktail': multiTrigger(
+    [Trigger.onBattle, Trigger.onWounded],
+    (c) => c
       ..dealDamage(3)
       ..restoreHealth(3),
-    Trigger.onWounded: (c) => c
-      ..dealDamage(3)
-      ..restoreHealth(3),
-  },
+  ),
+  'Explosive Sword': onExposedAndWounded((c) => c.dealDamage(3)),
 });

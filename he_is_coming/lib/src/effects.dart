@@ -28,6 +28,16 @@ EffectMap onExposed(EffectFn fn) => {Trigger.onExposed: fn};
 /// Creates an [Effect] with an onWounded callback.
 EffectMap onWounded(EffectFn fn) => {Trigger.onWounded: fn};
 
+/// Creates an [Effect] with multiple triggers.
+EffectMap multiTrigger(List<Trigger> triggers, EffectFn fn) =>
+    Map.fromEntries(triggers.map((trigger) => MapEntry(trigger, fn)));
+
+/// Creates an [Effect] with onExposed and onWounded callbacks.
+EffectMap onExposedAndWounded(EffectFn fn) => multiTrigger(
+      [Trigger.onExposed, Trigger.onWounded],
+      fn,
+    );
+
 /// Creates an [Effect] with an onHeal callback.
 EffectMap onHeal(EffectFn fn) => {Trigger.onHeal: fn};
 
