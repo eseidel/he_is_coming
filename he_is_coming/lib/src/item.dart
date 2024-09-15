@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
@@ -204,8 +203,7 @@ class Item extends CatalogItem {
   factory Item.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     final name = yaml['name'] as String;
     final weapon = yaml['weapon'] as bool? ?? false;
-    final tagsNames = yaml['tags'] as List? ?? [];
-    final tags = tagsNames.cast<String>().map(ItemTag.fromJson).toSet();
+    final tags = Item._tagsFromYaml(yaml['tags']) ?? {};
     final kind = yaml.get('kind', ItemKind.values);
     final rarity = yaml.expect('rarity', ItemRarity.values);
     final material = yaml.get('material', ItemMaterial.values);
@@ -295,13 +293,33 @@ class Item extends CatalogItem {
     'version',
   ];
 
+  static Set<ItemTag>? _tagsFromYaml(dynamic json) {
+    if (json == null) {
+      return null;
+    }
+    if (json is String) {
+      return {ItemTag.fromJson(json)};
+    }
+    if (json is List) {
+      return json.map((e) => ItemTag.fromJson(e as String)).toSet();
+    }
+    throw UnimplementedError('Unknown tag type: $json');
+  }
+
+  static dynamic _tagsToJson(Set<ItemTag> tags) {
+    if (tags.length == 1) {
+      return tags.first.toJson();
+    }
+    return tags.map((t) => t.toJson()).toList();
+  }
+
   @override
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'id': id,
       if (isWeapon) 'weapon': isWeapon,
-      if (tags.isNotEmpty) 'tags': tags.map((t) => t.toJson()).sorted(),
+      if (tags.isNotEmpty) 'tags': _tagsToJson(tags),
       if (isUnique) 'unique': isUnique,
       'kind': kind?.toJson(),
       'rarity': rarity.toJson(),
