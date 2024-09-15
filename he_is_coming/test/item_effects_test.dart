@@ -1632,4 +1632,21 @@ void main() {
     // We kill the enemy on their 4th attack, taking 4 dmg.
     expect(result.first.hp, 6);
   });
+
+  test('Citrine Earring', () {
+    const item = 'Citrine Earring';
+    final speedToDamage =
+        Item.test(effect: onTurn((c) => c.dealDamage(c.my.speed)));
+    final player = data.player(items: [item], customItems: [speedToDamage]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 10);
+    final result = doBattle(first: player, second: enemy);
+    // Citrine Earring gains speed every other turn.
+    // Our test item does damage based on speed every turn.
+    // Custom items are before items, so we deal 0 dmg on the first turn.
+    // So 0, 1, 1, 2, 2, etc.  We also strike every turn for 1.
+    // Enemy dies on our 5th turn from the test item dmg.
+    expect(result.first.hp, 6);
+  });
 }

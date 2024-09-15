@@ -236,4 +236,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Razor Scales': onLoseArmor(
     (c) => _if(c.my.hasBeenExposed, () => c.dealDamage(c.armorLost)),
   ),
+  'Citrine Earring': onTurn(
+    (c) => _if(c.isEveryOtherTurn, () => c.gainSpeed(1)),
+  ),
 });
