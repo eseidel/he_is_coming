@@ -1532,4 +1532,17 @@ void main() {
     // TODO(eseidel): resolve onHit on the fatal blow.
     expect(result.first.hp, 9);
   });
+
+  test('Brittlebark Armor', () {
+    const item = 'Brittlebark Armor';
+    final player = data.player(items: [item]);
+    // Brittlebark Armor gives +10 maxHp, but makes you take 1 dmg every time
+    // you take damage.
+    expect(player.hp, 20);
+
+    final enemy = makeEnemy(attack: 2, health: 6);
+    // Enemy hits 5 times for a total of 15 dmg.
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 5);
+  });
 }
