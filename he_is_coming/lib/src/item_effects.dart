@@ -83,7 +83,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Fortified Gauntlet':
       onTurn((c) => _if(c.my.armor > 0, () => c.gainArmor(1))),
-  'Iron Rose': onHeal((c) => c.gainArmor(1)),
+  'Iron Rose': onRestoreHealth((c) => c.gainArmor(1)),
   'Featherweight Coat': onBattle(
     (c) => _if(
       c.my.armor > 0,
@@ -226,6 +226,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
   'Explosive Sword': onExposedAndWounded((c) => c.dealDamage(3)),
   'Brittlebark Club': onExposedAndWounded((c) => c.loseAttack(2)),
-  'Sanguine Rose': onHeal((c) => c.restoreHealth(1)),
+  'Sanguine Rose': onRestoreHealth((c) => c.restoreHealth(1)),
   'Brittlebark Armor': onTakeDamage((c) => c.takeDamage(1)),
 });

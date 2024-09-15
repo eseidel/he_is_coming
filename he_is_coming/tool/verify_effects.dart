@@ -36,7 +36,7 @@ String? implementedTrigger(CatalogItem item) {
       return 'Exposed';
     case Trigger.onWounded:
       return 'Wounded';
-    case Trigger.onHeal:
+    case Trigger.onRestoreHealth:
       return 'Whenever you restore health';
   }
 }

@@ -551,7 +551,7 @@ class BattleContext {
     // If we successfully restored health, trigger onHeal.
     if (restored > 0) {
       _trigger(
-        Trigger.onHeal,
+        Trigger.onRestoreHealth,
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,

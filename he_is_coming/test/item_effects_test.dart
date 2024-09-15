@@ -1032,7 +1032,7 @@ void main() {
     // Tree Sap heals 1 hp 5 times on wounded, negating all of the wolf's dmg.
     expect(result.first.hp, 8);
 
-    final heals = Item.test(effect: onHeal((c) => c.gainArmor(1)));
+    final heals = Item.test(effect: onRestoreHealth((c) => c.gainArmor(1)));
     final player2 = data.player(customItems: [item, heals], hp: 8);
     expect(player2.baseStats.maxHp, 15);
     expect(player2.hp, 8);
