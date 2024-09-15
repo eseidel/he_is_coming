@@ -48,11 +48,13 @@ void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
-  Creature playerWithSet(String name) {
+  Creature playerWithSet(String name, {int? armor, int? hp}) {
     final needed = _lookupSet(name, data);
     return data.player(
       items: needed.items,
       edge: needed.edge,
+      armor: armor,
+      hp: hp,
     );
   }
 
@@ -135,5 +137,24 @@ void main() {
     // Each time we attack we deal 2 dmg, take 1 dmg and get 3 thorns.
     // Each time they attack, we lose 1 hp, deal 1 dmg and get 1 thorns.
     expect(result.first.hp, 4);
+  });
+
+  test('Stone Scales', () {
+    // Stone Scales gives +10 armor on wounded.
+    final player = playerWithSet('Stone Scales', armor: 1, hp: 6);
+    // Petrifying Flask gives 10 armor on wounded and self-stuns for 2 turns.
+    // Razor Scales turns armor loss into dmg after exposed.
+    expect(player.hp, 6);
+    expect(player.baseStats.armor, 1);
+    expect(player.baseStats.attack, 1);
+
+    final enemy = makeEnemy(health: 6, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // On the first hit we're exposed (enabling Razor Scales)
+    // On the second hit we're wounded (triggering 20 armor) and 2 self-stun.
+    // We hit twice before stun, then once after.
+    // It dies on turn 5.
+    expect(result.first.hp, 5);
+    expect(result.turns, 4); // 4 means "turn 5", 4 turns have passed.
   });
 }
