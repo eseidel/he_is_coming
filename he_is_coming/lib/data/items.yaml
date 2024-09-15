@@ -79,7 +79,7 @@
   armor: 2
   effect: "Turn Start: Convert 1 armor to 2 thorns"
   version: 0.3.5
-- name: Briar rose
+- name: Briar Rose
   id: 136
   unique: true
   rarity: rare

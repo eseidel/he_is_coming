@@ -229,4 +229,5 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Sanguine Rose': onRestoreHealth((c) => c.restoreHealth(1)),
   'Brittlebark Armor': onTakeDamage((c) => c.takeDamage(1)),
   'Shield Talisman': onGainArmor((c) => c.gainArmor(1)),
+  'Briar Rose': onRestoreHealth((c) => c.gainThorns(2)),
 });

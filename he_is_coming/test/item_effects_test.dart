@@ -1559,4 +1559,20 @@ void main() {
     // We attack first, so it only does 1 dmg for each of its attacks.
     expect(result.first.hp, 5);
   });
+
+  test('Briar Rose', () {
+    const item = 'Briar Rose';
+    final healOnHit = Item.test(effect: onTurn((c) => c.restoreHealth(1)));
+    final player = data.player(items: [item], customItems: [healOnHit]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 2, health: 10);
+    final result = doBattle(first: player, second: enemy);
+    // Briar Rose gives 2 thorns every time we restore health.
+    // We heal every turn for 1, and gain thorns as a result.
+    // We do 1 dmg, heal 1, get 2 thorns every turn, and take 2 dmg from enemy.
+    // Heal on the first turn is overheal so we don't get thorns.
+    // We kill it in 4 turns, having taken 5 dmg.
+    expect(result.first.hp, 5);
+  });
 }

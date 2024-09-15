@@ -85,7 +85,7 @@ void main() {
       'Sanguine Rose',
       'Crimson Cloak',
       'Razorvine Talisman',
-      'Briar rose',
+      'Briar Rose',
       'Iron Rose',
       'Pinecone Plate',
       'Vampiric Wine',
@@ -100,7 +100,7 @@ void main() {
       edge: edge,
       oils: oils,
       turns: 12, // should be 15
-      damage: 47, // should be 519
+      damage: 99, // should be 519
     );
   });
 }
