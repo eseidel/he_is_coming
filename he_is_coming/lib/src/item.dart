@@ -228,6 +228,7 @@ class Item extends CatalogItem {
     'Bejeweled Blade',
     "Woodcutter's Axe",
     'Tempest Blade',
+    'Bearclaw Blade',
   };
 
   /// Kind of the item.

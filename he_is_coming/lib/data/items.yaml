@@ -860,3 +860,9 @@
   rarity: heroic
   effect: "Whenever you deal non-weapon damage to the enemy, deal 1 additional damage"
   version: 0.3.5
+- name: Bearclaw Blade
+  id: 153
+  kind: weapon
+  rarity: heroic
+  effect: "Attack is always equal to missing health"
+  version: 0.3.5

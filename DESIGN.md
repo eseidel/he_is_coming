@@ -22,6 +22,21 @@ Add a trigger for death, rather than checking once a turn.  Otherwise it's
 possible to go negative and heal up in the same turn (with separate triggers
 for onTurn and onHit for example).
 
+Need to support something having both bomb and sanguine.
+
+- name: Cherry Cocktail
+  id: 154
+  rarity: cauldron
+  parts:
+    - Cherry Bomb
+    - Vampiric Wine
+  effect: "Battle Start & Wounded: Deal 3 damage and restore 3 health"
+  tags:
+    - bomb
+    - sanguine
+  version: 0.3.5
+
+
 ### Questions
 
 Can attack go negative (e.g. multiple emerald crowns).  And if when attack is 0 does onHit fire?
