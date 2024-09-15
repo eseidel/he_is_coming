@@ -177,6 +177,10 @@ class EffectContext {
     _battle._adjustStun(turns: turns, index: _meIndex, source: _sourceName);
   }
 
+  /// Executes the enemy.
+  // This might need to be different than just dealing damage?
+  void executeEnemy() => dealDamage(enemy.hp);
+
   /// Give armor to the enemy.
   void giveArmorToEnemy(int armor) {
     _expectPositive(armor, 'armor');
