@@ -11,7 +11,7 @@ void main() {
 
   test('Weapons require attack', () {
     expect(
-      () => Item.test(kind: ItemKind.weapon),
+      () => Item.test(isWeapon: true),
       throwsA(isA<ArgumentError>()),
     );
   });

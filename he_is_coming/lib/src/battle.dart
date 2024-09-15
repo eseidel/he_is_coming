@@ -245,16 +245,10 @@ class EffectContext {
         source: _sourceName,
       );
 
-  /// Returns the number of items of a given material.
-  int materialCount(ItemMaterial material) {
+  /// Returns the number of items with a given tag.
+  int tagCount(ItemTag tag) {
     final inventory = _battle.creatures[_meIndex].inventory;
-    return inventory == null ? 0 : inventory.materialCount(material);
-  }
-
-  /// Returns the number of items of a given kind.
-  int kindCount(ItemKind kind) {
-    final inventory = _battle.creatures[_meIndex].inventory;
-    return inventory == null ? 0 : inventory.kindCount(kind);
+    return inventory == null ? 0 : inventory.tagCount(tag);
   }
 
   /// Returns the number of items with a given gem.

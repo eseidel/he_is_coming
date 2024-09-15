@@ -343,7 +343,7 @@ class ItemView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: StatsRow(stats: stats),
               ),
-            TagsRow(tags: item.filterTags),
+            TagsRow(tags: item.displayTags),
           ],
         ),
       ),
@@ -572,12 +572,7 @@ class FilteredItems extends StatelessWidget {
   ];
 
   Set<String> _tagsForItem(Item item) {
-    return {
-      if (item.kind != null) item.kind!.name.capitalize(),
-      if (item.material != null) item.material!.name.capitalize(),
-      if (item.isUnique) 'Unique',
-      item.rarity.name.capitalize(),
-    };
+    return item.filterTags;
   }
 
   /// Items to display
@@ -660,12 +655,6 @@ class FilteringHeader<T> extends StatefulWidget {
 
   @override
   State<FilteringHeader<T>> createState() => _FilteringHeaderState();
-}
-
-extension on String {
-  String capitalize() {
-    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
-  }
 }
 
 class _FilteringHeaderState<T> extends State<FilteringHeader<T>> {

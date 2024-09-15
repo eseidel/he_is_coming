@@ -66,7 +66,7 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Plated Helmet':
       onTurn((c) => _if(c.my.belowHalfHealth, () => c.gainArmor(2))),
   'Ore Heart': onBattle(
-    (c) => c.gainArmor(c.materialCount(ItemMaterial.stone) * 2),
+    (c) => c.gainArmor(c.tagCount(ItemTag.stone) * 2),
   ),
   'Granite Hammer': onHit(
     (c) => _if(
@@ -100,8 +100,8 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   // Bejeweled Blade doesn't say "On Battle Start". This might be subtly wrong?
   'Bejeweled Blade': onBattle(
     (c) => _if(
-      c.kindCount(ItemKind.jewelry) > 0,
-      () => c.gainAttack(c.kindCount(ItemKind.jewelry) * 2),
+      c.tagCount(ItemTag.jewelry) > 0,
+      () => c.gainAttack(c.tagCount(ItemTag.jewelry) * 2),
     ),
   ),
   'Emerald Ring': onBattle((c) => c.restoreHealth(2)),

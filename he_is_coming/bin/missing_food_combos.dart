@@ -4,8 +4,7 @@ import 'package:scoped_deps/scoped_deps.dart';
 
 void doMain(List<String> arguments) {
   final data = Data.load();
-  final foods =
-      data.items.items.where((item) => item.kind == ItemKind.food).toList();
+  final foods = data.items.items.where((item) => item.isFood).toList();
   logger.info('${foods.length} food items found:');
   for (final food in foods) {
     logger.info('  ${food.name}');

@@ -23,17 +23,13 @@ Item inferGoldenItem(Item item) {
           callbacks: const {},
         )
       : null;
-  final goldenItem = Item(
+  final goldenItem = item.copyWith(
     name: 'Golden ${item.name}',
     rarity: ItemRarity.golden,
-    material: item.material,
-    isUnique: item.isUnique,
-    kind: item.kind,
     effect: effect,
     inferred: true,
     stats: item.stats * 2,
     id: 0, // TODO(eseidel): assign a unique id?
-    version: null,
     // Should this have parts of item x 2?
   );
   return goldenItem;
@@ -63,10 +59,9 @@ void doMain(List<String> arguments) {
       .where(
         (item) =>
             item.rarity == ItemRarity.common &&
-            item.kind != ItemKind.weapon &&
-            item.isUnique == false &&
-            item.inferred ==
-                false, // Don't infer golden items from inferred items.
+            !item.isWeapon &&
+            !item.isUnique &&
+            !item.inferred, // Don't infer golden items from inferred items.
       )
       .toList();
   final golden =

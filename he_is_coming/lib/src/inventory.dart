@@ -136,7 +136,7 @@ class Inventory {
   static List<Item> _enforceItemRules(Level level, List<Item> unenforced) {
     // Player must always have a weapon.
     final items = [...unenforced];
-    if (items.every((item) => item.kind != ItemKind.weapon)) {
+    if (items.every((item) => !item.isWeapon)) {
       items.add(Creature.defaultPlayerWeapon);
     }
 
@@ -195,14 +195,9 @@ class Inventory {
   /// Set bonuses applied to the inventory.
   late final List<SetBonus> sets;
 
-  /// Count of items in the inventory.
-  int materialCount(ItemMaterial material) {
-    return items.where((item) => item.material == material).length;
-  }
-
-  /// Count of items in the inventory.
-  int kindCount(ItemKind kind) {
-    return items.where((item) => item.kind == kind).length;
+  /// Count of items with a specific tag.
+  int tagCount(ItemTag tag) {
+    return items.where((item) => item.tags.contains(tag)).length;
   }
 
   /// Count of items with a specific gem.

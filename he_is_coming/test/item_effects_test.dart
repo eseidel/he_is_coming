@@ -558,7 +558,7 @@ void main() {
     expect(result.first.hp, 7);
     expect(result.first.baseStats.armor, 0);
 
-    final other = Item.test(material: ItemMaterial.stone);
+    final other = Item.test(tags: const {ItemTag.stone});
     final player2 = data.player(customItems: [itemCatalog[item], other]);
     expect(player2.hp, 10);
     expect(player2.baseStats.armor, 0);
@@ -823,7 +823,7 @@ void main() {
     expect(result.first.hp, 0);
     expect(player.baseStats.attack, 0);
 
-    final jewelry = Item.test(kind: ItemKind.jewelry);
+    final jewelry = Item.test(tags: const {ItemTag.jewelry});
     final player2 = data.player(customItems: [item, jewelry]);
     expect(player2.hp, 10);
     // We've implemented Bejeweled Blade onBattle so this is still 0.

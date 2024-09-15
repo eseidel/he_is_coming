@@ -140,18 +140,15 @@ class Item extends CatalogItem {
     required this.rarity,
     required super.id,
     required super.version,
-    bool? isWeapon,
+    this.isWeapon = false,
     this.tags = const {},
-    this.kind,
-    this.material,
     this.stats = const Stats(),
     this.isUnique = false,
     super.effect,
     super.inferred = false,
     this.parts = const [],
-  })  : isWeapon = isWeapon ?? kind == ItemKind.weapon,
-        super(name: name) {
-    if (this.isWeapon && stats.attack == 0) {
+  }) : super(name: name) {
+    if (isWeapon && stats.attack == 0) {
       if (_intentionallyZeroAttackItems.contains(name)) {
         return;
       }
@@ -165,8 +162,8 @@ class Item extends CatalogItem {
     String? name,
     EffectMap? effect,
     ItemRarity rarity = ItemRarity.common,
-    ItemMaterial? material,
-    ItemKind? kind,
+    bool isWeapon = false,
+    Set<ItemTag> tags = const {},
     bool isUnique = false,
     int? attack,
     int? armor,
@@ -190,10 +187,10 @@ class Item extends CatalogItem {
       name: name ?? 'test',
       id: 0, // Unique ids are not required for test items.
       rarity: rarity,
+      isWeapon: isWeapon,
+      tags: tags,
       stats: stats,
       effect: triggers,
-      material: material,
-      kind: kind,
       isUnique: isUnique,
       version: null,
     );
@@ -204,9 +201,7 @@ class Item extends CatalogItem {
     final name = yaml['name'] as String;
     final weapon = yaml['weapon'] as bool? ?? false;
     final tags = Item._tagsFromYaml(yaml['tags']) ?? {};
-    final kind = yaml.get('kind', ItemKind.values);
     final rarity = yaml.expect('rarity', ItemRarity.values);
-    final material = yaml.get('material', ItemMaterial.values);
     final stats = Stats.fromYaml(yaml);
     final unique = yaml['unique'] as bool? ?? false;
     final effectText = yaml['effect'] as String?;
@@ -219,9 +214,7 @@ class Item extends CatalogItem {
       name: name,
       isWeapon: weapon,
       tags: tags,
-      kind: kind,
       rarity: rarity,
-      material: material,
       stats: stats,
       effect: effect,
       isUnique: unique,
@@ -241,17 +234,11 @@ class Item extends CatalogItem {
   /// Tags on the item.
   final Set<ItemTag> tags;
 
-  /// Kind of the item.
-  final ItemKind? kind;
-
   /// Stats for the item.
   final Stats stats;
 
   /// Rarity of the item.
   final ItemRarity rarity;
-
-  /// Material of the item.
-  final ItemMaterial? material;
 
   /// Is the item unique.
   /// Unique items can only be equipped once.
@@ -259,6 +246,12 @@ class Item extends CatalogItem {
 
   /// Is the item a weapon.
   final bool isWeapon;
+
+  /// Returns true if the item has the given tag.
+  bool hasTag(ItemTag tag) => tags.contains(tag);
+
+  /// Is the item a food item.
+  bool get isFood => hasTag(ItemTag.food);
 
   /// Items combined to make this item.
   final List<String>? parts;
@@ -281,6 +274,8 @@ class Item extends CatalogItem {
   static const List<String> orderedKeys = <String>[
     'name',
     'id',
+    'weapon',
+    'tags',
     'unique',
     'kind',
     'rarity',
@@ -321,10 +316,8 @@ class Item extends CatalogItem {
       if (isWeapon) 'weapon': isWeapon,
       if (tags.isNotEmpty) 'tags': _tagsToJson(tags),
       if (isUnique) 'unique': isUnique,
-      'kind': kind?.toJson(),
       'rarity': rarity.toJson(),
       if (parts != null && parts!.isNotEmpty) 'parts': parts,
-      'material': material?.toJson(),
       ...stats.toJson(),
       'effect': effect?.toJson(),
       if (inferred) 'inferred': inferred,
@@ -351,9 +344,7 @@ class Item extends CatalogItem {
       name: name ?? this.name,
       rarity: rarity ?? this.rarity,
       tags: tags ?? this.tags,
-      kind: kind ?? this.kind,
       id: id ?? this.id,
-      material: material ?? this.material,
       stats: stats ?? this.stats,
       isUnique: isUnique ?? this.isUnique,
       effect: effect ?? this.effect,

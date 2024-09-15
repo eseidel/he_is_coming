@@ -48,6 +48,14 @@ extension EdgeUI on Edge {
   Widget get icon => Icon(Icons.flash_on, color: color);
 }
 
+/// Adds a capitalize method to String.
+extension StringCapitalize on String {
+  /// Capitalize the first letter of this string.
+  String capitalize() {
+    return '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+  }
+}
+
 /// Adds a color property to Item.
 extension ItemUI on Item {
   /// Color for this item.
@@ -55,10 +63,10 @@ extension ItemUI on Item {
     if (isWeapon) {
       return Palette.weapon;
     }
-    if (material == ItemMaterial.stone) {
+    if (hasTag(ItemTag.stone)) {
       return Palette.stone;
     }
-    if (material == ItemMaterial.sanguine) {
+    if (hasTag(ItemTag.sanguine)) {
       return Palette.sanguine;
     }
     return Colors.orange;
@@ -86,16 +94,21 @@ extension ItemUI on Item {
     );
   }
 
-  /// Tags for this item.
-  List<String> get filterTags {
+  /// Tags to display for this item.
+  List<String> get displayTags {
     return [
       if (isUnique) 'Unique',
-      if (kind == ItemKind.food) 'Food',
-      if (kind == ItemKind.jewelry) 'Jewelry',
-      if (material == ItemMaterial.stone) 'Stone',
-      if (material == ItemMaterial.sanguine) 'Sanguine',
-      if (material == ItemMaterial.wood) 'Wood',
+      ...tags.map((tag) => tag.name.capitalize()),
     ];
+  }
+
+  /// Tags to filter on for this item.
+  Set<String> get filterTags {
+    return {
+      ...tags.map((tag) => tag.name.capitalize()),
+      if (isUnique) 'Unique',
+      rarity.name.capitalize(),
+    };
   }
 }
 
