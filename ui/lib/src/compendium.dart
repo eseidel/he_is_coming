@@ -343,7 +343,7 @@ class ItemView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: StatsRow(stats: stats),
               ),
-            TagsRow(tags: item.tags),
+            TagsRow(tags: item.filterTags),
           ],
         ),
       ),

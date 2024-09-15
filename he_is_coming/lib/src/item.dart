@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
@@ -140,6 +141,8 @@ class Item extends CatalogItem {
     required this.rarity,
     required super.id,
     required super.version,
+    bool? isWeapon,
+    this.tags = const {},
     this.kind,
     this.material,
     this.stats = const Stats(),
@@ -147,8 +150,9 @@ class Item extends CatalogItem {
     super.effect,
     super.inferred = false,
     this.parts = const [],
-  }) : super(name: name) {
-    if (isWeapon && stats.attack == 0) {
+  })  : isWeapon = isWeapon ?? kind == ItemKind.weapon,
+        super(name: name) {
+    if (this.isWeapon && stats.attack == 0) {
       if (_intentionallyZeroAttackItems.contains(name)) {
         return;
       }
@@ -199,6 +203,9 @@ class Item extends CatalogItem {
   /// Create an item from a yaml map.
   factory Item.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
     final name = yaml['name'] as String;
+    final weapon = yaml['weapon'] as bool? ?? false;
+    final tagsNames = yaml['tags'] as List? ?? [];
+    final tags = tagsNames.cast<String>().map(ItemTag.fromJson).toSet();
     final kind = yaml.get('kind', ItemKind.values);
     final rarity = yaml.expect('rarity', ItemRarity.values);
     final material = yaml.get('material', ItemMaterial.values);
@@ -212,6 +219,8 @@ class Item extends CatalogItem {
     final version = yaml['version'] as String?;
     return Item(
       name: name,
+      isWeapon: weapon,
+      tags: tags,
       kind: kind,
       rarity: rarity,
       material: material,
@@ -231,6 +240,9 @@ class Item extends CatalogItem {
     'Bearclaw Blade',
   };
 
+  /// Tags on the item.
+  final Set<ItemTag> tags;
+
   /// Kind of the item.
   final ItemKind? kind;
 
@@ -247,8 +259,8 @@ class Item extends CatalogItem {
   /// Unique items can only be equipped once.
   final bool isUnique;
 
-  /// Returns true if the item is a weapon.
-  bool get isWeapon => kind == ItemKind.weapon;
+  /// Is the item a weapon.
+  final bool isWeapon;
 
   /// Items combined to make this item.
   final List<String>? parts;
@@ -288,6 +300,8 @@ class Item extends CatalogItem {
     return {
       'name': name,
       'id': id,
+      if (isWeapon) 'weapon': isWeapon,
+      if (tags.isNotEmpty) 'tags': tags.map((t) => t.toJson()).sorted(),
       if (isUnique) 'unique': isUnique,
       'kind': kind?.toJson(),
       'rarity': rarity.toJson(),
@@ -305,6 +319,7 @@ class Item extends CatalogItem {
   Item copyWith({
     String? name,
     int? id,
+    Set<ItemTag>? tags,
     ItemKind? kind,
     ItemRarity? rarity,
     ItemMaterial? material,
@@ -317,6 +332,7 @@ class Item extends CatalogItem {
     return Item(
       name: name ?? this.name,
       rarity: rarity ?? this.rarity,
+      tags: tags ?? this.tags,
       kind: kind ?? this.kind,
       id: id ?? this.id,
       material: material ?? this.material,
@@ -416,5 +432,34 @@ enum ItemMaterial {
   }
 
   /// Convert the material to a json string.
+  String toJson() => name;
+}
+
+/// Represents the tags on the item.
+enum ItemTag {
+  /// Food, can be combined in the cauldron.
+  food,
+
+  /// Jewelry, interacts with items sensitive to jewelry.
+  jewelry,
+
+  /// Wood, interacts with items sensitive to wood.
+  wood,
+
+  /// Stone, interacts with items sensitive to stone.
+  stone,
+
+  /// Sanguine
+  sanguine,
+
+  /// Bomb
+  bomb;
+
+  /// Create a tag from a json string.
+  factory ItemTag.fromJson(String json) {
+    return ItemTag.values.firstWhere((e) => e.name == json);
+  }
+
+  /// Convert the tag to a json string.
   String toJson() => name;
 }

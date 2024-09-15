@@ -87,7 +87,7 @@ extension ItemUI on Item {
   }
 
   /// Tags for this item.
-  List<String> get tags {
+  List<String> get filterTags {
     return [
       if (isUnique) 'Unique',
       if (kind == ItemKind.food) 'Food',
