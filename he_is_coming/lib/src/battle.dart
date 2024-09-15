@@ -144,7 +144,7 @@ class EffectContext {
 
   /// Add attack.
   void gainAttack(int attack) {
-    _expectPositive(attack, 'speed');
+    _expectPositive(attack, 'attack');
     _battle._adjustAttack(attack: attack, index: _meIndex, source: _sourceName);
   }
 

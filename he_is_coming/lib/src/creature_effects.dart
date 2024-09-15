@@ -47,7 +47,9 @@ final creatureEffects = EffectCatalog(<String, EffectMap>{
       c.gainAttack(1);
     },
   ),
-  'Black Knight': onBattle((c) => c.gainAttack(c.enemy.attack)),
+  'Black Knight': onBattle(
+    (c) => _if(c.enemy.attack > 0, () => c.gainAttack(c.enemy.attack)),
+  ),
   'Ironstone Golem': onExposed((c) => c.loseAttack(3)),
   'Granite Griffin': onWounded(
     (c) => c
