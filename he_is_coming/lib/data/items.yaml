@@ -123,6 +123,17 @@
   rarity: common
   effect: "Battle Start: Deal 2 damage"
   version: 0.3.5
+- name: Cherry Cocktail
+  id: 154
+  tags:
+    - bomb
+    - sanguine
+  rarity: cauldron
+  parts:
+    - Cherry Bomb
+    - Vampiric Wine
+  effect: "Battle Start & Wounded: Deal 3 damage and restore 3 health"
+  version: 0.3.5
 - name: Citrine Earring
   id: 130
   tags: jewelry
