@@ -213,6 +213,16 @@ abstract class Catalog<T extends CatalogItem> {
   /// Get a random item.
   T random(Random random) => items[random.nextInt(items.length)];
 
+  /// Get a random item or null.
+  T? randomIncludingNull(Random random) {
+    final count = items.length + 1;
+    final index = random.nextInt(count);
+    if (index == items.length) {
+      return null;
+    }
+    return items[index];
+  }
+
   /// Convert the catalog to a json list.
   List<dynamic> toJson() {
     final sorted = items.toList()..sort((a, b) => a.name.compareTo(b.name));

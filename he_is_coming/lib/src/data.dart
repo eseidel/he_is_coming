@@ -288,6 +288,11 @@ class OilCatalog extends Catalog<Oil> {
     return OilCatalog._(items ?? oils, idBits: idBits);
   }
 
+  /// Generate a random list of oils
+  List<Oil> randomOils(Random random, {double chanceInclude = 0.9}) {
+    return oils.where((o) => random.nextDouble() < chanceInclude).toList();
+  }
+
   /// The oils in this catalog.
   List<Oil> get oils => items;
 }

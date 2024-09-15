@@ -35,11 +35,8 @@ class Inventory {
   factory Inventory.random(Level level, Random random, Data data) {
     final slotCount = itemSlotCount(level);
     final items = _pickItems(random, slotCount, data.items);
-    // Most edges are strictly beneficial, so just pick one at random.
-    final edge = data.edges.random(random);
-    // Currently there are only 3 oils, you can always only use each once.
-    // No need to support random oils.
-    final oils = data.oils.oils.toList();
+    final edge = data.edges.randomIncludingNull(random);
+    final oils = data.oils.randomOils(random);
     return Inventory(
       level: level,
       items: items,

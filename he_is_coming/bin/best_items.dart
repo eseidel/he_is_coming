@@ -172,9 +172,11 @@ class BestItemFinder {
         mutated[i] = data.items.randomNonWeapon(random);
       }
     }
-    final edge = shouldMutate() ? data.edges.random(random) : inventory.edge;
-    // No need to mutate oils since there are only 3.
-    final oils = inventory.oils.toList();
+    final edge = shouldMutate()
+        ? data.edges.randomIncludingNull(random)
+        : inventory.edge;
+    // Oil stats can disrupt certain item effects/combos so use random too.
+    final oils = shouldMutate() ? data.oils.randomOils(random) : inventory.oils;
     try {
       // Constructor can throw if items break rules (e.g. duplicate unique).
       return Inventory(
