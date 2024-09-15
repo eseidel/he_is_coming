@@ -11,6 +11,115 @@ import 'package:ui/src/compendium.dart';
 import 'package:ui/src/extensions.dart';
 import 'package:ui/src/style.dart';
 
+// TODO(eseidel): Share code with AddItem.
+/// ChooseEdge widget
+class ChooseEdge extends StatefulWidget {
+  /// ChooseEdge constructor
+  const ChooseEdge({
+    required this.catalog,
+    required this.chooseItem,
+    super.key,
+  });
+
+  /// EdgeCatalog
+  final EdgeCatalog catalog;
+
+  /// ChooseItem callback
+  final void Function(Edge item) chooseItem;
+
+  @override
+  State<ChooseEdge> createState() => _ChooseEdgeState();
+}
+
+class _ChooseEdgeState extends State<ChooseEdge> {
+  final SearchController controller = SearchController();
+  final List<Edge> searchHistory = [];
+
+  void _addToSearchHistory(Edge item) {
+    if (searchHistory.contains(item)) {
+      return;
+    }
+    setState(() {
+      searchHistory.insert(0, item);
+      if (searchHistory.length > 5) {
+        searchHistory.removeLast();
+      }
+    });
+  }
+
+  Iterable<Widget> getHistoryList(SearchController controller) {
+    return searchHistory.map(
+      (Edge item) => ListTile(
+        leading: const Icon(Icons.history),
+        title: Text(item.name),
+        trailing: IconButton(
+          icon: const Icon(Icons.call_missed),
+          onPressed: () {
+            controller
+              ..text = item.name
+              ..selection =
+                  TextSelection.collapsed(offset: controller.text.length);
+          },
+        ),
+      ),
+    );
+  }
+
+  Iterable<Widget> getSuggestions(SearchController controller) {
+    final input = controller.value.text;
+    return widget.catalog.items
+        .where(
+          (Edge item) => item.name.toLowerCase().contains(input.toLowerCase()),
+        )
+        .map(
+          (Edge item) => ListTile(
+            leading: item.icon,
+            title: Text(item.name),
+            trailing: IconButton(
+              icon: const Icon(Icons.call_missed),
+              onPressed: () {
+                controller
+                  ..text = item.name
+                  ..selection =
+                      TextSelection.collapsed(offset: controller.text.length);
+              },
+            ),
+            onTap: () {
+              controller.closeView(item.name);
+              _addToSearchHistory(item);
+              widget.chooseItem(item);
+            },
+          ),
+        );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SearchAnchor(
+      searchController: controller,
+      builder: (BuildContext context, SearchController controller) {
+        return ElevatedButton.icon(
+          icon: const Icon(Icons.add),
+          label: const Text('Edge'),
+          onPressed: () {
+            // This is optional, SearchAnchor also does openView for us.
+            controller.openView();
+          },
+        );
+      },
+      suggestionsBuilder: (BuildContext context, SearchController controller) {
+        if (controller.text.isEmpty) {
+          if (searchHistory.isNotEmpty) {
+            return getHistoryList(controller);
+          }
+          return <Widget>[const Center(child: Text('No search history.'))];
+        }
+        return getSuggestions(controller);
+      },
+    );
+  }
+}
+
 /// AddItem widget
 class AddItem extends StatefulWidget {
   /// AddItem constructor
@@ -99,7 +208,7 @@ class _AddItemState extends State<AddItem> {
       builder: (BuildContext context, SearchController controller) {
         return ElevatedButton.icon(
           icon: const Icon(Icons.add),
-          label: const Text('Add Item'),
+          label: const Text('Item'),
           onPressed: () {
             // This is optional, SearchAnchor also does openView for us.
             controller.openView();
@@ -396,6 +505,17 @@ class BattleStateController {
     setInventory(Inventory.random(level, Random(), data));
   }
 
+  /// Set the edge
+  void setEdge(Edge edge) {
+    setInventory(
+      inventory.copyWith(
+        level: level,
+        edge: edge,
+        setBonuses: data.sets,
+      ),
+    );
+  }
+
   /// Add an item to the inventory
   void addItem(Item item) {
     // If the item is a weapon, replace the first item.
@@ -479,6 +599,10 @@ class PlayerEditor extends StatelessWidget {
             AddItem(
               data: _data,
               addItem: controller.addItem,
+            ),
+            ChooseEdge(
+              catalog: _data.edges,
+              chooseItem: controller.setEdge,
             ),
             ElevatedButton.icon(
               onPressed: controller.reroll,

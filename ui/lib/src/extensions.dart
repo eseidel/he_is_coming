@@ -22,6 +22,32 @@ extension ItemRarityColor on ItemRarity {
   }
 }
 
+/// UI extensions for edges.
+extension EdgeUI on Edge {
+  /// Color for this edge.
+  Color get color {
+    final map = {
+      'Agile Edge': Palette.speed,
+      'Bleeding Edge': Palette.sanguine,
+      'Blunt Edge': Palette.armor,
+      'Cutting Edge': Palette.attack,
+      'Featherweight Edge': Palette.speed,
+      'Jagged Edge': Palette.thorns,
+      'Lightning Edge': Palette.speed,
+      'Thieving Edge': Palette.gold,
+      "Titan's Edge": Palette.attack,
+    };
+    final color = map[name];
+    if (color == null) {
+      return Palette.white;
+    }
+    return color;
+  }
+
+  /// Icon for this edge.
+  Widget get icon => Icon(Icons.flash_on, color: color);
+}
+
 /// Adds a color property to Item.
 extension ItemUI on Item {
   /// Color for this item.
