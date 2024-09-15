@@ -1545,4 +1545,18 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 5);
   });
+
+  test('Shield Talisman', () {
+    const item = 'Shield Talisman';
+    final armorOnHit = Item.test(effect: onHit((c) => c.gainArmor(1)));
+    final player = data.player(items: [item], customItems: [armorOnHit]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy(attack: 3, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Enemy hits for 3 dmg, we gain 2 armor every time we attack it.
+    // We attack first, so it only does 1 dmg for each of its attacks.
+    expect(result.first.hp, 5);
+  });
 }

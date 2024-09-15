@@ -121,13 +121,21 @@ class EffectContext {
   /// Add armor.
   void gainArmor(int armor) {
     _expectPositive(armor, 'armor');
-    _battle._adjustArmor(index: _meIndex, armor: armor, source: _sourceName);
+    _battle._adjustArmor(
+      targetIndex: _meIndex,
+      armor: armor,
+      source: _sourceName,
+    );
   }
 
   /// Remove armor.
   void loseArmor(int armor) {
     _expectPositive(armor, 'armor');
-    _battle._adjustArmor(index: _meIndex, armor: -armor, source: _sourceName);
+    _battle._adjustArmor(
+      targetIndex: _meIndex,
+      armor: -armor,
+      source: _sourceName,
+    );
   }
 
   /// Add speed.
@@ -184,7 +192,11 @@ class EffectContext {
   /// Give armor to the enemy.
   void giveArmorToEnemy(int armor) {
     _expectPositive(armor, 'armor');
-    _battle._adjustArmor(index: _enemyIndex, armor: armor, source: _sourceName);
+    _battle._adjustArmor(
+      targetIndex: _enemyIndex,
+      armor: armor,
+      source: _sourceName,
+    );
   }
 
   /// Steal armor from the enemy.
@@ -197,12 +209,12 @@ class EffectContext {
     }
     _battle
       .._adjustArmor(
-        index: _enemyIndex,
+        targetIndex: _enemyIndex,
         armor: -stolen,
         source: _sourceName,
       )
       .._adjustArmor(
-        index: _meIndex,
+        targetIndex: _meIndex,
         armor: stolen,
         source: _sourceName,
       );
@@ -526,12 +538,22 @@ class BattleContext {
   /// Add or remove armor.
   void _adjustArmor({
     required int armor,
-    required int index,
+    required int targetIndex,
     required String source,
   }) {
-    final target = stats[index];
-    setStats(index, target.copyWith(armor: target.armor + armor));
-    log('${creatures[index].name} armor ${_signed(armor)} from $source');
+    final target = stats[targetIndex];
+    setStats(targetIndex, target.copyWith(armor: target.armor + armor));
+    log('${creatures[targetIndex].name} armor ${_signed(armor)} from $source');
+
+    // If we successfully gained armor, trigger onGainArmor.
+    if (armor > 0) {
+      _trigger(
+        Trigger.onGainArmor,
+        meIndex: targetIndex,
+        attackerIndex: _attackerIndex,
+        parentSource: source,
+      );
+    }
   }
 
   /// Restore health to a creature.
@@ -548,7 +570,7 @@ class BattleContext {
     final restored = newHp - target.hp;
     log('$source restored $restored hp to ${creatures[targetIndex].name}');
 
-    // If we successfully restored health, trigger onHeal.
+    // If we successfully restored health, trigger onRestoreHealth.
     if (restored > 0) {
       _trigger(
         Trigger.onRestoreHealth,

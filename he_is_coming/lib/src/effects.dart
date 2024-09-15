@@ -38,8 +38,11 @@ EffectMap onExposedAndWounded(EffectFn fn) => multiTrigger(
       fn,
     );
 
-/// Creates an [Effect] with an onHeal callback.
+/// Creates an [Effect] with an onRestoreHealth callback.
 EffectMap onRestoreHealth(EffectFn fn) => {Trigger.onRestoreHealth: fn};
+
+/// Creates an [Effect] with an onGainArmor callback.
+EffectMap onGainArmor(EffectFn fn) => {Trigger.onGainArmor: fn};
 
 /// Enum representing the different effects that can be triggered.
 enum Trigger {
@@ -68,6 +71,9 @@ enum Trigger {
 
   /// Called when any hp is restored.
   onRestoreHealth,
+
+  /// Called when any armor is gained.
+  onGainArmor,
 }
 
 /// Container for callbacks for items.

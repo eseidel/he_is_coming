@@ -38,6 +38,8 @@ String? implementedTrigger(CatalogItem item) {
       return 'Wounded';
     case Trigger.onRestoreHealth:
       return 'Whenever you restore health';
+    case Trigger.onGainArmor:
+      return 'Whenever you gain armor';
   }
 }
 
