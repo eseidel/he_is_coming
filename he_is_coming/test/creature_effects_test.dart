@@ -165,4 +165,20 @@ void main() {
     expect(result.first.hp, 0);
     expect(result.second.hp, 13);
   });
+
+  test('Brittlebark Beast', () {
+    final dmgOnHit = Item.test(effect: onHit((c) => c.dealDamage(1)));
+    final player = data.player(maxHp: 25, customItems: [dmgOnHit]);
+    expect(player.hp, 25);
+    final enemy = creatures['Brittlebark Beast'];
+    expect(enemy.baseStats.maxHp, 50);
+    expect(enemy.baseStats.speed, 2);
+    expect(enemy.baseStats.attack, 3);
+    final result = doBattle(first: player, second: enemy);
+    // Brittlebark Beast takes 3 damage when taking damage.
+    // We do an extra 1 dmg on hit, but it takes then 8 dmg from each strike.
+    // It goes first, but we kill it in 7 hits.
+    // We take 7 * 3 = 21 dmg.
+    expect(result.first.hp, 4);
+  });
 }

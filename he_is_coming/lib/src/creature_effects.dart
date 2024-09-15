@@ -64,4 +64,5 @@ final creatureEffects = EffectCatalog(<String, EffectMap>{
   'Bloodmoon Werewolf': onTurn(
     (c) => _if(c.enemy.atOrBelowHalfHealth, () => c.executeEnemy()),
   ),
+  'Brittlebark Beast': onTakeDamage((c) => c.takeDamage(3)),
 });
