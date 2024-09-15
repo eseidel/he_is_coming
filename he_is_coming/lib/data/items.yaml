@@ -4,18 +4,21 @@
   effect: "Whenever you take damage, deal 1 damage"
 - name: Battle Axe
   id: 2
+  weapon: true
   kind: weapon
   rarity: common
   attack: 2
   effect: Deal double damage to armor
 - name: Bearclaw Blade
   id: 153
+  weapon: true
   kind: weapon
   rarity: heroic
   effect: Attack is always equal to missing health
   version: 0.3.5
 - name: Bejeweled Blade
   id: 4
+  weapon: true
   kind: weapon
   rarity: rare
   effect: Gain 2 attack for each equipped jewelry item
@@ -40,6 +43,7 @@
   version: 0.3.5
 - name: Bloodmoon Ritual
   id: 141
+  tags: sanguine
   rarity: rare
   material: sanguine
   effect: "Wounded: Gain 10 thorns and take 2 damage"
@@ -58,6 +62,7 @@
   effect: "Wounded: Gain armor equal to 50% of max health"
 - name: Bonespine Whip
   id: 8
+  weapon: true
   kind: weapon
   rarity: heroic
   attack: 2
@@ -86,6 +91,7 @@
   version: 0.3.5
 - name: Brittlebark Armor
   id: 11
+  tags: wood
   rarity: heroic
   material: wood
   health: 10
@@ -93,6 +99,8 @@
   version: 0.3.5
 - name: Brittlebark Bow
   id: 12
+  weapon: true
+  tags: wood
   kind: weapon
   rarity: common
   material: wood
@@ -101,6 +109,7 @@
   version: 0.3.5
 - name: Brittlebark Buckler
   id: 139
+  tags: wood
   rarity: heroic
   material: wood
   armor: 10
@@ -108,6 +117,7 @@
   version: 0.3.5
 - name: Brittlebark Club
   id: 13
+  weapon: true
   kind: weapon
   rarity: heroic
   attack: 6
@@ -119,6 +129,7 @@
   version: 0.3.5
 - name: Cherry Bomb
   id: 125
+  tags: food
   kind: food
   rarity: common
   material: bomb
@@ -126,17 +137,20 @@
   version: 0.3.5
 - name: Citrine Earring
   id: 130
+  tags: jewelry
   kind: jewelry
   rarity: common
   effect: Gain 1 speed every other turn
   version: 0.3.5
 - name: Citrine Gemstone
   id: 16
+  tags: jewelry
   kind: jewelry
   rarity: heroic
   effect: Your speed stat is inverted
 - name: Citrine Ring
   id: 17
+  tags: jewelry
   unique: true
   kind: jewelry
   rarity: common
@@ -144,23 +158,27 @@
   version: 0.3.5
 - name: Cracked Bouldershield
   id: 18
+  tags: stone
   rarity: common
   material: stone
   effect: "Exposed: Gain 5 armor"
 - name: Cracked Whetstone
   id: 19
+  tags: stone
   rarity: common
   material: stone
   effect: "First Turn: Gain 2 attack"
   version: 0.3.5
 - name: Crimson Cloak
   id: 20
+  tags: sanguine
   rarity: heroic
   material: sanguine
   effect: "Whenever you take damage, restore 1 health"
   version: 0.3.5
 - name: Double-edged Sword
   id: 21
+  weapon: true
   kind: weapon
   rarity: rare
   attack: 5
@@ -175,6 +193,7 @@
   version: 0.3.5
 - name: Elderwood Necklace
   id: 24
+  tags: wood
   rarity: heroic
   material: wood
   attack: 1
@@ -183,6 +202,8 @@
   version: 0.3.5
 - name: Elderwood Staff
   id: 25
+  weapon: true
+  tags: wood
   kind: weapon
   rarity: common
   material: wood
@@ -192,6 +213,7 @@
   version: 0.3.5
 - name: Emerald Crown
   id: 26
+  tags: jewelry
   kind: jewelry
   rarity: common
   health: 8
@@ -203,11 +225,13 @@
   effect: Restore 1 health every other turn
 - name: Emerald Gemstone
   id: 28
+  tags: jewelry
   kind: jewelry
   rarity: heroic
   effect: Overhealing is dealt as damage
 - name: Emerald Ring
   id: 29
+  tags: jewelry
   kind: jewelry
   rarity: common
   effect: "Battle Start: Restore 2 health"
@@ -230,6 +254,7 @@
   version: 0.3.5
 - name: Explosive Sword
   id: 32
+  weapon: true
   kind: weapon
   rarity: rare
   material: bomb
@@ -238,6 +263,7 @@
   version: 0.3.5
 - name: Featherweight Blade
   id: 33
+  weapon: true
   kind: weapon
   rarity: common
   attack: 2
@@ -258,6 +284,7 @@
   effect: "Turn Start: If you have armor, gain 1 additional armor"
 - name: Gemstone Scepter
   id: 37
+  weapon: true
   kind: weapon
   rarity: heroic
   attack: 2
@@ -265,6 +292,7 @@
   version: 0.3.5
 - name: Gold Ring
   id: 38
+  tags: jewelry
   kind: jewelry
   rarity: rare
   effect: "Battle Start: Gain 1 gold"
@@ -276,6 +304,7 @@
   inferred: true
 - name: Golden Cherry Bomb
   id: 147
+  tags: food
   kind: food
   rarity: golden
   material: bomb
@@ -283,18 +312,21 @@
   inferred: true
 - name: Golden Citrine Earring
   id: 148
+  tags: jewelry
   kind: jewelry
   rarity: golden
   effect: Gain 2 speed every other turn
   inferred: true
 - name: Golden Cracked Bouldershield
   id: 41
+  tags: stone
   rarity: golden
   material: stone
   effect: "Exposed: Gain 10 armor"
   inferred: true
 - name: Golden Cracked Whetstone
   id: 42
+  tags: stone
   rarity: golden
   material: stone
   effect: "First Turn: Gain 4 attack"
@@ -308,6 +340,7 @@
   inferred: true
 - name: Golden Emerald Crown
   id: 149
+  tags: jewelry
   kind: jewelry
   rarity: golden
   health: 16
@@ -320,6 +353,7 @@
   inferred: true
 - name: Golden Emerald Ring
   id: 45
+  tags: jewelry
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Restore 4 health"
@@ -334,6 +368,7 @@
   effect: "Exposed: Deal 1 damage 6 times"
 - name: Golden Granite Gauntlet
   id: 48
+  tags: stone
   rarity: golden
   material: stone
   health: -4
@@ -357,30 +392,37 @@
   inferred: true
 - name: Golden Petrifying Flask
   id: 52
+  tags: stone
   rarity: golden
   material: stone
   effect: "Wounded: Gain 20 armor and stun yourself for 4 turns"
   inferred: true
 - name: Golden Redwood Cloak
   id: 53
+  tags: wood
   rarity: golden
   material: wood
   health: 4
   effect: "Battle Start: If your health is not full, restore 2 health"
 - name: Golden Redwood Helmet
   id: 54
+  tags: wood
   rarity: golden
   material: wood
   armor: 2
   effect: "Exposed: Restore 6 health"
 - name: Golden Redwood Roast
   id: 55
+  tags:
+    - food
+    - wood
   kind: food
   rarity: golden
   material: wood
   health: 10
 - name: Golden Ruby Crown
   id: 150
+  tags: jewelry
   kind: jewelry
   rarity: golden
   attack: 2
@@ -388,12 +430,14 @@
   inferred: true
 - name: Golden Ruby Earring
   id: 56
+  tags: jewelry
   kind: jewelry
   rarity: golden
   effect: Deal 2 damage every other turn
   inferred: true
 - name: Golden Ruby Ring
   id: 57
+  tags: jewelry
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Gain 2 attack and take 4 damage"
@@ -405,6 +449,7 @@
   inferred: true
 - name: Golden Sapphire Crown
   id: 152
+  tags: jewelry
   kind: jewelry
   rarity: golden
   health: -4
@@ -417,6 +462,7 @@
   version: 0.3.5
 - name: Golden Sapphire Ring
   id: 59
+  tags: jewelry
   kind: jewelry
   rarity: golden
   effect: "Battle Start: Steal 4 armor from the enemy"
@@ -427,6 +473,9 @@
   armor: 6
 - name: Golden Vampiric Wine
   id: 62
+  tags:
+    - food
+    - sanguine
   kind: food
   rarity: golden
   material: sanguine
@@ -438,12 +487,15 @@
   speed: -2
 - name: Granite Gauntlet
   id: 64
+  tags: stone
   rarity: common
   material: stone
   health: -2
   effect: "Battle Start: Gain 5 armor"
 - name: Granite Hammer
   id: 65
+  weapon: true
+  tags: stone
   kind: weapon
   rarity: rare
   material: stone
@@ -452,6 +504,8 @@
   version: 0.3.5
 - name: Grindstone Club
   id: 66
+  weapon: true
+  tags: stone
   kind: weapon
   rarity: heroic
   material: stone
@@ -460,12 +514,15 @@
   version: 0.3.5
 - name: Haymaker
   id: 67
+  weapon: true
   kind: weapon
   rarity: common
   attack: 1
   effect: "Every 3 strikes, deal triple damage"
 - name: Heart Drinker
   id: 68
+  weapon: true
+  tags: sanguine
   kind: weapon
   rarity: common
   material: sanguine
@@ -474,18 +531,21 @@
   version: 0.3.5
 - name: Heart-shaped Acorn
   id: 135
+  tags: wood
   rarity: rare
   material: wood
   effect: "Battle Start: If you have 0 base armor, restore health to full"
   version: 0.3.5
 - name: Heart-shaped Potion
   id: 127
+  tags: sanguine
   rarity: rare
   material: sanguine
   effect: "When you are reduced to exactly 1 health for the first time, restore health to full"
   version: 0.3.5
 - name: Hidden Dagger
   id: 69
+  weapon: true
   kind: weapon
   rarity: common
   attack: 2
@@ -500,11 +560,13 @@
   version: 0.3.5
 - name: Honeycomb
   id: 145
+  tags: food
   kind: food
   rarity: heroic
   version: 0.3.5
 - name: Hook Blade
   id: 70
+  weapon: true
   kind: weapon
   rarity: rare
   attack: 2
@@ -539,6 +601,8 @@
   version: 0.3.5
 - name: Ironstone Greatsword
   id: 76
+  weapon: true
+  tags: stone
   kind: weapon
   rarity: common
   material: stone
@@ -547,6 +611,7 @@
   version: 0.3.5
 - name: Ironstone Sandals
   id: 77
+  tags: stone
   rarity: rare
   material: stone
   speed: -1
@@ -571,6 +636,7 @@
   version: 0.3.5
 - name: Lifeblood Burst
   id: 81
+  tags: sanguine
   rarity: heroic
   material: sanguine
   effect: "Wounded: Deal damage equal to 50% of your max health"
@@ -581,17 +647,21 @@
   effect: "Resilience: 50% chance to survive with 1 health"
 - name: Marble Mirror
   id: 83
+  tags: stone
   rarity: rare
   material: stone
   effect: "Battle Start: Gain armor equal to the enemy's armor"
 - name: Melting Iceblade
   id: 84
+  weapon: true
   kind: weapon
   rarity: heroic
   attack: 7
   effect: "On Hit: Lose 1 attack"
 - name: Mortal Edge
   id: 85
+  weapon: true
+  tags: sanguine
   kind: weapon
   rarity: rare
   material: sanguine
@@ -600,12 +670,14 @@
   version: 0.3.5
 - name: Oak Heart
   id: 86
+  tags: wood
   unique: true
   rarity: rare
   material: wood
   effect: Gain 2 health for each equipped wood item
 - name: Ore Heart
   id: 87
+  tags: stone
   unique: true
   rarity: rare
   material: stone
@@ -613,11 +685,13 @@
   version: 0.3.5
 - name: Petrifying Flask
   id: 88
+  tags: stone
   rarity: common
   material: stone
   effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
 - name: Pinecone Plate
   id: 90
+  tags: wood
   rarity: rare
   material: wood
   effect: "Battle Start: If your health is full, gain 1 thorn at turn start for the rest of battle"
@@ -654,24 +728,31 @@
   version: 0.3.5
 - name: Redwood Cloak
   id: 95
+  tags: wood
   rarity: common
   material: wood
   health: 2
   effect: "Battle Start: If your health is not full, restore 1 health"
 - name: Redwood Helmet
   id: 96
+  tags: wood
   rarity: common
   material: wood
   armor: 1
   effect: "Exposed: Restore 3 health"
 - name: Redwood Roast
   id: 97
+  tags:
+    - food
+    - wood
   kind: food
   rarity: common
   material: wood
   health: 5
 - name: Redwood Rod
   id: 98
+  weapon: true
+  tags: wood
   kind: weapon
   rarity: common
   material: wood
@@ -687,23 +768,27 @@
   armor: 5
 - name: Ruby Crown
   id: 100
+  tags: jewelry
   kind: jewelry
   rarity: common
   attack: 1
   speed: -1
 - name: Ruby Earring
   id: 101
+  tags: jewelry
   kind: jewelry
   rarity: common
   effect: Deal 1 damage every other turn
 - name: Ruby Gemstone
   id: 102
+  tags: jewelry
   unique: true
   kind: jewelry
   rarity: heroic
   effect: "If your attack is exactly 1, deal 4 damage on hit"
 - name: Ruby Ring
   id: 103
+  tags: jewelry
   kind: jewelry
   rarity: common
   effect: "Battle Start: Gain 1 attack and take 2 damage"
@@ -720,6 +805,7 @@
   version: 0.3.5
 - name: Sapphire Crown
   id: 105
+  tags: jewelry
   kind: jewelry
   rarity: common
   health: -2
@@ -730,12 +816,14 @@
   effect: Gain 1 armor every other turn
 - name: Sapphire Gemstone
   id: 107
+  tags: jewelry
   unique: true
   kind: jewelry
   rarity: heroic
   effect: "Whenever you lose armor, restore that much health"
 - name: Sapphire Ring
   id: 108
+  tags: jewelry
   kind: jewelry
   rarity: common
   effect: "Battle Start: Steal 2 armor from the enemy"
@@ -752,6 +840,7 @@
   version: 0.3.5
 - name: Spearshield Lance
   id: 110
+  weapon: true
   kind: weapon
   rarity: common
   attack: 1
@@ -768,6 +857,9 @@
   version: 0.3.5
 - name: Stone Steak
   id: 113
+  tags:
+    - food
+    - stone
   kind: food
   rarity: rare
   material: stone
@@ -775,6 +867,8 @@
   version: 0.3.5
 - name: Stoneslab Sword
   id: 114
+  weapon: true
+  tags: stone
   kind: weapon
   rarity: heroic
   material: stone
@@ -783,6 +877,7 @@
   version: 0.3.5
 - name: Stormcloud Spear
   id: 115
+  weapon: true
   kind: weapon
   rarity: common
   attack: 2
@@ -799,6 +894,7 @@
   version: 0.3.5
 - name: Swiftstrike Rapier
   id: 116
+  weapon: true
   kind: weapon
   rarity: rare
   attack: 2
@@ -812,12 +908,14 @@
   version: 0.3.5
 - name: Sword of the Hero
   id: 117
+  weapon: true
   kind: weapon
   rarity: common
   attack: 3
   version: 0.3.5
 - name: Tempest Blade
   id: 137
+  weapon: true
   kind: weapon
   rarity: heroic
   effect: Attack is always equal to speed
@@ -835,6 +933,7 @@
   version: 0.3.5
 - name: Tree Sap
   id: 119
+  tags: wood
   rarity: cauldron
   parts:
     - Redwood Roast
@@ -845,6 +944,9 @@
   version: 0.3.5
 - name: Vampiric Wine
   id: 120
+  tags:
+    - food
+    - sanguine
   kind: food
   rarity: common
   material: sanguine
@@ -856,6 +958,8 @@
   speed: -1
 - name: Woodcutter's Axe
   id: 122
+  weapon: true
+  tags: wood
   kind: weapon
   rarity: common
   material: wood
@@ -863,6 +967,7 @@
   version: 0.3.5
 - name: Wooden Stick
   id: 123
+  weapon: true
   kind: weapon
   rarity: common
   attack: 1
