@@ -22,6 +22,7 @@
   version: 0.3.5
 - name: Blackbriar Blade
   id: 5
+  weapon: true
   rarity: rare
   attack: 1
   effect: Gain 2 attack for each thorns

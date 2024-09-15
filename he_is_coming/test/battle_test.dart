@@ -76,4 +76,31 @@ void main() {
       damage: 53, // should be 54
     );
   });
+
+  test('Blackbriar Blade build', () {
+    // https://discord.com/channels/1041414829606449283/1209488593219756063/1282945788846149685
+    final items = [
+      'Blackbriar Blade',
+      'Tree Sap',
+      'Sanguine Rose',
+      'Crimson Cloak',
+      'Razorvine Talisman',
+      'Briar rose',
+      'Iron Rose',
+      'Pinecone Plate',
+      'Vampiric Wine',
+    ];
+    const edge = 'Cutting Edge';
+    final oils = [
+      'Attack Oil',
+    ];
+    endFight(
+      data: data,
+      items: items,
+      edge: edge,
+      oils: oils,
+      turns: 10, // should be 15
+      damage: 39, // should be 519
+    );
+  });
 }

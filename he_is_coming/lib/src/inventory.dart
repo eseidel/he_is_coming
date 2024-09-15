@@ -12,6 +12,9 @@ class ItemException implements Exception {
 
   /// Message
   final String message;
+
+  @override
+  String toString() => 'ItemException: $message';
 }
 
 /// Player's inventory.
