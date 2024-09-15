@@ -1618,4 +1618,18 @@ void main() {
     // So we lose 1 hp and gain it back from the lost armor.
     expect(result.first.hp, 10);
   });
+
+  test('Razor Scales', () {
+    const item = 'Razor Scales';
+    final armorEveryTurn = Item.test(effect: onTurn((c) => c.gainArmor(1)));
+    final player = data.player(items: [item], customItems: [armorEveryTurn]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 2, health: 7);
+    final result = doBattle(first: player, second: enemy);
+    // Razor Scales does damage when armor is removed, after exposed.
+    // So the first attack doesn't trigger it, but further ones do.
+    // We kill the enemy on their 4th attack, taking 4 dmg.
+    expect(result.first.hp, 6);
+  });
 }

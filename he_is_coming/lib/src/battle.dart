@@ -391,6 +391,9 @@ class CreatureStats {
   /// true if the creature can still be exposed this battle.
   bool get canBeExposed => exposedCount < exposedLimit;
 
+  /// true if the creature has been exposed this battle.
+  bool get hasBeenExposed => exposedCount > 0;
+
   /// true if the creature has already sent onWounded this battle.
   final bool hasBeenWounded;
 
