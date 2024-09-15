@@ -225,4 +225,5 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
       ..restoreHealth(3),
   ),
   'Explosive Sword': onExposedAndWounded((c) => c.dealDamage(3)),
+  'Brittlebark Club': onExposedAndWounded((c) => c.loseAttack(2)),
 });

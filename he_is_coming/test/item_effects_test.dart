@@ -1503,4 +1503,19 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 5);
   });
+
+  test('Brittlebark Club', () {
+    const item = 'Brittlebark Club';
+    final player = data.player(armor: 1, items: [item], hp: 6);
+    expect(player.hp, 6);
+
+    final enemy = makeEnemy(attack: 1, health: 13);
+    // Brittlebark Club has 6 attack, but loses 2 attack on exposed or wounded.
+    // We hit for 6, then take 1 dmg and are exposed
+    // Then we hit for 4, then take 1 dmg and are wounded
+    // Then we hit for 2, take 1 dmg
+    // Then we hit for 2
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 4);
+  });
 }
