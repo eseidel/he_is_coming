@@ -51,8 +51,11 @@ class DataHolderState extends State<DataHolder> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
     return InheritedData(
-      data: _isLoading ? null : _data,
+      data: _data,
       child: widget.child,
     );
   }
@@ -63,39 +66,20 @@ class InheritedData extends InheritedWidget {
   /// Constructs an [InheritedData]
   const InheritedData({
     required super.child,
+    required this.data,
     super.key,
-    this.data,
   });
 
   /// The data to inherit.
-  final Data? data;
+  final Data data;
 
   /// Look up the [InheritedData] from the [BuildContext].
-  static InheritedData? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<InheritedData>();
+  static InheritedData of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedData>()!;
   }
 
   @override
   bool updateShouldNotify(InheritedData oldWidget) {
     return oldWidget.data != data;
-  }
-}
-
-/// A widget that uses the [Data] from the [InheritedData].
-class UsesData extends StatelessWidget {
-  /// Constructs a [UsesData]
-  const UsesData({required this.builder, super.key});
-
-  /// The builder to use with the [Data].
-  final Widget Function(BuildContext context, Data data) builder;
-
-  @override
-  Widget build(BuildContext context) {
-    final data = InheritedData.of(context)!.data;
-    if (data == null) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      return builder(context, data);
-    }
   }
 }

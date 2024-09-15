@@ -23,12 +23,15 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'battle',
           name: 'random_battle',
-          builder: (BuildContext context, GoRouterState state) {
-            return UsesData(
-              builder: (context, data) {
-                return RandomBattlePage(
-                  data: data.withoutMissingEffects(),
-                );
+          redirect: (BuildContext context, GoRouterState state) {
+            final data = InheritedData.of(context).data;
+            return state.namedLocation(
+              'battle',
+              pathParameters: {
+                BuildStateCodec.parameterName: BuildStateCodec.encode(
+                  BuildState.random(level: Level.one, data: data),
+                  data,
+                ),
               },
             );
           },
@@ -39,18 +42,15 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) {
             final parameter =
                 state.pathParameters[BuildStateCodec.parameterName];
-            return UsesData(
-              builder: (context, allData) {
-                final data = allData.withoutMissingEffects();
-                return BattlePage(
-                  data: data,
-                  state: BuildStateCodec.tryDecode(
-                        parameter,
-                        data,
-                      ) ??
-                      BuildState.random(level: Level.one, data: data),
-                );
-              },
+            final allData = InheritedData.of(context).data;
+            final data = allData.withoutMissingEffects();
+            return BattlePage(
+              data: data,
+              state: BuildStateCodec.tryDecode(
+                    parameter,
+                    data,
+                  ) ??
+                  BuildState.random(level: Level.one, data: data),
             );
           },
         ),
@@ -58,45 +58,14 @@ final GoRouter _router = GoRouter(
           path: 'compendium',
           name: 'compendium',
           builder: (context, _) {
-            return UsesData(
-              builder: (context, data) {
-                return CompendiumPage(data: data);
-              },
-            );
+            final data = InheritedData.of(context).data;
+            return CompendiumPage(data: data);
           },
         ),
       ],
     ),
   ],
 );
-
-/// A page that starts a random battle.
-/// This is needed because Data needs to be loaded before we can generate
-/// BuildState.random.
-class RandomBattlePage extends StatelessWidget {
-  /// Constructs a [RandomBattlePage]
-  const RandomBattlePage({required this.data, super.key});
-
-  /// The data to use for the battle.
-  final Data data;
-
-  @override
-  Widget build(BuildContext context) {
-    // Queue a redirection after the build.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.replaceNamed(
-        'battle',
-        pathParameters: {
-          BuildStateCodec.parameterName: BuildStateCodec.encode(
-            BuildState.random(level: Level.one, data: data),
-            data,
-          ),
-        },
-      );
-    });
-    return const Center(child: CircularProgressIndicator());
-  }
-}
 
 /// The main application widget.
 class MyApp extends StatelessWidget {
