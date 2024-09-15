@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:he_is_coming/he_is_coming.dart';
@@ -162,6 +163,27 @@ class EnemyResults extends StatelessWidget {
     ];
   }
 
+  Widget _resultLine(BattleResult result) {
+    final change = result.firstDelta;
+    final survived = result.first.isAlive;
+    final diedIcon = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Icon(
+        Symbols.skull,
+        color: Palette.attack,
+        size: Style.inlineStatIconSize.border,
+      ),
+    );
+    return Row(
+      children: [
+        CreatureName(creature: result.second),
+        const Spacer(),
+        if (survived) ..._battleDelta(change),
+        if (!survived) diedIcon,
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // For each enemy, run the battle and gather the results.
@@ -212,29 +234,18 @@ class EnemyResults extends StatelessWidget {
         ],
       );
     }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: results.map((result) {
-        final change = result.firstDelta;
-        final survived = result.first.isAlive;
-        final diedIcon = Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Icon(
-            Symbols.skull,
-            color: Palette.attack,
-            size: Style.inlineStatIconSize.border,
-          ),
-        );
-        return Row(
-          children: [
-            CreatureName(creature: result.second),
-            const Spacer(),
-            if (survived) ..._battleDelta(change),
-            if (!survived) diedIcon,
-          ],
-        );
-      }).toList(),
+      children: [
+        Text('Battle Results', style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        ...results.map(_resultLine).expandIndexed((i, line) {
+          return [
+            if (i != 0) const SizedBox(height: 8),
+            line,
+          ];
+        }),
+      ],
     );
   }
 }
@@ -520,32 +531,36 @@ class BattlePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Battle'),
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: 300,
-              child: LevelSwitcher(
-                level: _level,
-                setLevel: _stateController(context).setLevel,
+      body: SizedBox.expand(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(
+                width: 300,
+                child: LevelSwitcher(
+                  level: _level,
+                  setLevel: _stateController(context).setLevel,
+                ),
               ),
-            ),
-            Wrap(
-              children: <Widget>[
-                ConstrainedBox(
-                  constraints:
-                      const BoxConstraints(maxWidth: 500, minWidth: 400),
-                  child: PlayerEditor(controller: _stateController(context)),
-                ),
-                const SizedBox(width: 16),
-                ConstrainedBox(
-                  constraints:
-                      const BoxConstraints(maxWidth: 500, minWidth: 400),
-                  child: EnemyResults(state: state, data: data),
-                ),
-              ],
-            ),
-          ],
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 16,
+                runSpacing: 16,
+                children: <Widget>[
+                  ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxWidth: 500, minWidth: 400),
+                    child: PlayerEditor(controller: _stateController(context)),
+                  ),
+                  ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxWidth: 500, minWidth: 400),
+                    child: EnemyResults(state: state, data: data),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -641,50 +656,31 @@ class PlayerBattleView extends StatelessWidget {
     // Should this make a Player first?
     final stats = inventory.statsWithItems(playerIntrinsicStats);
     final edge = inventory.edge;
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: <Widget>[
-        SizedBox(
-          width: 100,
-          child: Column(
-            children: StatType.values.map((statType) {
-              return Padding(
-                padding: const EdgeInsets.all(4),
-                child: StatLine(
-                  stats: stats,
-                  statType: statType,
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-        Expanded(
-          child: Column(
-            children: <Widget>[
-              _itemSlot(0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ...inventory.oils.map((oil) {
-                    return OilIconWithTooltip(oil: oil);
-                  }),
-                  if (edge != null)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: EdgeName(edge: edge),
-                    ),
-                ],
+        StatsRow(stats: stats),
+        const SizedBox(height: 8),
+        _itemSlot(0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ...inventory.oils.map((oil) {
+              return OilIconWithTooltip(oil: oil);
+            }),
+            if (edge != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: EdgeName(edge: edge),
               ),
-              ...inventory.items.skip(1).map((item) {
-                return _itemSlot(inventory.items.indexOf(item));
-              }),
-              if (inventory.sets.isNotEmpty)
-                ...inventory.sets.map((set) {
-                  return SetBonusName(set: set);
-                }),
-            ],
-          ),
+          ],
         ),
+        ...inventory.items.skip(1).map((item) {
+          return _itemSlot(inventory.items.indexOf(item));
+        }),
+        if (inventory.sets.isNotEmpty)
+          ...inventory.sets.map((set) {
+            return SetBonusName(set: set);
+          }),
       ],
     );
   }

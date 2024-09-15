@@ -84,7 +84,7 @@ class RandomBattlePage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Queue a redirection after the build.
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.goNamed(
+      context.replaceNamed(
         'battle',
         pathParameters: {
           BuildStateCodec.parameterName: BuildStateCodec.encode(

@@ -8,6 +8,7 @@ environment:
   sdk: ^3.5.1
 
 dependencies:
+  collection: ^1.18.0
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
