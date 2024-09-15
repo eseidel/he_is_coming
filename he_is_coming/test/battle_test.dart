@@ -99,8 +99,8 @@ void main() {
       items: items,
       edge: edge,
       oils: oils,
-      turns: 10, // should be 15
-      damage: 39, // should be 519
+      turns: 12, // should be 15
+      damage: 47, // should be 519
     );
   });
 }

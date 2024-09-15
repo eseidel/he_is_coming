@@ -554,6 +554,7 @@ class BattleContext {
         Trigger.onHeal,
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
+        parentSource: source,
       );
     }
   }
@@ -588,6 +589,7 @@ class BattleContext {
       Trigger.onTakeDamage,
       meIndex: targetIndex,
       attackerIndex: _attackerIndex,
+      parentSource: source,
     );
 
     // newStats is not valid after setStats (which can happen inside a trigger)
@@ -605,6 +607,7 @@ class BattleContext {
           Trigger.onExposed,
           meIndex: targetIndex,
           attackerIndex: _attackerIndex,
+          parentSource: source,
         );
       }
     }
@@ -622,6 +625,7 @@ class BattleContext {
         Trigger.onWounded,
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
+        parentSource: source,
       );
     }
   }
@@ -648,6 +652,7 @@ class BattleContext {
       Trigger.onHit,
       meIndex: attackerIndex,
       attackerIndex: defenderIndex,
+      parentSource: null,
     );
 
     // Thorns only trigger on strikes.
@@ -685,8 +690,17 @@ class BattleContext {
     }
   }
 
-  void _trigger(Trigger trigger, {required int meIndex, int? attackerIndex}) {
+  void _trigger(
+    Trigger trigger, {
+    required int meIndex,
+    required String? parentSource,
+    int? attackerIndex,
+  }) {
     void callTrigger(CatalogItem item) {
+      // Prevent infinite loops.
+      if (parentSource == item.name) {
+        return;
+      }
       final effectCxt = EffectContext(
         battle: this,
         meIndex: meIndex,
@@ -729,7 +743,7 @@ class BattleContext {
     // OnBattleStart happens before we decide who the attacker is.
     // So intentionally do not pass an attackerIndex here.
     for (var index = 0; index < creatures.length; index++) {
-      _trigger(Trigger.onBattle, meIndex: index);
+      _trigger(Trigger.onBattle, meIndex: index, parentSource: null);
     }
   }
 
@@ -737,7 +751,7 @@ class BattleContext {
     // Initiative triggers after battle start so we know who the attacker is
     // but we're still not passing an attackerIndex here.
     for (var index = 0; index < creatures.length; index++) {
-      _trigger(Trigger.onInitiative, meIndex: index);
+      _trigger(Trigger.onInitiative, meIndex: index, parentSource: null);
     }
   }
 
@@ -745,6 +759,7 @@ class BattleContext {
         Trigger.onTurn,
         meIndex: attackerIndex,
         attackerIndex: attackerIndex,
+        parentSource: null,
       );
 
   /// Initial list of creatures in this battle.

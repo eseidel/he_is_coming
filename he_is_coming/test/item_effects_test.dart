@@ -1518,4 +1518,18 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     expect(result.first.hp, 4);
   });
+
+  test('Sanguine Rose', () {
+    const item = 'Sanguine Rose';
+    final healOnHit = Item.test(effect: onHit((c) => c.restoreHealth(1)));
+    final player = data.player(items: [item], customItems: [healOnHit], hp: 6);
+    expect(player.hp, 6);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // Sanguine Rose heals 1 hp when we restore health.
+    // So we heal 2 every time we attack, restoring to full over 4 hits.
+    final result = doBattle(first: player, second: enemy);
+    // TODO(eseidel): resolve onHit on the fatal blow.
+    expect(result.first.hp, 9);
+  });
 }
