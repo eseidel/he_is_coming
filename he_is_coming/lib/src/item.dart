@@ -277,9 +277,7 @@ class Item extends CatalogItem {
     'weapon',
     'tags',
     'unique',
-    'kind',
     'rarity',
-    'material',
     'unlock', // ignored for now
     'parts', // ignored for now
     ...Stats.orderedKeys,
@@ -331,9 +329,7 @@ class Item extends CatalogItem {
     String? name,
     int? id,
     Set<ItemTag>? tags,
-    ItemKind? kind,
     ItemRarity? rarity,
-    ItemMaterial? material,
     Stats? stats,
     bool? isUnique,
     Effect? effect,
@@ -353,30 +349,6 @@ class Item extends CatalogItem {
       version: version,
     );
   }
-}
-
-/// Enum representing Item kind.
-enum ItemKind {
-  /// Weapon, can only equip one of these.
-  weapon,
-
-  // Are food and jewelry just "tags"?  The only reason why Food is separate
-  // is that there are food + stone items.
-  // I'm not aware of jewelry + material items.
-
-  /// Food, can be combined in the cauldron.
-  food,
-
-  /// Jewelry, interacts with items sensitive to jewelry.
-  jewelry;
-
-  /// Create a kind from a json string.
-  factory ItemKind.fromJson(String json) {
-    return ItemKind.values.firstWhere((e) => e.name == json);
-  }
-
-  /// Convert the kind to a json string.
-  String toJson() => name;
 }
 
 /// The types of gem sets.
@@ -417,30 +389,6 @@ enum ItemRarity {
   }
 
   /// Convert the rarity to a json string.
-  String toJson() => name;
-}
-
-/// Represents the material of the item.
-// These maybe should just be "tags".
-enum ItemMaterial {
-  /// Wood, interacts with items sensitive to wood.
-  wood,
-
-  /// Stone, interacts with items sensitive to stone.
-  stone,
-
-  /// Sanguine
-  sanguine,
-
-  /// Bomb
-  bomb;
-
-  /// Create a material from a json string.
-  factory ItemMaterial.fromJson(String json) {
-    return ItemMaterial.values.firstWhere((e) => e.name == json);
-  }
-
-  /// Convert the material to a json string.
   String toJson() => name;
 }
 
