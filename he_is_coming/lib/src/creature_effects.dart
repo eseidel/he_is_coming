@@ -37,6 +37,7 @@ final creatureEffects = EffectCatalog(<String, EffectMap>{
   'Spider Level 3': _spiderEffect(damage: 5),
   'Bat Level 1': _batEffect(hp: 1),
   'Bat Level 2': _batEffect(hp: 2),
+  'Bat Level 3': _batEffect(hp: 3),
   'Hedgehog Level 1': _hedgehogEffect(thorns: 3),
   'Woodland Abomination': onTurn(
     (c) {
