@@ -239,4 +239,8 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Citrine Earring': onTurn(
     (c) => _if(c.isEveryOtherTurn, () => c.gainSpeed(1)),
   ),
+  'Tempest Plate': onExposed(
+    // I'm not aware of any negative armor, so this if is probably unnecessary.
+    (c) => _if(c.my.baseArmor > 0, () => c.gainSpeed(c.my.baseArmor)),
+  ),
 });

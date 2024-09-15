@@ -1649,4 +1649,22 @@ void main() {
     // Enemy dies on our 5th turn from the test item dmg.
     expect(result.first.hp, 6);
   });
+
+  test('Tempest Plate', () {
+    const item = 'Tempest Plate';
+    final speedToDamage =
+        Item.test(effect: onTurn((c) => c.dealDamage(c.my.speed)));
+    final player = data.player(items: [item], customItems: [speedToDamage]);
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 2);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Tempest Plate gives speed = base armor when exposed.
+    // Our test item does damage based on speed every turn.
+    // Armor breaks on 2nd turn, we deal 2 dmg from 3rd turn onward.
+    // So 1, 1, 3, 3, 3, including our strike dmg.
+    // Dies on the 4th turn, we take 3 dmg total, 2 of which is goes to armor.
+    expect(result.first.hp, 9);
+  });
 }
