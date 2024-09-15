@@ -26,9 +26,11 @@ class EffectContext {
   /// Create an EffectContext
   EffectContext({
     required BattleContext battle,
+    required this.trigger,
     required int meIndex,
     required int? attackerIndex,
     required String sourceName,
+    required this.value,
   })  : _battle = battle,
         _meIndex = meIndex,
         _attackerIndex = attackerIndex,
@@ -38,6 +40,13 @@ class EffectContext {
   final int _meIndex;
   final int? _attackerIndex;
   final String _sourceName;
+
+  /// Trigger for this effect.
+  final Trigger trigger;
+
+  /// Trigger specific value information.
+  /// e.g. damage for onDamage.
+  final int? value;
 
   /// Stats for the creature causing the effect.
   CreatureStats get my => _battle.stats[_meIndex];
@@ -91,6 +100,15 @@ class EffectContext {
   bool get hadMoreSpeedAtStart {
     final initialStats = _battle.initialCreatures[_meIndex].baseStats;
     return initialStats.speed > _battle.stats[_enemyIndex].speed;
+  }
+
+  /// How much overheal triggered this effect.
+  /// Only valid when trigger == Trigger.onOverheal.
+  int get overhealValue {
+    if (trigger != Trigger.onOverheal) {
+      throw StateError("Can't call overhealValue outside of overheal triggers");
+    }
+    return value!;
   }
 
   /// Add an extra exposed trigger.
@@ -556,6 +574,7 @@ class BattleContext {
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,
+        value: armor,
       );
     }
   }
@@ -577,6 +596,7 @@ class BattleContext {
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,
+        value: thorns,
       );
     }
   }
@@ -594,6 +614,7 @@ class BattleContext {
     final newStats = target.copyWith(hp: newHp);
     setStats(targetIndex, newStats);
     final restored = newHp - target.hp;
+    final overheal = hp - restored;
     log('$source restored $restored hp to $targetName');
 
     // If we successfully restored health, trigger onRestoreHealth.
@@ -603,6 +624,16 @@ class BattleContext {
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,
+        value: restored,
+      );
+    }
+    if (overheal > 0) {
+      _trigger(
+        Trigger.onOverheal,
+        meIndex: targetIndex,
+        attackerIndex: _attackerIndex,
+        parentSource: source,
+        value: overheal,
       );
     }
   }
@@ -638,6 +669,7 @@ class BattleContext {
       meIndex: targetIndex,
       attackerIndex: _attackerIndex,
       parentSource: source,
+      value: damage,
     );
 
     // newStats is not valid after setStats (which can happen inside a trigger)
@@ -656,6 +688,7 @@ class BattleContext {
           meIndex: targetIndex,
           attackerIndex: _attackerIndex,
           parentSource: source,
+          value: null,
         );
       }
     }
@@ -674,6 +707,7 @@ class BattleContext {
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,
+        value: null,
       );
     }
   }
@@ -701,6 +735,7 @@ class BattleContext {
       meIndex: attackerIndex,
       attackerIndex: defenderIndex,
       parentSource: null,
+      value: null,
     );
 
     // Thorns only trigger on strikes.
@@ -742,6 +777,7 @@ class BattleContext {
     Trigger trigger, {
     required int meIndex,
     required String? parentSource,
+    required int? value,
     int? attackerIndex,
   }) {
     void callTrigger(CatalogItem item) {
@@ -750,10 +786,12 @@ class BattleContext {
         return;
       }
       final effectCxt = EffectContext(
+        trigger: trigger,
         battle: this,
         meIndex: meIndex,
         attackerIndex: attackerIndex,
         sourceName: item.name,
+        value: value,
       );
       item.effect?[trigger]?.call(effectCxt);
       _checkForDeath();
@@ -791,7 +829,12 @@ class BattleContext {
     // OnBattleStart happens before we decide who the attacker is.
     // So intentionally do not pass an attackerIndex here.
     for (var index = 0; index < creatures.length; index++) {
-      _trigger(Trigger.onBattle, meIndex: index, parentSource: null);
+      _trigger(
+        Trigger.onBattle,
+        meIndex: index,
+        parentSource: null,
+        value: null,
+      );
     }
   }
 
@@ -799,7 +842,12 @@ class BattleContext {
     // Initiative triggers after battle start so we know who the attacker is
     // but we're still not passing an attackerIndex here.
     for (var index = 0; index < creatures.length; index++) {
-      _trigger(Trigger.onInitiative, meIndex: index, parentSource: null);
+      _trigger(
+        Trigger.onInitiative,
+        meIndex: index,
+        parentSource: null,
+        value: null,
+      );
     }
   }
 
@@ -808,6 +856,7 @@ class BattleContext {
         meIndex: attackerIndex,
         attackerIndex: attackerIndex,
         parentSource: null,
+        value: null,
       );
 
   /// Initial list of creatures in this battle.

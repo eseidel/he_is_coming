@@ -231,4 +231,5 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   'Shield Talisman': onGainArmor((c) => c.gainArmor(1)),
   'Briar Rose': onRestoreHealth((c) => c.gainThorns(2)),
   'Razorvine Talisman': onGainThorns((c) => c.gainThorns(1)),
+  'Emerald Gemstone': onOverheal((c) => c.dealDamage(c.overhealValue)),
 });

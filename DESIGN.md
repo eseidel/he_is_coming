@@ -37,17 +37,8 @@ Does a heal of 0 counts as triggering "whenever you restore health"?
 - Deal double damage to armor for Battle Axe
   onModifyDamageThem(c.multiplyArmorDamage(2))
 
-- Whenever you take damage, take 1 additional damage for Brittlebark Armor
-  onModifyDamageMe((c) => c.addDamage(1))
-
 - The first time the enemy strikes, their damage is halved for Protecting Charm
   onModifyDamageMe(_if(c.them.isFirstStrike, c.multiplyDamage(.5)))
-
-- Whenever Brittlebark Beast takes damage, he takes 2 additional damage for Brittlebark Beast
-  onModifyDamageMe((c.addDamage(2)))
-
-- Whenever Gentle Giant takes damage he gains 2 thorns.  Wounded: Gain 4 thorns instead for Gentle Giant
-  onTakeDamage(c.gainThorns(c.isWounded ? 4 : 2))
 
 - Every 3 strikes, deal triple damage for Haymaker
 - Ignores armor for Bearserker
@@ -98,12 +89,6 @@ Does a heal of 0 counts as triggering "whenever you restore health"?
 
 - Whenever you lose armor, restore that much health for Sapphire Gemstone
   OnArmorDamage
-
-- Whenever you gain thorns, gain 1 additional thorn for Razorvine Talisman
-  OnGainThorn
-
-- Whenever you restore health, restore 1 additional health for Sanguine Rose
-  Health adjust modifiers
 
 - Mountain Troll only strikes every other turn for Mountain Troll
   onWillStrike?  How does this interact with stun?

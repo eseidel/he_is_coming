@@ -41,6 +41,9 @@ EffectMap onExposedAndWounded(EffectFn fn) => multiTrigger(
 /// Creates an [Effect] with an onRestoreHealth callback.
 EffectMap onRestoreHealth(EffectFn fn) => {Trigger.onRestoreHealth: fn};
 
+/// Creates an [Effect] with an onOverheal callback.
+EffectMap onOverheal(EffectFn fn) => {Trigger.onOverheal: fn};
+
 /// Creates an [Effect] with an onGainArmor callback.
 EffectMap onGainArmor(EffectFn fn) => {Trigger.onGainArmor: fn};
 
@@ -74,6 +77,10 @@ enum Trigger {
 
   /// Called when any hp is restored.
   onRestoreHealth,
+
+  /// Called when hp is not restored due to overheal.
+  /// Read EffectContext.overhealValue for amount.
+  onOverheal,
 
   /// Called when any armor is gained.
   onGainArmor,

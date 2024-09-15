@@ -1588,4 +1588,20 @@ void main() {
     // So we gain 2 thorns every turn and kill the wolf in 2 turns taking 2 dmg
     expect(result.first.hp, 8);
   });
+
+  test('Emerald Gemstone', () {
+    const item = 'Emerald Gemstone';
+    final healEveryTurn = Item.test(effect: onTurn((c) => c.restoreHealth(2)));
+    final player = data.player(items: [item], customItems: [healEveryTurn]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Emerald Gemstone turns overheal into damage.
+    // We heal 2 every turn.
+    // That converts to 3 dmg on the first turn, 2 each successive turn.
+    // Wolf dies on our 3rd turn, we lose 0 hp.
+    expect(result.first.hp, 10);
+    expect(result.turns, 2); // 2 turns completed, we're in the 3rd turn.
+  });
 }

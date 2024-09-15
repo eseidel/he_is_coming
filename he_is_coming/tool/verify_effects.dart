@@ -42,6 +42,8 @@ String? implementedTrigger(CatalogItem item) {
       return 'Whenever you gain armor';
     case Trigger.onGainThorns:
       return 'Whenever you gain thorns';
+    case Trigger.onOverheal:
+      return 'Overhealing';
   }
 }
 
