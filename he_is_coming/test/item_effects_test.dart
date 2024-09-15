@@ -1475,4 +1475,18 @@ void main() {
     // Next strike we deal 1.  Enemy strikes for 1 and takes 10 thorns.
     expect(result.first.hp, 2);
   });
+
+  test('Cherry Cocktail', () {
+    const item = 'Cherry Cocktail';
+    final player = data.player(items: [item], hp: 3);
+    expect(player.hp, 3);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Cherry Cocktail heals 3 on battle start and does 3 dmg.
+    // Cherry Cocktail also heals 3 on wounded and does 3 dmg.
+    // We heal to 6, hit enemy for 3, and then it hits us once, wounding
+    // us, triggering a second heal and second 3 dmg, leaving us at 8.
+    expect(result.first.hp, 8);
+  });
 }
