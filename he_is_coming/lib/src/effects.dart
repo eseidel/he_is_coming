@@ -47,6 +47,9 @@ EffectMap onOverheal(EffectFn fn) => {Trigger.onOverheal: fn};
 /// Creates an [Effect] with an onGainArmor callback.
 EffectMap onGainArmor(EffectFn fn) => {Trigger.onGainArmor: fn};
 
+/// Creates an [Effect] with an onLoseArmor callback.
+EffectMap onLoseArmor(EffectFn fn) => {Trigger.onLoseArmor: fn};
+
 /// Creates an [Effect] with an onGainThorns callback.
 EffectMap onGainThorns(EffectFn fn) => {Trigger.onGainThorns: fn};
 
@@ -84,6 +87,10 @@ enum Trigger {
 
   /// Called when any armor is gained.
   onGainArmor,
+
+  /// Called when any amor is removed.
+  /// Check EffectContext.armorValue for amount.
+  onLoseArmor,
 
   /// Called when any thorns are gained.
   onGainThorns,

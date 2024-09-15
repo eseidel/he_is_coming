@@ -40,6 +40,8 @@ String? implementedTrigger(CatalogItem item) {
       return 'Whenever you restore health';
     case Trigger.onGainArmor:
       return 'Whenever you gain armor';
+    case Trigger.onLoseArmor:
+      return 'Whenever you lose armor';
     case Trigger.onGainThorns:
       return 'Whenever you gain thorns';
     case Trigger.onOverheal:

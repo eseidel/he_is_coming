@@ -106,7 +106,18 @@ class EffectContext {
   /// Only valid when trigger == Trigger.onOverheal.
   int get overhealValue {
     if (trigger != Trigger.onOverheal) {
-      throw StateError("Can't call overhealValue outside of overheal triggers");
+      throw StateError('overhealValue only valid for onOverheal');
+    }
+    return value!;
+  }
+
+  /// How much armor was gained or lost.
+  /// Only valid when trigger == Trigger.onGainArmor or Trigger.onLoseArmor.
+  int get armorLost {
+    if (trigger != Trigger.onLoseArmor && trigger != Trigger.onGainArmor) {
+      throw StateError(
+        'armorLost is only valid for onGainArmor and onLoseArmor',
+      );
     }
     return value!;
   }
@@ -663,7 +674,7 @@ class BattleContext {
       );
     }
 
-    // Does it count as damage if it's absorbed by armor?
+    // Damage counts as damage regardless of if it was absorbed by armor.
     _trigger(
       Trigger.onTakeDamage,
       meIndex: targetIndex,
@@ -671,6 +682,17 @@ class BattleContext {
       parentSource: source,
       value: damage,
     );
+
+    final armorLost = armorBefore - newArmor;
+    if (armorLost > 0) {
+      _trigger(
+        Trigger.onLoseArmor,
+        meIndex: targetIndex,
+        attackerIndex: _attackerIndex,
+        parentSource: source,
+        value: armorLost,
+      );
+    }
 
     // newStats is not valid after setStats (which can happen inside a trigger)
     {

@@ -1604,4 +1604,18 @@ void main() {
     expect(result.first.hp, 10);
     expect(result.turns, 2); // 2 turns completed, we're in the 3rd turn.
   });
+
+  test('Sapphire Gemstone', () {
+    const item = 'Sapphire Gemstone';
+    final armorEveryTurn = Item.test(effect: onTurn((c) => c.gainArmor(1)));
+    final player = data.player(items: [item], customItems: [armorEveryTurn]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 2, health: 6);
+    final result = doBattle(first: player, second: enemy);
+    // Sapphire Gemstone lost armor into healing.
+    // Every turn we gain 1 armor, and the enemy hits for 2.
+    // So we lose 1 hp and gain it back from the lost armor.
+    expect(result.first.hp, 10);
+  });
 }
