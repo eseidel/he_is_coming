@@ -1667,4 +1667,19 @@ void main() {
     // Dies on the 4th turn, we take 3 dmg total, 2 of which is goes to armor.
     expect(result.first.hp, 9);
   });
+
+  test('Oak Heart', () {
+    const item = 'Oak Heart';
+    final player = data.player(items: [item]);
+    // Oak Heart gives 2 hp for each wood item.
+    // It counts as a wood item itself.
+    expect(player.hp, 12);
+
+    final wood = Item.test(tags: const {ItemTag.wood});
+    final player2 = data.player(items: [item], customItems: [wood]);
+    expect(player2.hp, 14);
+
+    final player3 = data.player(items: [item], customItems: [wood, wood]);
+    expect(player3.hp, 16);
+  });
 }

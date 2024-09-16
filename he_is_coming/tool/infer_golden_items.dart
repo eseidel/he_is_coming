@@ -21,6 +21,7 @@ Item inferGoldenItem(Item item) {
       ? Effect(
           text: doubleNumbers(item.effect!.text),
           callbacks: const {},
+          onDynamicStats: null,
         )
       : null;
   final goldenItem = item.copyWith(

@@ -243,4 +243,6 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
     // I'm not aware of any negative armor, so this if is probably unnecessary.
     (c) => _if(c.my.baseArmor > 0, () => c.gainSpeed(c.my.baseArmor)),
   ),
+}, {
+  'Oak Heart': (i) => Stats(maxHp: i.tagCount(ItemTag.wood) * 2),
 });

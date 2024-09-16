@@ -1,4 +1,4 @@
-import 'package:he_is_coming/src/battle.dart';
+import 'package:he_is_coming/he_is_coming.dart';
 import 'package:meta/meta.dart';
 
 /// Function type for effect callbacks.
@@ -6,6 +6,9 @@ typedef EffectFn = void Function(EffectContext ctx);
 
 /// Callbacks for effects.
 typedef EffectMap = Map<Trigger, EffectFn>;
+
+/// Function type for effect callbacks.
+typedef StatsFn = Stats Function(Inventory inventory);
 
 /// Creates an [Effect] with an onBattle callback.
 EffectMap onBattle(EffectFn fn) => {Trigger.onBattle: fn};
@@ -103,6 +106,7 @@ class Effect {
   const Effect({
     required this.text,
     required this.callbacks,
+    required this.onDynamicStats,
   });
 
   /// Get the effect callback for a given effect.
@@ -110,6 +114,9 @@ class Effect {
 
   /// Returns a new effect with the given callback added.
   final Map<Trigger, EffectFn> callbacks;
+
+  /// Callback for dynamic stats.
+  final StatsFn? onDynamicStats;
 
   /// Returns a string representation of the effect.
   final String text;
@@ -127,10 +134,13 @@ class Effect {
 /// Catalog of effects.
 class EffectCatalog {
   /// Create a new EffectCatalog
-  EffectCatalog(this.catalog);
+  EffectCatalog(this.catalog, [this.dynamicStats = const {}]);
 
   /// The catalog of effects.
   final Map<String, EffectMap> catalog;
+
+  /// Callbacks for dynamic stats.
+  final Map<String, StatsFn> dynamicStats;
 
   /// Look up an effect by name.
   Effect? lookup({required String name, required String? effectText}) {
@@ -139,6 +149,7 @@ class EffectCatalog {
     }
     return Effect(
       callbacks: catalog[name] ?? {},
+      onDynamicStats: dynamicStats[name],
       text: effectText,
     );
   }

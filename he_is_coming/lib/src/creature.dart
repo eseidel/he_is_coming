@@ -110,6 +110,7 @@ Creature makeEnemy({
     triggers = Effect(
       callbacks: effect,
       text: 'Enemy',
+      onDynamicStats: null,
     );
   }
   return Creature(

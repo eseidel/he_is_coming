@@ -175,6 +175,7 @@ class Item extends CatalogItem {
       triggers = Effect(
         callbacks: effect,
         text: 'test',
+        onDynamicStats: null,
       );
     }
     final stats = Stats(

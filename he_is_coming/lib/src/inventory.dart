@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:he_is_coming/src/data.dart';
+import 'package:he_is_coming/he_is_coming.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:yaml/yaml.dart';
 
@@ -174,13 +174,17 @@ class Inventory {
   /// Resolve stats with items.
   Stats statsWithItems(Stats intrinsic) {
     return [
-      ...items.map((item) => item.stats),
+      ...items.map(_dynamicItemStats),
       ...oils.map((oil) => oil.stats),
       ...sets.map((set) => set.stats),
     ].fold<Stats>(
       intrinsic,
       (acc, stats) => acc + stats,
     );
+  }
+
+  Stats _dynamicItemStats(Item item) {
+    return item.effect?.onDynamicStats?.call(this) ?? item.stats;
   }
 
   /// The edge on the weapon.
