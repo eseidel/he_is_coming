@@ -8,10 +8,10 @@ import 'package:scoped_deps/scoped_deps.dart';
 
 Set<String> findImplementedEffects() {
   final implementedEffectNames = <String>[
-    ...creatureEffects.catalog.keys,
-    ...itemEffects.catalog.keys,
-    ...edgeEffects.catalog.keys,
-    ...setEffects.catalog.keys,
+    ...creatureEffects.implemented,
+    ...itemEffects.implemented,
+    ...edgeEffects.implemented,
+    ...setEffects.implemented,
   ];
   final implementedEffects = implementedEffectNames.toSet();
   if (implementedEffects.length != implementedEffectNames.length) {

@@ -1711,5 +1711,7 @@ void main() {
     expect(player2.baseStats.speed, 3);
 
     // TODO(eseidel): Test changes to speed during battle.
+    // Citrine Gemstone only effects base speed, not battle speed.
+    // https://discord.com/channels/1041414829606449283/1209488302269534209/1285164839014240337
   });
 }

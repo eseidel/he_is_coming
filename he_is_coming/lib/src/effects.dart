@@ -135,7 +135,8 @@ class Effect {
   final String text;
 
   /// Returns true if the effect has no callbacks.
-  bool get isEmpty => callbacks.isEmpty;
+  bool get isEmpty =>
+      callbacks.isEmpty && onDynamicStats == null && onOverrideStats == null;
 
   @override
   String toString() => text;
@@ -161,6 +162,15 @@ class EffectCatalog {
 
   /// Callbacks for overriding stats.
   final Map<String, OverrideStatsFn> overrideStats;
+
+  /// Get the list of implemented effects.
+  Set<String> get implemented {
+    return <String>{
+      ...catalog.keys,
+      ...dynamicStats.keys,
+      ...overrideStats.keys,
+    };
+  }
 
   /// Look up an effect by name.
   Effect? lookup({required String name, required String? effectText}) {
