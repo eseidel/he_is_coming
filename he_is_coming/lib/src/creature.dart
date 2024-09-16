@@ -111,6 +111,7 @@ Creature makeEnemy({
       callbacks: effect,
       text: 'Enemy',
       onDynamicStats: null,
+      onOverrideStats: null,
     );
   }
   return Creature(

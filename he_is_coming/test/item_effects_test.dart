@@ -826,14 +826,13 @@ void main() {
     final jewelry = Item.test(tags: const {ItemTag.jewelry});
     final player2 = data.player(customItems: [item, jewelry]);
     expect(player2.hp, 10);
-    // We've implemented Bejeweled Blade onBattle so this is still 0.
-    expect(player2.baseStats.attack, 0);
+    expect(player2.baseStats.attack, 2);
 
     final result2 = doBattle(first: player2, second: enemy);
     // Bejeweled Blade gives 2 attack for each jewelry item we have.
     // So we kill the wolf in 3 attacks, so we take 2 dmg.
     expect(result2.first.hp, 8);
-    expect(player2.baseStats.attack, 0);
+    expect(player2.baseStats.attack, 2);
   });
 
   test('Emerald Ring', () {

@@ -176,6 +176,7 @@ class Item extends CatalogItem {
         callbacks: effect,
         text: 'test',
         onDynamicStats: null,
+        onOverrideStats: null,
       );
     }
     final stats = Stats(

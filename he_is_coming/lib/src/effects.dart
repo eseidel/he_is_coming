@@ -7,8 +7,11 @@ typedef EffectFn = void Function(EffectContext ctx);
 /// Callbacks for effects.
 typedef EffectMap = Map<Trigger, EffectFn>;
 
-/// Function type for effect callbacks.
+/// Function type for dynamic stats callbacks.
 typedef StatsFn = Stats Function(Inventory inventory);
+
+/// Function type for stats override callbacks.
+typedef OverrideStatsFn = Stats Function(Stats stats);
 
 /// Creates an [Effect] with an onBattle callback.
 EffectMap onBattle(EffectFn fn) => {Trigger.onBattle: fn};
@@ -107,7 +110,14 @@ class Effect {
     required this.text,
     required this.callbacks,
     required this.onDynamicStats,
+    required this.onOverrideStats,
   });
+
+  /// Create an effect without any callbacks.
+  Effect.textOnly(this.text)
+      : callbacks = {},
+        onDynamicStats = null,
+        onOverrideStats = null;
 
   /// Get the effect callback for a given effect.
   EffectFn? operator [](Trigger effect) => callbacks[effect];
@@ -117,6 +127,9 @@ class Effect {
 
   /// Callback for dynamic stats.
   final StatsFn? onDynamicStats;
+
+  /// Callback for overriding stats.
+  final OverrideStatsFn? onOverrideStats;
 
   /// Returns a string representation of the effect.
   final String text;
@@ -134,13 +147,20 @@ class Effect {
 /// Catalog of effects.
 class EffectCatalog {
   /// Create a new EffectCatalog
-  EffectCatalog(this.catalog, [this.dynamicStats = const {}]);
+  EffectCatalog(
+    this.catalog, {
+    this.dynamicStats = const {},
+    this.overrideStats = const {},
+  });
 
   /// The catalog of effects.
   final Map<String, EffectMap> catalog;
 
   /// Callbacks for dynamic stats.
   final Map<String, StatsFn> dynamicStats;
+
+  /// Callbacks for overriding stats.
+  final Map<String, OverrideStatsFn> overrideStats;
 
   /// Look up an effect by name.
   Effect? lookup({required String name, required String? effectText}) {
@@ -150,6 +170,7 @@ class EffectCatalog {
     return Effect(
       callbacks: catalog[name] ?? {},
       onDynamicStats: dynamicStats[name],
+      onOverrideStats: overrideStats[name],
       text: effectText,
     );
   }

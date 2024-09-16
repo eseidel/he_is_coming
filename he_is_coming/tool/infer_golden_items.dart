@@ -18,11 +18,7 @@ String doubleNumbers(String text) {
 
 Item inferGoldenItem(Item item) {
   final effect = item.effect != null
-      ? Effect(
-          text: doubleNumbers(item.effect!.text),
-          callbacks: const {},
-          onDynamicStats: null,
-        )
+      ? Effect.textOnly(doubleNumbers(item.effect!.text))
       : null;
   final goldenItem = item.copyWith(
     name: 'Golden ${item.name}',
