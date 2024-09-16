@@ -174,14 +174,22 @@ class Inventory {
 
   /// Resolve stats with items.
   Stats statsWithItems(Stats intrinsic) {
-    return [
+    var stats = [
       ...items.map(_dynamicItemStats),
+      // Edges don't currently give stats.
       ...oils.map((oil) => oil.stats),
       ...sets.map((set) => set.stats),
     ].fold<Stats>(
       intrinsic,
       (acc, stats) => acc + stats,
     );
+    for (final item in items) {
+      final overrideStats = item.effect?.onOverrideStats;
+      if (overrideStats != null) {
+        stats = overrideStats(stats);
+      }
+    }
+    return stats;
   }
 
   Stats _dynamicItemStats(Item item) {

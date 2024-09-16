@@ -1700,4 +1700,14 @@ void main() {
     );
     expect(player3.baseStats.attack, 10);
   });
+
+  test('Citrine Gemstone', () {
+    const item = 'Citrine Gemstone';
+    // Citrine Gemstone inverts the speed stat.
+    final player = data.player(items: [item], speed: 2);
+    expect(player.baseStats.speed, -2);
+
+    final player2 = data.player(items: [item], speed: -3);
+    expect(player2.baseStats.speed, 3);
+  });
 }

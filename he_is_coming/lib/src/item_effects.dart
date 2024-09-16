@@ -245,5 +245,7 @@ final itemEffects = EffectCatalog(
     "Woodcutter's Axe": (i) => Stats(attack: i.emptySlots * 2),
     'Bejeweled Blade': (i) => Stats(attack: i.tagCount(ItemTag.jewelry) * 2),
   },
-  overrideStats: {},
+  overrideStats: {
+    'Citrine Gemstone': (s) => s.copyWith(speed: -s.speed),
+  },
 );
