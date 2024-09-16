@@ -41,10 +41,6 @@ Does a heal of 0 counts as triggering "whenever you restore health"?
 - Strikes steal gold instead of dealing damage for Raven Level 2
 - The first time the enemy strikes, their damage is halved for Protecting Charm
 
-### Contextual Base Stats
-- Gain 2 attack for each empty equipment slot for Woodcutter's Axe
-- Gain 2 health for each equipped wood item for Oak Heart
-
 ### Contextual Battle Stats
 - Bear deals 3 additional damage while you have armor for Bear Level 1
 - Bear deals 5 additional damage while you have armor for Bear Level 2

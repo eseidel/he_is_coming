@@ -245,4 +245,5 @@ final itemEffects = EffectCatalog(<String, EffectMap>{
   ),
 }, {
   'Oak Heart': (i) => Stats(maxHp: i.tagCount(ItemTag.wood) * 2),
+  "Woodcutter's Axe": (i) => Stats(attack: i.emptySlots * 2),
 });

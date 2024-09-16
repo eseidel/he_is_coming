@@ -1682,4 +1682,23 @@ void main() {
     final player3 = data.player(items: [item], customItems: [wood, wood]);
     expect(player3.hp, 16);
   });
+
+  test("Woodcutter's Axe", () {
+    const item = "Woodcutter's Axe";
+    final player = data.player(items: [item], level: Level.one);
+    // Woodcutter's Axe gives 2 attack for each empty equipment slot.
+    expect(player.baseStats.attack, 8);
+
+    final filler = Item.test();
+    final player2 =
+        data.player(items: [item], customItems: [filler], level: Level.one);
+    expect(player2.baseStats.attack, 6);
+
+    final player3 = data.player(
+      items: [item],
+      customItems: [filler],
+      level: Level.two,
+    );
+    expect(player3.baseStats.attack, 10);
+  });
 }

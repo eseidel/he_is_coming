@@ -26,7 +26,7 @@ class Inventory {
     required this.edge,
     required this.oils,
     required SetBonusCatalog setBonuses,
-  }) {
+  }) : maxItems = itemSlotCount(level) {
     this.items = _enforceItemRules(level, items);
     if (oils.length > 3) {
       throw UnimplementedError('Too many oils');
@@ -77,7 +77,8 @@ class Inventory {
   Inventory.empty()
       : edge = null,
         oils = const <Oil>[],
-        items = [];
+        items = [],
+        maxItems = 0;
 
   static List<SetBonus> _resolveSetBonuses(
     List<Item> items,
@@ -196,8 +197,14 @@ class Inventory {
   /// Items in the inventory.
   late final List<Item> items;
 
+  /// Number of slots in the inventory.
+  final int maxItems;
+
   /// Set bonuses applied to the inventory.
   late final List<SetBonus> sets;
+
+  /// Number of empty slots in the inventory.
+  int get emptySlots => maxItems - items.length;
 
   /// Count of items with a specific tag.
   int tagCount(ItemTag tag) {
