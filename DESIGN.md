@@ -59,7 +59,6 @@ Does a heal of 0 counts as triggering "whenever you restore health"?
 ### Stat Overrides
 - Attack is always equal to missing health for Bearclaw Blade
 - Attack is always equal to speed for Tempest Blade
-- Your speed stat is inverted for Citrine Gemstone
 
 ### Temporary Stats
 - First Turn: Gain 2 attack for Cracked Whetstone

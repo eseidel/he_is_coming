@@ -1709,5 +1709,7 @@ void main() {
 
     final player2 = data.player(items: [item], speed: -3);
     expect(player2.baseStats.speed, 3);
+
+    // TODO(eseidel): Test changes to speed during battle.
   });
 }
