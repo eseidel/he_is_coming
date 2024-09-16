@@ -173,7 +173,7 @@ class Inventory {
   }
 
   /// Resolve stats with items.
-  Stats statsWithItems(Stats intrinsic) {
+  Stats resolveBaseStats({Stats intrinsic = const Stats()}) {
     var stats = [
       ...items.map(_dynamicItemStats),
       // Edges don't currently give stats.

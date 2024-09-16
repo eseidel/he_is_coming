@@ -77,7 +77,10 @@ class Population {
 }
 
 void logConfig(Inventory config) {
-  logger.info('Items:');
+  final stats = config.resolveBaseStats();
+  logger
+    ..info('Stats: $stats')
+    ..info('Items:');
   for (final item in config.items) {
     logger.info('  ${item.name}');
   }

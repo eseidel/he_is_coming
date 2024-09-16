@@ -778,7 +778,7 @@ class PlayerBattleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Should this make a Player first?
-    final stats = inventory.statsWithItems(playerIntrinsicStats);
+    final stats = inventory.resolveBaseStats(intrinsic: playerIntrinsicStats);
     final edge = inventory.edge;
     return Column(
       children: <Widget>[

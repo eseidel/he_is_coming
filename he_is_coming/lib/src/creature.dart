@@ -201,7 +201,8 @@ class Creature extends CatalogItem {
     Inventory? inventory,
     int? hp,
   ) {
-    final maxHp = inventory?.statsWithItems(intrinsic).maxHp ?? intrinsic.maxHp;
+    final maxHp = inventory?.resolveBaseStats(intrinsic: intrinsic).maxHp ??
+        intrinsic.maxHp;
     return maxHp - (hp ?? maxHp);
   }
 
@@ -241,7 +242,8 @@ class Creature extends CatalogItem {
   bool get healthFull => lostHp == 0;
 
   /// Stats as they would be in the over-world or at fight start.
-  Stats get baseStats => inventory?.statsWithItems(_intrinsic) ?? _intrinsic;
+  Stats get baseStats =>
+      inventory?.resolveBaseStats(intrinsic: _intrinsic) ?? _intrinsic;
 
   /// Make a copy with a changed hp.
   @override
