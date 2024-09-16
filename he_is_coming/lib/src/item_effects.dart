@@ -247,5 +247,6 @@ final itemEffects = EffectCatalog(
   },
   overrideStats: {
     'Citrine Gemstone': (s) => s.copyWith(speed: -s.speed),
+    'Honey Ham': (s) => s.copyWith(maxHp: s.maxHp * 2),
   },
 );

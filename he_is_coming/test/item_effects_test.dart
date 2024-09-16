@@ -1714,4 +1714,13 @@ void main() {
     // Citrine Gemstone only effects base speed, not battle speed.
     // https://discord.com/channels/1041414829606449283/1209488302269534209/1285164839014240337
   });
+
+  test('Honey Ham', () {
+    const item = 'Honey Ham';
+    final player = data.player(items: [item]);
+    expect(player.baseStats.maxHp, 20);
+
+    final player2 = data.player(items: [item], maxHp: 14);
+    expect(player2.baseStats.maxHp, 28);
+  });
 }
