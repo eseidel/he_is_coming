@@ -202,6 +202,7 @@ class BestItemFinder {
     final survivorsCount = (populationSize * survivalRate).ceil();
     var pop = initial.toList();
     final enemy = data.creatures['Woodland Abomination'];
+    RunResult? bestResult;
 
     RunResult doBattle(Inventory inventory) {
       final player = playerWithInventory(level, inventory);
@@ -233,8 +234,11 @@ class BestItemFinder {
       final sorted = pop.map(doBattle).toList()..sortBy<num>((r) => -r.damage);
       // Select the top survivorRate of the population.
       bestResults = sorted.sublist(0, survivorsCount);
+      bestResult = bestResults.firstOrNull;
       final survivors = bestResults.map((r) => r.inventory).toList();
       pop = [
+        // Best comes back every round.
+        if (bestResult != null) bestResult.inventory,
         // Keep the best survivors.
         ...survivors.take(2),
         // Crossover the survivors.
