@@ -76,25 +76,6 @@ class Population {
   final List<Inventory> configs;
 }
 
-void logConfig(Inventory config) {
-  final stats = config.resolveBaseStats();
-  logger
-    ..info('Stats: $stats')
-    ..info('Items:');
-  for (final item in config.items) {
-    logger.info('  ${item.name}');
-  }
-  if (config.edge != null) {
-    logger.info('Edge: ${config.edge!.name}');
-  }
-  logger.info('Oils: ${config.oils.map((o) => o.name).join(', ')}');
-}
-
-void logResult(RunResult result) {
-  logger.info('${result.damage} damage ${result.turns} turns:');
-  logConfig(result.inventory);
-}
-
 class BestItemFinder {
   BestItemFinder(this.data, {this.itemLimits = const {}});
 
@@ -105,7 +86,7 @@ class BestItemFinder {
   final random = Random();
   final populationSize = 1000;
   final survivalRate = 0.1;
-  final mutationRate = 0.01;
+  final mutationRate = 0.005;
 
   List<Inventory> _seedPopulation(
     Random random,
@@ -255,6 +236,30 @@ class BestItemFinder {
       }
     }
     return pop;
+  }
+
+  void logConfig(Inventory config) {
+    final stats = config.resolveBaseStats();
+    logger
+      ..info('Stats: $stats')
+      ..info('Items:');
+    for (final item in config.items) {
+      logger.info('  ${item.name}');
+    }
+    if (config.edge != null) {
+      logger.info('Edge: ${config.edge!.name}');
+    }
+    logger.info('Oils: ${config.oils.map((o) => o.name).join(', ')}');
+    final encoded = BuildStateCodec.encode(
+      BuildState(level: level, inventory: config),
+      data,
+    );
+    logger.info('Code: $encoded');
+  }
+
+  void logResult(RunResult result) {
+    logger.info('${result.damage} damage ${result.turns} turns:');
+    logConfig(result.inventory);
   }
 }
 
