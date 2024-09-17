@@ -174,12 +174,7 @@ class Item extends CatalogItem {
   }) {
     Effect? triggers;
     if (effect != null) {
-      triggers = Effect(
-        callbacks: effect,
-        text: 'test',
-        onDynamicStats: null,
-        onOverrideStats: null,
-      );
+      triggers = Effect.test(callbacks: effect);
     }
     final stats = Stats(
       attack: attack ?? 0,

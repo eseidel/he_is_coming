@@ -65,6 +65,7 @@ extension CreatePlayer on Data {
     List<String> items = const <String>[],
     List<Item> customItems = const <Item>[],
     String? edge,
+    Edge? customEdge,
     List<String> oils = const <String>[],
     int? hp,
     int gold = 0,
@@ -76,6 +77,10 @@ extension CreatePlayer on Data {
       armor: armor ?? playerIntrinsicStats.armor,
       speed: speed ?? playerIntrinsicStats.speed,
     );
+    if (edge != null && customEdge != null) {
+      throw ArgumentError('Cannot specify both edge and customEdge.');
+    }
+    final edgeObject = customEdge ?? (edge != null ? edges[edge] : null);
     return Creature(
       name: _kPlayerName,
       level: level,
@@ -86,7 +91,7 @@ extension CreatePlayer on Data {
       version: null,
       inventory: Inventory(
         level: level,
-        edge: edge != null ? edges[edge] : null,
+        edge: edgeObject,
         oils: oils.map((name) => this.oils[name]).toList(),
         items: [...customItems, ...items.map((name) => this.items[name])],
         setBonuses: sets,
@@ -104,6 +109,7 @@ Creature makeEnemy({
   int speed = 0,
   EffectMap? effect,
   Level level = Level.one,
+  bool isBoss = false,
 }) {
   Effect? triggers;
   if (effect != null) {
@@ -124,7 +130,8 @@ Creature makeEnemy({
       attack: attack,
       speed: speed,
     ),
-    gold: 1,
+    type: isBoss ? CreatureType.boss : CreatureType.mob,
+    gold: isBoss ? 0 : 1,
     effect: triggers,
     version: null,
     id: 0, // Test enemies don't require unique ids.
@@ -188,7 +195,7 @@ class Creature extends CatalogItem {
         attack: attack,
         speed: speed,
       ),
-      gold: 1,
+      gold: type == CreatureType.boss ? 0 : 1,
       effect: effect,
       type: type,
       id: id,

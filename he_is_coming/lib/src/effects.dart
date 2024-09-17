@@ -123,6 +123,14 @@ class Effect {
         onDynamicStats = null,
         onOverrideStats = null;
 
+  /// Create a test effect.
+  const Effect.test({
+    this.callbacks = const {},
+    this.onDynamicStats,
+    this.onOverrideStats,
+    this.text = 'test',
+  });
+
   /// Get the effect callback for a given effect.
   EffectFn? operator [](Trigger effect) => callbacks[effect];
 

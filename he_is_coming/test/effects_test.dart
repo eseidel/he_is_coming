@@ -23,7 +23,7 @@ void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
   Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
-  test('Enemies give gold', () {
+  test('Non-bosses give gold', () {
     final player = data.player();
     expect(player.hp, 10);
     expect(player.gold, 0);
@@ -34,6 +34,42 @@ void main() {
     expect(result.first.hp, 5);
     // Gain one gold at battle end.
     expect(result.first.gold, 1);
+  });
+
+  test('Bosses do not give gold', () {
+    final player = data.player();
+    expect(player.hp, 10);
+    expect(player.gold, 0);
+
+    final enemy = makeEnemy(attack: 1, health: 6, isBoss: true);
+    expect(enemy.gold, 0);
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 5);
+    // No gold from bosses.
+    expect(result.first.gold, 0);
+  });
+
+  test('Edge triggers after weapon before other items', () {
+    final orderedTriggers = <String>[];
+    final player = data.player(
+      customEdge: Edge.test(effect: onHit((c) => orderedTriggers.add('edge'))),
+      customItems: [
+        Item.test(
+          isWeapon: true,
+          attack: 1,
+          effect: onHit((c) => orderedTriggers.add('weapon')),
+        ),
+        Item.test(
+          effect: onHit((c) => orderedTriggers.add('item')),
+        ),
+      ],
+    );
+    final enemy = makeEnemy(attack: 10, health: 6);
+    // Enemy dies in one hit.
+    final result = doBattle(first: player, second: enemy);
+    expect(result.first.hp, 0);
+    expect(result.second.hp, 5);
+    expect(orderedTriggers, ['weapon', 'edge', 'item']);
   });
 
   test('Check for Death after every trigger', () {

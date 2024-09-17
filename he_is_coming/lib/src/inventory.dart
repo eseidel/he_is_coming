@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:he_is_coming/he_is_coming.dart';
 import 'package:he_is_coming/src/effects.dart';
+import 'package:meta/meta.dart';
 import 'package:yaml/yaml.dart';
 
 /// ItemException
@@ -205,6 +206,12 @@ class Inventory {
   /// Items in the inventory.
   late final List<Item> items;
 
+  /// The weapon in the inventory.
+  Item get weapon => items[0];
+
+  /// Non-weapon items in the inventory.
+  List<Item> get nonWeapons => items.sublist(1);
+
   /// Number of slots in the inventory.
   final int maxItems;
 
@@ -322,6 +329,18 @@ class Edge extends CatalogItem {
     required super.version,
     required super.inferred,
   });
+
+  /// Create an edge for testing.
+  @visibleForTesting
+  Edge.test({
+    required EffectMap effect,
+  }) : super(
+          name: 'test',
+          id: 0,
+          version: 'test',
+          inferred: false,
+          effect: Effect.test(callbacks: effect),
+        );
 
   /// Create an Edge from a yaml map.
   factory Edge.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {

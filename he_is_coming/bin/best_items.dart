@@ -179,7 +179,7 @@ class BestItemFinder {
   List<Inventory> _enforceItemLimits(List<Inventory> population) {
     return population.where((c) {
       for (final entry in itemLimits.entries) {
-        // This should move into enforceItemLimits for Honeycomb.
+        // This should move into Inventory.enforceItemLimits for Honeycomb.
         // https://discord.com/channels/1041414829606449283/1209488302269534209/1285467752936640552
         final count = c.items.fold(0, (acc, i) => acc + i.partCount(entry.key));
         if (count > entry.value) {

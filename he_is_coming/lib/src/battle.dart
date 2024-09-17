@@ -859,13 +859,16 @@ class BattleContext {
 
     final inventory = creature.inventory;
     if (inventory != null) {
-      // Slightly odd to have the edge trigger before the weapon.
+      callTrigger(inventory.weapon);
+
+      // Edge triggers after the weapon, before other items.
+      // https://discord.com/channels/1041414829606449283/1209488302269534209/1285468168311148565
       final edge = inventory.edge;
       if (edge != null) {
         callTrigger(edge);
       }
 
-      inventory.items.forEach(callTrigger);
+      inventory.nonWeapons.forEach(callTrigger);
       inventory.sets.forEach(callTrigger);
     }
 
