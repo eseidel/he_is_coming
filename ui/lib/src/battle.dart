@@ -507,13 +507,7 @@ class BattleStateController {
 
   /// Set the edge
   void setEdge(Edge edge) {
-    setInventory(
-      inventory.copyWith(
-        level: level,
-        edge: edge,
-        data: data,
-      ),
-    );
+    setInventory(inventory.copyWith(level: level, edge: edge, data: data));
   }
 
   /// Add an item to the inventory
