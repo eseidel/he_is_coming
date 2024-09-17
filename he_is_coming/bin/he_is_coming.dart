@@ -17,10 +17,7 @@ void _logMissingEffects(Inventory inventory) {
   logMissing(inventory.sets);
 }
 
-/// Simulate one game with a player.
-void runSim() {
-  final data = Data.load();
-
+BuildState defaultState(Data data) {
   // https://discord.com/channels/1041414829606449283/1209488593219756063/1283944376069787710
   final items = [
     'Haymaker',
@@ -39,7 +36,20 @@ void runSim() {
     'Armor Oil',
     'Speed Oil',
   ];
-  final player = data.player(items: items, edge: edge, oils: oils);
+  const level = Level.end;
+  final inventory = Inventory.fromNames(
+    items: items,
+    edge: edge,
+    oils: oils,
+    level: level,
+    data: data,
+  );
+  return BuildState(level: level, inventory: inventory);
+}
+
+/// Simulate one game with a player.
+void runSim(Data data, BuildState state) {
+  final player = playerFromState(state);
   final enemy = data.creatures['Woodland Abomination'];
 
   final result = Battle.resolve(first: player, second: enemy, verbose: true);
@@ -48,16 +58,26 @@ void runSim() {
   final damageTaken = winner.baseStats.maxHp - winner.hp;
   logger.info('${result.winner.name} wins in ${result.turns} turns with '
       '$damageTaken damage taken.');
-  final state = BuildState(level: player.level, inventory: player.inventory!);
   final encoded = BuildStateCodec.encode(state, data);
   logger.info('Build Id: $encoded');
-  final decoded = BuildStateCodec.tryDecode(encoded, data);
-  logger.info('Decoded: $decoded');
 }
 
-void doMain(List<String> arguments) {
-  // Roll a new start and simulate.
-  runSim();
+int doMain(List<String> arguments) {
+  final data = Data.load();
+  final buildId = arguments.firstOrNull;
+  final BuildState state;
+  if (buildId != null) {
+    final maybeState = BuildStateCodec.tryDecode(buildId, data);
+    if (maybeState == null) {
+      logger.err('Invalid build ID: $buildId');
+      return 1;
+    }
+    state = maybeState;
+  } else {
+    state = defaultState(data);
+  }
+  runSim(data, state);
+  return 0;
 }
 
 void main(List<String> args) {

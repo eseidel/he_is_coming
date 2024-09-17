@@ -1,3 +1,4 @@
+import 'package:he_is_coming/src/build_id.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
@@ -42,14 +43,14 @@ enum Level {
 }
 
 /// Create a player from a creature configuration.
-Player playerWithInventory(Level level, Inventory inventory) {
+Player playerFromState(BuildState state) {
   return Creature(
     name: _kPlayerName,
     intrinsic: playerIntrinsicStats,
     gold: 0,
-    level: level,
+    level: state.level,
     id: _kPlayerId,
-    inventory: inventory,
+    inventory: state.inventory,
     version: null,
   );
 }
@@ -81,6 +82,29 @@ extension CreatePlayer on Data {
       throw ArgumentError('Cannot specify both edge and customEdge.');
     }
     final edgeObject = customEdge ?? (edge != null ? edges[edge] : null);
+    var inventory = Inventory.fromNames(
+      items: items,
+      edge: edge,
+      oils: oils,
+      data: this,
+      level: level,
+    );
+    if (edgeObject != null) {
+      inventory =
+          inventory.copyWith(edge: edgeObject, level: level, data: this);
+    }
+    if (customItems.isNotEmpty) {
+      // Remove the default weapon to avoid a custom weapon triggering a
+      // "can't have two weapons" Exception.
+      final items = (inventory.items + customItems)
+          .where((i) => i.name != 'Wooden Stick')
+          .toList();
+      inventory = inventory.copyWith(
+        items: items,
+        level: level,
+        data: this,
+      );
+    }
     return Creature(
       name: _kPlayerName,
       level: level,
@@ -89,13 +113,7 @@ extension CreatePlayer on Data {
       hp: hp,
       id: _kPlayerId,
       version: null,
-      inventory: Inventory(
-        level: level,
-        edge: edgeObject,
-        oils: oils.map((name) => this.oils[name]).toList(),
-        items: [...customItems, ...items.map((name) => this.items[name])],
-        data: this,
-      ),
+      inventory: inventory,
     );
   }
 }

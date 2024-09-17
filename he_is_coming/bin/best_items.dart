@@ -205,7 +205,8 @@ class BestItemFinder {
     RunResult? bestResult;
 
     RunResult doBattle(Inventory inventory) {
-      final player = playerWithInventory(level, inventory);
+      final player =
+          playerFromState(BuildState(level: level, inventory: inventory));
 
       final BattleResult result;
       try {
@@ -254,28 +255,9 @@ class BestItemFinder {
     return pop;
   }
 
-  void logConfig(Inventory config) {
-    final stats = config.resolveBaseStats();
-    logger
-      ..info('Stats: $stats')
-      ..info('Items:');
-    for (final item in config.items) {
-      logger.info('  ${item.name}');
-    }
-    if (config.edge != null) {
-      logger.info('Edge: ${config.edge!.name}');
-    }
-    logger.info('Oils: ${config.oils.map((o) => o.name).join(', ')}');
-    final encoded = BuildStateCodec.encode(
-      BuildState(level: level, inventory: config),
-      data,
-    );
-    logger.info('Code: $encoded');
-  }
-
   void logResult(RunResult result) {
     logger.info('${result.damage} damage ${result.turns} turns:');
-    logConfig(result.inventory);
+    logBuildState(BuildState(inventory: result.inventory, level: level), data);
   }
 }
 

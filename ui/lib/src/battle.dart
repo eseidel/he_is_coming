@@ -296,7 +296,7 @@ class EnemyResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // For each enemy, run the battle and gather the results.
-    final player = playerWithInventory(state.level, state.inventory);
+    final player = playerFromState(state);
     final results = _enemies
         .map((enemy) => Battle.resolve(first: player, second: enemy))
         .toList();

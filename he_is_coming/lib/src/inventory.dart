@@ -50,6 +50,26 @@ class Inventory {
     );
   }
 
+  /// Create an inventory by looking up items, oils and edge by name.
+  factory Inventory.fromNames({
+    required List<String> items,
+    required String? edge,
+    required List<String> oils,
+    required Data data,
+    required Level level,
+  }) {
+    final edgeObject = edge != null ? data.edges[edge] : null;
+    final itemsObject = items.map((name) => data.items[name]).toList();
+    final oilsObject = oils.map((name) => data.oils[name]).toList();
+    return Inventory(
+      level: level,
+      items: itemsObject,
+      edge: edgeObject,
+      oils: oilsObject,
+      data: data,
+    );
+  }
+
   /// Create an inventory from json.
   /// This expects names, not full item definitions.
   factory Inventory.fromJson(

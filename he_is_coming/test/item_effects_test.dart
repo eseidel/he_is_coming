@@ -1642,10 +1642,10 @@ void main() {
     final result = doBattle(first: player, second: enemy);
     // Citrine Earring gains speed every other turn.
     // Our test item does damage based on speed every turn.
-    // Custom items are before items, so we deal 0 dmg on the first turn.
-    // So 0, 1, 1, 2, 2, etc.  We also strike every turn for 1.
+    // Custom items are after items, so we deal 1 dmg on the first turn.
+    // So 1, 1, 2, 2, 3, etc.  We also strike every turn for 1.
     // Enemy dies on our 5th turn from the test item dmg.
-    expect(result.first.hp, 6);
+    expect(result.first.hp, 7);
   });
 
   test('Tempest Plate', () {
