@@ -21,7 +21,6 @@ BattleResult doBattle({
 
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
   final itemCatalog = data.items;
 
   test('maxHp from items', () {

@@ -94,7 +94,7 @@ extension CreatePlayer on Data {
         edge: edgeObject,
         oils: oils.map((name) => this.oils[name]).toList(),
         items: [...customItems, ...items.map((name) => this.items[name])],
-        setBonuses: sets,
+        data: this,
       ),
     );
   }
@@ -212,10 +212,6 @@ class Creature extends CatalogItem {
         intrinsic.maxHp;
     return maxHp - (hp ?? maxHp);
   }
-
-  /// The default player item.
-  // TODO(eseidel): Remove defaultPlayerWeapon.
-  static late final Item defaultPlayerWeapon;
 
   /// The intrinsic stats of this Creature without any items.
   final Stats _intrinsic;

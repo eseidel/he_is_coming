@@ -491,7 +491,7 @@ class BattleStateController {
   /// Set the items
   void setItems(List<Item> items) {
     setInventory(
-      inventory.copyWith(level: level, items: items, setBonuses: data.sets),
+      inventory.copyWith(level: level, items: items, data: data),
     );
   }
 
@@ -511,7 +511,7 @@ class BattleStateController {
       inventory.copyWith(
         level: level,
         edge: edge,
-        setBonuses: data.sets,
+        data: data,
       ),
     );
   }

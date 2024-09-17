@@ -6,7 +6,6 @@ class _MockLogger extends Mock implements Logger {}
 
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('BitsBuilder', () {
     final builder = BitsBuilder()
@@ -38,7 +37,7 @@ void main() {
       items: [data.items['Wooden Stick'], data.items['Shield of the Hero']],
       edge: data.edges['Cutting Edge'],
       oils: [data.oils['Attack Oil']],
-      setBonuses: data.sets,
+      data: data,
     );
     final state = BuildState(level: level, inventory: inventory);
     final encoded = BuildStateCodec.encode(state, data);
@@ -70,7 +69,7 @@ void main() {
       items: items,
       edge: edge,
       oils: oils,
-      setBonuses: data.sets,
+      data: data,
     );
     expect(data.edges.idBits, 4);
     expect(data.items.idBits, 8);

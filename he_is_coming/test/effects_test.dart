@@ -21,7 +21,6 @@ BattleResult doBattle({
 
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Non-bosses give gold', () {
     final player = data.player();

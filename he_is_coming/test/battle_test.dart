@@ -36,7 +36,6 @@ void endFight({
 
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Infinite battle', () {
     final healOnHit = onHit((c) => c.restoreHealth(1));

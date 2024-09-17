@@ -129,7 +129,7 @@ class BestItemFinder {
             items: items,
             edge: edge,
             oils: oils,
-            setBonuses: data.sets,
+            data: data,
           ),
         );
       } on ItemException {
@@ -169,7 +169,7 @@ class BestItemFinder {
         items: mutated,
         edge: edge,
         oils: oils,
-        setBonuses: data.sets,
+        data: data,
       );
     } on ItemException {
       return inventory;
@@ -281,7 +281,6 @@ class BestItemFinder {
 
 void doMain(List<String> arguments) {
   final data = Data.load().withoutMissingEffects().withoutInferredItems();
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   const filePath = 'results.json';
   final saved = Population.fromFile(filePath, data);

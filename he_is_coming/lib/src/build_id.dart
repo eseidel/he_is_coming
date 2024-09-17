@@ -226,7 +226,7 @@ class BuildStateCodec {
         items: items,
         edge: edge,
         oils: oils,
-        setBonuses: data.sets,
+        data: data,
       ),
     );
   }

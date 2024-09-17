@@ -46,7 +46,6 @@ _Needed _lookupSet(String name, Data data) {
 
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   Creature playerWithSet(String name, {int? armor, int? hp}) {
     final needed = _lookupSet(name, data);

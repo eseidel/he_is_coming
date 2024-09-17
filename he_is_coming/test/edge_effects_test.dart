@@ -20,7 +20,6 @@ BattleResult doBattle({
 
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Bleeding Edge', () {
     final player = data.player(edge: 'Bleeding Edge');

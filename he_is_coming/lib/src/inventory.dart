@@ -26,13 +26,13 @@ class Inventory {
     required List<Item> items,
     required this.edge,
     required this.oils,
-    required SetBonusCatalog setBonuses,
+    required Data data,
   }) : maxItems = itemSlotCount(level) {
-    this.items = _enforceItemRules(level, items);
+    this.items = _enforceItemRules(level, items, data);
     if (oils.length > 3) {
       throw UnimplementedError('Too many oils');
     }
-    sets = _resolveSetBonuses(this.items, edge, setBonuses);
+    sets = _resolveSetBonuses(this.items, edge, data.sets);
   }
 
   /// Create a random creature configuration.
@@ -46,7 +46,7 @@ class Inventory {
       items: items,
       edge: edge,
       oils: oils,
-      setBonuses: data.sets,
+      data: data,
     );
   }
 
@@ -70,7 +70,7 @@ class Inventory {
       items: items,
       edge: edge,
       oils: oils,
-      setBonuses: data.sets,
+      data: data,
     );
   }
 
@@ -135,11 +135,15 @@ class Inventory {
     return items;
   }
 
-  static List<Item> _enforceItemRules(Level level, List<Item> unenforced) {
+  static List<Item> _enforceItemRules(
+    Level level,
+    List<Item> unenforced,
+    Data data,
+  ) {
     // Player must always have a weapon.
     final items = [...unenforced];
     if (items.every((item) => !item.isWeapon)) {
-      items.add(Creature.defaultPlayerWeapon);
+      items.add(data.items['Wooden Stick']);
     }
 
     // Check number of items after possibly adding the weapon.
@@ -242,7 +246,7 @@ class Inventory {
   /// Copy with changes.
   Inventory copyWith({
     required Level level,
-    required SetBonusCatalog setBonuses,
+    required Data data,
     Edge? edge,
     List<Oil>? oils,
     List<Item>? items,
@@ -252,7 +256,7 @@ class Inventory {
       edge: edge ?? this.edge,
       oils: oils ?? this.oils,
       items: items ?? this.items,
-      setBonuses: setBonuses,
+      data: data,
     );
   }
 

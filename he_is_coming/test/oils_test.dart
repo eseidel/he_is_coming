@@ -20,7 +20,6 @@ BattleResult doBattle({
 
 void main() {
   final data = runWithLogger(_MockLogger(), Data.load);
-  Creature.defaultPlayerWeapon = data.items['Wooden Stick'];
 
   test('Attack Oil', () {
     const oil = 'Attack Oil';
