@@ -96,9 +96,10 @@ void logResult(RunResult result) {
 }
 
 class BestItemFinder {
-  BestItemFinder(this.data);
+  BestItemFinder(this.data, {this.itemLimits = const {}});
 
   final Data data;
+  final Map<String, int> itemLimits;
 
   final level = Level.end;
   final random = Random();
@@ -223,7 +224,18 @@ class BestItemFinder {
     for (var i = 0; i < rounds; i++) {
       // Fill in any missing population with random.
       final fillSize = max(populationSize - pop.length, 0);
-      pop.addAll(_seedPopulation(random, fillSize, data));
+      pop
+        ..addAll(_seedPopulation(random, fillSize, data))
+        // Remove any population who exceed item limits.
+        ..removeWhere((c) {
+          for (final entry in itemLimits.entries) {
+            final count = c.items.where((i) => i.name == entry.key).length;
+            if (count > entry.value) {
+              return true;
+            }
+          }
+          return false;
+        });
 
       final sorted = pop.map(doBattle).toList()..sortBy<num>((r) => -r.damage);
       // Select the top survivorRate of the population.
@@ -255,7 +267,12 @@ void doMain(List<String> arguments) {
   logger.info('Loaded ${saved.configs.length} saved configs.');
 
   final pop = saved.configs.toList();
-  final finder = BestItemFinder(data);
+  final finder = BestItemFinder(
+    data,
+    itemLimits: {
+      'Honey Ham': 3,
+    },
+  );
   const rounds = 1000;
   final newPop = finder.run(pop, rounds);
 
