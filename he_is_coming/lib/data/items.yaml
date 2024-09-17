@@ -120,7 +120,9 @@
   version: 0.3.5
 - name: Cherry Bomb
   id: 125
-  tags: food
+  tags:
+   - bomb
+   - food
   rarity: common
   effect: "Battle Start: Deal 2 damage"
   version: 0.3.5
@@ -284,7 +286,6 @@
   inferred: true
 - name: Golden Cherry Bomb
   id: 147
-  tags: food
   rarity: golden
   effect: "Battle Start: Deal 4 damage"
   inferred: true
@@ -381,9 +382,7 @@
   effect: "Exposed: Restore 6 health"
 - name: Golden Redwood Roast
   id: 55
-  tags:
-    - food
-    - wood
+  tags: wood
   rarity: golden
   health: 10
 - name: Golden Ruby Crown
@@ -434,9 +433,7 @@
   armor: 6
 - name: Golden Vampiric Wine
   id: 62
-  tags:
-    - food
-    - sanguine
+  tags: sanguine
   rarity: golden
   effect: "Wounded: Restore 8 health"
 - name: Golden Weighted Bracelet
@@ -675,8 +672,8 @@
 - name: Redwood Roast
   id: 97
   tags:
-    - food
-    - wood
+   - food
+   - wood
   rarity: common
   health: 5
 - name: Redwood Rod
@@ -856,8 +853,8 @@
 - name: Vampiric Wine
   id: 120
   tags:
-    - food
-    - sanguine
+   - sanguine
+   - food
   rarity: common
   effect: "Wounded: Restore 4 health"
 - name: Weighted Bracelet

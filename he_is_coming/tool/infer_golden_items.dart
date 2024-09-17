@@ -26,6 +26,8 @@ Item inferGoldenItem(Item item) {
     effect: effect,
     inferred: true,
     stats: item.stats * 2,
+    // Food loses its food tag when it becomes golden.
+    tags: item.tags..remove(ItemTag.food),
     id: 0, // TODO(eseidel): assign a unique id?
     // Should this have parts of item x 2?
   );

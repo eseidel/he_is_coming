@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/catalog.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:meta/meta.dart';
@@ -146,7 +147,7 @@ class Item extends CatalogItem {
     this.isUnique = false,
     super.effect,
     super.inferred = false,
-    this.parts = const [],
+    this.parts = const {},
   }) : super(name: name) {
     if (isWeapon && stats.attack == 0) {
       if (_intentionallyZeroAttackItems.contains(name)) {
@@ -220,7 +221,7 @@ class Item extends CatalogItem {
       stats: stats,
       effect: effect,
       isUnique: unique,
-      parts: parts?.cast<String>(),
+      parts: parts?.cast<String>().toSet(),
       inferred: inferred,
       id: id,
       version: version,
@@ -256,7 +257,10 @@ class Item extends CatalogItem {
   bool get isFood => hasTag(ItemTag.food);
 
   /// Items combined to make this item.
-  final List<String>? parts;
+  final Set<String>? parts;
+
+  /// Parts of the item, sorted.
+  List<String>? get sortedParts => parts?.sorted();
 
   /// The gem type of the item.
   Gem? get gem {
@@ -317,7 +321,7 @@ class Item extends CatalogItem {
       if (tags.isNotEmpty) 'tags': _tagsToJson(tags),
       if (isUnique) 'unique': isUnique,
       'rarity': rarity.toJson(),
-      if (parts != null && parts!.isNotEmpty) 'parts': parts,
+      if (parts != null && parts!.isNotEmpty) 'parts': sortedParts,
       ...stats.toJson(),
       'effect': effect?.toJson(),
       if (inferred) 'inferred': inferred,
@@ -336,7 +340,7 @@ class Item extends CatalogItem {
     bool? isUnique,
     Effect? effect,
     bool? inferred,
-    List<String>? parts,
+    Set<String>? parts,
   }) {
     return Item(
       name: name ?? this.name,
