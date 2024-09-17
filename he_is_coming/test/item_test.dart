@@ -23,4 +23,12 @@ void main() {
       throwsA(isA<ItemException>()),
     );
   });
+
+  test('Item.partCount', () {
+    const honey = 'Honeycomb';
+    final honeyItem = Item.test(name: honey);
+    expect(honeyItem.partCount(honey), 1);
+    final item = Item.test(parts: const {'Honeycomb'});
+    expect(item.partCount(honey), 1);
+  });
 }

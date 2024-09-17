@@ -165,6 +165,7 @@ class Item extends CatalogItem {
     ItemRarity rarity = ItemRarity.common,
     bool isWeapon = false,
     Set<ItemTag> tags = const {},
+    Set<String>? parts,
     bool isUnique = false,
     int? attack,
     int? armor,
@@ -192,6 +193,7 @@ class Item extends CatalogItem {
       rarity: rarity,
       isWeapon: isWeapon,
       tags: tags,
+      parts: parts,
       stats: stats,
       effect: triggers,
       isUnique: isUnique,
@@ -261,6 +263,11 @@ class Item extends CatalogItem {
 
   /// Parts of the item, sorted.
   List<String>? get sortedParts => parts?.sorted();
+
+  /// The number of parts of the given type in the item.
+  /// This currently doesn't look at the whole tree of parts.
+  int partCount(String part) =>
+      name == part ? 1 : parts?.where((p) => p == part).length ?? 0;
 
   /// Returns true if the item is crafted from other items.
   bool get isCrafted =>
