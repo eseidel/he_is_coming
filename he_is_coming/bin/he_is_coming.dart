@@ -49,6 +49,7 @@ BuildState defaultState(Data data) {
 
 /// Simulate one game with a player.
 void runSim(Data data, BuildState state) {
+  logBuildState(state, data);
   final player = playerFromState(state);
   final enemy = data.creatures['Woodland Abomination'];
 
