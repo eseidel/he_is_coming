@@ -224,6 +224,6 @@
   id: 27
   boss: true
   level: 4
-  health: 2000
+  health: 10000
   speed: 2
   effect: "Turn Start: Woodland Abomination gains 1 attack"

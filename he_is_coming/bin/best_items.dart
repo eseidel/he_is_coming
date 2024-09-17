@@ -176,6 +176,25 @@ class BestItemFinder {
     }
   }
 
+  List<Inventory> _enforceItemLimits(List<Inventory> population) {
+    return population.where((c) {
+      for (final entry in itemLimits.entries) {
+        final count = c.items.where((i) => i.name == entry.key).length;
+        if (count > entry.value) {
+          return false;
+        }
+      }
+      final craftedCount = c.items.where((i) => i.isCrafted).length;
+      // Weapon can't be crafted and last item can't be either, since requires
+      // combining two items.
+      final craftedLimit = Inventory.itemSlotCount(level) - 2;
+      if (craftedCount > craftedLimit) {
+        return false;
+      }
+      return true;
+    }).toList();
+  }
+
   List<Inventory> run(List<Inventory> initial, int rounds) {
     late List<RunResult> bestResults;
     final survivorsCount = (populationSize * survivalRate).ceil();
@@ -205,18 +224,9 @@ class BestItemFinder {
     for (var i = 0; i < rounds; i++) {
       // Fill in any missing population with random.
       final fillSize = max(populationSize - pop.length, 0);
-      pop
-        ..addAll(_seedPopulation(random, fillSize, data))
-        // Remove any population who exceed item limits.
-        ..removeWhere((c) {
-          for (final entry in itemLimits.entries) {
-            final count = c.items.where((i) => i.name == entry.key).length;
-            if (count > entry.value) {
-              return true;
-            }
-          }
-          return false;
-        });
+      pop.addAll(_seedPopulation(random, fillSize, data));
+      // Remove any population who exceed item limits.
+      pop = _enforceItemLimits(pop);
 
       final sorted = pop.map(doBattle).toList()..sortBy<num>((r) => -r.damage);
       // Select the top survivorRate of the population.
@@ -275,7 +285,7 @@ void doMain(List<String> arguments) {
   final finder = BestItemFinder(
     data,
     itemLimits: {
-      'Honey Ham': 3,
+      // 'Honey Ham': 3,
     },
   );
   const rounds = 1000;

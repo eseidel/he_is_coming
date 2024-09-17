@@ -262,6 +262,10 @@ class Item extends CatalogItem {
   /// Parts of the item, sorted.
   List<String>? get sortedParts => parts?.sorted();
 
+  /// Returns true if the item is crafted from other items.
+  bool get isCrafted =>
+      parts != null && parts!.isNotEmpty || rarity == ItemRarity.golden;
+
   /// The gem type of the item.
   Gem? get gem {
     final nameParts = name.split(' ').map((s) => s.toLowerCase()).toSet();
