@@ -100,7 +100,7 @@ void main() {
       edge: edge,
       oils: oils,
       turns: 12, // should be 15
-      damage: 136, // should be 519
+      damage: 352, // should be 519
     );
   });
 }

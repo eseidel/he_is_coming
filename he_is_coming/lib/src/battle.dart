@@ -113,10 +113,21 @@ class EffectContext {
 
   /// How much armor was gained or lost.
   /// Only valid when trigger == Trigger.onGainArmor or Trigger.onLoseArmor.
-  int get armorLost {
+  int get armorDelta {
     if (trigger != Trigger.onLoseArmor && trigger != Trigger.onGainArmor) {
       throw StateError(
         'armorLost is only valid for onGainArmor and onLoseArmor',
+      );
+    }
+    return value!;
+  }
+
+  /// How much thorns was gained or lost.
+  /// Only valid when trigger == Trigger.onGainThorns or Trigger.onLoseThorns.
+  int get thornsDelta {
+    if (trigger != Trigger.onLoseThorns && trigger != Trigger.onGainThorns) {
+      throw StateError(
+        'thornsDelta is only valid for onGainThorns and onLoseThorns',
       );
     }
     return value!;
@@ -600,13 +611,26 @@ class BattleContext {
   }) {
     final target = stats[targetIndex];
     final targetName = creatures[targetIndex].name;
-    setStats(targetIndex, target.copyWith(thorns: target.thorns + thorns));
+    final newThorns = target.thorns + thorns;
+    if (newThorns < 0) {
+      throw Exception('thorns cannot be negative');
+    }
+    setStats(targetIndex, target.copyWith(thorns: newThorns));
     log('$targetName thorns ${_signed(thorns)} from $source');
 
     // If we successfully gained thorns, trigger onGainThorns.
     if (thorns > 0) {
       _trigger(
         Trigger.onGainThorns,
+        meIndex: targetIndex,
+        attackerIndex: _attackerIndex,
+        parentSource: source,
+        value: thorns,
+      );
+    }
+    if (thorns < 0) {
+      _trigger(
+        Trigger.onLoseThorns,
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,
@@ -693,7 +717,7 @@ class BattleContext {
         meIndex: targetIndex,
         attackerIndex: _attackerIndex,
         parentSource: source,
-        value: armorLost,
+        value: -armorLost,
       );
     }
 
@@ -745,7 +769,12 @@ class BattleContext {
     // Collect and clear thorns before takeDamage and onHit triggers.
     final thorns = defender.thorns;
     if (thorns > 0) {
-      setStats(defenderIndex, defender.copyWith(thorns: 0));
+      // Use adjustThorns so that onLoseThorns is triggered.
+      _adjustThorns(
+        thorns: -thorns,
+        targetIndex: defenderIndex,
+        source: '$attackerName strike',
+      );
     }
     // Some items provide negative attack, so clamp to 0.
     final clampedAttack = max(attacker.attack, 0);

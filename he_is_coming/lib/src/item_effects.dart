@@ -228,9 +228,9 @@ final itemEffects = EffectCatalog(
     'Briar Rose': onRestoreHealth((c) => c.gainThorns(2)),
     'Razorvine Talisman': onGainThorns((c) => c.gainThorns(1)),
     'Emerald Gemstone': onOverheal((c) => c.dealDamage(c.overhealValue)),
-    'Sapphire Gemstone': onLoseArmor((c) => c.restoreHealth(c.armorLost)),
+    'Sapphire Gemstone': onLoseArmor((c) => c.restoreHealth(-c.armorDelta)),
     'Razor Scales': onLoseArmor(
-      (c) => _if(c.my.hasBeenExposed, () => c.dealDamage(c.armorLost)),
+      (c) => _if(c.my.hasBeenExposed, () => c.dealDamage(-c.armorDelta)),
     ),
     'Citrine Earring': onTurn(
       (c) => _if(c.isEveryOtherTurn, () => c.gainSpeed(1)),
@@ -239,6 +239,10 @@ final itemEffects = EffectCatalog(
       // Negative armor doesn't exist? This if is probably unnecessary.
       (c) => _if(c.my.baseArmor > 0, () => c.gainSpeed(c.my.baseArmor)),
     ),
+    'Blackbriar Blade': {
+      Trigger.onGainThorns: (c) => c.gainAttack(c.thornsDelta * 2),
+      Trigger.onLoseThorns: (c) => c.loseAttack(c.thornsDelta * -2),
+    },
   },
   dynamicStats: {
     'Oak Heart': (i) => Stats(maxHp: i.tagCount(ItemTag.wood) * 2),

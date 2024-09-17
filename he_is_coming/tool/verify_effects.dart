@@ -46,6 +46,8 @@ String? implementedTrigger(CatalogItem item) {
       return 'Whenever you gain thorns';
     case Trigger.onOverheal:
       return null;
+    case Trigger.onLoseThorns:
+      return null;
   }
 }
 

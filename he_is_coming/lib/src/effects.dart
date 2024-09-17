@@ -100,6 +100,10 @@ enum Trigger {
 
   /// Called when any thorns are gained.
   onGainThorns,
+
+  /// Called when any thorns are removed.
+  /// Check EffectContext.thornsValue for amount.
+  onLoseThorns,
 }
 
 /// Container for callbacks for items.

@@ -1723,4 +1723,24 @@ void main() {
     final player2 = data.player(items: [item], maxHp: 14);
     expect(player2.baseStats.maxHp, 28);
   });
+
+  test('Blackbriar Blade', () {
+    const item = 'Blackbriar Blade';
+    final thornsOnBattleStart =
+        Item.test(effect: onBattle((c) => c.gainThorns(2)));
+    final player =
+        data.player(items: [item], customItems: [thornsOnBattleStart]);
+    expect(player.baseStats.attack, 1);
+
+    final enemy = makeEnemy(attack: 1, health: 9);
+    final result = doBattle(first: player, second: enemy);
+    // Blackbriar Blade gives 2 attack for each thorns.
+    // We get 2 thorns on battle start, so hit for 5 first turn.
+    // Wolf attacks for 1, takes 2 thorn dmg.
+    // We attack on 2nd turn for 1.
+    // Wolf attacks for 1.
+    // We kill wolf on 3rd turn, taking 2 dmg.
+    expect(result.first.hp, 8);
+    expect(result.turns, 2);
+  });
 }
