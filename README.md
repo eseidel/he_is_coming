@@ -11,4 +11,4 @@ Or join the Discord: https://discord.com/invite/w6rDh4gRPN
 This repo is just a simulator to explore the space of possible builds.
 
 No promises that any of the data here reflects the current game.
-At time of writing Demo Patch 3 (August 11, 2024) is the latest.
+At time of writing that is Demo Patch 4 (0.3.5, September 4, 2024).
