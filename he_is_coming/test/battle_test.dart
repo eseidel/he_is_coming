@@ -26,10 +26,11 @@ void endFight({
   required List<String> oils,
   required int turns,
   required int damage,
+  bool verbose = false,
 }) {
   final player = data.player(items: items, edge: edge, oils: oils);
   final enemy = data.creatures['Woodland Abomination'];
-  final result = doBattle(first: player, second: enemy);
+  final result = doBattle(first: player, second: enemy, verbose: verbose);
   expect(result.turns, turns);
   expect(result.second.lostHp, damage);
 }
