@@ -1742,4 +1742,30 @@ void main() {
     expect(result.first.hp, 8);
     expect(result.turns, 2);
   });
+
+  test('Cracked Whetstone', () {
+    const item = 'Cracked Whetstone';
+    final player = data.player(items: [item]);
+    expect(player.baseStats.attack, 1);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // Cracked Whetstone gives 2 attack for just the first turn.
+    final result = doBattle(first: player, second: enemy);
+    // Player hits for 3, 1, 1, 1, killing in 4 turns, taking 3 dmg.
+    expect(result.first.hp, 7);
+    expect(result.first.baseStats.attack, 1);
+  });
+
+  test('Golden Cracked Whetstone', () {
+    const item = 'Golden Cracked Whetstone';
+    final player = data.player(items: [item]);
+    expect(player.baseStats.attack, 1);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // Cracked Whetstone gives 2 attack for just the first turn.
+    final result = doBattle(first: player, second: enemy);
+    // Player hits for 5, 1 killing in 2 turns, taking 1 dmg.
+    expect(result.first.hp, 9);
+    expect(result.first.baseStats.attack, 1);
+  });
 }

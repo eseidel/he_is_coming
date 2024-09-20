@@ -243,6 +243,14 @@ final itemEffects = EffectCatalog(
       Trigger.onGainThorns: (c) => c.gainAttack(c.thornsDelta * 2),
       Trigger.onLoseThorns: (c) => c.loseAttack(c.thornsDelta * -2),
     },
+    'Cracked Whetstone': {
+      Trigger.onTurn: (c) => _if(c.isFirstTurn, () => c.gainAttack(2)),
+      Trigger.onEndTurn: (c) => _if(c.isFirstTurn, () => c.loseAttack(2)),
+    },
+    'Golden Cracked Whetstone': {
+      Trigger.onTurn: (c) => _if(c.isFirstTurn, () => c.gainAttack(4)),
+      Trigger.onEndTurn: (c) => _if(c.isFirstTurn, () => c.loseAttack(4)),
+    },
   },
   dynamicStats: {
     'Oak Heart': (i) => Stats(maxHp: i.tagCount(ItemTag.wood) * 2),

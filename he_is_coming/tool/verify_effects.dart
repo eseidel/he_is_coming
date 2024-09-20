@@ -48,6 +48,8 @@ String? implementedTrigger(CatalogItem item) {
       return null;
     case Trigger.onLoseThorns:
       return null;
+    case Trigger.onEndTurn:
+      return null;
   }
 }
 

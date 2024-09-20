@@ -70,6 +70,9 @@ enum Trigger {
   /// Called at the start of each turn.
   onTurn,
 
+  /// Called at the end of each turn.
+  onEndTurn,
+
   /// Called whenever the creature attacks.
   /// This does not include damage dealt by non-attack actions.
   /// This really should be named onStrike or onAttack.

@@ -916,6 +916,14 @@ class BattleContext {
         value: null,
       );
 
+  void _triggerEndTurn() => _trigger(
+        Trigger.onEndTurn,
+        meIndex: attackerIndex,
+        attackerIndex: attackerIndex,
+        parentSource: null,
+        value: null,
+      );
+
   /// Initial list of creatures in this battle.
   final List<Creature> initialCreatures;
 
@@ -1031,6 +1039,7 @@ class BattleContext {
         _triggerOnTurn();
         _strike();
         _handleExtraStrikes();
+        _triggerEndTurn();
         // Might advance multiple turns if both creatures are stunned.
         _nextAttacker();
         if (attackerIndex == 1 && turnNumber > 100) {
