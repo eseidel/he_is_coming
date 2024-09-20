@@ -46,15 +46,11 @@ Does a heal of 0 counts as triggering "whenever you restore health"?
 - Bear deals 5 additional damage while you have armor for Bear Level 2
 - Bear deals 5 additional damage while you have armor for Crazed Honeybear Level 3
 - Bear deals 7 additional damage while you have armor for Bear Level 3
-- Gain 2 attack for each thorns for Blackbriar Blade
 - If Hothead has more speed than you, his first strike deals 10 additional damage for Hothead
 - If player has 5 or less health, wolf gains 2 attack for Wolf Level 1
 - If player has 5 or less health, wolf gains 3 attack for Wolf Level 2
 - If player has 5 or less health, wolf gains 4 attack for Wolf Level 3
 - When you have armor gain 3 attack for Ironstone Sandals
-
-### Stat Modifiers
-- Double your max health for Honey Ham
 
 ### Stat Overrides
 - Attack is always equal to missing health for Bearclaw Blade
