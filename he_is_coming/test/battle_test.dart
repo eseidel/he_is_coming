@@ -102,4 +102,33 @@ void main() {
       damage: 352, // should be 519
     );
   });
+
+  test('Three cloak', () {
+    // https://discord.com/channels/1041414829606449283/1209488593219756063/1286786296840323074
+    final items = [
+      'Granite Hammer',
+      'Crimson Cloak',
+      'Crimson Cloak',
+      'Crimson Cloak',
+      'Lifeblood Burst', // Not sure this is correct?
+      'Shield Talisman',
+      'Iron Rose',
+      'Pinecone Plate', // Unclear if this is correct?
+      'Tree Sap',
+    ];
+    const edge = 'Blunt Edge';
+    final oils = [
+      'Attack Oil',
+      'Armor Oil',
+      'Speed Oil',
+    ];
+    endFight(
+      data: data,
+      items: items,
+      edge: edge,
+      oils: oils,
+      turns: 17, // should be 50
+      damage: 318, // should be 2642
+    );
+  });
 }
