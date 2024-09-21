@@ -30,16 +30,24 @@ class EffectContext {
     required int meIndex,
     required int? attackerIndex,
     required String sourceName,
+    required int effectMultiplier,
     required this.value,
   })  : _battle = battle,
         _meIndex = meIndex,
         _attackerIndex = attackerIndex,
-        _sourceName = sourceName;
+        _sourceName = sourceName,
+        _effectMultiplier = effectMultiplier;
 
   final BattleContext _battle;
   final int _meIndex;
   final int? _attackerIndex;
   final String _sourceName;
+
+  /// Multiplier (Golden = 2, Diamond = 4) for effect.
+  final int _effectMultiplier;
+
+  /// Alias for effectMultiplier for brevity.
+  int get m => _effectMultiplier;
 
   /// Trigger for this effect.
   final Trigger trigger;
@@ -845,6 +853,7 @@ class BattleContext {
         meIndex: meIndex,
         attackerIndex: attackerIndex,
         sourceName: item.name,
+        effectMultiplier: item.effectMultiplier,
         value: value,
       );
       item.effect?[trigger]?.call(effectCxt);

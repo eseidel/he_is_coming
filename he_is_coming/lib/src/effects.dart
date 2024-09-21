@@ -192,10 +192,21 @@ class EffectCatalog {
     if (effectText == null) {
       return null;
     }
+    // This is a bit of a hack for Items, unclear where this should go?
+    // Maybe items should have an effectName in the yaml?
+    final String lookupName;
+    if (name.startsWith('Golden ')) {
+      lookupName = name.substring(7);
+    } else if (name.startsWith('Diamond ')) {
+      lookupName = name.substring(8);
+    } else {
+      lookupName = name;
+    }
+
     return Effect(
-      callbacks: catalog[name] ?? {},
-      onDynamicStats: dynamicStats[name],
-      onOverrideStats: overrideStats[name],
+      callbacks: catalog[lookupName] ?? {},
+      onDynamicStats: dynamicStats[lookupName],
+      onOverrideStats: overrideStats[lookupName],
       text: effectText,
     );
   }

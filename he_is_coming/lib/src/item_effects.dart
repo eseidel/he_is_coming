@@ -13,26 +13,19 @@ final itemEffects = EffectCatalog(
   <String, EffectMap>{
     'Stone Steak':
         onBattle((c) => _if(c.my.isHealthFull, () => c.gainArmor(4))),
-    'Redwood Cloak': onBattle((c) => c.restoreHealth(1)),
-    'Golden Redwood Cloak': onBattle((c) => c.restoreHealth(2)),
+    'Redwood Cloak': onBattle((c) => c.restoreHealth(1 * c.m)),
     'Emergency Shield': onBattle(
-      (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4)),
-    ),
-    'Golden Emergency Shield': onBattle(
-      (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(8)),
+      (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4 * c.m)),
     ),
     'Granite Gauntlet': onBattle((c) => c.gainArmor(5)),
     'Ruby Earring':
         onTurn((c) => _if(c.isEveryOtherTurn, () => c.dealDamage(1))),
-    'Firecracker Belt': onExposed((c) => [1, 1, 1].forEach(c.dealDamage)),
-    'Golden Firecracker Belt':
-        onExposed((c) => [1, 1, 1, 1, 1, 1].forEach(c.dealDamage)),
-    'Redwood Helmet': onExposed((c) => c.restoreHealth(3)),
-    'Golden Redwood Helmet': onExposed((c) => c.restoreHealth(6)),
+    'Firecracker Belt':
+        onExposed((c) => List.filled(3 * c.m, 1).forEach(c.dealDamage)),
+    'Redwood Helmet': onExposed((c) => c.restoreHealth(3 * c.m)),
     'Explosive Surprise': onExposed((c) => c.dealDamage(5)),
     'Cracked Bouldershield': onExposed((c) => c.gainArmor(5)),
-    'Vampiric Wine': onWounded((c) => c.restoreHealth(4)),
-    'Golden Vampiric Wine': onWounded((c) => c.restoreHealth(8)),
+    'Vampiric Wine': onWounded((c) => c.restoreHealth(4 * c.m)),
     'Mortal Edge': onWounded(
       (c) => c
         ..gainAttack(5)
@@ -45,13 +38,8 @@ final itemEffects = EffectCatalog(
     'Gold Ring': onBattle((c) => c.gainGold(1)),
     'Ruby Ring': onBattle(
       (c) => c
-        ..gainAttack(1)
-        ..takeDamage(2),
-    ),
-    'Golden Ruby Ring': onBattle(
-      (c) => c
-        ..gainAttack(2)
-        ..takeDamage(4),
+        ..gainAttack(1 * c.m)
+        ..takeDamage(2 * c.m),
     ),
     'Melting Iceblade': onHit((c) => c.loseAttack(1)),
     'Double-edged Sword': onHit((c) => c.takeDamage(1)),
@@ -100,25 +88,18 @@ final itemEffects = EffectCatalog(
     ),
     'Impressive Physique': onExposed((c) => c.stunEnemy(1)),
     'Steelbond Curse': onBattle((c) => c.giveArmorToEnemy(8)),
-    'Emerald Ring': onBattle((c) => c.restoreHealth(2)),
-    'Golden Emerald Ring': onBattle((c) => c.restoreHealth(4)),
+    'Emerald Ring': onBattle((c) => c.restoreHealth(2 * c.m)),
     'Ironskin Potion': onBattle(
       (c) => _if(c.my.lostHp > 0, () => c.gainArmor(c.my.lostHp)),
     ),
     'Double-plated Armor': onExposed((c) => c.gainArmor(3)),
     'Sapphire Earring':
-        onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainArmor(1))),
-    'Golden Sapphire Earring':
-        onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainArmor(2))),
+        onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainArmor(1 * c.m))),
     'Emerald Earring': onTurn(
-      (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(1)),
-    ),
-    'Golden Emerald Earring': onTurn(
-      (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(2)),
+      (c) => _if(c.isEveryOtherTurn, () => c.restoreHealth(1 * c.m)),
     ),
     'Sapphire Ring': onBattle((c) => c.stealArmor(2)),
-    'Horned Helmet': onBattle((c) => c.gainThorns(2)),
-    'Golden Horned Helmet': onBattle((c) => c.gainThorns(4)),
+    'Horned Helmet': onBattle((c) => c.gainThorns(2 * c.m)),
     'Crimson Cloak': onTakeDamage((c) => c.restoreHealth(1)),
     'Tree Sap': onWounded((c) => [1, 1, 1, 1, 1].forEach(c.restoreHealth)),
     'Petrifying Flask': onWounded(
@@ -244,12 +225,8 @@ final itemEffects = EffectCatalog(
       Trigger.onLoseThorns: (c) => c.loseAttack(c.thornsDelta * -2),
     },
     'Cracked Whetstone': {
-      Trigger.onTurn: (c) => _if(c.isFirstTurn, () => c.gainAttack(2)),
-      Trigger.onEndTurn: (c) => _if(c.isFirstTurn, () => c.loseAttack(2)),
-    },
-    'Golden Cracked Whetstone': {
-      Trigger.onTurn: (c) => _if(c.isFirstTurn, () => c.gainAttack(4)),
-      Trigger.onEndTurn: (c) => _if(c.isFirstTurn, () => c.loseAttack(4)),
+      Trigger.onTurn: (c) => _if(c.isFirstTurn, () => c.gainAttack(2 * c.m)),
+      Trigger.onEndTurn: (c) => _if(c.isFirstTurn, () => c.loseAttack(2 * c.m)),
     },
   },
   dynamicStats: {

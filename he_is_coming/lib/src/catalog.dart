@@ -103,6 +103,18 @@ abstract class CatalogItem {
   /// If the item was inferred rather  than seen in the wild.
   final bool inferred;
 
+  /// The multiplier for the effect.
+  // Should this move onto Item?
+  int get effectMultiplier {
+    if (name.startsWith('Golden')) {
+      return 2;
+    }
+    if (name.startsWith('Diamond')) {
+      return 4;
+    }
+    return 1;
+  }
+
   @override
   String toString() => name;
 
