@@ -392,6 +392,9 @@ enum ItemRarity {
   /// Golden, made by combining commons
   golden,
 
+  /// Diamond, made by combining golden
+  diamond,
+
   /// Cauldron, made by combining food in the cauldron.
   cauldron;
 

@@ -16,6 +16,8 @@ extension ItemRarityColor on ItemRarity {
         return Palette.heroic;
       case ItemRarity.golden:
         return Palette.golden;
+      case ItemRarity.diamond:
+        return Palette.diamond;
       case ItemRarity.cauldron:
         return Palette.cauldron;
     }

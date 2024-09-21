@@ -99,6 +99,9 @@ class Palette {
   /// Golden Rarity color.
   static const Color golden = Colors.yellow;
 
+  /// Diamond Rarity color.
+  static const Color diamond = Colors.blueGrey;
+
   /// Cauldron Rarity color.
   static const Color cauldron = Colors.orange;
 
