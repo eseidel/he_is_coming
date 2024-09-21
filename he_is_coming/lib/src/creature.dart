@@ -52,6 +52,7 @@ Player playerFromState(BuildState state) {
     inventory: state.inventory,
     version: null,
     type: CreatureType.player,
+    gold: 0,
   );
 }
 
