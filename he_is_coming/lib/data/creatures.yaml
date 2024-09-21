@@ -33,7 +33,8 @@
   attack: 2
   armor: 3
   speed: 1
-  effect: Bear deals 5 additional damage while you have armor
+  effect: Bear deals 4 additional damage while you have armor
+  version: 0.3.5
 - name: Bear Level 3
   id: 6
   level: 3
@@ -41,7 +42,8 @@
   attack: 3
   armor: 4
   speed: 2
-  effect: Bear deals 7 additional damage while you have armor
+  effect: Bear deals 5 additional damage while you have armor
+  version: 0.3.5
 - name: Bearserker
   id: 7
   boss: true
@@ -108,6 +110,22 @@
   attack: 1
   armor: 1
   effect: "Battle Start: Hedgehog gains 3 thorns"
+- name: Hedgehog Level 2
+  id: 30
+  level: 2
+  health: 2
+  attack: 1
+  armor: 2
+  effect: "Battle Start: Hedgehog gains 4 thorns"
+  version: 0.3.5
+- name: Hedgehog Level 3
+  id: 31
+  level: 3
+  health: 3
+  attack: 1
+  armor: 4
+  effect: "Battle Start: Hedgehog gains 5 thorns"
+  version: 0.3.5
 - name: Hothead
   id: 13
   boss: true
@@ -173,6 +191,7 @@
   attack: 1
   speed: 2
   effect: "Battle Start: If Spider has more speed than you, it deals 3 damage"
+  version: 0.3.5
 - name: Spider Level 2
   id: 21
   level: 2

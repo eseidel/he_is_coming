@@ -111,7 +111,7 @@ void main() {
       'Crimson Cloak',
       'Crimson Cloak',
       'Crimson Cloak',
-      'Lifeblood Burst', // Not sure this is correct?
+      'Iron Transfusion',
       'Shield Talisman',
       'Iron Rose',
       'Pinecone Plate', // Unclear if this is correct?
@@ -128,8 +128,8 @@ void main() {
       items: items,
       edge: edge,
       oils: oils,
-      turns: 17, // should be 50
-      damage: 318, // should be 2642
+      turns: 19, // should be 50
+      damage: 417, // should be 2642
     );
   });
 }
