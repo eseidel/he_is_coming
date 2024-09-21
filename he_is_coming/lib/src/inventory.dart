@@ -209,7 +209,7 @@ class Inventory {
       (acc, stats) => acc + stats,
     );
     for (final item in items) {
-      final overrideStats = item.effect?.onOverrideStats;
+      final overrideStats = item.effect?.callbacks?.overrideStats;
       if (overrideStats != null) {
         stats = overrideStats(stats);
       }
@@ -218,7 +218,7 @@ class Inventory {
   }
 
   Stats _dynamicItemStats(Item item) {
-    return item.effect?.onDynamicStats?.call(this) ?? item.stats;
+    return item.effect?.callbacks?.dynamicStats?.call(this) ?? item.stats;
   }
 
   /// The edge on the weapon.

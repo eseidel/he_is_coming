@@ -169,12 +169,6 @@ class Effect {
   /// Callbacks for the effect.
   final EffectCallbacks? callbacks;
 
-  /// Get the dynamic stats callback for the effect.
-  StatsFn? get onDynamicStats => callbacks?.dynamicStats;
-
-  /// Get the override stats callback for the effect.
-  OverrideStatsFn? get onOverrideStats => callbacks?.overrideStats;
-
   /// Returns a string representation of the effect.
   final String text;
 
