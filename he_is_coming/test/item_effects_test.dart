@@ -1155,6 +1155,18 @@ void main() {
     // Enemy should only attack 8 times (1, 2, 3, 4, 7, 8, 9, 13)
     expect(result.first.hp, 2);
     expect(result.second.hp, 0);
+
+    final extraStrikes = Item.test(effect: onTurn((c) => c.queueExtraStrike()));
+    final player2 = data.player(items: [item], customItems: [extraStrikes]);
+    // Strikes twice per turn, should stun every 3 turns for 2 turns.
+    // Enemy gets two strikes off during the first 2 turns, and then only 1
+    // every 3 turns.
+    // 2 dmg per strike, kill in the 7th turn.
+    // Enemy gets to attack on turn 1, 2, and then is stunned 3, 4
+    // re-stunned on 5, 6 and dies on turn 7 before it can attack.
+    final result2 = doBattle(first: player2, second: enemy);
+    expect(result2.first.hp, 8);
+    expect(result2.second.hp, 0);
   });
 
   test(

@@ -545,11 +545,12 @@ class BattleContext {
       if (attacker.stunCount < 1) {
         break;
       }
+      final remaining = attacker.stunCount - 1;
       setStats(
         attackerIndex,
-        attacker.copyWith(stunCount: attacker.stunCount - 1),
+        attacker.copyWith(stunCount: remaining),
       );
-      log('$attackerName is stunned, skipping turn');
+      log('$attackerName is stunned ($remaining remaining), skipping turn');
     }
   }
 

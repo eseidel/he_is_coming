@@ -121,9 +121,8 @@ final itemEffects = EffectCatalog(
           ..gainThorns(2),
       ),
     ),
-    // TODO(eseidel): Should use onHit rather than onTurn.
     'Stormcloud Spear':
-        onTurn((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
+        onHit((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
     'Pinecone Plate': onTurn(
       (c) => _if(c.myHealthWasFullAtBattleStart, () => c.gainThorns(1)),
     ),

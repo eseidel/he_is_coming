@@ -37,9 +37,6 @@ List<RegExp> expectedText(CatalogItem item) {
     }
     return [];
   }
-  TriggerMap map(Set<Trigger> triggers, List<RegExp> regexps) {
-    return TriggerMap(triggers, regexps);
-  }
 
   TriggerMap setToOne(Set<Trigger> triggers, RegExp regexp) {
     return TriggerMap(triggers, [regexp]);
