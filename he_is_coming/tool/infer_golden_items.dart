@@ -131,7 +131,7 @@ void doMain(List<String> arguments) {
   final inferredGolden =
       combinable.map((i) => inferItem(i, ItemRarity.golden)).toList();
   final inferredDiamond =
-      inferredGolden.map((i) => inferItem(i, ItemRarity.diamond)).toList();
+      combinable.map((i) => inferItem(i, ItemRarity.diamond)).toList();
 
   // Warn about items that are missing or unexpected.
   warnMissing(

@@ -47,11 +47,11 @@ Player playerFromState(BuildState state) {
   return Creature(
     name: _kPlayerName,
     intrinsic: playerIntrinsicStats,
-    gold: 0,
     level: state.level,
     id: _kPlayerId,
     inventory: state.inventory,
     version: null,
+    type: CreatureType.player,
   );
 }
 
@@ -109,11 +109,12 @@ extension CreatePlayer on Data {
       name: _kPlayerName,
       level: level,
       intrinsic: intrinsic,
-      gold: gold,
       hp: hp,
       id: _kPlayerId,
       version: null,
       inventory: inventory,
+      type: CreatureType.player,
+      gold: gold,
     );
   }
 }
@@ -149,7 +150,6 @@ Creature makeEnemy({
       speed: speed,
     ),
     type: isBoss ? CreatureType.boss : CreatureType.mob,
-    gold: isBoss ? 0 : 1,
     effect: triggers,
     version: null,
     id: 0, // Test enemies don't require unique ids.
@@ -175,16 +175,17 @@ class Creature extends CatalogItem {
   Creature({
     required super.name,
     required Stats intrinsic,
-    required this.gold,
     required this.level,
     required this.inventory,
     required super.id,
     required super.version,
-    this.type = CreatureType.mob,
+    required this.type,
     int? hp,
+    int? gold,
     super.effect,
   })  : _intrinsic = intrinsic,
-        lostHp = _computeLostHp(intrinsic, inventory, hp);
+        lostHp = _computeLostHp(intrinsic, inventory, hp),
+        gold = _computeGold(gold, type);
 
   /// Create a creature from a yaml map.
   factory Creature.fromYaml(YamlMap yaml, LookupEffect lookupEffect) {
@@ -213,7 +214,6 @@ class Creature extends CatalogItem {
         attack: attack,
         speed: speed,
       ),
-      gold: type == CreatureType.boss ? 0 : 1,
       effect: effect,
       type: type,
       id: id,
@@ -229,6 +229,14 @@ class Creature extends CatalogItem {
     final maxHp = inventory?.resolveBaseStats(intrinsic: intrinsic).maxHp ??
         intrinsic.maxHp;
     return maxHp - (hp ?? maxHp);
+  }
+
+  static int _computeGold(int? gold, CreatureType type) {
+    return switch (type) {
+      CreatureType.player => gold!,
+      CreatureType.mob => gold ?? 1,
+      CreatureType.boss => gold ?? 0,
+    };
   }
 
   /// The intrinsic stats of this Creature without any items.
@@ -293,7 +301,6 @@ class Creature extends CatalogItem {
     'health',
     'armor',
     'speed',
-    'gold',
     'items',
     'effect',
     'edge',
@@ -311,7 +318,6 @@ class Creature extends CatalogItem {
       if (type == CreatureType.boss) 'boss': true,
       'level': level.toJson(),
       ..._intrinsic.toJson(),
-      if (gold != 1) 'gold': gold,
       if (inventory != null) ...?inventory?.toJson(),
       // Not including hp for now.
       'effect': effect?.toJson(),
