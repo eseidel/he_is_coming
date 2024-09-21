@@ -83,7 +83,7 @@ final itemEffects = EffectCatalog(
           ..gainSpeed(3),
       ),
     ),
-    'Sticky Web': onBattle(
+    'Sticky Web': onInitiative(
       (c) => _if(c.my.speed < c.enemy.speed, () => c.stunEnemy(1)),
     ),
     'Impressive Physique': onExposed((c) => c.stunEnemy(1)),

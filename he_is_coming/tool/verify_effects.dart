@@ -35,6 +35,9 @@ List<RegExp> expectedText(CatalogItem item) {
     if (callbacks.dynamicStats != null) {
       return [contains('for each')];
     }
+    if (callbacks.overrideStats != null) {
+      return [contains('stat is inverted'), startsWith('Double your')];
+    }
     return [];
   }
 
@@ -65,14 +68,29 @@ List<RegExp> expectedText(CatalogItem item) {
       {Trigger.onGainThorns, Trigger.onLoseThorns},
       contains('for each thorns'),
     ),
-    one(Trigger.onBattle, startsWith('Battle Start')),
+    many(
+      Trigger.onBattle,
+      [
+        startsWith('Battle Start'),
+        contains('trigger 1 additional time'),
+        contains('on your first turn'),
+      ],
+    ),
     one(Trigger.onInitiative, startsWith('Initiative')),
     many(Trigger.onTurn, [
       startsWith('Turn Start'),
       contains('every other turn'),
       contains('at turn start'),
     ]),
-    many(Trigger.onHit, [startsWith('On Hit'), endsWith('on hit')]),
+    many(
+      Trigger.onHit,
+      [
+        startsWith('On Hit'),
+        endsWith('on hit'),
+        RegExp(r'Every \d strikes'),
+        RegExp(r'After \d strikes'),
+      ],
+    ),
     one(Trigger.onTakeDamage, takesDamage),
     one(Trigger.onExposed, startsWith('Exposed')),
     one(Trigger.onWounded, startsWith('Wounded')),
