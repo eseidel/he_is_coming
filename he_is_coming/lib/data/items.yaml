@@ -121,8 +121,8 @@
 - name: Cherry Bomb
   id: 125
   tags:
-   - bomb
-   - food
+    - bomb
+    - food
   rarity: common
   effect: "Battle Start: Deal 2 damage"
   version: 0.3.5
@@ -172,6 +172,193 @@
   rarity: heroic
   effect: "Whenever you take damage, restore 1 health"
   version: 0.3.5
+- name: Diamond Boots of the Hero
+  id: 155
+  rarity: golden
+  speed: 8
+  inferred: true
+  version: 0.3.5
+- name: Diamond Cherry Bomb
+  id: 156
+  tags: bomb
+  rarity: golden
+  effect: "Battle Start: Deal 8 damage"
+  inferred: true
+  version: 0.3.5
+- name: Diamond Citrine Earring
+  id: 157
+  tags: jewelry
+  rarity: golden
+  effect: Gain 4 speed every other turn
+  inferred: true
+  version: 0.3.5
+- name: Diamond Cracked Bouldershield
+  id: 158
+  tags: stone
+  rarity: golden
+  effect: "Exposed: Gain 20 armor"
+  inferred: true
+- name: Diamond Cracked Whetstone
+  id: 159
+  tags: stone
+  rarity: golden
+  effect: "First Turn: Gain 8 attack"
+  inferred: true
+  version: 0.3.5
+- name: Diamond Double-plated Armor
+  id: 160
+  rarity: golden
+  armor: 8
+  speed: -8
+  effect: "Exposed: Gain 12 armor"
+  inferred: true
+  version: 0.3.5
+- name: Diamond Emerald Crown
+  id: 161
+  tags: jewelry
+  rarity: golden
+  health: 32
+  attack: -4
+  inferred: true
+  version: 0.3.5
+- name: Diamond Emerald Earring
+  id: 162
+  rarity: golden
+  effect: Restore 4 health every other turn
+  inferred: true
+- name: Diamond Emerald Ring
+  id: 163
+  tags: jewelry
+  rarity: golden
+  effect: "Battle Start: Restore 8 health"
+  inferred: true
+- name: Diamond Emergency Shield
+  id: 164
+  rarity: golden
+  effect: "Initiative: If you have less speed than the enemy, gain 16 armor"
+  inferred: true
+  version: 0.3.5
+- name: Diamond Firecracker Belt
+  id: 165
+  rarity: golden
+  effect: "Exposed: Deal 4 damage 12 times"
+  inferred: true
+  version: 0.3.5
+- name: Diamond Granite Gauntlet
+  id: 166
+  tags: stone
+  rarity: golden
+  health: -8
+  effect: "Battle Start: Gain 20 armor"
+  inferred: true
+- name: Diamond Horned Helmet
+  id: 167
+  rarity: golden
+  armor: 8
+  effect: "Battle Start: Gain 8 thorns"
+  inferred: true
+  version: 0.3.5
+- name: Diamond Leather Glove
+  id: 168
+  rarity: golden
+  health: 12
+  speed: 4
+  inferred: true
+  version: 0.3.5
+- name: Diamond Leather Vest
+  id: 169
+  rarity: golden
+  armor: 8
+  speed: 4
+  inferred: true
+  version: 0.3.5
+- name: Diamond Petrifying Flask
+  id: 170
+  tags: stone
+  rarity: golden
+  effect: "Wounded: Gain 40 armor and stun yourself for 8 turns"
+  inferred: true
+- name: Diamond Redwood Cloak
+  id: 171
+  tags: wood
+  rarity: golden
+  health: 8
+  effect: "Battle Start: If your health is not full, restore 4 health"
+  inferred: true
+- name: Diamond Redwood Helmet
+  id: 172
+  tags: wood
+  rarity: golden
+  armor: 4
+  effect: "Exposed: Restore 12 health"
+  inferred: true
+- name: Diamond Redwood Roast
+  id: 173
+  tags: wood
+  rarity: golden
+  health: 20
+  inferred: true
+- name: Diamond Ruby Crown
+  id: 174
+  tags: jewelry
+  rarity: golden
+  attack: 4
+  speed: -4
+  inferred: true
+- name: Diamond Ruby Earring
+  id: 175
+  tags: jewelry
+  rarity: golden
+  effect: Deal 4 damage every other turn
+  inferred: true
+- name: Diamond Ruby Ring
+  id: 176
+  tags: jewelry
+  rarity: golden
+  effect: "Battle Start: Gain 4 attack and take 8 damage"
+  inferred: true
+- name: Diamond Saffron Feather
+  id: 177
+  rarity: golden
+  speed: 4
+  effect: "Turn Start: Convert 4 speed to 4 health"
+  inferred: true
+- name: Diamond Sapphire Crown
+  id: 178
+  tags: jewelry
+  rarity: golden
+  health: -8
+  armor: 20
+  inferred: true
+- name: Diamond Sapphire Earring
+  id: 179
+  rarity: golden
+  effect: Gain 4 armor every other turn
+  inferred: true
+- name: Diamond Sapphire Ring
+  id: 180
+  tags: jewelry
+  rarity: golden
+  effect: "Battle Start: Steal 8 armor from the enemy"
+  inferred: true
+- name: Diamond Shield of the Hero
+  id: 181
+  rarity: golden
+  armor: 12
+  inferred: true
+  version: 0.3.5
+- name: Diamond Vampiric Wine
+  id: 182
+  tags: sanguine
+  rarity: golden
+  effect: "Wounded: Restore 16 health"
+  inferred: true
+- name: Diamond Weighted Bracelet
+  id: 183
+  rarity: golden
+  attack: 4
+  speed: -4
+  inferred: true
 - name: Double-edged Sword
   id: 21
   weapon: true
@@ -672,8 +859,8 @@
 - name: Redwood Roast
   id: 97
   tags:
-   - food
-   - wood
+    - food
+    - wood
   rarity: common
   health: 5
 - name: Redwood Rod
@@ -853,8 +1040,8 @@
 - name: Vampiric Wine
   id: 120
   tags:
-   - sanguine
-   - food
+    - sanguine
+    - food
   rarity: common
   effect: "Wounded: Restore 4 health"
 - name: Weighted Bracelet
