@@ -126,17 +126,15 @@ Creature makeEnemy({
   required int attack,
   int armor = 0,
   int speed = 0,
-  EffectMap? effect,
+  EffectCallbacks? effect,
   Level level = Level.one,
   bool isBoss = false,
 }) {
   Effect? triggers;
   if (effect != null) {
-    triggers = Effect(
+    triggers = Effect.test(
       callbacks: effect,
       text: 'Enemy',
-      onDynamicStats: null,
-      onOverrideStats: null,
     );
   }
   return Creature(

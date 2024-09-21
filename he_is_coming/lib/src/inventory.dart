@@ -357,7 +357,7 @@ class Edge extends CatalogItem {
   /// Create an edge for testing.
   @visibleForTesting
   Edge.test({
-    required EffectMap effect,
+    required EffectCallbacks effect,
   }) : super(
           name: 'test',
           id: 0,

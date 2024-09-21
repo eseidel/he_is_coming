@@ -8,7 +8,7 @@ void _if(bool condition, void Function() fn) {
 }
 
 /// Effects that can be triggered by set bonuses.
-final setEffects = EffectCatalog(<String, EffectMap>{
+final setEffects = EffectCatalog(<String, EffectCallbacks>{
   'Redwood Crown': onWounded((c) => c.healToFull()),
   'Raw Hide': onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainAttack(1))),
   'Briar Greaves': onTakeDamage((c) => c.gainThorns(1)),

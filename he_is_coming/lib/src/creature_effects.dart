@@ -1,6 +1,6 @@
 import 'package:he_is_coming/src/effects.dart';
 
-EffectMap _spiderEffect({required int damage}) {
+EffectCallbacks _spiderEffect({required int damage}) {
   return onBattle(
     (c) {
       if (c.my.speed > c.enemy.speed) {
@@ -10,7 +10,7 @@ EffectMap _spiderEffect({required int damage}) {
   );
 }
 
-EffectMap _batEffect({required int hp}) {
+EffectCallbacks _batEffect({required int hp}) {
   return onHit(
     (c) {
       if (c.isEveryOtherTurn) {
@@ -20,7 +20,7 @@ EffectMap _batEffect({required int hp}) {
   );
 }
 
-EffectMap _hedgehogEffect({required int thorns}) =>
+EffectCallbacks _hedgehogEffect({required int thorns}) =>
     onBattle((c) => c.gainThorns(thorns));
 
 // Dart doesn't have if-expressions, so made a helper function.
@@ -31,7 +31,7 @@ void _if(bool condition, void Function() fn) {
 }
 
 /// Effects that can be triggered by creatures.
-final creatureEffects = EffectCatalog(<String, EffectMap>{
+final creatureEffects = EffectCatalog(<String, EffectCallbacks>{
   'Spider Level 1': _spiderEffect(damage: 3),
   'Spider Level 2': _spiderEffect(damage: 4),
   'Spider Level 3': _spiderEffect(damage: 5),

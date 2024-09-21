@@ -161,7 +161,7 @@ class Item extends CatalogItem {
   @visibleForTesting
   factory Item.test({
     String? name,
-    EffectMap? effect,
+    EffectCallbacks? effect,
     ItemRarity rarity = ItemRarity.common,
     bool isWeapon = false,
     Set<ItemTag> tags = const {},

@@ -4,8 +4,31 @@ import 'package:meta/meta.dart';
 /// Function type for effect callbacks.
 typedef EffectFn = void Function(EffectContext ctx);
 
-/// Callbacks for effects.
+/// Map from Trigger to callback function.
 typedef EffectMap = Map<Trigger, EffectFn>;
+
+/// Callbacks for an Effect.
+class EffectCallbacks {
+  /// Construct a new EffectCallbacks.
+  const EffectCallbacks({
+    this.triggers = const {},
+    this.dynamicStats,
+    this.overrideStats,
+  });
+
+  /// Returns true if the effect has no callbacks.
+  bool get isEmpty =>
+      triggers.isEmpty && dynamicStats == null && overrideStats == null;
+
+  /// Callbacks for triggers.
+  final EffectMap triggers;
+
+  /// Callback for computing dynamic stats.
+  final StatsFn? dynamicStats;
+
+  /// Callback for overriding stats.
+  final OverrideStatsFn? overrideStats;
+}
 
 /// Function type for dynamic stats callbacks.
 typedef StatsFn = Stats Function(Inventory inventory);
@@ -13,51 +36,70 @@ typedef StatsFn = Stats Function(Inventory inventory);
 /// Function type for stats override callbacks.
 typedef OverrideStatsFn = Stats Function(Stats stats);
 
+/// Create an [EffectCallbacks] with the given triggers.
+EffectCallbacks triggers(EffectMap triggers) =>
+    EffectCallbacks(triggers: triggers);
+
+/// Create an [EffectCallbacks] with the given dynamic stats callback.
+EffectCallbacks dynamicStats(StatsFn fn) =>
+    EffectCallbacks(dynamicStats: fn, triggers: {});
+
+/// Create an [EffectCallbacks] with the given override stats callback.
+EffectCallbacks overrideStats(OverrideStatsFn fn) =>
+    EffectCallbacks(overrideStats: fn, triggers: {});
+
 /// Creates an [Effect] with an onBattle callback.
-EffectMap onBattle(EffectFn fn) => {Trigger.onBattle: fn};
+EffectCallbacks onBattle(EffectFn fn) => triggers({Trigger.onBattle: fn});
 
 /// Creates an [Effect] with an onInitiative callback.
-EffectMap onInitiative(EffectFn fn) => {Trigger.onInitiative: fn};
+EffectCallbacks onInitiative(EffectFn fn) =>
+    triggers({Trigger.onInitiative: fn});
 
 /// Creates an [Effect] with an onTurn callback.
-EffectMap onTurn(EffectFn fn) => {Trigger.onTurn: fn};
+EffectCallbacks onTurn(EffectFn fn) => triggers({Trigger.onTurn: fn});
 
 /// Creates an [Effect] with an onHit callback.
-EffectMap onHit(EffectFn fn) => {Trigger.onHit: fn};
+EffectCallbacks onHit(EffectFn fn) => triggers({Trigger.onHit: fn});
 
 /// Creates an [Effect] with an onTakeDamage callback.
-EffectMap onTakeDamage(EffectFn fn) => {Trigger.onTakeDamage: fn};
+EffectCallbacks onTakeDamage(EffectFn fn) =>
+    triggers({Trigger.onTakeDamage: fn});
 
 /// Creates an [Effect] with an onExposed callback.
-EffectMap onExposed(EffectFn fn) => {Trigger.onExposed: fn};
+EffectCallbacks onExposed(EffectFn fn) => triggers({Trigger.onExposed: fn});
 
 /// Creates an [Effect] with an onWounded callback.
-EffectMap onWounded(EffectFn fn) => {Trigger.onWounded: fn};
+EffectCallbacks onWounded(EffectFn fn) => triggers({Trigger.onWounded: fn});
 
 /// Creates an [Effect] with multiple triggers.
-EffectMap multiTrigger(List<Trigger> triggers, EffectFn fn) =>
-    Map.fromEntries(triggers.map((trigger) => MapEntry(trigger, fn)));
+EffectCallbacks multiTrigger(List<Trigger> triggers, EffectFn fn) =>
+    EffectCallbacks(
+      triggers:
+          Map.fromEntries(triggers.map((trigger) => MapEntry(trigger, fn))),
+    );
 
 /// Creates an [Effect] with onExposed and onWounded callbacks.
-EffectMap onExposedAndWounded(EffectFn fn) => multiTrigger(
+EffectCallbacks onExposedAndWounded(EffectFn fn) => multiTrigger(
       [Trigger.onExposed, Trigger.onWounded],
       fn,
     );
 
 /// Creates an [Effect] with an onRestoreHealth callback.
-EffectMap onRestoreHealth(EffectFn fn) => {Trigger.onRestoreHealth: fn};
+EffectCallbacks onRestoreHealth(EffectFn fn) =>
+    triggers({Trigger.onRestoreHealth: fn});
 
 /// Creates an [Effect] with an onOverheal callback.
-EffectMap onOverheal(EffectFn fn) => {Trigger.onOverheal: fn};
+EffectCallbacks onOverheal(EffectFn fn) => triggers({Trigger.onOverheal: fn});
 
 /// Creates an [Effect] with an onGainArmor callback.
-EffectMap onGainArmor(EffectFn fn) => {Trigger.onGainArmor: fn};
+EffectCallbacks onGainArmor(EffectFn fn) => triggers({Trigger.onGainArmor: fn});
 
 /// Creates an [Effect] with an onLoseArmor callback.
-EffectMap onLoseArmor(EffectFn fn) => {Trigger.onLoseArmor: fn};
+EffectCallbacks onLoseArmor(EffectFn fn) => triggers({Trigger.onLoseArmor: fn});
 
 /// Creates an [Effect] with an onGainThorns callback.
-EffectMap onGainThorns(EffectFn fn) => {Trigger.onGainThorns: fn};
+EffectCallbacks onGainThorns(EffectFn fn) =>
+    triggers({Trigger.onGainThorns: fn});
 
 /// Enum representing the different effects that can be triggered.
 enum Trigger {
@@ -113,45 +155,31 @@ enum Trigger {
 @immutable
 class Effect {
   /// Create a new Effect
-  const Effect({
-    required this.text,
-    required this.callbacks,
-    required this.onDynamicStats,
-    required this.onOverrideStats,
-  });
+  const Effect({required this.text, required this.callbacks});
 
   /// Create an effect without any callbacks.
-  Effect.textOnly(this.text)
-      : callbacks = {},
-        onDynamicStats = null,
-        onOverrideStats = null;
+  const Effect.textOnly(this.text) : callbacks = const EffectCallbacks();
 
   /// Create a test effect.
-  const Effect.test({
-    this.callbacks = const {},
-    this.onDynamicStats,
-    this.onOverrideStats,
-    this.text = 'test',
-  });
+  const Effect.test({this.callbacks, this.text = 'test'});
 
   /// Get the effect callback for a given effect.
-  EffectFn? operator [](Trigger effect) => callbacks[effect];
+  EffectFn? operator [](Trigger effect) => callbacks?.triggers[effect];
 
-  /// Returns a new effect with the given callback added.
-  final Map<Trigger, EffectFn> callbacks;
+  /// Callbacks for the effect.
+  final EffectCallbacks? callbacks;
 
-  /// Callback for dynamic stats.
-  final StatsFn? onDynamicStats;
+  /// Get the dynamic stats callback for the effect.
+  StatsFn? get onDynamicStats => callbacks?.dynamicStats;
 
-  /// Callback for overriding stats.
-  final OverrideStatsFn? onOverrideStats;
+  /// Get the override stats callback for the effect.
+  OverrideStatsFn? get onOverrideStats => callbacks?.overrideStats;
 
   /// Returns a string representation of the effect.
   final String text;
 
   /// Returns true if the effect has no callbacks.
-  bool get isEmpty =>
-      callbacks.isEmpty && onDynamicStats == null && onOverrideStats == null;
+  bool get isEmpty => callbacks == null || callbacks!.isEmpty;
 
   @override
   String toString() => text;
@@ -163,29 +191,13 @@ class Effect {
 /// Catalog of effects.
 class EffectCatalog {
   /// Create a new EffectCatalog
-  EffectCatalog(
-    this.catalog, {
-    this.dynamicStats = const {},
-    this.overrideStats = const {},
-  });
+  EffectCatalog(this.catalog);
 
   /// The catalog of effects.
-  final Map<String, EffectMap> catalog;
-
-  /// Callbacks for dynamic stats.
-  final Map<String, StatsFn> dynamicStats;
-
-  /// Callbacks for overriding stats.
-  final Map<String, OverrideStatsFn> overrideStats;
+  final Map<String, EffectCallbacks> catalog;
 
   /// Get the list of implemented effects.
-  Set<String> get implemented {
-    return <String>{
-      ...catalog.keys,
-      ...dynamicStats.keys,
-      ...overrideStats.keys,
-    };
-  }
+  Set<String> get implemented => catalog.keys.toSet();
 
   /// Look up an effect by name.
   Effect? lookup({required String name, required String? effectText}) {
@@ -202,11 +214,10 @@ class EffectCatalog {
     } else {
       lookupName = name;
     }
+    final callbacks = catalog[lookupName];
 
     return Effect(
-      callbacks: catalog[lookupName] ?? {},
-      onDynamicStats: dynamicStats[lookupName],
-      onOverrideStats: overrideStats[lookupName],
+      callbacks: callbacks,
       text: effectText,
     );
   }

@@ -10,7 +10,7 @@ void _if(bool condition, void Function() fn) {
 
 /// Effects that can be triggered by items.
 final itemEffects = EffectCatalog(
-  <String, EffectMap>{
+  <String, EffectCallbacks>{
     'Stone Steak':
         onBattle((c) => _if(c.my.isHealthFull, () => c.gainArmor(4))),
     'Redwood Cloak': onBattle((c) => c.restoreHealth(1 * c.m)),
@@ -126,32 +126,34 @@ final itemEffects = EffectCatalog(
     'Pinecone Plate': onTurn(
       (c) => _if(c.myHealthWasFullAtBattleStart, () => c.gainThorns(1)),
     ),
-    'Gemstone Scepter': {
-      Trigger.onHit: (c) {
-        // "Draws power from emerald, ruby, sapphire and citrine items"
-        final emeraldPower = c.gemCount(Gem.emerald);
-        // These are supposedly one at a time rather than in bulk.
-        // https://discord.com/channels/1041414829606449283/1209488593219756063/1283601378953924650
-        for (var i = 0; i < emeraldPower; i++) {
-          c.restoreHealth(1);
-        }
-        final rubyPower = c.gemCount(Gem.ruby);
-        for (var i = 0; i < rubyPower; i++) {
-          c.dealDamage(1);
-        }
-        final sapphirePower = c.gemCount(Gem.sapphire);
-        for (var i = 0; i < sapphirePower; i++) {
-          c.gainArmor(1);
-        }
+    'Gemstone Scepter': EffectCallbacks(
+      triggers: {
+        Trigger.onHit: (c) {
+          // "Draws power from emerald, ruby, sapphire and citrine items"
+          final emeraldPower = c.gemCount(Gem.emerald);
+          // These are supposedly one at a time rather than in bulk.
+          // https://discord.com/channels/1041414829606449283/1209488593219756063/1283601378953924650
+          for (var i = 0; i < emeraldPower; i++) {
+            c.restoreHealth(1);
+          }
+          final rubyPower = c.gemCount(Gem.ruby);
+          for (var i = 0; i < rubyPower; i++) {
+            c.dealDamage(1);
+          }
+          final sapphirePower = c.gemCount(Gem.sapphire);
+          for (var i = 0; i < sapphirePower; i++) {
+            c.gainArmor(1);
+          }
+        },
+        Trigger.onBattle: (c) {
+          // Citrine means extra strikes on the first turn:
+          // https://discord.com/channels/1041414829606449283/1209488302269534209/1278082886892781619
+          for (var i = 0; i < c.gemCount(Gem.citrine); i++) {
+            c.queueExtraStrike();
+          }
+        },
       },
-      Trigger.onBattle: (c) {
-        // Citrine means extra strikes on the first turn:
-        // https://discord.com/channels/1041414829606449283/1209488302269534209/1278082886892781619
-        for (var i = 0; i < c.gemCount(Gem.citrine); i++) {
-          c.queueExtraStrike();
-        }
-      },
-    },
+    ),
     'Blacksmith Bond': onBattle((c) => c.addExtraExposed(1)),
     // This could also be done using computed stats once we have that.
     'Brittlebark Bow':
@@ -220,22 +222,25 @@ final itemEffects = EffectCatalog(
       // Negative armor doesn't exist? This if is probably unnecessary.
       (c) => _if(c.my.baseArmor > 0, () => c.gainSpeed(c.my.baseArmor)),
     ),
-    'Blackbriar Blade': {
-      Trigger.onGainThorns: (c) => c.gainAttack(c.thornsDelta * 2),
-      Trigger.onLoseThorns: (c) => c.loseAttack(c.thornsDelta * -2),
-    },
-    'Cracked Whetstone': {
-      Trigger.onTurn: (c) => _if(c.isFirstTurn, () => c.gainAttack(2 * c.m)),
-      Trigger.onEndTurn: (c) => _if(c.isFirstTurn, () => c.loseAttack(2 * c.m)),
-    },
-  },
-  dynamicStats: {
-    'Oak Heart': (i) => Stats(maxHp: i.tagCount(ItemTag.wood) * 2),
-    "Woodcutter's Axe": (i) => Stats(attack: i.emptySlots * 2),
-    'Bejeweled Blade': (i) => Stats(attack: i.tagCount(ItemTag.jewelry) * 2),
-  },
-  overrideStats: {
-    'Citrine Gemstone': (s) => s.copyWith(speed: -s.speed),
-    'Honey Ham': (s) => s.copyWith(maxHp: s.maxHp * 2),
+    'Blackbriar Blade': EffectCallbacks(
+      triggers: {
+        Trigger.onGainThorns: (c) => c.gainAttack(c.thornsDelta * 2),
+        Trigger.onLoseThorns: (c) => c.loseAttack(c.thornsDelta * -2),
+      },
+    ),
+    'Cracked Whetstone': EffectCallbacks(
+      triggers: {
+        Trigger.onTurn: (c) => _if(c.isFirstTurn, () => c.gainAttack(2 * c.m)),
+        Trigger.onEndTurn: (c) =>
+            _if(c.isFirstTurn, () => c.loseAttack(2 * c.m)),
+      },
+    ),
+    'Oak Heart':
+        dynamicStats((i) => Stats(maxHp: i.tagCount(ItemTag.wood) * 2)),
+    "Woodcutter's Axe": dynamicStats((i) => Stats(attack: i.emptySlots * 2)),
+    'Bejeweled Blade':
+        dynamicStats((i) => Stats(attack: i.tagCount(ItemTag.jewelry) * 2)),
+    'Citrine Gemstone': overrideStats((s) => s.copyWith(speed: -s.speed)),
+    'Honey Ham': overrideStats((s) => s.copyWith(maxHp: s.maxHp * 2)),
   },
 );

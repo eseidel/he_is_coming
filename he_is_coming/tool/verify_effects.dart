@@ -12,10 +12,10 @@ String? implementedTrigger(CatalogItem item) {
     return null;
   }
   final callbacks = effect.callbacks;
-  if (callbacks.isEmpty) {
+  if (callbacks == null || callbacks.isEmpty) {
     return null;
   }
-  final triggers = callbacks.keys.toList();
+  final triggers = callbacks.triggers.keys.toList();
   if (triggers.length != 1) {
     logger.warn('${item.name} has multiple triggers: $triggers');
     return null;
