@@ -236,11 +236,20 @@ final itemEffects = EffectCatalog(
       },
     ),
     'Oak Heart':
-        dynamicStats((i) => Stats(maxHp: i.tagCount(ItemTag.wood) * 2)),
-    "Woodcutter's Axe": dynamicStats((i) => Stats(attack: i.emptySlots * 2)),
+        dynamicStats((c) => Stats(maxHp: c.tagCount(ItemTag.wood) * 2)),
+    "Woodcutter's Axe": dynamicStats((c) => Stats(attack: c.emptySlots * 2)),
     'Bejeweled Blade':
-        dynamicStats((i) => Stats(attack: i.tagCount(ItemTag.jewelry) * 2)),
+        dynamicStats((c) => Stats(attack: c.tagCount(ItemTag.jewelry) * 2)),
     'Citrine Gemstone': overrideStats((s) => s.copyWith(speed: -s.speed)),
     'Honey Ham': overrideStats((s) => s.copyWith(maxHp: s.maxHp * 2)),
+    'Bearclaw Blade': EffectCallbacks(
+      // Use dynamicStats to attack shows up correctly over-land.
+      dynamicStats: (c) => Stats(attack: c.lostHp),
+      triggers: {
+        // Since base stats already include lost hp adjustment we just need
+        // to update attack based on hp deltas.
+        Trigger.onHpChanged: (c) => c.adjustAttack(-c.hpDelta),
+      },
+    ),
   },
 );

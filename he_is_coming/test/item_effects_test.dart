@@ -1778,10 +1778,26 @@ void main() {
     expect(player.baseStats.attack, 1);
 
     final enemy = makeEnemy(attack: 1, health: 6);
-    // Cracked Whetstone gives 2 attack for just the first turn.
+    // Golden Cracked Whetstone gives 4 attack for just the first turn.
     final result = doBattle(first: player, second: enemy);
     // Player hits for 5, 1 killing in 2 turns, taking 1 dmg.
     expect(result.first.hp, 9);
     expect(result.first.baseStats.attack, 1);
+  });
+
+  test('Bearclaw Blade', () {
+    const item = 'Bearclaw Blade';
+    final player = data.player(items: [item]);
+    // Health is full, so attack is 0.
+    expect(player.baseStats.attack, 0);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // Bearclaw Blade attack is equal to missing health.
+    final result = doBattle(first: player, second: enemy);
+    // Player hits for 0 first attack, then 1, 2, 3 as loses health.
+    // Kills enemy in 4 turns, taking 3 dmg.
+    expect(result.first.hp, 7);
+    // 3 health is missing so attack is 3 now.
+    expect(result.first.baseStats.attack, 3);
   });
 }

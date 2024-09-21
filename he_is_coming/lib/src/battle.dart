@@ -9,6 +9,12 @@ import 'package:meta/meta.dart';
 
 String _signed(int value) => value >= 0 ? '+$value' : '$value';
 
+void _expectNonZero(int value, String valueName) {
+  if (value == 0) {
+    throw Exception('$valueName ($value) must be non-zero');
+  }
+}
+
 void _expectPositive(int value, String valueName) {
   if (value <= 0) {
     throw Exception('$valueName ($value) must be positive');
@@ -143,9 +149,9 @@ class EffectContext {
 
   /// How much hp was gained or lost.
   int get hpDelta {
-    if (trigger != Trigger.onEnemyHpChanged) {
+    if (trigger != Trigger.onEnemyHpChanged && trigger != Trigger.onHpChanged) {
       throw StateError(
-        'hpDelta is only valid for onGainThorns and onLoseThorns',
+        'hpDelta is only valid for onEnemyHpChanged or onHpChanged',
       );
     }
     return value!;
@@ -211,7 +217,23 @@ class EffectContext {
   /// Add attack.
   void gainAttack(int attack) {
     _expectPositive(attack, 'attack');
-    _battle._adjustAttack(attack: attack, index: _meIndex, source: _sourceName);
+    adjustAttack(attack);
+  }
+
+  /// Adjust by a negative attack.
+  void loseAttack(int attack) {
+    _expectPositive(attack, 'attack');
+    adjustAttack(-attack);
+  }
+
+  /// Adjust attack by a given delta.  Must be non-zero.
+  void adjustAttack(int attack) {
+    _expectNonZero(attack, 'attack');
+    _battle._adjustAttack(
+      attack: attack,
+      index: _meIndex,
+      source: _sourceName,
+    );
   }
 
   /// Add thorns.
@@ -220,16 +242,6 @@ class EffectContext {
     _battle._adjustThorns(
       thorns: thorns,
       targetIndex: _meIndex,
-      source: _sourceName,
-    );
-  }
-
-  /// Adjust by a negative attack.
-  void loseAttack(int attack) {
-    _expectPositive(attack, 'attack');
-    _battle._adjustAttack(
-      attack: -attack,
-      index: _meIndex,
       source: _sourceName,
     );
   }
@@ -684,6 +696,17 @@ class BattleContext {
         value: restored,
       );
     }
+
+    if (restored != 0) {
+      _trigger(
+        Trigger.onHpChanged,
+        meIndex: targetIndex,
+        parentSource: source,
+        value: restored,
+        attackerIndex: _attackerIndex,
+      );
+    }
+
     if (overheal > 0) {
       _trigger(
         Trigger.onOverheal,
@@ -741,6 +764,16 @@ class BattleContext {
         attackerIndex: _attackerIndex,
         parentSource: source,
         value: -armorLost,
+      );
+    }
+
+    if (hpDelta != 0) {
+      _trigger(
+        Trigger.onHpChanged,
+        meIndex: targetIndex,
+        parentSource: source,
+        value: hpDelta,
+        attackerIndex: _attackerIndex,
       );
     }
 

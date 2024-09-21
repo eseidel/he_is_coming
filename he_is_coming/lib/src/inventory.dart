@@ -198,9 +198,16 @@ class Inventory {
   }
 
   /// Resolve stats with items.
-  Stats resolveBaseStats({Stats intrinsic = const Stats()}) {
+  Stats resolveBaseStats({
+    required int lostHp,
+    Stats intrinsic = const Stats(),
+  }) {
     var stats = [
-      ...items.map(_dynamicItemStats),
+      ...items.map((item) {
+        return item.effect?.callbacks?.dynamicStats
+                ?.call(StatsContext(inventory: this, lostHp: lostHp)) ??
+            item.stats;
+      }),
       // Edges don't currently give stats.
       ...oils.map((oil) => oil.stats),
       ...sets.map((set) => set.stats),
@@ -215,10 +222,6 @@ class Inventory {
       }
     }
     return stats;
-  }
-
-  Stats _dynamicItemStats(Item item) {
-    return item.effect?.callbacks?.dynamicStats?.call(this) ?? item.stats;
   }
 
   /// The edge on the weapon.

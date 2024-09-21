@@ -12,7 +12,7 @@ export 'package:scoped_deps/scoped_deps.dart';
 /// Log the passed build state.
 void logBuildState(BuildState state, Data data) {
   final inventory = state.inventory;
-  final stats = inventory.resolveBaseStats();
+  final stats = inventory.resolveBaseStats(lostHp: 0);
   logger
     ..info('Stats: $stats')
     ..info('Items:');

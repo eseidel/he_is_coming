@@ -30,8 +30,29 @@ class EffectCallbacks {
   final OverrideStatsFn? overrideStats;
 }
 
+/// Used for resolving dynamic stats.
+class StatsContext {
+  /// Create a new StatsContext.
+  const StatsContext({
+    required this.inventory,
+    required this.lostHp,
+  });
+
+  /// The inventory of the creature.
+  final Inventory inventory;
+
+  /// Count of the given tag in the inventory.
+  int tagCount(ItemTag tag) => inventory.tagCount(tag);
+
+  /// The number of empty slots in the inventory.
+  int get emptySlots => inventory.emptySlots;
+
+  /// The amount of hp lost.
+  final int lostHp;
+}
+
 /// Function type for dynamic stats callbacks.
-typedef StatsFn = Stats Function(Inventory inventory);
+typedef StatsFn = Stats Function(StatsContext context);
 
 /// Function type for stats override callbacks.
 typedef OverrideStatsFn = Stats Function(Stats stats);
@@ -131,6 +152,9 @@ enum Trigger {
 
   /// Called when any hp is restored.
   onRestoreHealth,
+
+  /// Called when hp changes.
+  onHpChanged,
 
   /// Called when hp is not restored due to overheal.
   /// Read EffectContext.overhealValue for amount.
