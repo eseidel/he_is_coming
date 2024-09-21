@@ -24,52 +24,53 @@ EffectCallbacks _batEffect({required int hp}) {
 EffectCallbacks _hedgehogEffect({required int thorns}) =>
     onBattle((c) => c.gainThorns(thorns));
 
-EffectCallbacks _wolfEffect({required int baseAttack, required int bonus}) {
+EffectFn _attackAdjustCallback({
+  required int baseAttack,
+  required int bonus,
+  required bool Function(EffectContext) shouldHaveBonus,
+}) {
   // We have no way for effects to have their own state, so we have to hard
   // code the base/bonus within this effect so we can tell during the effect
   // which state we're in.
-  void adjustIfNeeded(EffectContext c) {
-    final hasBonus = c.my.attack == baseAttack + bonus;
-    final shouldHaveBonus = c.enemy.hp < 5;
+  return (EffectContext c) {
+    final has = c.my.attack == baseAttack + bonus;
+    final shouldHave = shouldHaveBonus(c);
     if (!{baseAttack, baseAttack + bonus}.contains(c.my.attack)) {
-      throw StateError('Unexpected attack value for Wolf.');
+      throw StateError('Unexpected attack value.');
     }
-    if (hasBonus && !shouldHaveBonus) {
+    if (has && !shouldHave) {
       c.loseAttack(bonus);
-    } else if (!hasBonus && shouldHaveBonus) {
+    } else if (!has && shouldHave) {
       c.gainAttack(bonus);
     }
-  }
+  };
+}
 
+EffectCallbacks _wolfEffect({required int baseAttack, required int bonus}) {
+  final updateAttack = _attackAdjustCallback(
+    baseAttack: baseAttack,
+    bonus: bonus,
+    shouldHaveBonus: (c) => c.enemy.hp < 5,
+  );
   return EffectCallbacks(
     triggers: {
-      Trigger.onBattle: adjustIfNeeded,
-      Trigger.onEnemyHpChanged: adjustIfNeeded,
+      Trigger.onBattle: updateAttack,
+      Trigger.onEnemyHpChanged: updateAttack,
     },
   );
 }
 
 EffectCallbacks _bearEffect({required int baseAttack, required int bonus}) {
-  // We have no way for effects to have their own state, so we have to hard
-  // code the base/bonus within this effect so we can tell during the effect
-  // which state we're in.
-  void adjustIfNeeded(EffectContext c) {
-    final hasBonus = c.my.attack == baseAttack + bonus;
-    final shouldHaveBonus = c.enemy.armor > 0;
-    if (!{baseAttack, baseAttack + bonus}.contains(c.my.attack)) {
-      throw StateError('Unexpected attack value for Bear.');
-    }
-    if (hasBonus && !shouldHaveBonus) {
-      c.loseAttack(bonus);
-    } else if (!hasBonus && shouldHaveBonus) {
-      c.gainAttack(bonus);
-    }
-  }
+  final updateAttack = _attackAdjustCallback(
+    baseAttack: baseAttack,
+    bonus: bonus,
+    shouldHaveBonus: (c) => c.enemy.armor > 0,
+  );
 
   return EffectCallbacks(
     triggers: {
-      Trigger.onBattle: adjustIfNeeded,
-      Trigger.onEnemyArmorChanged: adjustIfNeeded,
+      Trigger.onBattle: updateAttack,
+      Trigger.onEnemyArmorChanged: updateAttack,
     },
   );
 }
