@@ -551,7 +551,8 @@ class BattleContext {
   /// Coordinated logging for the battle.
   void log(String message) {
     if (verbose) {
-      logger.info(message);
+      final indent = ' ' * _triggerNesting;
+      logger.info(indent + message);
     }
   }
 
@@ -928,7 +929,12 @@ class BattleContext {
         effectMultiplier: item.effectMultiplier,
         value: value,
       );
-      callback.call(effectCxt);
+      try {
+        _triggerNesting++;
+        callback.call(effectCxt);
+      } finally {
+        _triggerNesting--;
+      }
       _checkForDeath();
     }
 
@@ -1017,6 +1023,8 @@ class BattleContext {
   final List<CreatureStats> stats;
 
   int? _attackerIndex;
+
+  int _triggerNesting = 0;
 
   /// If true, log more detailed information.
   final bool verbose;
