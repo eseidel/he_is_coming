@@ -831,8 +831,9 @@
   version: 0.3.5
 - name: Rabbit Doll
   id: 131
-  rarity: common
-  inferred: true
+  rarity: rare
+  unique: true
+  effect: "Wounded: Trigger Initiative"
   version: 0.3.5
 - name: Razor Scales
   id: 93
@@ -954,6 +955,7 @@
   rarity: rare
   attack: 2
   effect: "Battle Start: Give 8 armor to the enemy"
+  version: 0.3.5
 - name: Sticky Web
   id: 112
   rarity: rare
@@ -983,8 +985,9 @@
   effect: "Every 5 strikes: Stun the enemy for 2 turns"
 - name: Swiftstrike Cloak
   id: 133
-  rarity: common
-  inferred: true
+  rarity: rare
+  speed: 1
+  effect: "Initiative: If your speed is double or more than the enemy's, do an additional strike on your next turn"
   version: 0.3.5
 - name: Swiftstrike Gauntlet
   id: 23
@@ -1061,3 +1064,8 @@
   weapon: true
   rarity: common
   attack: 1
+- name: Time Bomb
+  id: 132
+  rarity: rare
+  effect: "After 5 turns: Deal 15 damage"
+  version: 0.3.5

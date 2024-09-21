@@ -21,14 +21,14 @@
 - name: Bombastic
   id: 26
   unlock: Trigger 3 bomb items at the same time on Exposed
-  reward: Unimplemented
+  reward: Time Bomb
   x: 5
   y: 4
   version: 0.3.5
 - name: Citrine Yellow
   id: 28
   unlock: Start a battle with 8 base speed"
-  reward: Unimplemented
+  reward: Swiftstrike Cloak
   x: 8
   y: 4
   version: 0.3.5
@@ -114,7 +114,7 @@
 - name: Ruby Red
   id: 29
   unlock: Start a battle with 8 base attack
-  reward: Unimplemented
+  reward: Steelbond Curse
   x: 9
   y: 4
   version: 0.3.5
@@ -172,4 +172,11 @@
   reward: Bloodmoon Ritual
   x: 1
   y: 1
+  version: 0.3.5
+- name: Magic Roulette
+  id: 34
+  unlock: Use Fairy 4 times in a single run
+  reward: Rabbit Doll
+  x: 13
+  y: 4
   version: 0.3.5
