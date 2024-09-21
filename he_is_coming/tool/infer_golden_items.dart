@@ -25,24 +25,25 @@ extension on ItemRarity {
 Item inferItem(Item item, ItemRarity rarity) {
   final multiplier = rarity.multiplier;
   final prefix = rarity.prefix;
-  String doubleNumbers(String text) {
-    return text.splitMapJoin(
-      RegExp(r'\d+'),
-      onMatch: (m) => '${int.parse(m.group(0)!) * multiplier}',
-      onNonMatch: (n) => n,
+  Effect? multiplyText(Effect? effect) {
+    if (effect == null) return null;
+    return Effect.textOnly(
+      effect.text.splitMapJoin(
+        RegExp(r'\d+'),
+        onMatch: (m) => '${int.parse(m.group(0)!) * multiplier}',
+        onNonMatch: (n) => n,
+      ),
     );
   }
 
-  final effect = item.effect != null
-      ? Effect.textOnly(doubleNumbers(item.effect!.text))
-      : null;
+  final effect = multiplyText(item.effect);
   final inferred = item.copyWith(
     name: '$prefix ${item.name}',
-    rarity: ItemRarity.golden,
+    rarity: rarity,
     effect: effect,
     inferred: true,
     stats: item.stats * multiplier,
-    // Food loses its food tag when it becomes golden.
+    // Food loses its food tag when combined.
     tags: item.tags.difference({ItemTag.food}),
     id: 0, // TODO(eseidel): assign a unique id?
     // Should this have parts of item x multiplier?
