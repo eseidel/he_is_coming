@@ -43,7 +43,7 @@ Item inferItem(Item item, ItemRarity rarity) {
     inferred: true,
     stats: item.stats * multiplier,
     // Food loses its food tag when it becomes golden.
-    tags: item.tags..remove(ItemTag.food),
+    tags: item.tags.difference({ItemTag.food}),
     id: 0, // TODO(eseidel): assign a unique id?
     // Should this have parts of item x multiplier?
   );
