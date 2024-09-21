@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:he_is_coming/src/data.dart';
 import 'package:he_is_coming/src/effects.dart';
 import 'package:he_is_coming/src/logger.dart';
@@ -6,66 +7,92 @@ import 'package:scoped_deps/scoped_deps.dart';
 // get all the first and last words in item names.
 // Look for repeats.
 
-String? implementedTrigger(CatalogItem item) {
+class TriggerMap {
+  TriggerMap(this.triggers, this.regexps);
+
+  final Set<Trigger> triggers;
+  List<RegExp> regexps;
+}
+
+List<RegExp> expectedText(CatalogItem item) {
+  RegExp startsWith(String text) => RegExp('^$text');
+  RegExp endsWith(String text) => RegExp('$text\$');
+  RegExp contains(String text) => RegExp(text);
+  RegExp whenever(String text) => RegExp('^Whenever .+ $text');
+  final takesDamage = RegExp('^Whenever .+ takes? damage');
+
   final effect = item.effect;
   if (effect == null) {
-    return null;
+    return [];
   }
   final callbacks = effect.callbacks;
   if (callbacks == null || callbacks.isEmpty) {
-    return null;
+    return [];
   }
-  final triggers = callbacks.triggers.keys.toList();
-  if (triggers.length != 1) {
-    logger.warn('${item.name} has multiple triggers: $triggers');
-    return null;
+  final triggers = callbacks.triggers.keys.toSet();
+  if (triggers.isEmpty) {
+    // Could add for dynamicStats and overrideStats.
+    if (callbacks.dynamicStats != null) {
+      return [contains('for each')];
+    }
+    return [];
   }
-  final trigger = triggers.single;
-  switch (trigger) {
-    case Trigger.onBattle:
-      return 'Battle Start';
-    case Trigger.onInitiative:
-      return 'Initiative';
-    case Trigger.onTurn:
-      return 'Turn Start';
-    case Trigger.onHit:
-      return 'On Hit';
-    case Trigger.onTakeDamage:
-      return 'Whenever you take damage';
-    case Trigger.onExposed:
-      return 'Exposed';
-    case Trigger.onWounded:
-      return 'Wounded';
-    case Trigger.onRestoreHealth:
-      return 'Whenever you restore health';
-    case Trigger.onGainArmor:
-      return 'Whenever you gain armor';
-    case Trigger.onLoseArmor:
-      return 'Whenever you lose armor';
-    case Trigger.onGainThorns:
-      return 'Whenever you gain thorns';
-    case Trigger.onOverheal:
-      return null;
-    case Trigger.onLoseThorns:
-      return null;
-    case Trigger.onEndTurn:
-      return null;
+  TriggerMap map(Set<Trigger> triggers, List<RegExp> regexps) {
+    return TriggerMap(triggers, regexps);
   }
-}
 
-String? writtenTrigger(CatalogItem item) {
-  final effect = item.effect;
-  if (effect == null) {
-    return null;
+  TriggerMap setToOne(Set<Trigger> triggers, RegExp regexp) {
+    return TriggerMap(triggers, [regexp]);
   }
-  var parts = effect.text.split(':');
-  if (parts.length != 2) {
-    parts = effect.text.split(',');
-    if (parts.length != 2) {
-      return null;
+
+  TriggerMap one(Trigger triggers, RegExp regexp) {
+    return TriggerMap({triggers}, [regexp]);
+  }
+
+  TriggerMap many(Trigger triggers, List<RegExp> regexps) {
+    return TriggerMap({triggers}, regexps);
+  }
+
+  final matchers = [
+    setToOne(
+      {Trigger.onExposed, Trigger.onWounded},
+      startsWith('Exposed & Wounded'),
+    ),
+    setToOne(
+      {Trigger.onBattle, Trigger.onWounded},
+      startsWith('Battle Start & Wounded'),
+    ),
+    // This isn't always true, but close enough.
+    setToOne({Trigger.onTurn, Trigger.onEndTurn}, startsWith('First Turn')),
+    setToOne(
+      {Trigger.onGainThorns, Trigger.onLoseThorns},
+      contains('for each thorns'),
+    ),
+    one(Trigger.onBattle, startsWith('Battle Start')),
+    one(Trigger.onInitiative, startsWith('Initiative')),
+    many(Trigger.onTurn, [
+      startsWith('Turn Start'),
+      contains('every other turn'),
+      contains('at turn start'),
+    ]),
+    many(Trigger.onHit, [startsWith('On Hit'), endsWith('on hit')]),
+    one(Trigger.onTakeDamage, takesDamage),
+    one(Trigger.onExposed, startsWith('Exposed')),
+    one(Trigger.onWounded, startsWith('Wounded')),
+    one(Trigger.onRestoreHealth, whenever('restore health')),
+    one(Trigger.onGainArmor, whenever('gain armor')),
+    one(Trigger.onLoseArmor, whenever('lose armor')),
+    one(Trigger.onGainThorns, whenever('gain thorns')),
+    one(Trigger.onOverheal, startsWith('Overhealing')),
+  ];
+
+  const equality = SetEquality<Trigger>();
+  for (final matcher in matchers) {
+    if (equality.equals(matcher.triggers, triggers)) {
+      return matcher.regexps;
     }
   }
-  return parts.first.trim();
+  return [];
 }
 
 void doMain(List<String> arguments) {
@@ -75,10 +102,16 @@ void doMain(List<String> arguments) {
     if (!item.isImplemented) {
       continue;
     }
-    final written = writtenTrigger(item);
-    final implemented = implementedTrigger(item);
-    if (written != implemented) {
-      logger.warn('${item.name} Implemented: $implemented, Written: $written');
+    // Ignore golden/diamond items.
+    if (item.effectMultiplier != 1) continue;
+    final written = item.effect?.text;
+    if (written == null && item.effect != null) {
+      logger.warn('${item.name} has unexpected effects.');
+    }
+    final regexps = expectedText(item);
+    if (written != null && !regexps.any((r) => r.hasMatch(written))) {
+      final patterns = regexps.map((r) => r.pattern);
+      logger.info('$written on ${item.name} expected one of: $patterns');
     }
   }
 }

@@ -14,7 +14,7 @@ final itemEffects = EffectCatalog(
     'Stone Steak':
         onBattle((c) => _if(c.my.isHealthFull, () => c.gainArmor(4))),
     'Redwood Cloak': onBattle((c) => c.restoreHealth(1 * c.m)),
-    'Emergency Shield': onBattle(
+    'Emergency Shield': onInitiative(
       (c) => _if(c.my.speed < c.enemy.speed, () => c.gainArmor(4 * c.m)),
     ),
     'Granite Gauntlet': onBattle((c) => c.gainArmor(5)),
@@ -121,6 +121,7 @@ final itemEffects = EffectCatalog(
           ..gainThorns(2),
       ),
     ),
+    // TODO(eseidel): Should use onHit rather than onTurn.
     'Stormcloud Spear':
         onTurn((c) => _if(c.everyNStrikes(5), () => c.stunEnemy(2))),
     'Pinecone Plate': onTurn(
