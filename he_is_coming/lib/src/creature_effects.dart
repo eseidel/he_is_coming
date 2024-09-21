@@ -84,6 +84,8 @@ final creatureEffects = EffectCatalog(<String, EffectCallbacks>{
   'Bat Level 2': _batEffect(hp: 2),
   'Bat Level 3': _batEffect(hp: 3),
   'Hedgehog Level 1': _hedgehogEffect(thorns: 3),
+  'Hedgehog Level 2': _hedgehogEffect(thorns: 4),
+  'Hedgehog Level 3': _hedgehogEffect(thorns: 5),
   'Woodland Abomination': onTurn(
     (c) {
       // The game lets the abomination attack once for 0 for whatever reason.
