@@ -180,4 +180,25 @@ void main() {
     // We take 7 * 3 = 21 dmg.
     expect(result.first.hp, 4);
   });
+
+  test('Wolf Level 1', () {
+    // If we have < 5 hp, wolf gains 2 attack.
+    final player = data.player(hp: 5);
+    final enemy = creatures['Wolf Level 1'];
+    expect(enemy.baseStats.attack, 1);
+    expect(enemy.baseStats.speed, 1);
+    expect(enemy.hp, 3);
+    final result = doBattle(first: player, second: enemy);
+    // Wolf hits first for 1, then we hit, then wolf starts hitting for 3.
+    // Wolf kills us in 3 hits before we can kill it.
+    expect(result.first.hp, 0);
+    expect(result.second.hp, 1);
+
+    // Wolf also gets the ad boost on the first turn if we are below 5.
+    final player2 = data.player(hp: 4);
+    // And thus kills us in 2 turns.
+    final result2 = doBattle(first: player2, second: enemy);
+    expect(result2.first.hp, 0);
+    expect(result2.second.hp, 2);
+  });
 }

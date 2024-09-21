@@ -141,6 +141,16 @@ class EffectContext {
     return value!;
   }
 
+  /// How much hp was gained or lost.
+  int get hpDelta {
+    if (trigger != Trigger.onEnemyHpChanged) {
+      throw StateError(
+        'hpDelta is only valid for onGainThorns and onLoseThorns',
+      );
+    }
+    return value!;
+  }
+
   /// Add an extra exposed trigger.
   void addExtraExposed(int count) {
     final exposedLimit = _myStats.exposedLimit + count;
@@ -685,7 +695,8 @@ class BattleContext {
     }
   }
 
-  /// Deal damage to the defender.
+  /// Deal [damage] points of damage to the target specified by [targetIndex].
+  /// This is the only method which should ever change hp.
   void dealDamage({
     required int damage,
     required int targetIndex,
@@ -693,11 +704,13 @@ class BattleContext {
   }) {
     _expectNonNegative(damage, 'damage');
     final target = stats[targetIndex];
+    final enemyIndex = (targetIndex + 1) % 2;
     final targetName = creatures[targetIndex].name;
     final armorReduction = min(target.armor, damage);
     final remainingDamage = damage - armorReduction;
     final newArmor = target.armor - armorReduction;
     final newHp = target.hp - remainingDamage;
+    final hpDelta = newHp - target.hp;
     final armorBefore = target.armor;
     // newStats is not valid after setStats (which can happen inside a trigger)
     {
@@ -708,6 +721,7 @@ class BattleContext {
         '${newStats.hp} / ${newStats.maxHp} hp '
         '${newStats.armor} armor',
       );
+      _checkForDeath();
     }
 
     // Damage counts as damage regardless of if it was absorbed by armor.
@@ -766,6 +780,16 @@ class BattleContext {
         attackerIndex: _attackerIndex,
         parentSource: source,
         value: null,
+      );
+    }
+
+    if (hpDelta != 0) {
+      _trigger(
+        Trigger.onEnemyHpChanged,
+        meIndex: enemyIndex,
+        attackerIndex: _attackerIndex,
+        parentSource: source,
+        value: hpDelta,
       );
     }
   }
@@ -848,6 +872,10 @@ class BattleContext {
       if (parentSource == item.name) {
         return;
       }
+      final callback = item.effect?[trigger];
+      if (callback == null) {
+        return;
+      }
       final effectCxt = EffectContext(
         trigger: trigger,
         battle: this,
@@ -857,7 +885,7 @@ class BattleContext {
         effectMultiplier: item.effectMultiplier,
         value: value,
       );
-      item.effect?[trigger]?.call(effectCxt);
+      callback.call(effectCxt);
       _checkForDeath();
     }
 
