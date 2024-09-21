@@ -101,10 +101,6 @@ EffectCallbacks onLoseArmor(EffectFn fn) => triggers({Trigger.onLoseArmor: fn});
 EffectCallbacks onGainThorns(EffectFn fn) =>
     triggers({Trigger.onGainThorns: fn});
 
-/// Creates an [Effect] with an onEnemyHpChanged callback.
-EffectCallbacks onEnemyHpChanged(EffectFn fn) =>
-    triggers({Trigger.onEnemyHpChanged: fn});
-
 /// Enum representing the different effects that can be triggered.
 enum Trigger {
   /// Called on battle start.
@@ -156,8 +152,11 @@ enum Trigger {
 
   /// Called whenever enemy hp changes.
   /// Check EffectContext.hpDelta for amount.
-  /// Or use crossedHpThreshold to call only when crossing a threshold.
   onEnemyHpChanged,
+
+  /// Called whenever enemy hp changes.
+  /// Check EffectContext.armorDelta for amount.
+  onEnemyArmorChanged,
 }
 
 /// Container for callbacks for items.

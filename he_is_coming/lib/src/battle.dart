@@ -792,6 +792,16 @@ class BattleContext {
         value: hpDelta,
       );
     }
+
+    if (armorReduction != 0) {
+      _trigger(
+        Trigger.onEnemyArmorChanged,
+        meIndex: enemyIndex,
+        attackerIndex: _attackerIndex,
+        parentSource: source,
+        value: -armorReduction,
+      );
+    }
   }
 
   /// Strike the defender, defaults to the attacker's attack value.
@@ -865,7 +875,7 @@ class BattleContext {
     required int meIndex,
     required String? parentSource,
     required int? value,
-    int? attackerIndex,
+    required int? attackerIndex,
   }) {
     void callTrigger(CatalogItem item) {
       // Prevent infinite loops.
@@ -927,6 +937,7 @@ class BattleContext {
       _trigger(
         Trigger.onBattle,
         meIndex: index,
+        attackerIndex: null,
         parentSource: null,
         value: null,
       );
@@ -940,6 +951,7 @@ class BattleContext {
       _trigger(
         Trigger.onInitiative,
         meIndex: index,
+        attackerIndex: null,
         parentSource: null,
         value: null,
       );

@@ -201,4 +201,20 @@ void main() {
     expect(result2.first.hp, 0);
     expect(result2.second.hp, 2);
   });
+
+  test('Bear Level 1', () {
+    // If we have armor, bear gains 3 attack.
+    final player = data.player(hp: 5, armor: 1);
+    final enemy = creatures['Bear Level 1'];
+    expect(enemy.baseStats.attack, 1);
+    expect(enemy.baseStats.armor, 2);
+    expect(enemy.baseStats.speed, 0);
+    expect(enemy.hp, 3);
+    final result = doBattle(first: player, second: enemy);
+    // Bear hits for 4 (due to armor), then 1 each remaining turn once
+    // armor is broken.  Bear kills us in 3 turns, we only deal one dmg
+    // due to its 2 armor.
+    expect(result.first.hp, 0);
+    expect(result.second.hp, 2);
+  });
 }
