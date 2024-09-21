@@ -4,6 +4,12 @@
     - Assault Greaves
     - Jagged Edge
   effect: "Whenever you take damage, gain 1 thorn"
+- name: Elderwood Mask
+  id: 6
+  parts:
+    - Elderwood Staff
+    - Elderwood Necklace
+  effect: "Battle Start: If your base attack, armor, and speed are all the same, gain that much of each stat"
 - name: Hero's Return
   id: 2
   parts:
@@ -35,9 +41,3 @@
     - Petrifying Flask
     - Razor Scales
   effect: "Wounded: Gain 10 armor"
-- name: Elderwood Mask
-  id: 6
-  parts:
-    - Elderwood Staff
-    - Elderwood Necklace
-  effect: "Battle Start: If your base attack, armor, and speed are all the same, gain that much of each stat"

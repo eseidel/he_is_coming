@@ -88,6 +88,13 @@
   x: 12
   y: 2
   version: 0.3.5
+- name: Magic Roulette
+  id: 34
+  unlock: Use Fairy 4 times in a single run
+  reward: Rabbit Doll
+  x: 13
+  y: 4
+  version: 0.3.5
 - name: My job is done
   id: 30
   unlock: Defeat a boss without striking
@@ -172,11 +179,4 @@
   reward: Bloodmoon Ritual
   x: 1
   y: 1
-  version: 0.3.5
-- name: Magic Roulette
-  id: 34
-  unlock: Use Fairy 4 times in a single run
-  reward: Rabbit Doll
-  x: 13
-  y: 4
   version: 0.3.5

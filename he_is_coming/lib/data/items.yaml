@@ -831,8 +831,8 @@
   version: 0.3.5
 - name: Rabbit Doll
   id: 131
-  rarity: rare
   unique: true
+  rarity: rare
   effect: "Wounded: Trigger Initiative"
   version: 0.3.5
 - name: Razor Scales
@@ -1030,6 +1030,11 @@
   rarity: heroic
   effect: "Battle Start: Gain 6 thorns"
   version: 0.3.5
+- name: Time Bomb
+  id: 132
+  rarity: rare
+  effect: "After 5 turns: Deal 15 damage"
+  version: 0.3.5
 - name: Tree Sap
   id: 119
   tags: wood
@@ -1064,8 +1069,3 @@
   weapon: true
   rarity: common
   attack: 1
-- name: Time Bomb
-  id: 132
-  rarity: rare
-  effect: "After 5 turns: Deal 15 damage"
-  version: 0.3.5
