@@ -217,4 +217,29 @@ void main() {
     expect(result.first.hp, 0);
     expect(result.second.hp, 2);
   });
+
+  test('Hothead', () {
+    final player = data.player();
+    final enemy = creatures['Hothead'];
+    expect(enemy.baseStats.attack, 4);
+    expect(enemy.hp, 5);
+    expect(enemy.baseStats.speed, 4);
+    expect(enemy.baseStats.armor, 0);
+
+    final result = doBattle(first: player, second: enemy);
+    // Hothead gains 10 attack on first turn if it has more speed.
+    // Hothead hits for 14 on first turn, then 4 all other turns.
+    expect(result.first.hp, 0);
+    expect(result.second.hp, 5);
+    expect(result.second.baseStats.attack, 4);
+
+    final player2 = data.player(speed: 4, attack: 1);
+    expect(player2.baseStats.attack, 2);
+    final result2 = doBattle(first: player2, second: enemy);
+    // We go first, so hothead doesn't get the bonus attack.
+    // Its 4 attack is enough to kill us in 3 hits, but with 2 attack
+    // we will kill it in 3 hits before it can kill us.
+    expect(result2.first.hp, 2);
+    expect(result2.second.hp, 0);
+  });
 }

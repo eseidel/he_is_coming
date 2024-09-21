@@ -24,7 +24,7 @@ EffectCallbacks _batEffect({required int hp}) {
 EffectCallbacks _hedgehogEffect({required int thorns}) =>
     onBattle((c) => c.gainThorns(thorns));
 
-EffectFn _attackAdjustCallback({
+EffectFn _temporaryAttack({
   required int baseAttack,
   required int bonus,
   required bool Function(EffectContext) shouldHaveBonus,
@@ -47,31 +47,24 @@ EffectFn _attackAdjustCallback({
 }
 
 EffectCallbacks _wolfEffect({required int baseAttack, required int bonus}) {
-  final updateAttack = _attackAdjustCallback(
-    baseAttack: baseAttack,
-    bonus: bonus,
-    shouldHaveBonus: (c) => c.enemy.hp < 5,
-  );
-  return EffectCallbacks(
-    triggers: {
-      Trigger.onBattle: updateAttack,
-      Trigger.onEnemyHpChanged: updateAttack,
-    },
+  return multiTrigger(
+    [Trigger.onBattle, Trigger.onEnemyHpChanged],
+    _temporaryAttack(
+      baseAttack: baseAttack,
+      bonus: bonus,
+      shouldHaveBonus: (c) => c.enemy.hp < 5,
+    ),
   );
 }
 
 EffectCallbacks _bearEffect({required int baseAttack, required int bonus}) {
-  final updateAttack = _attackAdjustCallback(
-    baseAttack: baseAttack,
-    bonus: bonus,
-    shouldHaveBonus: (c) => c.enemy.armor > 0,
-  );
-
-  return EffectCallbacks(
-    triggers: {
-      Trigger.onBattle: updateAttack,
-      Trigger.onEnemyArmorChanged: updateAttack,
-    },
+  return multiTrigger(
+    [Trigger.onBattle, Trigger.onEnemyArmorChanged],
+    _temporaryAttack(
+      baseAttack: baseAttack,
+      bonus: bonus,
+      shouldHaveBonus: (c) => c.enemy.armor > 0,
+    ),
   );
 }
 
@@ -124,4 +117,12 @@ final creatureEffects = EffectCatalog(<String, EffectCallbacks>{
   'Bear Level 2': _bearEffect(baseAttack: 2, bonus: 5),
   'Bear Level 3': _bearEffect(baseAttack: 3, bonus: 7),
   'Crazed Honeybear Level 3': _bearEffect(baseAttack: 6, bonus: 5),
+  'Hothead': multiTrigger(
+    [Trigger.onBattle, Trigger.onEndTurn],
+    _temporaryAttack(
+      baseAttack: 4,
+      bonus: 10,
+      shouldHaveBonus: (c) => c.my.speed > c.enemy.speed && c.isFirstTurn,
+    ),
+  ),
 });
