@@ -1813,4 +1813,23 @@ void main() {
     // Wolf hits us 3 times and then dies from cherry.
     expect(result.first.hp, 10);
   });
+
+  test('Charcoal Roast', () {
+    const item = 'Charcoal Roast';
+    final player = data.player(items: [item]);
+    expect(player.hp, 18); // Roast gives 8 hp
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // Charcoal Roast does 4 dmg on battle start if health is not full.
+    // Does nothing if health is full.
+    final result = doBattle(first: player, second: enemy);
+    // We kill the enemy in 6 turns, taking 5 dmg.
+    expect(result.first.hp, 13);
+
+    final player2 = data.player(items: [item], hp: 9);
+    final result2 = doBattle(first: player2, second: enemy);
+    // Since our health is not full, the roast does 4 dmg on battle start.
+    // We kill the enemy in 2 turns taking 1 dmg.
+    expect(result2.first.hp, 8);
+  });
 }

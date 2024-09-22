@@ -257,5 +257,7 @@ final itemEffects = EffectCatalog(
         Trigger.onExposed: (c) => c.dealDamage(6),
       },
     ),
+    'Charcoal Roast':
+        onBattle((c) => _if(!c.my.isHealthFull, () => c.dealDamage(4))),
   },
 );
