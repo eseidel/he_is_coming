@@ -1800,4 +1800,17 @@ void main() {
     // 3 health is missing so attack is 3 now.
     expect(result.first.baseStats.attack, 3);
   });
+
+  test('Granite Cherry', () {
+    const item = 'Granite Cherry';
+    final player = data.player(items: [item]);
+    expect(player.baseStats.armor, 0);
+
+    final enemy = makeEnemy(attack: 2, health: 6);
+    // Granite Cherry gives 6 armor on battle start.
+    final result = doBattle(first: player, second: enemy);
+    // Cherry does 6 dmg on exposed.
+    // Wolf hits us 3 times and then dies from cherry.
+    expect(result.first.hp, 10);
+  });
 }

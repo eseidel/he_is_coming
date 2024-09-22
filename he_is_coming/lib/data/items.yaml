@@ -118,6 +118,16 @@
   rarity: rare
   effect: "Wounded: Gain armor equal to your base armor"
   version: 0.3.5
+- name: Charcoal Roast
+  id: 184
+  tags: bomb
+  rarity: cauldron
+  parts:
+    - Cherry Bomb
+    - Redwood Roast
+  health: 8
+  effect: "Battle Start: If your health is not full, deal 4 damage"
+  version: 0.3.5
 - name: Cherry Bomb
   id: 125
   tags:
@@ -628,6 +638,17 @@
   rarity: golden
   attack: 2
   speed: -2
+- name: Granite Cherry
+  id: 185
+  tags:
+    - bomb
+    - stone
+  rarity: cauldron
+  parts:
+    - Cherry Bomb
+    - Stone Steak
+  effect: "Battle Start: Gain 6 armor\nExposed: Deal 6 damage"
+  version: 0.3.5
 - name: Granite Gauntlet
   id: 64
   tags: stone
@@ -928,6 +949,7 @@
   unique: true
   rarity: heroic
   effect: "Whenever you lose armor, restore that much health"
+  version: 0.3.5
 - name: Sapphire Ring
   id: 108
   tags: jewelry

@@ -251,5 +251,11 @@ final itemEffects = EffectCatalog(
         Trigger.onHpChanged: (c) => c.adjustAttack(-c.hpDelta),
       },
     ),
+    'Granite Cherry': EffectCallbacks(
+      triggers: {
+        Trigger.onBattle: (c) => c.gainArmor(6),
+        Trigger.onExposed: (c) => c.dealDamage(6),
+      },
+    ),
   },
 );

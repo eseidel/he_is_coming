@@ -80,6 +80,15 @@
   speed: 2
   effect: "Whenever Brittlebark Beast takes damage, he takes 3 additional damage"
   version: 0.3.5
+- name: Crazed Honeybear Level 2
+  id: 32
+  level: 2
+  health: 10
+  attack: 4
+  armor: 6
+  speed: 2
+  effect: Bear deals 4 additional damage while you have armor
+  version: 0.3.5
 - name: Crazed Honeybear Level 3
   id: 29
   level: 3
