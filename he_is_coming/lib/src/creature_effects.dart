@@ -118,6 +118,7 @@ final creatureEffects = EffectCatalog(<String, EffectCallbacks>{
   'Bear Level 1': _bearEffect(baseAttack: 1, bonus: 3),
   'Bear Level 2': _bearEffect(baseAttack: 2, bonus: 5),
   'Bear Level 3': _bearEffect(baseAttack: 3, bonus: 7),
+  'Crazed Honeybear Level 2': _bearEffect(baseAttack: 4, bonus: 4),
   'Crazed Honeybear Level 3': _bearEffect(baseAttack: 6, bonus: 5),
   'Hothead': multiTrigger(
     [Trigger.onBattle, Trigger.onEndTurn],
