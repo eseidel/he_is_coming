@@ -13,4 +13,14 @@ final setEffects = EffectCatalog(<String, EffectCallbacks>{
   'Raw Hide': onTurn((c) => _if(c.isEveryOtherTurn, () => c.gainAttack(1))),
   'Briar Greaves': onTakeDamage((c) => c.gainThorns(1)),
   'Stone Scales': onWounded((c) => c.gainArmor(10)),
+  'Elderwood Mask': onBattle((c) {
+    final base = c.my.baseStats;
+    final value = base.attack;
+    if (value == base.armor && value == base.speed) {
+      c
+        ..gainAttack(value)
+        ..gainArmor(value)
+        ..gainSpeed(value);
+    }
+  }),
 });

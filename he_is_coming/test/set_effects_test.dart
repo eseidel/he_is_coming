@@ -156,4 +156,22 @@ void main() {
     expect(result.first.hp, 5);
     expect(result.turns, 4); // 4 means "turn 5", 4 turns have passed.
   });
+
+  test('Elderwood Mask', () {
+    // Gives +attack, +armor, and +speed if all are equal on battle start.
+    final player = playerWithSet('Elderwood Mask');
+    expect(player.hp, 10);
+    expect(player.baseStats.armor, 2);
+    expect(player.baseStats.attack, 2);
+    expect(player.baseStats.speed, 2);
+
+    final enemy = makeEnemy(health: 20, attack: 1);
+    final result = doBattle(first: player, second: enemy);
+    // We actually hit for 4, and have 4 armor, so kill the enemy in 5 hits.
+    // Taking 4 damage, all of which is absorbed by armor.
+    expect(result.first.hp, 10);
+    expect(player.baseStats.armor, 2);
+    expect(player.baseStats.attack, 2);
+    expect(player.baseStats.speed, 2);
+  });
 }
