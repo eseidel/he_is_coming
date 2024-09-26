@@ -62,7 +62,7 @@
 - name: Infinity Rings
   id: 25
   unlock: Have 3 rings equipped
-  reward: Unimplemented
+  reward: Bloodthief Needle
   x: 2
   y: 4
   version: 0.3.5
@@ -84,7 +84,7 @@
 - name: Lord of Blood
   id: 32
   unlock: Restore 50+ health in a single battle
-  reward: Unimplemented
+  reward: Lifesteal Scythe
   x: 12
   y: 2
   version: 0.3.5

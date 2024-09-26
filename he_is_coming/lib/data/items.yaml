@@ -47,8 +47,10 @@
   version: 0.3.5
 - name: Bloodthief Needle
   id: 134
-  rarity: common
-  inferred: true
+  tags: sanguine
+  rarity: heroic
+  speed: 2
+  effect: "Initiative: If you have more speed than the enemy, steal 5 max health"
   version: 0.3.5
 - name: Bloody Steak
   id: 7
@@ -564,7 +566,7 @@
   tags: stone
   rarity: golden
   effect: "Wounded: Gain 20 armor and stun yourself for 4 turns"
-  inferred: true
+  version: 0.3.5
 - name: Golden Redwood Cloak
   id: 53
   tags: wood
@@ -788,6 +790,14 @@
   rarity: heroic
   effect: "Wounded: Deal damage equal to 50% of your max health"
   version: 0.3.5
+- name: Lifesteal Scythe
+  id: 186
+  weapon: true
+  tags: sanguine
+  rarity: heroic
+  attack: 2
+  effect: "On Hit: Restore health equal to damage dealt to health"
+  version: 0.3.5
 - name: Lifethread Pendant
   id: 82
   rarity: rare
@@ -1005,6 +1015,15 @@
   rarity: common
   attack: 2
   effect: "Every 5 strikes: Stun the enemy for 2 turns"
+- name: Sugar Bomb
+  id: 187
+  tags: bomb
+  rarity: cauldron
+  parts:
+    - Cherry Bomb
+    - Honeycomb
+  effect: "Turn Start: Deal 2 damage"
+  version: 0.3.5
 - name: Swiftstrike Cloak
   id: 133
   rarity: rare
