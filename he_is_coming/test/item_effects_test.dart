@@ -1832,4 +1832,16 @@ void main() {
     // We kill the enemy in 2 turns taking 1 dmg.
     expect(result2.first.hp, 8);
   });
+
+  test('Sugar Bomb', () {
+    const item = 'Sugar Bomb';
+    final player = data.player(items: [item]);
+    expect(player.hp, 10);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // Sugar Bomb does 2 dmg on every turn.
+    final result = doBattle(first: player, second: enemy);
+    // We kill the enemy in 2 turns, taking 1 dmg.
+    expect(result.first.hp, 9);
+  });
 }
