@@ -260,5 +260,8 @@ final itemEffects = EffectCatalog(
     'Charcoal Roast':
         onBattle((c) => _if(!c.my.isHealthFull, () => c.dealDamage(4))),
     'Sugar Bomb': onTurn((c) => c.dealDamage(2)),
+    'Swiftstrike Cloak': onInitiative(
+      (c) => _if(c.my.speed >= (c.enemy.speed * 2), () => c.queueExtraStrike()),
+    ),
   },
 );

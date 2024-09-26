@@ -1844,4 +1844,23 @@ void main() {
     // We kill the enemy in 2 turns, taking 1 dmg.
     expect(result.first.hp, 9);
   });
+
+  test('Swiftstrike Cloak', () {
+    const item = 'Swiftstrike Cloak';
+    final player = data.player(items: [item]);
+    expect(player.baseStats.speed, 1);
+
+    final enemy = makeEnemy(attack: 1, health: 6);
+    // If your speed is 2x the enemy's speed, you queue an extra strike.
+    // 1 > 2 * 0, so we get an extra strike.
+    final result = doBattle(first: player, second: enemy);
+    // We kill the enemy in 5 turns, taking 4 dmg.
+    expect(result.first.hp, 6);
+
+    final enemy2 = makeEnemy(attack: 1, health: 6, speed: 1);
+    // 1 < 2 * 1, so we don't get an extra strike.
+    final result2 = doBattle(first: player, second: enemy2);
+    // We kill the enemy in 6 turns, taking 5 dmg.
+    expect(result2.first.hp, 5);
+  });
 }
