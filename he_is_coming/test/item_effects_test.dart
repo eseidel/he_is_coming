@@ -1043,19 +1043,6 @@ void main() {
     expect(result2.first.hp, 12);
   });
 
-  test('Petrifying Flask', () {
-    const item = 'Petrifying Flask';
-    final player = data.player(items: [item], hp: 6);
-    expect(player.hp, 6);
-
-    final enemy = makeEnemy(attack: 1, health: 6);
-    final result = doBattle(first: player, second: enemy);
-    // Petrifying Flask gives 10 armor and self-stuns for 2 turns on wounded.
-    expect(result.first.hp, 5);
-    // turns is 0-indexed, turn 7 is the 8th turn.
-    expect(result.turns, 7);
-  });
-
   test('Ruby Gemstone', () {
     const item = 'Ruby Gemstone';
     final player = data.player(items: [item]);

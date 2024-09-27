@@ -57,7 +57,7 @@ final itemEffects = EffectCatalog(
     'Plated Helmet':
         onTurn((c) => _if(c.my.belowHalfHealth, () => c.gainArmor(2))),
     'Ore Heart': onBattle(
-      (c) => c.gainArmor(c.tagCount(ItemTag.stone) * 2),
+      (c) => c.gainArmor(c.tagCount(ItemTag.stone) * 3),
     ),
     'Granite Hammer': onHit(
       (c) => _if(
@@ -102,11 +102,6 @@ final itemEffects = EffectCatalog(
     'Horned Helmet': onBattle((c) => c.gainThorns(2 * c.m)),
     'Crimson Cloak': onTakeDamage((c) => c.restoreHealth(1)),
     'Tree Sap': onWounded((c) => [1, 1, 1, 1, 1].forEach(c.restoreHealth)),
-    'Petrifying Flask': onWounded(
-      (c) => c
-        ..gainArmor(10)
-        ..stunSelf(2),
-    ),
     'Ruby Gemstone': onHit(
       (ctx) => _if(ctx.my.attack == 1, () => ctx.dealDamage(4)),
     ),

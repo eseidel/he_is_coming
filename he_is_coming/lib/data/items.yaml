@@ -36,7 +36,7 @@
 - name: Blood Bond
   id: 143
   unique: true
-  rarity: heroic
+  rarity: rare
   effect: "When the enemy has lost 50% health, trigger all of your wounded items"
   version: 0.3.5
 - name: Bloodmoon Ritual
@@ -105,7 +105,7 @@
 - name: Brittlebark Buckler
   id: 139
   tags: wood
-  rarity: heroic
+  rarity: rare
   armor: 10
   effect: Lose all your armor after your opponent's first strike
   version: 0.3.5
@@ -284,12 +284,6 @@
   speed: 4
   inferred: true
   version: 0.3.5
-- name: Diamond Petrifying Flask
-  id: 170
-  tags: stone
-  rarity: diamond
-  effect: "Wounded: Gain 40 armor and stun yourself for 8 turns"
-  inferred: true
 - name: Diamond Redwood Cloak
   id: 171
   tags: wood
@@ -561,12 +555,6 @@
   armor: 4
   speed: 2
   inferred: true
-- name: Golden Petrifying Flask
-  id: 52
-  tags: stone
-  rarity: golden
-  effect: "Wounded: Gain 20 armor and stun yourself for 4 turns"
-  version: 0.3.5
 - name: Golden Redwood Cloak
   id: 53
   tags: wood
@@ -718,12 +706,6 @@
   tags: food
   rarity: heroic
   version: 0.3.5
-- name: Hook Blade
-  id: 70
-  weapon: true
-  rarity: rare
-  attack: 2
-  effect: "Whenever you deal damage to the enemy's armor, gain that much armor"
 - name: Horned Helmet
   id: 71
   rarity: common
@@ -832,13 +814,8 @@
   tags: stone
   unique: true
   rarity: rare
-  effect: "Battle Start: Gain 2 armor for each equipped stone item"
+  effect: "Battle Start: Gain 3 armor for each equipped stone item"
   version: 0.3.5
-- name: Petrifying Flask
-  id: 88
-  tags: stone
-  rarity: common
-  effect: "Wounded: Gain 10 armor and stun yourself for 2 turns"
 - name: Pinecone Plate
   id: 90
   tags: wood
@@ -981,7 +958,7 @@
   weapon: true
   rarity: common
   attack: 1
-  armor: 4
+  armor: 6
 - name: Steelbond Curse
   id: 111
   rarity: rare
@@ -1014,7 +991,7 @@
   weapon: true
   rarity: common
   attack: 2
-  effect: "Every 5 strikes: Stun the enemy for 2 turns"
+  effect: "Every 5 strikes: Stun the enemy for 3 turns"
 - name: Sugar Bomb
   id: 187
   tags: bomb
@@ -1026,7 +1003,7 @@
   version: 0.3.5
 - name: Swiftstrike Cloak
   id: 133
-  rarity: rare
+  rarity: heroic
   speed: 1
   effect: "Initiative: If your speed is double or more than the enemy's, do an additional strike on your next turn"
   version: 0.3.5
@@ -1110,3 +1087,11 @@
   weapon: true
   rarity: common
   attack: 1
+- name: Energy Drain
+  id: 188
+  rarity: common
+  inferred: true
+- name: Stone Thorns
+  id: 189
+  rarity: common
+  inferred: true

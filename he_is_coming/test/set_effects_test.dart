@@ -138,25 +138,6 @@ void main() {
     expect(result.first.hp, 4);
   });
 
-  test('Stone Scales', () {
-    // Stone Scales gives +10 armor on wounded.
-    final player = playerWithSet('Stone Scales', armor: 1, hp: 6);
-    // Petrifying Flask gives 10 armor on wounded and self-stuns for 2 turns.
-    // Razor Scales turns armor loss into dmg after exposed.
-    expect(player.hp, 6);
-    expect(player.baseStats.armor, 1);
-    expect(player.baseStats.attack, 1);
-
-    final enemy = makeEnemy(health: 6, attack: 1);
-    final result = doBattle(first: player, second: enemy);
-    // On the first hit we're exposed (enabling Razor Scales)
-    // On the second hit we're wounded (triggering 20 armor) and 2 self-stun.
-    // We hit twice before stun, then once after.
-    // It dies on turn 5.
-    expect(result.first.hp, 5);
-    expect(result.turns, 4); // 4 means "turn 5", 4 turns have passed.
-  });
-
   test('Elderwood Mask', () {
     // Gives +attack, +armor, and +speed if all are equal on battle start.
     final player = playerWithSet('Elderwood Mask');

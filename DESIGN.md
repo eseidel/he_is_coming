@@ -86,8 +86,5 @@ Does a heal of 0 counts as triggering "whenever you restore health"?
 
 - When the enemy has lost 50% health, trigger all of your wounded items for Blood Bond
 
-- Whenever you deal damage to the enemy's armor, gain that much armor for Hook Blade
-  onEnemyArmorDamage?
-
 - Whenever you deal non-weapon damage to the enemy, deal 1 additional damage for Sword Talisman
 

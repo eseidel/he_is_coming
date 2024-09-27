@@ -75,7 +75,7 @@
   id: 9
   boss: true
   level: 1
-  health: 50
+  health: 40
   attack: 3
   speed: 2
   effect: "Whenever Brittlebark Beast takes damage, he takes 3 additional damage"
@@ -102,7 +102,7 @@
   id: 10
   boss: true
   level: 2
-  health: 40
+  health: 50
   effect: "Whenever Gentle Giant takes damage he gains 2 thorns.  Wounded: Gain 4 thorns instead"
 - name: Granite Griffin
   id: 11
@@ -182,7 +182,7 @@
   level: 2
   health: 20
   attack: 4
-  speed: 4
+  speed: 5
   effect: "Battle Start: If Razortusk Hog has more speed than you, he strikes twice for the rest of the battle"
 - name: Redwood Treant
   id: 19
