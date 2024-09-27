@@ -76,7 +76,7 @@
   reward: Hidden Dagger
 - name: Lifeblood Overflow
   id: 24
-  unlock: Overheal 80+ health in a battle
+  unlock: Overheal 30+ health in a battle
   reward: Unimplemented
   x: 1
   y: 3
